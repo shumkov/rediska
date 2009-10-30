@@ -14,11 +14,6 @@ require_once 'Rediska/Exception.php';
  * Rediska (radish on russian) - PHP client 
  * for key-value database Redis (http://code.google.com/p/redis)
  * 
- * @todo Tags for group expiring keys 
- * @todo Ketama support
- * @todo Documentation
- * @todo More test coverage
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version 0.2.1
@@ -64,16 +59,16 @@ class Rediska
      * Configuration
      * 
      * namespace      - Key names prefix
+     * servers        - Array of servers: array(
+     *                                        array('host' => '127.0.0.1', 'port' => 6379, 'weight' => 1, 'password' => '123'),
+     *                                        array('host' => '127.0.0.1', 'port' => 6380, 'weight' => 2)
+     *                                    )
      * serializer     - Callback function for serialization.
      *                  You may use PHP extensions like igbinary (http://opensource.dynamoid.com/)
      *                  or you personal function.
      *                  For default php function serialize.             
      * unserializer   - Unserialize callback.
-     * servers        - Array of servers: array(
-     *                                        array('host' => '127.0.0.1', 'port' => 6379, 'weight' => 1),
-     *                                        array('host' => '127.0.0.1', 'port' => 6380, 'weight' => 2)
-     *                                    )
-     * keydistributor - Algorithm of keys distribution on redis servers.
+     * keyDistributor - Algorithm of keys distribution on redis servers.
      *                  For default 'consistentHashing' which implement
      *                  consistent hashing algorithm (http://weblogs.java.net/blog/tomwhite/archive/2007/11/consistent_hash.html)
      *                  You may use basic 'crc32' (crc32(key) % servers_count) algorithm
@@ -83,8 +78,6 @@ class Rediska
      */
     protected $_options = array(
         'namespace'           => '',
-        'serializer'          => 'serialize',
-        'unserializer'        => 'unserialize',
         'servers'             => array(
             array(
                 'host'   => Rediska_Connection::DEFAULT_HOST,
@@ -92,13 +85,33 @@ class Rediska
                 'weight' => Rediska_Connection::DEFAULT_WEIGHT,
             )
         ),
+        'serializer'          => 'serialize',
+        'unserializer'        => 'unserialize',
         'keydistributor'      => 'consistentHashing'
     );
 
     /**
      * Contruct Rediska
      * 
-     * @param array $options Options (see $_options description)
+     * @param array $options Options
+     * 
+     * namespace      - Key names prefix
+     * servers        - Array of servers: array(
+     *                                        array('host' => '127.0.0.1', 'port' => 6379, 'weight' => 1, 'password' => '123'),
+     *                                        array('host' => '127.0.0.1', 'port' => 6380, 'weight' => 2)
+     *                                    )
+     * serializer     - Callback function for serialization.
+     *                  You may use PHP extensions like igbinary (http://opensource.dynamoid.com/)
+     *                  or you personal function.
+     *                  For default php function serialize.             
+     * unserializer   - Unserialize callback.
+     * keyDistributor - Algorithm of keys distribution on redis servers.
+     *                  For default 'consistentHashing' which implement
+     *                  consistent hashing algorithm (http://weblogs.java.net/blog/tomwhite/archive/2007/11/consistent_hash.html)
+     *                  You may use basic 'crc32' (crc32(key) % servers_count) algorithm
+     *                  or you personal implementation (option value - name of class
+     *                  which implements Rediska_KeyDistributor_Interface).
+     * 
      */
     public function __construct(array $options = array()) 
     {
@@ -1671,7 +1684,7 @@ class Rediska
             if (empty($this->_connections)) {
                 throw new Rediska_Connection_Exception('No one working server connections!');
             } else {
-                $connection = $this->_getConnectionByKey($name);
+                $connection = $this->_getConnectionByKeyName($name);
             }
         }
 

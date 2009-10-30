@@ -1,23 +1,7 @@
 <?php
 
-class Test_KeySpace extends PHPUnit_Framework_TestCase
-{
-	/**
-     * @var Rediska
-     */
-    private $rediska;
-
-	protected function setUp()
-    {
-        $this->rediska = new Rediska(array('namespace' => 'Rediska_Tests_'));
-    }
-
-    protected function tearDown()
-    {
-        $this->rediska->flushDb();
-        $this->rediska = null;
-    }
-    
+class Test_KeySpace extends RediskaTestCase
+{    
     public function testGetKeysByPattern()
     {
     	$reply = $this->rediska->getKeysByPattern('h*llo');
@@ -51,7 +35,8 @@ class Test_KeySpace extends PHPUnit_Framework_TestCase
     
     public function testGetKeysByPatternWithManyConnections()
     {
-    	$this->rediska->addServer('127.0.0.1', 6380);
+    	$this->_addServerOrSkipTest('127.0.0.1', 6380);
+
     	$this->testGetKeysByPattern();
     }
 
@@ -80,7 +65,8 @@ class Test_KeySpace extends PHPUnit_Framework_TestCase
     
     public function testRenameWithManyConnections()
     {
-        $this->rediska->addServer('127.0.0.1', 6380);
+    	$this->_addServerOrSkipTest('127.0.0.1', 6380);
+
         $this->testRename();
     }
 
@@ -97,7 +83,8 @@ class Test_KeySpace extends PHPUnit_Framework_TestCase
     
     public function testRenameWithoutOverwriteWithManyConnections()
     {
-        $this->rediska->addServer('127.0.0.1', 6380);
+    	$this->_addServerOrSkipTest('127.0.0.1', 6380);
+
         $this->testRenameWithoutOverwrite();
     }
 
@@ -121,7 +108,8 @@ class Test_KeySpace extends PHPUnit_Framework_TestCase
     
     public function testGetKeysCountWithManyConnections()
     {
-        $this->rediska->addServer('127.0.0.1', 6380);
+    	$this->_addServerOrSkipTest('127.0.0.1', 6380);
+
         $this->testGetKeysCount();
     }
 

@@ -36,6 +36,9 @@ class Rediska_Connection
      */
 	public function __construct(array $options = array())
 	{
+		$options = array_change_key_case($options, CASE_LOWER);
+        $options = array_merge($this->_options, $options);
+
 		$this->setOptions($options);
 	}
 
@@ -51,7 +54,7 @@ class Rediska_Connection
      * Set options array
      * 
      * @param array $options Options (see $_options description)
-     * @return Rediska
+     * @return Rediska_Connection
      */
     public function setOptions(array $options)
     {
@@ -72,7 +75,7 @@ class Rediska_Connection
      * @throws Rediska_Connection_Exception
      * @param string $name Name of option
      * @param mixed $value Value of option
-     * @return Rediska
+     * @return Rediska_Connection
      */
     public function setOption($name, $value)
     {

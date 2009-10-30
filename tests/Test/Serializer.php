@@ -1,23 +1,7 @@
 <?php
 
-class Test_Serializer extends PHPUnit_Framework_TestCase
+class Test_Serializer extends RediskaTestCase
 {
-	/**
-     * @var Rediska
-     */
-    private $rediska;
-	
-	protected function setUp()
-    {
-        $this->rediska = new Rediska(array('namespace' => 'Rediska_Tests_'));
-    }
-
-    protected function tearDown()
-    {
-        $this->rediska->flushDb();
-        $this->rediska = null;
-    }
-
     /**
      * @expectedException Rediska_Exception
      */

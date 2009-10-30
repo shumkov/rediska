@@ -8,7 +8,7 @@ set_include_path(implode(PATH_SEPARATOR, array(
 define('REDISKA_TESTS_PATH', realpath(dirname(__FILE__)));
 
 require_once 'PHPUnit/Framework/TestSuite.php';
-require_once 'PHPUnit/Framework/TestCase.php';
+require_once 'classes/RediskaTestCase.php';
 
 require_once 'Test/Strings.php';
 require_once 'Test/KeySpace.php';
@@ -23,8 +23,11 @@ require_once 'Test/Key/Basic.php';
 require_once 'Test/Key/Set.php';
 require_once 'Test/Key/List.php';
 require_once 'Test/Zend/Application/Resource.php';
+require_once 'Test/Zend/Auth.php';
+require_once 'Test/Zend/Cache.php';
 
 require_once 'Rediska.php';
+
 
 class Suite extends PHPUnit_Framework_TestSuite
 {
@@ -45,6 +48,8 @@ class Suite extends PHPUnit_Framework_TestSuite
 		$this->addTestSuite('Test_Key_Set');
 		$this->addTestSuite('Test_Key_List');
 		$this->addTestSuite('Test_Zend_Application_Resource');
+		$this->addTestSuite('Test_Zend_Auth');
+		$this->addTestSuite('Test_Zend_Cache');
 	}
 
 	public static function suite() {

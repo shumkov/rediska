@@ -1,23 +1,7 @@
 <?php
 
-class Test_Lists extends PHPUnit_Framework_TestCase
+class Test_Lists extends RediskaTestCase
 {
-    /**
-     * @var Rediska
-     */
-    private $rediska;
-
-    protected function setUp()
-    {
-        $this->rediska = new Rediska(array('namespace' => 'Rediska_Tests_'));
-    }
-
-    protected function tearDown()
-    {
-        $this->rediska->flushDb();
-        $this->rediska = null;
-    }
-
     public function testAppendToList()
     {
     	$reply = $this->rediska->appendToList('test', 'aaa');
