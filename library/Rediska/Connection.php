@@ -80,7 +80,7 @@ class Rediska_Connection
     public function setOption($name, $value)
     {
         if (!array_key_exists($name, $this->_options)) {
-            throw new Rediska_Connection_Exception("Unknown option $name");
+            throw new Rediska_Connection_Exception("Unknown option '$name'");
         }
 
         $this->_options[$name] = $value;
@@ -98,7 +98,7 @@ class Rediska_Connection
     public function getOption($name)
     {
         if (!array_key_exists($name, $this->_options)) {
-            throw new Rediska_Connection_Exception("Unknown option $name");
+            throw new Rediska_Connection_Exception("Unknown option '$name'");
         }
 
         return $this->_options[$name];
