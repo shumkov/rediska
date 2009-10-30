@@ -1,23 +1,7 @@
 <?php
 
-class Test_Sets extends PHPUnit_Framework_TestCase
+class Test_Sets extends RediskaTestCase
 {
-    /**
-     * @var Rediska
-     */
-    private $rediska;
-
-    protected function setUp()
-    {
-        $this->rediska = new Rediska(array('namespace' => 'Rediska_Tests_'));
-    }
-
-    protected function tearDown()
-    {
-        $this->rediska->flushDb();
-        $this->rediska = null;
-    }
-    
     public function testAddToSet()
     {
     	$value = $this->rediska->addToSet('test', 'aaa');
@@ -88,7 +72,7 @@ class Test_Sets extends PHPUnit_Framework_TestCase
     
     public function testMoveToSetWithMayConnections()
     {
-    	$this->rediska->addServer('127.0.0.1', 6380);
+    	$this->_addServerOrSkipTest('127.0.0.1', 6380);
     	$this->testMoveToSet();
     }
     
@@ -136,7 +120,7 @@ class Test_Sets extends PHPUnit_Framework_TestCase
     
     public function testIntersectSetsWithManyConnection()
     {
-    	$this->rediska->addServer('127.0.0.1', 6380);
+    	$this->_addServerOrSkipTest('127.0.0.1', 6380);
         $this->testIntersectSets();
     }
     
@@ -161,7 +145,7 @@ class Test_Sets extends PHPUnit_Framework_TestCase
     
     public function testUnionSetsWithManyConnection()
     {
-    	$this->rediska->addServer('127.0.0.1', 6380);
+    	$this->_addServerOrSkipTest('127.0.0.1', 6380);
         $this->testUnionSets();
     }
     
@@ -186,7 +170,7 @@ class Test_Sets extends PHPUnit_Framework_TestCase
     
     public function testDiffSetsWithManyConnection()
     {
-    	$this->rediska->addServer('127.0.0.1', 6380);
+    	$this->_addServerOrSkipTest('127.0.0.1', 6380);
         $this->testDiffSets();
     }
     

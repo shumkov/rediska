@@ -1,23 +1,7 @@
 <?php
 
-class Test_Controls extends PHPUnit_Framework_TestCase
+class Test_Controls extends RediskaTestCase
 {
-    /**
-     * @var Rediska
-     */
-    private $rediska;
-
-    protected function setUp()
-    {
-        $this->rediska = new Rediska(array('namespace' => 'Rediska_Tests_'));
-    }
-
-    protected function tearDown()
-    {
-        $this->rediska->flushDb(true);
-        $this->rediska = null;
-    }
-
     public function testSelectDb()
     {
     	$this->rediska->set('a', 1);
@@ -92,7 +76,7 @@ class Test_Controls extends PHPUnit_Framework_TestCase
 
     public function testGetLastSaveTimeWithManyConnections()
     {
-    	$this->rediska->addServer('127.0.0.1', 6380);
+    	$this->_addServerOrSkipTest('127.0.0.1', 6380);
 
     	$timestamp = $this->rediska->getLastSaveTime();
     	$this->assertTrue(is_array($timestamp));
@@ -114,7 +98,7 @@ class Test_Controls extends PHPUnit_Framework_TestCase
 
     public function testInfoWithManyServers()
     {
-    	$this->rediska->addServer('127.0.0.1', 6380);
+    	$this->_addServerOrSkipTest('127.0.0.1', 6380);
 
         $info = $this->rediska->info();
         $this->assertTrue(is_array($info));
