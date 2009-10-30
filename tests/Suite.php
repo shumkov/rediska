@@ -26,6 +26,7 @@ require_once 'Test/Zend/Application/Resource.php';
 require_once 'Test/Zend/Auth.php';
 require_once 'Test/Zend/Cache.php';
 require_once 'Test/Zend/Session.php';
+require_once 'Test/Zend/Queue.php';
 
 require_once 'Rediska.php';
 
@@ -52,6 +53,7 @@ class Suite extends PHPUnit_Framework_TestSuite
 		$this->addTestSuite('Test_Zend_Auth');
 		$this->addTestSuite('Test_Zend_Cache');
 		$this->addTestSuite('Test_Zend_Session');
+		$this->addTestSuite('Test_Zend_Queue');
 	}
 
 	public static function suite() {

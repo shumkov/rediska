@@ -31,7 +31,7 @@ require_once 'Zend/Session/SaveHandler/Interface.php';
 require_once 'Zend/Session/SaveHandler/Exception.php';
 
 /**
- * Zend_Session save handler for Redis
+ * Redis save handler for Zend_Session
  * 
  * @author Ivan Shumkov
  * @package Rediska
@@ -147,7 +147,7 @@ class Rediska_Zend_Session_SaveHandler_Redis implements Zend_Session_SaveHandler
     {
     	$this->_set[] = $id;
 
-        return $this->_rediska->set($this->_getKeyName($id), $data, $this->_lifetime);
+        return $this->_rediska->set($this->_getKeyName($id), $data, $this->_options['lifetime']);
     }
 
     /**

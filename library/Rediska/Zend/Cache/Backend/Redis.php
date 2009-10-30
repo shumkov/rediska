@@ -16,7 +16,7 @@ require_once 'Zend/Cache/Backend.php';
 require_once 'Zend/Cache/Backend/ExtendedInterface.php';
 
 /**
- * Zend_Cache adapter for Redis
+ * Redis adapter for Zend_Cache
  * 
  * @author Ivan Shumkov
  * @package Rediska
