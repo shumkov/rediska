@@ -26,7 +26,7 @@ require_once 'Zend/Auth/Adapter/Exception.php';
 require_once 'Zend/Config.php';
 
 /**
- * Zend_Auth adapter for Redis
+ * Redis adapter for Zend_Auth
  * 
  * @author Ivan Shumkov
  * @package Rediska

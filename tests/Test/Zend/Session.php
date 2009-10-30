@@ -67,7 +67,7 @@ class Test_Zend_Session extends PHPUnit_Framework_TestCase
         $this->rediska->set('s_123', 'aaa');
         $this->rediska->addToSet('s_sessions', '123');
 
-        $reply = $this->saveHandler->gc();
+        $reply = $this->saveHandler->gc(0);
         $this->assertTrue($reply);
 
         $values = $this->rediska->getSet('s_sessions');
@@ -78,7 +78,7 @@ class Test_Zend_Session extends PHPUnit_Framework_TestCase
 
         $this->rediska->delete('s_123');
 
-        $reply = $this->saveHandler->gc();
+        $reply = $this->saveHandler->gc(0);
         $this->assertTrue($reply);
 
         $values = $this->rediska->getSet('s_sessions');
