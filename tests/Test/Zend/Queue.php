@@ -16,7 +16,7 @@ class Test_Zend_Queue extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->rediska = new Rediska(array('namespace' => 'Rediska_Tests_'));
+        $this->rediska = new Rediska(array('namespace' => 'Rediska_Test_'));
         $this->queue = new Zend_Queue('Redis', array('adapterNamespace' => 'Rediska_Zend_Queue_Adapter'));
     }
 
@@ -62,29 +62,28 @@ class Test_Zend_Queue extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $queue->count());
     }
 
-    public function testDeleteMessage()
-    {
-    	$queue = $this->queue->createQueue('test');
-        $queue->send(array(1, 2, 3));
-
-        $values = $this->rediska->getList('Zend_Queue_queue_test');
-        $this->assertEquals(array(array(1, 2, 3)), $values);
-
-        $queue->deleteMessage($queue);
-
-        $values = $this->rediska->getList('Zend_Queue_queue_test');
-        $this->assertEquals(array(), $values);
-    }
-
     public function testReceive()
     {
     	$queue = $this->queue->createQueue('test');
         $queue->send(array(1, 2, 3));
 
-        $values = $queue->receive();
-        $this->assertType($queue->getMessageSetClass(), $values);
+        $messages = $queue->receive();
+        $this->assertType($queue->getMessageSetClass(), $messages);
 
-        $values = $values->toArray();
-        $this->assertEquals(array(1, 2, 3), $values[0]);
+        $values = $messages->toArray();
+        $this->assertEquals(array(1, 2, 3), $values[0]['body']);
+    }
+
+    public function testDeleteMessage()
+    {
+        $queue = $this->queue->createQueue('test');
+        $queue->send(array(1, 2, 3));
+
+        foreach($queue->receive() as $message) {
+            $queue->deleteMessage($message);
+        }
+
+        $values = $this->rediska->getList('Zend_Queue_queue_test');
+        $this->assertEquals(array(), $values);
     }
 }
