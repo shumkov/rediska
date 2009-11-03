@@ -66,15 +66,10 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
         parent::__construct($options, $queue);
 
         $defaultInstance = Rediska::getDefaultInstance();
-        if (!isset($this->_options['driverOptions']) && $defaultInstance) {
+        if (empty($this->_options['driverOptions']) && $defaultInstance) {
         	$this->_rediska = $defaultInstance;
         } else {
-        	if (isset($this->_options['driverOptions'])) {
-        		$options = $this->_options['driverOptions'];
-        	} else {
-        		$options = array();
-        	}
-        	$this->_rediska = new Rediska($options);
+        	$this->_rediska = new Rediska($this->_options['driverOptions']);
         }
 
         $this->_queues = new Rediska_Key_Set($this->_getKeyName('queues'));
