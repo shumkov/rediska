@@ -23,18 +23,40 @@ class Rediska_Zend_Session_Set extends Rediska_Key_Set
 	 */
 	protected static $_saveHandler;
 
-	public function __construct(Rediska_Zend_Session_SaveHandler_Redis $saveHandler = null)
+	/**
+	 * Session set constructor
+	 */
+	public function __construct()
 	{
-		if (!is_null($saveHandler)) {
-			self::$_saveHandler = $saveHandler;
-		} else if (self::$_saveHandler) {
-			$saveHandler = self::$_saveHandler;
-		} else {
+		if (!self::$_saveHandler) {
 			throw new Rediska_Key_Exception('You must initialize Rediska_Zend_Session_SaveHandler_Redis before');
 		}
 
-		$this->setRediska($saveHandler->getRediska());
+		$this->setRediska(self::getSaveHandler()->getRediska());
 
-		parent::__construct($saveHandler->getOption('keyPrefix') . 'sessions');
+		parent::__construct(self::getSaveHandler()->getOption('keyPrefix') . 'sessions');
+	}
+
+	/**
+	 * Get Redis session save handler
+	 * 
+	 * @return Rediska_Zend_Session_SaveHandler_Redis
+	 */
+	public static function getSaveHandler()
+	{
+		return self::$_saveHandler;
+	}
+
+	/**
+	 * Set Redis session save handler
+	 * 
+	 * @param Rediska_Zend_Session_SaveHandler_Redis $saveHandler
+	 * @return boolean
+	 */
+	public static function setSaveHandler(Rediska_Zend_Session_SaveHandler_Redis $saveHandler)
+	{
+		self::$_saveHandler = $saveHandler;
+
+		return true;
 	}
 }
