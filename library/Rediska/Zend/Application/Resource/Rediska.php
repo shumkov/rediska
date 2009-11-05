@@ -35,10 +35,10 @@ class Rediska_Zend_Application_Resource_Rediska extends Zend_Application_Resourc
         	$key = self::DEFAULT_REGISTRY_KEY;
         }
 
-        $redis = new Rediska($options);
+        $rediska = new Rediska($options);
 
-        Zend_Registry::set($key, $redis);
+        Zend_Registry::set($key, $rediska);
 
-        return $redis;
+        return $rediska;
     }
 }

@@ -82,15 +82,15 @@ class Rediska_Zend_Session_SaveHandler_Redis implements Zend_Session_SaveHandler
     	$this->setOptions($options);
 
     	$defaultInstance = Rediska::getDefaultInstance();
-        if (!$this->_rediska) {
-        	if ($defaultInstance) {
-        	   $this->_rediska = $defaultInstance;
-            } else {
-        	   $this->_rediska = new Rediska();
-            }
+        if (empty($options) && $defaultInstance) {
+            $this->_rediska = $defaultInstance;
+        } else {
+            $this->_rediska = new Rediska($options);
         }
 
-        $this->_set = new Rediska_Zend_Session_Set($this);
+        Rediska_Zend_Session_Set::setSaveHandler($this);
+
+        $this->_set = new Rediska_Zend_Session_Set();
     }
 
     /**
