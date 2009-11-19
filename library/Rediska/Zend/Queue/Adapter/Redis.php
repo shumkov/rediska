@@ -22,7 +22,7 @@ require_once 'Zend/Queue/Adapter/AdapterAbstract.php';
 
 /**
  * Redis adapter for Zend_Queue
- * 
+ *
  * @author Ivan Shumkov
  * @package Rediska
  * @version 0.2.1
@@ -32,24 +32,24 @@ require_once 'Zend/Queue/Adapter/AdapterAbstract.php';
 class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstract
 {
 	const KEY_PREFIX = 'Zend_Queue_';
-	
+
 	/**
 	 * Rediska instance
-	 * 
+	 *
 	 * @var Rediska
 	 */
 	protected $_rediska;
-	
+
 	/**
 	 * Queues set
-	 * 
+	 *
 	 * @var Rediska_Key_Set
 	 */
 	protected $_queues;
 
 	/**
 	 * Queue Lists array
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $_queueObjects;
@@ -114,7 +114,7 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
 
         return true;
     }
-    
+
     /**
      * Delete a queue and all of it's messages
      *
@@ -133,7 +133,7 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
         	return $this->_rediska->delete($this->_getKeyName("queue_$name"));
         }
     }
-    
+
     /**
      * Get an array of all available queues
      *
@@ -151,7 +151,7 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
     {
     	return self::KEY_PREFIX . $name;
     }
-    
+
     /**
      * Return the approximate number of messages in the queue
      *
@@ -180,7 +180,7 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
         if ($queue === null) {
             $queue = $this->_queue;
         }
-        
+
         $queueName = $queue->getName();
 
         if (!$this->isExists($queueName)) {
@@ -228,9 +228,9 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
         if ($queue === null) {
             $queue = $this->_queue;
         }
-        
+
         $queueName = $queue->getName();
-        
+
         if (!$this->isExists($queueName)) {
             require_once 'Zend/Queue/Exception.php';
             throw new Zend_Queue_Exception('Queue does not exist:' . $queueName);
@@ -240,15 +240,17 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
             $this->_queueObjects[$queueName] = new Rediska_Key_List($this->_getKeyName("queue_$queueName"));
         }
 
-        $msgs = array();
+        $messages = array();
         for ($i = 0; $i < $maxMessages; $i++) {
-            $data = array('body' => $this->_queueObjects[$queueName]->pop());
-            $msgs[] = $data;
+        	$message = $this->_queueObjects[$queueName]->pop();
+        	if (!is_null($message)) {
+                $messages[] = array('body' => $message);
+        	}
         }
 
         $options = array(
             'queue'        => $queue,
-            'data'         => $msgs,
+            'data'         => $messages,
             'messageClass' => $queue->getMessageClass(),
         );
 

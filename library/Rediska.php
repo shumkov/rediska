@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @see Rediska_Connection
+ ** @see Rediska_Connection
  */
 require_once 'Rediska/Connection.php';
 
