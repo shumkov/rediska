@@ -81,6 +81,12 @@ class Rediska_Zend_Session_SaveHandler_Redis implements Zend_Session_SaveHandler
 
     	$this->setOptions($options);
 
+        foreach($this->_options as $name => $value) {
+            if (isset($options[$name])) {
+                unset($options[$name]);
+            }
+        }
+
     	$defaultInstance = Rediska::getDefaultInstance();
         if (empty($options) && $defaultInstance) {
             $this->_rediska = $defaultInstance;
