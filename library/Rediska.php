@@ -11,6 +11,11 @@ require_once 'Rediska/Connection.php';
 require_once 'Rediska/Exception.php';
 
 /**
+ * @see Rediska_KeyDistributor_Interface
+ */
+require_once 'Rediska/KeyDistributor/Interface.php';
+
+/**
  * Rediska (radish on russian) - PHP client 
  * for key-value database Redis (http://code.google.com/p/redis)
  * 
@@ -309,7 +314,7 @@ class Rediska
      */
     public function setKeyDistributor($name)
     {
-        if (in_array(ucfirst($name), array('Crc32', 'ConsistentHashing'))) {
+        if (in_array($name, array('crc32', 'consistentHashing'))) {
             $name = ucfirst($name);
             require_once "Rediska/KeyDistributor/$name.php";
             $className = "Rediska_KeyDistributor_$name";
