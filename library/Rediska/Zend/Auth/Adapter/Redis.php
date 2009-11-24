@@ -310,6 +310,9 @@ class Rediska_Zend_Auth_Adapter_Redis implements Zend_Auth_Adapter_Interface
     {
     	if (is_null($this->_rediska)) {
             $this->_rediska = Rediska::getDefaultInstance();
+            if (is_null($this->_rediska)) {
+                $this->_rediska = new Rediska();
+            }
     	}
     }
 }
