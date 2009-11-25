@@ -187,5 +187,8 @@ abstract class Rediska_Key_Abstract
     protected function _setupRediskaDefaultInstance()
     {
         $this->_rediska = Rediska::getDefaultInstance();
+        if (!$this->_rediska) {
+            $this->_rediska = new Rediska();
+        }
     }
 }

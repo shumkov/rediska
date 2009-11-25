@@ -309,23 +309,25 @@ class Rediska
      * See options description for more information.
      * 
      * @throws Rediska_Exception
-     * @param string $name Name of key distributor (Crc32, ConsistentHashing or you personal class)
+     * @param string $name Name of key distributor (crc32, consistentHashing or you personal class) or object
      * @return rediska
      */
     public function setKeyDistributor($name)
     {
-        if (in_array($name, array('crc32', 'consistentHashing'))) {
+        if (is_object($name)) {
+            $this->_keyDistributor = $name;
+        } else if (in_array($name, array('crc32', 'consistentHashing'))) {
             $name = ucfirst($name);
             require_once "Rediska/KeyDistributor/$name.php";
             $className = "Rediska_KeyDistributor_$name";
+            $this->_keyDistributor = new $className;
         } else {
             if (!@class_exists($name)) {
                 throw new Rediska_Exception("Key distributor '$name' not found. You need include it before or setup autoload.");
             }
-            $className = $name;
+            $this->_keyDistributor = new $name;
         }
 
-        $this->_keyDistributor = new $className;
         if (!$this->_keyDistributor instanceof Rediska_KeyDistributor_Interface) {
             throw new Rediska_Exception("'$name' must implement Rediska_KeyDistributor_Interface");
         }
@@ -339,7 +341,7 @@ class Rediska
     }
 
     /**
-     * Commands operating on string values
+     * Commands operating on single-value keys
      */
 
     /**
