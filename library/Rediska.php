@@ -327,7 +327,7 @@ class Rediska
             }
             $this->_keyDistributor = new $name;
         }
-        
+
         if (!$this->_keyDistributor instanceof Rediska_KeyDistributor_Interface) {
             throw new Rediska_Exception("'$name' must implement Rediska_KeyDistributor_Interface");
         }
