@@ -33,7 +33,7 @@ class Test_Zend_Auth extends PHPUnit_Framework_TestCase
         $this->rediska->set('users:1', $data);
 
         $this->auth = Zend_Auth::getInstance();
-        
+
         $this->adapter = new Rediska_Zend_Auth_Adapter_Redis();
     }
 
@@ -42,7 +42,7 @@ class Test_Zend_Auth extends PHPUnit_Framework_TestCase
         $this->rediska->flushDb(true);
         $this->rediska = null;
     }
-	
+
 	public function testIdentityNotFound()
     {
         $this->adapter->setIdentity('test2')->setCredential('aaa');
@@ -52,7 +52,7 @@ class Test_Zend_Auth extends PHPUnit_Framework_TestCase
         $this->assertFalse($result->isValid());
         $this->assertEquals(Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND, $result->getCode());
     }
-    
+
     public function testCredentialInvalid()
     {
         $this->adapter->setIdentity('test')->setCredential('aaa');
