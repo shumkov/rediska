@@ -255,12 +255,12 @@ class Rediska_Zend_Auth_Adapter_Redis implements Zend_Auth_Adapter_Interface
 
     /**
      * (non-PHPdoc)
-     * @see library/Zend/Auth/Adapter/Zend_Auth_Adapter_Interface#authenticate()
+     * @see Zend_Auth_Adapter_Interface#authenticate()
      */
     public function authenticate()
     {
     	$identity = $this->getIdentity();
-    	
+
     	$userIdKey = str_replace('*', $identity, $this->getOption('userIdKey'));
 
     	$userId = $this->getRediska()->get($userIdKey);

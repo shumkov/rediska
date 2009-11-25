@@ -110,7 +110,7 @@ class Rediska_Key_GetOrSetValue
     	$value = $this->_key->getValue();
 
         if (is_null($value)) {
-            if (is_null($object)) {
+            if (is_null($this->_object)) {
                 $callback = $method;
             } else {
                 $callback = array($this->_object, $method);
