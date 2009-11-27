@@ -18,8 +18,8 @@ require_once 'Rediska/KeyDistributor/Exception.php';
  * @author Ivan Shumkov
  * @package Rediska
  * @version 0.4.1
- * @link http://code.google.com/p/rediska
- * @licence http://opensource.org/licenses/gpl-3.0.html
+ * @link http://rediska.geometria-lab.net
+ * @licence http://www.opensource.org/licenses/bsd-license.php
  */
 class Rediska_KeyDistributor_Crc32 implements Rediska_KeyDistributor_Interface
 {
