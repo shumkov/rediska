@@ -18,18 +18,18 @@ require_once 'Rediska/KeyDistributor/Exception.php';
  * @author Ivan Shumkov
  * @package Rediska
  * @version 0.4.1
- * @link http://code.google.com/p/rediska
- * @licence http://opensource.org/licenses/gpl-3.0.html
+ * @link http://rediska.geometria-lab.net
+ * @licence http://www.opensource.org/licenses/bsd-license.php
  */
 class Rediska_KeyDistributor_Crc32 implements Rediska_KeyDistributor_Interface
 {
-	protected $_connections = array();
+    protected $_connections = array();
 
-	protected $_connectionCount = 0;
+    protected $_connectionCount = 0;
 
-	protected $_connectionPositions = array();
-	
-	protected $_connectionPositionCount = 0;
+    protected $_connectionPositions = array();
+
+    protected $_connectionPositionCount = 0;
 
 	/**
      * (non-PHPdoc)
@@ -37,20 +37,20 @@ class Rediska_KeyDistributor_Crc32 implements Rediska_KeyDistributor_Interface
      */
 	public function addConnection($connectionString, $weight = Rediska_Connection::DEFAULT_WEIGHT)
 	{
-		if (in_array($connectionString, $this->_connections)) {
-			throw new Rediska_KeyDistributor_Exception("Connection '$connectionString' already exists.");
-		}
+        if (in_array($connectionString, $this->_connections)) {
+            throw new Rediska_KeyDistributor_Exception("Connection '$connectionString' already exists.");
+        }
 
-		$this->_connections[] = $connectionString;
-		$this->_connectionCount++;
+        $this->_connections[] = $connectionString;
+        $this->_connectionCount++;
 
-		// add connection positions
-		for ($index = 0; $index < $weight; $index++) {
-			$this->_connectionPositions[] = $connectionString;
-			$this->_connectionPositionCount++;
-		}
+        // add connection positions
+        for ($index = 0; $index < $weight; $index++) {
+            $this->_connectionPositions[] = $connectionString;
+            $this->_connectionPositionCount++;
+        }
 
-		return $this;
+        return $this;
 	}
 
 	/**

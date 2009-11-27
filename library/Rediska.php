@@ -11,14 +11,19 @@ require_once 'Rediska/Connection.php';
 require_once 'Rediska/Exception.php';
 
 /**
+ * @see Rediska_KeyDistributor_Interface
+ */
+require_once 'Rediska/KeyDistributor/Interface.php';
+
+/**
  * Rediska (radish on russian) - PHP client 
  * for key-value database Redis (http://code.google.com/p/redis)
  * 
  * @author Ivan Shumkov
  * @package Rediska
- * @version 0.2.1
- * @link http://code.google.com/p/rediska
- * @licence http://opensource.org/licenses/gpl-3.0.html
+ * @version 0.2.2
+ * @link http://rediska.geometria-lab.net
+ * @licence http://www.opensource.org/licenses/bsd-license.php
  */
 class Rediska
 {
@@ -304,23 +309,25 @@ class Rediska
      * See options description for more information.
      * 
      * @throws Rediska_Exception
-     * @param string $name Name of key distributor (Crc32, ConsistentHashing or you personal class)
+     * @param string $name Name of key distributor (crc32, consistentHashing or you personal class) or object
      * @return rediska
      */
     public function setKeyDistributor($name)
     {
-        if (in_array(ucfirst($name), array('Crc32', 'ConsistentHashing'))) {
+        if (is_object($name)) {
+            $this->_keyDistributor = $name;
+        } else if (in_array($name, array('crc32', 'consistentHashing'))) {
             $name = ucfirst($name);
             require_once "Rediska/KeyDistributor/$name.php";
             $className = "Rediska_KeyDistributor_$name";
+            $this->_keyDistributor = new $className;
         } else {
             if (!@class_exists($name)) {
                 throw new Rediska_Exception("Key distributor '$name' not found. You need include it before or setup autoload.");
             }
-            $className = $name;
+            $this->_keyDistributor = new $name;
         }
 
-        $this->_keyDistributor = new $className;
         if (!$this->_keyDistributor instanceof Rediska_KeyDistributor_Interface) {
             throw new Rediska_Exception("'$name' must implement Rediska_KeyDistributor_Interface");
         }
@@ -334,7 +341,7 @@ class Rediska
     }
 
     /**
-     * Commands operating on string values
+     * Commands operating on single-value keys
      */
 
     /**

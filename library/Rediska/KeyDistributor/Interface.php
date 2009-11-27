@@ -6,8 +6,8 @@
  * @author Ivan Shumkov
  * @package Rediska
  * @version 0.4.1
- * @link http://code.google.com/p/rediska
- * @licence http://opensource.org/licenses/gpl-3.0.html
+ * @link http://rediska.geometria-lab.net
+ * @licence http://www.opensource.org/licenses/bsd-license.php
  */
 interface Rediska_KeyDistributor_Interface
 {

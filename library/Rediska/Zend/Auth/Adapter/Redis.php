@@ -30,9 +30,9 @@ require_once 'Zend/Config.php';
  * 
  * @author Ivan Shumkov
  * @package Rediska
- * @version 0.2.1
- * @link http://code.google.com/p/rediska
- * @licence http://opensource.org/licenses/gpl-3.0.html
+ * @version 0.2.2
+ * @link http://rediska.geometria-lab.net
+ * @licence http://www.opensource.org/licenses/bsd-license.php
  */
 class Rediska_Zend_Auth_Adapter_Redis implements Zend_Auth_Adapter_Interface
 {
@@ -255,12 +255,12 @@ class Rediska_Zend_Auth_Adapter_Redis implements Zend_Auth_Adapter_Interface
 
     /**
      * (non-PHPdoc)
-     * @see library/Zend/Auth/Adapter/Zend_Auth_Adapter_Interface#authenticate()
+     * @see Zend_Auth_Adapter_Interface#authenticate()
      */
     public function authenticate()
     {
     	$identity = $this->getIdentity();
-    	
+
     	$userIdKey = str_replace('*', $identity, $this->getOption('userIdKey'));
 
     	$userId = $this->getRediska()->get($userIdKey);
@@ -310,6 +310,9 @@ class Rediska_Zend_Auth_Adapter_Redis implements Zend_Auth_Adapter_Interface
     {
     	if (is_null($this->_rediska)) {
             $this->_rediska = Rediska::getDefaultInstance();
+            if (is_null($this->_rediska)) {
+                $this->_rediska = new Rediska();
+            }
     	}
     }
 }

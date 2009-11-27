@@ -10,9 +10,9 @@ require_once 'Rediska/Key/Abstract.php';
  * 
  * @author Ivan Shumkov
  * @package Rediska
- * @version 0.2.1
- * @link http://code.google.com/p/rediska
- * @licence http://opensource.org/licenses/gpl-3.0.html
+ * @version 0.2.2
+ * @link http://rediska.geometria-lab.net
+ * @licence http://www.opensource.org/licenses/bsd-license.php
  */
 class Rediska_Key extends Rediska_Key_Abstract
 {
@@ -57,7 +57,7 @@ class Rediska_Key extends Rediska_Key_Abstract
 		return $this->getRediska()->get($this->_name);
 	}
 
-    public function getOrSetValue($object)
+    public function getOrSetValue($object = null)
     {
         return new Rediska_Key_GetOrSetValue($this, $object);
     }
@@ -73,9 +73,9 @@ class Rediska_Key extends Rediska_Key_Abstract
  * 
  * @author Ivan Shumkov
  * @package Rediska
- * @version 0.2.1
- * @link http://code.google.com/p/rediska
- * @licence http://opensource.org/licenses/gpl-3.0.html
+ * @version 0.2.2
+ * @link http://rediska.geometria-lab.net
+ * @licence http://www.opensource.org/licenses/bsd-license.php
  */
 class Rediska_Key_GetOrSetValue
 {
@@ -99,7 +99,7 @@ class Rediska_Key_GetOrSetValue
 	 * @param Rediska_Key $key
 	 * @param object      $object Provider object
 	 */
-	public function __construct(Rediska_Key $key, $object)
+	public function __construct(Rediska_Key $key, $object = null)
 	{
         $this->_key    = $key;
         $this->_object = $object;
@@ -110,7 +110,12 @@ class Rediska_Key_GetOrSetValue
     	$value = $this->_key->getValue();
 
         if (is_null($value)) {
-            $value = call_user_func_array(array($this->_object, $method), $args);
+            if (is_null($this->_object)) {
+                $callback = $method;
+            } else {
+                $callback = array($this->_object, $method);
+            }
+            $value = call_user_func_array($callback, $args);
             $this->_key->setValue($value);
         }
 

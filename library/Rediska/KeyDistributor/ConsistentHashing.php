@@ -15,7 +15,7 @@ require_once 'Rediska/KeyDistributor/Exception.php';
  * @version 0.4.1
  * @author Paul Annesley
  * @link http://github.com/pda/flexihash
- * @link http://code.google.com/p/rediska
+ * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/mit-license.php
  */
 class Rediska_KeyDistributor_ConsistentHashing implements Rediska_KeyDistributor_Interface
