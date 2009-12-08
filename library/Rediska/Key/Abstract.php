@@ -34,15 +34,23 @@ abstract class Rediska_Key_Abstract
 	 * @var Rediska
 	 */
 	protected $_rediska;
+	
+	/**
+     * Seconds to expire
+     * 
+     * @var integer
+     */
+    protected $_expire;
 
 	/**
 	 * Construct key
 	 * 
 	 * @param string $name
 	 */
-	public function __construct($name)
+	public function __construct($name, $expire = null)
 	{
 		$this->_name = $name;
+		$this->_expire = $expire;
 
 		$this->_setupRediskaDefaultInstance();
 	}
@@ -95,6 +103,10 @@ abstract class Rediska_Key_Abstract
 
 		$this->_name = $newName;
 
+        if (!is_null($this->_expire)) {
+            $this->expire($this->_expire);
+        }
+
 		return true;
 	}
 
@@ -128,7 +140,13 @@ abstract class Rediska_Key_Abstract
 	 */
 	public function moveToDb($dbIndex)
 	{
-		return $this->getRediska()->moveToDb($this->_name, $dbIndex);
+		$result = $this->getRediska()->moveToDb($this->_name, $dbIndex);
+
+        if ($result && !is_null($this->_expire)) {
+            $this->expire($this->_expire);
+        }
+
+        return $result;
 	}
 
 	/**

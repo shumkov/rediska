@@ -17,26 +17,6 @@ require_once 'Rediska/Key/Abstract.php';
 class Rediska_Key extends Rediska_Key_Abstract
 {
 	/**
-	 * Seconds to expire
-	 * 
-	 * @var integer
-	 */
-	protected $_expire;
-
-	/**
-	 * Construct key
-	 * 
-	 * @param string  $name
-	 * @param integer $expire
-	 */
-	public function __construct($name, $expire = null)
-	{
-		parent::__construct($name);
-
-		$this->_expire = $expire;
-	}
-
-	/**
 	 * Set key value
 	 * 
 	 * @param $value
