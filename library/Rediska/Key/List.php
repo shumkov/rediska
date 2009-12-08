@@ -24,7 +24,13 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
 	 */
 	public function append($value)
 	{
-		return $this->getRediska()->appendToList($this->_name, $value);
+		$result = $this->getRediska()->appendToList($this->_name, $value);
+
+	    if ($result && !is_null($this->_expire)) {
+            $this->expire($this->_expire);
+        }
+
+        return $result;
 	}
 	
 	/**
@@ -35,7 +41,13 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
 	 */
 	public function prepend($value)
 	{
-		return $this->getRediska()->prependToList($this->_name, $value);
+		$result = $this->getRediska()->prependToList($this->_name, $value);
+		
+		if ($result && !is_null($this->_expire)) {
+            $this->expire($this->_expire);
+        }
+
+        return $result;
 	}
 	
 	/**
@@ -71,8 +83,12 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
     public function fromArray(array $array)
     {
     	foreach($array as $item) {
-    		$this->append($item);
+    	    $this->getRediska()->appendToList($this->_name, $item);
     	}
+
+    	if (!is_null($this->_expire)) {
+            $this->expire($this->_expire);
+        }
 
     	return true;
     }
@@ -86,7 +102,13 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
      */
     public function truncate($limit, $offset = 0)
     {
-        return $this->getRediska()->truncateList($this->_name, $limit, $offset);
+        $result = $this->getRediska()->truncateList($this->_name, $limit, $offset);
+
+        if ($result && !is_null($this->_expire)) {
+            $this->expire($this->_expire);
+        }
+
+        return $result;
     }
 
     /**
@@ -109,7 +131,13 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
      */
     public function set($index, $value)
     {
-    	return $this->getRediska()->setToList($this->_name, $index, $value);
+    	$result = $this->getRediska()->setToList($this->_name, $index, $value);
+
+    	if ($result && !is_null($this->_expire)) {
+            $this->expire($this->_expire);
+        }
+
+        return $result;
     }
     
     /**
@@ -122,7 +150,13 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
      */
     public function remove($value, $count = 0)
     {
-        return $this->getRediska()->deleteFromList($this->_name, $value, $count);
+        $result = $this->getRediska()->deleteFromList($this->_name, $value, $count);
+
+        if ($result && !is_null($this->_expire)) {
+            $this->expire($this->_expire);
+        }
+
+        return $result;
     }
     
     /**
@@ -132,7 +166,13 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
      */
     public function shift()
     {
-    	return $this->getRediska()->shiftFromList($this->_name);
+    	$result = $this->getRediska()->shiftFromList($this->_name);
+
+    	if ($result && !is_null($this->_expire)) {
+            $this->expire($this->_expire);
+        }
+
+        return $result;
     }
 
     /**
@@ -142,7 +182,13 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
      */
     public function pop()
     {
-    	return $this->getRediska()->popFromList($this->_name);
+    	$result = $this->getRediska()->popFromList($this->_name);
+
+    	if ($result && !is_null($this->_expire)) {
+            $this->expire($this->_expire);
+        }
+
+        return $result;
     }
     
     /**

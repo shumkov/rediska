@@ -24,7 +24,13 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
      */
     public function add($value)
     {
-        return $this->getRediska()->addToSet($this->_name, $value);
+        $result = $this->getRediska()->addToSet($this->_name, $value);
+
+        if ($result && !is_null($this->_expire)) {
+            $this->expire($this->_expire);
+        }
+
+        return $result;
     }
     
     /**
@@ -35,7 +41,13 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
      */
     public function remove($value)
     {
-        return $this->getRediska()->deleteFromSet($this->_name, $value);
+        $result = $this->getRediska()->deleteFromSet($this->_name, $value);
+
+        if ($result && !is_null($this->_expire)) {
+            $this->expire($this->_expire);
+        }
+
+        return $result;
     }
     
     /**
@@ -174,7 +186,11 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
     public function fromArray(array $array)
     {
         foreach($array as $item) {
-            $this->add($item);
+            $this->getRediska()->addToSet($this->_name, $item);
+        }
+
+        if (!is_null($this->_expire)) {
+            $this->expire($this->_expire);
         }
 
         return true;
