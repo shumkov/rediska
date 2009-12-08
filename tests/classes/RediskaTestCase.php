@@ -26,7 +26,7 @@ class RediskaTestCase extends PHPUnit_Framework_TestCase
 
         if (is_resource($socket)) {
             @fclose($socket);
-            $this->rediska->addServer($host, $port);
+            $this->rediska->addServer($host, $port, array('persistent' => true));
         } else {
             $this->markTestSkipped("You must start server $host:$port before run test");
         }

@@ -19,14 +19,15 @@ class Rediska_Connection
 	const DEFAULT_HOST   = '127.0.0.1';
     const DEFAULT_PORT   = 6379;
     const DEFAULT_WEIGHT = 1;
-    
-    protected $_socket;
+
+    protected static $_sockets = array();
 
 	protected $_options = array(
-	   'host'     => self::DEFAULT_HOST,
-	   'port'     => self::DEFAULT_PORT,
-	   'weight'   => self::DEFAULT_WEIGHT,
-	   'password' => null,
+	   'host'       => self::DEFAULT_HOST,
+	   'port'       => self::DEFAULT_PORT,
+	   'weight'     => self::DEFAULT_WEIGHT,
+	   'persistent' => false,
+	   'password'   => null,
 	);
 
 	/**
@@ -112,14 +113,22 @@ class Rediska_Connection
      */
     public function connect() 
     {
-        if (!is_resource($this->_socket)) {
-	        $this->_socket = @fsockopen($this->getHost(), $this->getPort(), $errno, $errmsg);
-	
-	        if (!is_resource($this->_socket)) {
+        $socketString = $this->__toString();
+
+        if (!isset(self::$_sockets[$socketString])) {
+            if ($this->_options['persistent']) {
+                self::$_sockets[$socketString] = @pfsockopen($this->getHost(), $this->getPort(), $errno, $errmsg);
+            } else {
+                self::$_sockets[$socketString] = @fsockopen($this->getHost(), $this->getPort(), $errno, $errmsg);
+            }
+
+	        if (!is_resource(self::$_sockets[$socketString])) {
 	            $msg = "Can't connect to Redis server on {$this->getHost()}:{$this->getPort()}";
 	            if ($errno || $errmsg) {
 	                $msg .= "," . ($errno ? " error $errno" : "") . ($errmsg ? " $errmsg" : "");
 	            }
+
+	            unset(self::$_sockets[$socketString]);
 
 	            throw new Rediska_Connection_Exception($msg);
 	        }
@@ -143,13 +152,15 @@ class Rediska_Connection
      */
     public function write($string) 
     {
-        if (is_string($string) && $string != '') {
-            $string .= Rediska::EOL;
-            
+        if ($string != '') {
+            $string = (string)$string . Rediska::EOL;
+
             $this->connect();
 
+            $socketString = $this->__toString();
+
 	        while ($string) {
-	            $bytes = @fwrite($this->_socket, $string);
+	            $bytes = @fwrite(self::$_sockets[$socketString], $string);
 	
 	            if ($bytes === false) {
 	                $this->disconnect();
@@ -177,11 +188,13 @@ class Rediska_Connection
      */
     public function readLine()
     {
-    	if (!is_resource($this->_socket)) {
+        $socketString = $this->__toString();
+
+    	if (!isset(self::$_sockets[$socketString]) || !is_resource(self::$_sockets[$socketString])) {
             throw new Rediska_Connection_Exception("Can't read without connection to Redis server. Do connect or write first.");
     	}
 
-    	$string = @fgets($this->_socket);
+    	$string = @fgets(self::$_sockets[$socketString]);
 
         if ($string === false) {
         	$this->disconnect();
@@ -200,10 +213,16 @@ class Rediska_Connection
      */
     public function read($length)
     {
-    	$buffer = '';
+    	$socketString = $this->__toString();
+
+        if (!isset(self::$_sockets[$socketString]) || !is_resource(self::$_sockets[$socketString])) {
+            throw new Rediska_Connection_Exception("Can't read without connection to Redis server. Do connect or write first.");
+        }
+
+        $buffer = '';
 
     	while ($length) {
-            $data = @fread($this->_socket, $length);
+            $data = @fread(self::$_sockets[$socketString], $length);
             if ($data === false) {
             	$this->disconnect();
                 throw new Rediska_Connection_Exception("Can't read from socket.");
@@ -212,7 +231,7 @@ class Rediska_Connection
             $buffer .= $data;
         }
 
-        $eof = @fread($this->_socket, 2);
+        $eof = @fread(self::$_sockets[$socketString], 2);
         if ($eof === false) {
             $this->disconnect();
             throw new Rediska_Connection_Exception("Can't read from socket.");
@@ -228,13 +247,14 @@ class Rediska_Connection
      */
     public function disconnect() 
     {
-    	if (!is_null($this->_socket)) {
-    		if (is_resource($this->_socket)) {
-    			$this->write('QUIT');
-	            @fclose($this->_socket);
-	        }
+        $socketString = $this->__toString();
 
-	        $this->_socket = null;
+    	if (isset(self::$_sockets[$socketString])) {
+    		if (is_resource(self::$_sockets[$socketString])) {
+    			$this->write('QUIT');
+	            @fclose(self::$_sockets[$socketString]);
+	        }
+	        unset(self::$_sockets[$socketString]);
 
 	        return true;
     	} else {
