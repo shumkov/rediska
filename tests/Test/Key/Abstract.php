@@ -82,19 +82,20 @@ class Test_Key_Abstract extends PHPUnit_Framework_TestCase
     public function testExpire()
     {
     	$this->key->getRediska()->set($this->key->getName(), 1);
-    	
+
     	$this->key->expire(1);
-    	
+
     	sleep(2);
-    	
+
     	$reply = $this->key->getRediska()->get($this->key->getName());
     	$this->assertNull($reply);
     }
 
     public function testGetLifetime()
     {
-    	$this->key->getRediska()->set($this->key->getName(), 1, 50);
-    	
+    	$this->key->getRediska()->set($this->key->getName(), 1);
+    	$this->key->getRediska()->expire($this->key->getName(), 50);
+
     	$reply = $this->key->getLifetime();
     	$this->assertGreaterThan(45, $reply);
     }

@@ -160,4 +160,26 @@ class Test_Lists extends RediskaTestCase
         $reply = $this->rediska->getList('test');
         $this->assertEquals(array('aaa'), $reply);
     }
+    
+    public function testPopFromListAndPushToAnother()
+    {
+        $this->rediska->appendToList('test', 'aaa');
+        $this->rediska->appendToList('test', 'bbb');
+        $this->rediska->appendToList('test', 'ccc');
+
+        $reply = $this->rediska->popFromList('test', 'test2');
+        $this->assertEquals('ccc', $reply);
+
+        $reply = $this->rediska->getList('test');
+        $this->assertEquals(array('aaa', 'bbb'), $reply);
+
+        $reply = $this->rediska->getList('test2');
+        $this->assertEquals(array('ccc'), $reply);
+    }
+
+    public function testPopFromListAndPushToAnotherWithManyConnection()
+    {
+        $this->_addServerOrSkipTest('127.0.0.1', 6380);
+        $this->testPopFromListAndPushToAnother();
+    }
 }

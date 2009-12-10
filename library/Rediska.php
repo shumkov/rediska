@@ -264,7 +264,7 @@ class Rediska
         $this->_connections = array();
         foreach($servers as $serverOptions) {
             $this->addServer(
-                isset($serverOptions['host']) ? $serverOptions['host'] : null,
+                isset($serverOptions['host']) ? $serverOptions['host'] : Rediska_Connection::DEFAULT_HOST,
                 isset($serverOptions['port']) ? $serverOptions['port'] : Rediska_Connection::DEFAULT_PORT,
                 $serverOptions);
         }
@@ -352,13 +352,12 @@ class Rediska
      * @param mixed $value Value
      * @param integer $expire Number of seconds to expire key
      * @param boolean $overwrite If false don't set and return false if key already exist
-     * @param boolean $getOldValue If true return old value
      * @return boolean
      */
-    public function set($name, $value, $expire = null, $overwrite = true) 
+    public function set($name, $value, $expire = null, $overwrite = true)
     {
-        if ((!is_null($expire) && !is_integer($expire)) || (is_integer($expire) && $expire <= 0)) {
-            throw new Rediska_Exception("Expire must be positive integer");
+        if (!is_null($expire)) {
+            trigger_error('Expire argument is depricated and will be removed in 3.0.0 version. Use Rediska::expire() method', E_USER_WARNING);
         }
 
         $connection = $this->_getConnectionByKeyName($name);
@@ -490,6 +489,46 @@ class Rediska
         $reply = $this->_sendCommandAndGetReply($connection, $command);
 
         return $this->_unserialize($reply);
+    }
+    
+    /**
+     * Set muliple values to multiple keys
+     * 
+     * @param array   $data      Array with key => value
+     * @param boolean $overwrite If false don't set and return false if one of the keys already exists
+     * @return boolean
+     */
+    public function setMultiple($data, $overwrite = true)
+    {
+        $result = false;
+        if (!empty($data)) {
+            $connections = array();
+            foreach ($data as $key => $value) {
+                $connection = $this->_getConnectionByKeyName($key);
+                $connectionString = "$connection";
+                if (!array_key_exists($connectionString, $connections)) {
+                    $connections[$connectionString] = array();
+                }
+                $connections[$connectionString][$key] = $value;
+            }
+
+            $result = true;
+            foreach($connections as $connectionString => $data) {
+                $command = array($overwrite ? 'MSET' : 'MSETNX');
+                foreach($data as $key => $value) {
+                    $command[] = $this->_options['namespace'] . $key;
+                    $command[] = $this->_serialize($value);
+                }
+
+                $reply = $this->_sendCommandAndGetReply($this->_connections[$connectionString], $command);
+
+                if (!$reply) {
+                    $result = false;
+                }
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -1014,8 +1053,7 @@ class Rediska
     /**
      * Return and remove the first element of the List at key
      * 
-     * @throws Rediska_Exception
-     * @param string $name
+     * @param string $name Key name
      * @return mixin
      */
     public function shiftFromList($name) 
@@ -1032,16 +1070,46 @@ class Rediska
     /**
      * Return and remove the last element of the List at key 
      * 
-     * @param string $name
+     * @param string $name       Key name
+     * @param string $pushToName Push value to another key
      * @return mixin
      */
-    public function popFromList($name) 
+    public function popFromList($name, $pushToName = null) 
     {
-        $connection = $this->_getConnectionByKeyName($name);
+        if (is_null($pushToName)) {
+            $connection = $this->_getConnectionByKeyName($name);
 
-        $command = "RPOP {$this->_options['namespace']}$name";
+            $command = "RPOP {$this->_options['namespace']}$name";
 
-        $reply = $this->_sendCommandAndGetReply($connection, $command);
+            $reply = $this->_sendCommandAndGetReply($connection, $command);
+        } else {
+            $connection = false;
+
+            if (count($this->_connections) == 1) {
+                $connections = $this->_getConnections();
+                $connection = $connections[0];
+            } else {
+                $fromConnection = $this->_getConnectionByKeyName($name);
+                $toConnection = $this->_getConnectionByKeyName($pushToName);
+                if ("$fromConnection" == "$toConnection") {
+                   $connection = $toConnection;
+                }
+            }
+
+            if ($connection) {
+                $command = "RPOPLPUSH {$this->_options['namespace']}$name " . strlen("{$this->_options['namespace']}$pushToName") .  self::EOL . "{$this->_options['namespace']}$pushToName";
+
+                $reply = $this->_sendCommandAndGetReply($connection, $command);
+            } else {
+                $command = "RPOP {$this->_options['namespace']}$name";
+
+                $reply = $this->_sendCommandAndGetReply($fromConnection, $command);
+                
+                $command = "LPUSH {$this->_options['namespace']}$pushToName " . strlen($reply) . self::EOL . $reply;
+
+                $this->_sendCommandAndGetReply($toConnection, $command);
+            }            
+        }
 
         return $this->_unserialize($reply);
     }
@@ -1063,7 +1131,7 @@ class Rediska
 
         return $this->_addToSet($connection, $name, $value);
     }
-    
+
     protected function _addToSet(Rediska_Connection $connection, $name, $value)
     {
         $value = $this->_serialize($value);
@@ -1086,7 +1154,7 @@ class Rediska
 
         return $this->_deleteFromSet($connection, $name, $value);
     }
-    
+
     protected function _deleteFromSet(Rediska_Connection $connection, $name, $value)
     {
         $value = $this->_serialize($value);
@@ -1106,8 +1174,6 @@ class Rediska
      */
     public function getRandomFromSet($name, $pop = false)
     {
-        throw new Rediska_Exception('Not yet implemented');
-
         $connection = $this->_getConnectionByKeyName($name);
 
         if ($pop) {
@@ -1116,7 +1182,7 @@ class Rediska
             $command = "SRANDMEMBER";
         }
 
-        $command = " {$this->_options['namespace']}$name";
+        $command .= " {$this->_options['namespace']}$name";
 
         $reply = $this->_sendCommandAndGetReply($connection, $command);
 
@@ -1291,7 +1357,7 @@ class Rediska
             return false;
         }
     }
-    
+
     /**
      * Return the union between the Sets stored at key1, key2, ..., keyN
      * 
@@ -1472,7 +1538,6 @@ class Rediska
         }
     }
     
-    
     /**
      * Return all the members of the Set value at key
      * 
@@ -1498,6 +1563,187 @@ class Rediska
         }
 
         return $values;
+    }
+
+    /**
+     * Command operationg on sorted sets
+     */
+
+    /**
+     * Add member to sorted set
+     * 
+     * @param string $name  Key name
+     * @param mixin  $value Member
+     * @param number $score Score of member
+     * @return boolean
+     */
+    public function addToSortedSet($name, $value, $score)
+    {
+        $connection = $this->_getConnectionByKeyName($name);
+
+        $value = $this->_serialize($value);
+
+        $command = array('ZADD', "{$this->_options['namespace']}$name", $score, $value);
+
+        return (boolean)$this->_sendCommandAndGetReply($connection, $command);
+    }
+
+    /**
+     * Remove member from sorted set
+     * 
+     * @param string $name  Key name
+     * @param mixin  $value Member
+     * @return boolean
+     */
+    public function deleteFromSortedSet($name, $value)
+    {
+        $connection = $this->_getConnectionByKeyName($name);
+
+        $value = $this->_serialize($value);
+
+        $command = array('ZREM', "{$this->_options['namespace']}$name", $value);
+
+        return (boolean)$this->_sendCommandAndGetReply($connection, $command);
+    }
+
+    /**
+     * Get all the members of the Sorted Set value at key
+     * 
+     * @throws Rediska_Exception
+     * @param string         $name        Key name
+     * @param integer|string $limitOrSort Limit of elements or sorting query
+     *                                    ALPHA work incorrect becouse values in List serailized
+     *                                    Read more: http://code.google.com/p/redis/wiki/SortCommand
+     * @param integer        $offset      Offset (not using in sorting)
+     * @param boolean        $revert      Revert elements (not used in sorting)
+     * @return array
+     */
+    public function getSortedSet($name, $limitOrSort = null, $offset = null, $revert = false)
+    {
+        $connection = $this->_getConnectionByKeyName($name);
+
+        if (is_null($limitOrSort) || is_numeric($limitOrSort)) {
+            $limit = $limitOrSort;
+
+            if (!is_null($limit) && !is_integer($limit)) {
+                throw new Rediska_Exception("Limit must be integer");
+            }
+
+            if (is_null($offset)) {
+                $offset = 0;
+            } else if (!is_integer($offset)) {
+                throw new Rediska_Exception("Offset must be integer");
+            }
+
+            $start = $offset;
+
+            if (is_null($limit)) {
+                $end = -1;
+            } else {
+                $end = $offset + $limit - 1;
+            }
+
+            $command = array($revert ? 'ZREVRANGE' : 'ZRANGE',
+                             "{$this->_options['namespace']}$name",
+                             $start,
+                             $end);
+        } else {
+            $sort = $limitOrSort;
+
+            if (!is_null($offset)) {
+                throw new Rediska_Exception("Offset not used with sorting query. Use LIMIT in query.");
+            }
+
+            if ($revert) {
+                throw new Rediska_Exception("Revert not used with sorting query. Use DESC in query.");
+            }
+
+            $command = "SORT {$this->_options['namespace']}$name $sort";
+        }
+
+        $values = $this->_sendCommandAndGetReply($connection, $command);
+
+        foreach($values as &$value) {
+            $value = $this->_unserialize($value);
+        }
+
+        return $values;
+    }
+
+    /**
+     * Get members of Sorted Set by min and max score
+     * 
+     * @throws Rediska_Exception
+     * @param string  $name   Key name
+     * @param number  $min    Min score
+     * @param number  $max    Max score
+     * @param integer $limit  Limit
+     * @param integer $offset Offset
+     * @return array
+     */
+    public function getSortedSetByScore($name, $min, $max, $limit = null, $offset = null)
+    {
+        if (!is_null($limit) && !is_integer($limit)) {
+            throw new Rediska_Exception("Limit must be integer");
+        }
+
+        if (!is_null($offset) && !is_integer($offset)) {
+            throw new Rediska_Exception("Offset must be integer");
+        }
+
+        $connection = $this->_getConnectionByKeyName($name);
+
+        $command = array('ZRANGEBYSCORE', "{$this->_options['namespace']}$name", $min, $max);
+
+        if (!is_null($limit)) {
+            if (is_null($offset)) {
+                $offset = 0;
+            }
+            $command[] = 'LIMIT';
+            $command[] = $offset;
+            $command[] = $limit;
+        }
+
+        $values = $this->_sendCommandAndGetReply($connection, $command);
+
+        foreach($values as &$value) {
+            $value = $this->_unserialize($value);
+        }
+
+        return $values;
+    }
+
+    /**
+     * Get length of Sorted Set
+     * 
+     * @param string $name Key name
+     * @return integer
+     */
+    public function getSortedSetLength($name)
+    {
+        $connection = $this->_getConnectionByKeyName($name);
+
+        $command = array('ZCARD', "{$this->_options['namespace']}$name");
+
+        return $this->_sendCommandAndGetReply($connection, $command);
+    }
+
+    /**
+     * Get member score from Sorted Set
+     * 
+     * @param string $name
+     * @param mixin $value
+     * @return number
+     */
+    public function getScoreFromSortedSet($name, $value)
+    {
+        $connection = $this->_getConnectionByKeyName($name);
+
+        $value = $this->_serialize($value);
+
+        $command = array('ZSCORE', "{$this->_options['namespace']}$name", $value);
+
+        return $this->_sendCommandAndGetReply($connection, $command);
     }
 
     /**
@@ -1749,6 +1995,15 @@ class Rediska
 
     protected function _sendCommandAndGetReply(Rediska_Connection $connection, $command)
     {
+        // MultiBulkCommand
+        if (is_array($command)) {
+            $commandString = '*' . count($command) . self::EOL;
+            foreach($command as $argument) {
+                $commandString .= '$' . strlen($argument) . self::EOL . $argument . self::EOL;
+            }
+            $command = $commandString;
+        }
+
         $connection->write($command);
 
         return $this->_getReplay($connection);

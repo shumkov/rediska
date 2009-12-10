@@ -96,7 +96,7 @@ abstract class Rediska_Key_Abstract
 	public function rename($newName, $overwrite = true)
 	{
 		try {
-		  $this->getRediska()->rename($this->_name, $newName, $overwrite);
+            $this->getRediska()->rename($this->_name, $newName, $overwrite);
 		} catch (Rediska_Exception $e) {
 			return false;
 		}

@@ -31,8 +31,9 @@ class Test_Strings extends RediskaTestCase
 
     public function testSetWithExpire()
     {       
-        $reply = $this->rediska->set('a', 'b', 1);
+        $reply = $this->rediska->set('a', 'b');
         $this->assertTrue($reply);
+        $this->rediska->expire('a', 1);
         sleep(2);
         $reply = $this->rediska->get('a');
         $this->assertNull($reply);
@@ -40,8 +41,9 @@ class Test_Strings extends RediskaTestCase
 
     public function testSetWithNotExpired()
     {       
-        $reply = $this->rediska->set('a', 'b', 20);
+        $reply = $this->rediska->set('a', 'b');
         $this->assertTrue($reply);
+        $this->rediska->expire('a', 20);
         $reply = $this->rediska->get('a');
         $this->assertEquals('b', $reply);
     }
@@ -86,6 +88,34 @@ class Test_Strings extends RediskaTestCase
         $this->assertTrue($reply);
         $reply = $this->rediska->get('a');
         $this->assertNull($reply);	
+    }
+    
+    public function testSetMultiple()
+    {
+        $data = array('a' => 'first data', 'b' => 'second data');
+        $reply = $this->rediska->setMultiple($data);
+        $this->assertTrue($reply);
+
+        $reply = $this->rediska->get('a');
+        $this->assertEquals('first data', $reply);
+
+        $reply = $this->rediska->get('b');
+        $this->assertEquals('second data', $reply);
+    }
+    
+    public function testSetMultipleWithoutOverwrite()
+    {
+        $this->rediska->set('a', 1);
+        
+        $data = array('a' => 'first data', 'b' => 'second data');
+        $reply = $this->rediska->setMultiple($data, false);
+        $this->assertFalse($reply);
+
+        $reply = $this->rediska->get('a');
+        $this->assertEquals(1, $reply);
+
+        $reply = $this->rediska->get('b');
+        $this->assertNull($reply);
     }
 
     public function testGetWithNotPresentKey()

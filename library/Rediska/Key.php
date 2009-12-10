@@ -24,7 +24,13 @@ class Rediska_Key extends Rediska_Key_Abstract
 	 */
 	public function setValue($value)
 	{
-		return $this->getRediska()->set($this->_name, $value, $this->_expire);
+		$reply = $this->getRediska()->set($this->_name, $value);
+
+		if ($reply && !is_null($this->_expire)) {
+		    $this->expire($this->_expire);
+		}
+
+		return $reply;
 	}
 
 	/**
