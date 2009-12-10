@@ -153,7 +153,13 @@ class Rediska_Zend_Session_SaveHandler_Redis implements Zend_Session_SaveHandler
     {
     	$this->_set[] = $id;
 
-        return $this->_rediska->set($this->_getKeyName($id), $data, $this->_options['lifetime']);
+        $reply = $this->_rediska->set($this->_getKeyName($id), $data);
+
+        if ($reply) {
+            $this->_rediska->expire($this->_getKeyName($id), $this->_options['lifetime']);
+        }
+
+        return $reply;
     }
 
     /**
@@ -224,7 +230,7 @@ class Rediska_Zend_Session_SaveHandler_Redis implements Zend_Session_SaveHandler
     public function setOption($name, $value)
     {
     	$lowerName = strtolower($name);
-    	
+
         if (!array_key_exists($lowerName, $this->_options)) {
             throw new Zend_Session_SaveHandler_Exception("Unknown option '$name'");
         }

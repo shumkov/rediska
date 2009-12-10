@@ -85,7 +85,8 @@ class Test_Zend_Cache extends PHPUnit_Framework_TestCase
     
     public function testGetMetadats()
     {
-    	$this->rediska->set('test', array('aaa', time(), 100), 100);
+    	$this->rediska->set('test', array('aaa', time(), 100));
+    	$this->rediska->expire('test', 100);
     	
     	$array = $this->cache->getMetadatas('test');
     	$this->assertTrue(is_array($array));
@@ -96,7 +97,8 @@ class Test_Zend_Cache extends PHPUnit_Framework_TestCase
     
     public function testTouch()
     {
-    	$this->rediska->set('test', array('aaa', time(), 100), 100);
+    	$this->rediska->set('test', array('aaa', time(), 100));
+    	$this->rediska->expire('test', 100);
 
     	$reply = $this->cache->touch('test', 200);
     	$this->assertTrue($reply);

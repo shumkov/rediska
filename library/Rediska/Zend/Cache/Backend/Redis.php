@@ -118,12 +118,16 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
     {
         $lifetime = $this->getLifetime($specificLifetime);
 
-        $result = $this->_rediska->set($id, array($data, time(), $lifetime), $lifetime);
+        $result = $this->_rediska->set($id, array($data, time(), $lifetime));
+
+        if ($result) {
+            $this->_rediska->expire($id, $lifetime);
+        }
 
         if (count($tags) > 0) {
             $this->_log(self::TAGS_UNSUPPORTED_BY_SAVE_OF_REDIS_BACKEND);
         }
-        
+
         return $result;
     }
 
@@ -330,7 +334,12 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
             if ($newLifetime <=0) {
                 return false;
             }
-            $result = $this->_rediska->set($id, array($data, time(), $newLifetime), $newLifetime);
+            $result = $this->_rediska->set($id, array($data, time(), $newLifetime));
+
+            if ($result) {
+                $this->_rediska->expire($id, $newLifetime);    
+            }
+
             return $result;
         }
         return false;

@@ -82,6 +82,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
      */
     public function fromArray(array $array)
     {
+        // TODO: Use pipelines
     	foreach($array as $item) {
     	    $this->getRediska()->appendToList($this->_name, $item);
     	}

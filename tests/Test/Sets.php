@@ -32,11 +32,8 @@ class Test_Sets extends RediskaTestCase
         $this->assertNotContains('bbb', $values);
     }
     
-    /**
-     * @expectedException Rediska_Exception
-     */
     public function testGetRandomFromSet()
-    {    	
+    {
     	$value = $this->rediska->getRandomFromSet('test');
         $this->assertNull($value);
 
