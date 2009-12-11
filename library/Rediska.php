@@ -16,6 +16,11 @@ require_once 'Rediska/Exception.php';
 require_once 'Rediska/KeyDistributor/Interface.php';
 
 /**
+ * @see Rediska_Connection_Specified
+ */
+require_once 'Rediska/Connection/Specified.php';
+
+/**
  * Rediska (radish on russian) - PHP client 
  * for key-value database Redis (http://code.google.com/p/redis)
  * 
@@ -52,7 +57,14 @@ class Rediska
      * @var array
      */
     protected $_connections = array();
-    
+
+    /**
+     * Proxy object for specified connection
+     * 
+     * @var Rediska_Connection_Specified
+     */
+    protected $_specifiedConnection;
+
     /**
      * Default rediska instance
      * 
@@ -103,7 +115,7 @@ class Rediska
      * namespace      - Key names prefix
      * servers        - Array of servers: array(
      *                                        array('host' => '127.0.0.1', 'port' => 6379, 'weight' => 1, 'password' => '123'),
-     *                                        array('host' => '127.0.0.1', 'port' => 6380, 'weight' => 2)
+     *                                        'alias' => array('host' => '127.0.0.1', 'port' => 6380, 'weight' => 2)
      *                                    )
      * serializer     - Callback function for serialization.
      *                  You may use PHP extensions like igbinary (http://opensource.dynamoid.com/)
@@ -130,6 +142,8 @@ class Rediska
         $this->setOptions($options);
 
         self::setDefaultInstace($this);
+
+        $this->_specifiedConnection = new Rediska_Connection_Specified($this);
     }
 
     /**
@@ -262,7 +276,11 @@ class Rediska
     public function setServers(array $servers)
     {
         $this->_connections = array();
-        foreach($servers as $serverOptions) {
+        foreach($servers as $alias => $serverOptions) {
+            if (!isset($serverOptions['alias']) && is_string($alias)) {
+                $serverOptions['alias'] = $alias;
+            } 
+
             $this->addServer(
                 isset($serverOptions['host']) ? $serverOptions['host'] : Rediska_Connection::DEFAULT_HOST,
                 isset($serverOptions['port']) ? $serverOptions['port'] : Rediska_Connection::DEFAULT_PORT,
@@ -283,10 +301,14 @@ class Rediska
      */
     public function addServer($host, $port = Rediska_Connection::DEFAULT_PORT, array $options = array())
     {
-    	$connectionString = "$host:$port";
+        if (!isset($options['alias'])) {
+            $connectionString = "$host:$port";
+        } else {
+            $connectionString = $options['alias'];
+        }
 
     	if (array_key_exists($connectionString, $this->_connections)) {
-    		throw new Rediska_Exception("Server '$host:$port' already added");
+    		throw new Rediska_Exception("Server '$connectionString' already added.");
     	}
 
     	$options['host'] = $host;
@@ -338,6 +360,23 @@ class Rediska
         }
 
         return $this;
+    }
+
+    /**
+     * Chain method to work with keys on specified by alias server
+     * 
+     * @param $alias Alias or host:port of server if not specified
+     * @return Rediska_Connection_Specified
+     */
+    public function on($alias)
+    {
+        if (!isset($this->_connections[$alias])) {
+            throw new Rediska_Exception("Can't find connection '$alias'");
+        }
+
+        $this->_specifiedConnection->setConnection($this->_connections[$alias]);
+
+        return $this->_specifiedConnection;
     }
 
     /**
@@ -1922,17 +1961,19 @@ class Rediska
         if (count($this->_connections) == 1) {
             $connections = array_values($this->_connections);
             $connection = $connections[0];
+        } else if ($this->_specifiedConnection->getConnection()) {
+            $connection = $this->_specifiedConnection->getConnection();
         } else {
-            $connectionString = $this->_keyDistributor->getConnectionByKeyName($name);
-            $connection = $this->_connections[$connectionString];
+            $alias = $this->_keyDistributor->getConnectionByKeyName($name);
+            $connection = $this->_connections[$alias];
         }
 
         try {
             $connection->connect();
         } catch (Rediska_Connection_Exception $e) {
-            $connectionString = "$connection";
-            unset($this->_connections[$connectionString]);
-            $this->_keyDistributor->removeConnection($connectionString);
+            $alias = "$connection";
+            unset($this->_connections[$alias]);
+            $this->_keyDistributor->removeConnection($alias);
             trigger_error($e->getMessage(), E_USER_WARNING);
             if (empty($this->_connections)) {
                 throw new Rediska_Connection_Exception('No one working server connections!');
@@ -1946,21 +1987,28 @@ class Rediska
 
     protected function _getConnections()
     {
-        foreach($this->_connections as $connectionString => $connection) {
-            try {
-                $connection->connect();
-            } catch (Rediska_Connection_Exception $e) {
-                unset($this->_connections[$connectionString]);
-                $this->_keyDistributor->removeConnection($connectionString);
-                trigger_error($e->getMessage(), E_USER_WARNING);
+        if ($this->_specifiedConnection->getConnection()) {
+            $connection = $this->_specifiedConnection->getConnection();
+            $connection->connect();
+
+            return $connection;
+        } else {
+            foreach ($this->_connections as $alias => $connection) {
+                try {
+                    $connection->connect();
+                } catch (Rediska_Connection_Exception $e) {
+                    unset($this->_connections[$alias]);
+                    $this->_keyDistributor->removeConnection($alias);
+                    trigger_error($e->getMessage(), E_USER_WARNING);
+                }
             }
-        }
 
-        if (empty($this->_connections)) {
-            throw new Rediska_Connection_Exception('No one working server connections!');
-        }
+            if (empty($this->_connections)) {
+                throw new Rediska_Connection_Exception('No one working server connections!');
+            }
 
-        return array_values($this->_connections);
+            return array_values($this->_connections);
+        }
     }
 
     protected function _serialize($value)
@@ -2064,4 +2112,41 @@ class Rediska
                 throw new Rediska_Exception("Invalid reply type: '$type'");
         }
     }
+    
+    
+    /*
+    ->on('alias')->sdaad();
+    
+    Rediska_Connection_Alias
+    __call()
+    {
+        $this->_specifiedConnection = $this->
+        $result = call_use()
+        $this->_specifiedConnection = null;
+        return $result;
+    }
+    
+    
+    
+    $rediska->pipeline()->adsad()->adsda();
+    
+    $rediska->asdasda()
+    
+    
+    -set();
+    
+    ->set()->get()->execute();
+    __call()
+    {
+        $this->_pipeline = $this;
+        $command = call_user()
+        $this->_pipeline = null;
+        return $this;
+    }
+    
+    
+    ->pipline()->on('alias')->adsa()->on('alias')->ada();
+    
+    */
+
 }

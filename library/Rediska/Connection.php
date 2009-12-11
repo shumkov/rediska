@@ -28,6 +28,7 @@ class Rediska_Connection
 	   'weight'     => self::DEFAULT_WEIGHT,
 	   'persistent' => false,
 	   'password'   => null,
+	   'alias'      => null,
 	);
 
 	/**
@@ -294,6 +295,10 @@ class Rediska_Connection
 
     public function __toString()
     {
-    	return $this->getHost() . ':' . $this->getPort();
+        if ($this->_options['alias'] != '') {
+            return $this->_options['alias'];
+        } else {
+            return $this->_options['host'] . ':' . $this->_options['port'];
+        }
     }
 }

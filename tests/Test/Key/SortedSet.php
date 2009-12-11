@@ -84,7 +84,7 @@ class Test_Key_SortedSet extends PHPUnit_Framework_TestCase
     	$values = $this->set->toArray();
     	$this->assertEquals(array(), $values);
 
-    	$this->rediska->addToSortedSet('test', 123);
+    	$this->rediska->addToSortedSet('test', 123, 1);
 
         $values = $this->set->toArray();
         $this->assertEquals(array(123), $values);

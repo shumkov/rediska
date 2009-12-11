@@ -13,13 +13,13 @@ class RediskaTestCase extends PHPUnit_Framework_TestCase
     {
         $this->rediska = new Rediska(array('namespace' => 'Rediska_Tests_'));
     }
-    
+
     protected function tearDown()
     {
         $this->rediska->flushDb(true);
         $this->rediska = null;
     }
-	
+
     protected function _addServerOrSkipTest($host, $port)
     {
         $socket = @fsockopen($host, $port);
