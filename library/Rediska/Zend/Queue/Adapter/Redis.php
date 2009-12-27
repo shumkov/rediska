@@ -160,7 +160,22 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
      */
     public function count(Zend_Queue $queue=null)
     {
-        return count($this->_queues);
+        if ($queue === null) {
+            $queue = $this->_queue;
+        }
+
+        $queueName = $queue->getName();
+
+        if (!$this->isExists($queueName)) {
+            require_once 'Zend/Queue/Exception.php';
+            throw new Zend_Queue_Exception('Queue does not exist:' . $queueName);
+        }
+
+        if (!isset($this->_queueObjects[$queueName])) {
+            $this->_queueObjects[$queueName] = new Rediska_Key_List($this->_getKeyName("queue_$queueName"));
+        }
+
+        return count($this->_queueObjects[$queueName]);
     }
 
     /********************************************************************
