@@ -21,24 +21,33 @@ class Rediska_Connection_Specified
         $this->_rediska = $rediska;
     }
 
-    public function __call($method, $args)
+    public function __call($name, $args)
     {
-        $callback = array($this->_rediska, $method);
-
-        $result = call_user_func_array($callback, $args);
-
-        $this->_connection = null;
-
-        return $result;
+        if (strtolower($name) == 'pipeline') {
+            return $this->_rediska->pipeline();
+        } else {
+            $command = $this->_rediska->getCommand($name, $args);
+            $command->write();
+            return $command->read();
+        }
     }
 
     public function setConnection(Rediska_Connection $connection)
     {
         $this->_connection = $connection;
+        
+        return $this;
     }
 
     public function getConnection()
     {
         return $this->_connection;
+    }
+
+    public function resetConnection()
+    {
+        $this->_connection = null;
+        
+        return $this;
     }
 }
