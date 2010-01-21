@@ -7,11 +7,11 @@ class Test_Sets extends RediskaTestCase
     	$value = $this->rediska->addToSet('test', 'aaa');
     	$this->assertTrue($value);
     	$this->rediska->addToSet('test', 'bbb');
-    	
+
     	$values = $this->rediska->getSet('test');
     	$this->assertContains('aaa', $values);
     	$this->assertContains('bbb', $values);
-    	
+
     	$reply = $this->rediska->getSetLength('test');
     	$this->assertEquals(2, $reply);
     }
@@ -95,7 +95,7 @@ class Test_Sets extends RediskaTestCase
         $reply = $this->rediska->existsInSet('test', 'xxx');
         $this->assertFalse($reply);
     }
-    
+
     public function testIntersectSets()
     {
     	$myIntersection = array_intersect($this->_sets['set1'], $this->_sets['set2'], $this->_sets['set2']);
@@ -114,13 +114,13 @@ class Test_Sets extends RediskaTestCase
     	sort($intersection);
     	$this->assertEquals($myIntersection, $intersection);
     }
-    
+
     public function testIntersectSetsWithManyConnection()
     {
     	$this->_addServerOrSkipTest('127.0.0.1', 6380);
         $this->testIntersectSets();
     }
-    
+
     public function testUnionSets()
     {
     	$myUnion = array_unique(array_merge($this->_sets['set1'], $this->_sets['set2'], $this->_sets['set3']));

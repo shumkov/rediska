@@ -58,7 +58,7 @@ class Test_Key_Abstract extends PHPUnit_Framework_TestCase
     public function testGetType()
     {
     	$reply = $this->key->getType();
-        $this->assertNull($reply);
+        $this->assertEquals('none', $reply);
 
         $this->key->getRediska()->set($this->key->getName(), 1);
 

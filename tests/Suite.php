@@ -1,7 +1,5 @@
 <?php
 
-ob_start();
-
 set_include_path(implode(PATH_SEPARATOR, array(
     realpath('../library'),
     get_include_path(),
@@ -19,7 +17,8 @@ require_once 'Test/Sets.php';
 require_once 'Test/SortedSets.php';
 require_once 'Test/Controls.php';
 require_once 'Test/Serializer.php';
-require_once 'Test/SpecifiedConnection.php';
+require_once 'Test/Connection.php';
+require_once 'Test/Pipeline.php';
 require_once 'Test/KeyDistributor/Crc32.php';
 require_once 'Test/KeyDistributor/ConsistentHashing.php';
 require_once 'Test/Key/Abstract.php';
@@ -50,7 +49,8 @@ class Suite extends PHPUnit_Framework_TestSuite
 		$this->addTestSuite('Test_SortedSets');
 		$this->addTestSuite('Test_Controls');
 		$this->addTestSuite('Test_Serializer');
-		$this->addTestSuite('Test_SpecifiedConnection');
+		$this->addTestSuite('Test_Connection');
+		$this->addTestSuite('Test_Pipeline');
 		$this->addTestSuite('Test_KeyDistributor_Crc32');
 		$this->addTestSuite('Test_KeyDistributor_ConsistentHashing');
 		$this->addTestSuite('Test_Key_Abstract');

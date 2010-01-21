@@ -8,7 +8,7 @@ class RediskaTestCase extends PHPUnit_Framework_TestCase
      * @var Rediska
      */
     protected $rediska;
-	
+
 	protected function setUp()
     {
         $this->rediska = new Rediska(array('namespace' => 'Rediska_Tests_'));

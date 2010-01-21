@@ -35,7 +35,7 @@ require_once 'Zend/Session/SaveHandler/Exception.php';
  * 
  * @author Ivan Shumkov
  * @package Rediska
- * @version 0.2.2
+ * @version 0.3.0
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
@@ -172,7 +172,9 @@ class Rediska_Zend_Session_SaveHandler_Redis implements Zend_Session_SaveHandler
     {
         $this->_set->remove($id);
 
-        return $this->_rediska->delete($this->_getKeyName($id));
+        $this->_rediska->delete($this->_getKeyName($id));
+
+        return true;
     }
 
     /**
