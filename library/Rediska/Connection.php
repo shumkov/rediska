@@ -31,13 +31,14 @@ class Rediska_Connection
     /**
      * Options
      * 
-     * host       - Server host. For default 127.0.0.1
-     * port       - Server port. For default 6379.
-     * weight     - Server weight for sharding. For default 1.
-     * persistent - Open persistent connection. For default false.
-     * password   - Server password. Optional.
-     * alias      - Connection alias. For default [host]:[port].
-     * db         - Redis server index. For default 0.
+     * host       - Redis server host. For default 127.0.0.1
+     * port       - Redis server port. For default 6379
+     * db         - Redis server DB index. For default 0
+     * weight     - Weight of Redis server for key distribution. For default 1
+     * persistent - Persistent connection to Redis server. For default false
+     * password   - Redis server password. Optional
+     * alias      - Redis server alias for operate keys on specified server. For default [host]:[port]
+
      * 
      * @var array
      */
