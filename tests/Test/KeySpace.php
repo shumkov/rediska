@@ -131,10 +131,10 @@ class Test_KeySpace extends RediskaTestCase
     {
     	$this->rediska->set('a', '123');
     	$reply = $this->rediska->getType('a');
-    	$this->assertEquals(Rediska::KEY_TYPE_STRING, $reply);
+    	$this->assertEquals('string', $reply);
     	
     	$reply = $this->rediska->getType('b');
-    	$this->assertNull($reply);
+    	$this->assertEquals('none', $reply);
     }
 }
 

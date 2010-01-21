@@ -15,7 +15,7 @@ require_once 'Zend/Log/Writer/Abstract.php';
  * 
  * @author Ivan Shumkov
  * @package Rediska
- * @version 0.2.2
+ * @version 0.3.0
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */

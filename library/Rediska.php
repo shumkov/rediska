@@ -36,7 +36,7 @@ require_once 'Rediska/KeyDistributor/Interface.php';
  * 
  * @author Ivan Shumkov
  * @package Rediska
- * @version 0.2.2
+ * @version 0.3.0
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
@@ -71,33 +71,54 @@ class Rediska
      * @var array
      */
     protected static $_commands = array(
-        'set'              => 'Rediska_Command_Set',
-        'setandget'        => 'Rediska_Command_SetAndGet',
-        'get'              => 'Rediska_Command_Get',
-        'increment'        => 'Rediska_Command_Increment',
-        'decrement'        => 'Rediska_Command_Decrement',
-        'exists'           => 'Rediska_Command_Exists',
-        'delete'           => 'Rediska_Command_Delete',
-        'gettype'          => 'Rediska_Command_GetType',
-        'getkeysbypattern' => 'Rediska_Command_GetKeysByPattern',
-        'getrandomkey'     => 'Rediska_Command_GetRandomKey',
-        'rename'           => 'Rediska_Command_Rename',
-        'expire'           => 'Rediska_Command_Expire',
-        'getkeyscount'     => 'Rediska_Command_GetKeysCount',
-        'getlifetime'      => 'Rediska_Command_GetLifetime',
-        'appendtolist'     => 'Rediska_Command_AppendToList',
-        'prependtolist'    => 'Rediska_Command_PrependToList',
-        'getlistlength'    => 'Rediska_Command_GetListLength',
-        'getlist'          => 'Rediska_Command_GetList',
-        'truncatelist'     => 'Rediska_Command_TruncateList',
-        'getfromlist'      => 'Rediska_Command_GetFromList',
-        'settolist'        => 'Rediska_Command_SetToList',
-        'deletefromlist'   => 'Rediska_Command_DeleteFromList',
-        'shiftfromlist'    => 'Rediska_Command_ShiftFromList',
-        'popfromlist'      => 'Rediska_Command_PopFromList',
-        'addtoset'         => 'Rediska_Command_AddToSet',
-        'deletefromset'    => 'Rediska_Command_DeleteFromSet',
-        'getrandomfromset' => 'Rediska_Command_GetRandomFromSet',
+        'set'                   => 'Rediska_Command_Set',
+        'setandget'             => 'Rediska_Command_SetAndGet',
+        'get'                   => 'Rediska_Command_Get',
+        'increment'             => 'Rediska_Command_Increment',
+        'decrement'             => 'Rediska_Command_Decrement',
+        'exists'                => 'Rediska_Command_Exists',
+        'delete'                => 'Rediska_Command_Delete',
+        'gettype'               => 'Rediska_Command_GetType',
+        'getkeysbypattern'      => 'Rediska_Command_GetKeysByPattern',
+        'getrandomkey'          => 'Rediska_Command_GetRandomKey',
+        'rename'                => 'Rediska_Command_Rename',
+        'expire'                => 'Rediska_Command_Expire',
+        'getkeyscount'          => 'Rediska_Command_GetKeysCount',
+        'getlifetime'           => 'Rediska_Command_GetLifetime',
+        'appendtolist'          => 'Rediska_Command_AppendToList',
+        'prependtolist'         => 'Rediska_Command_PrependToList',
+        'getlistlength'         => 'Rediska_Command_GetListLength',
+        'getlist'               => 'Rediska_Command_GetList',
+        'truncatelist'          => 'Rediska_Command_TruncateList',
+        'getfromlist'           => 'Rediska_Command_GetFromList',
+        'settolist'             => 'Rediska_Command_SetToList',
+        'deletefromlist'        => 'Rediska_Command_DeleteFromList',
+        'shiftfromlist'         => 'Rediska_Command_ShiftFromList',
+        'popfromlist'           => 'Rediska_Command_PopFromList',
+        'addtoset'              => 'Rediska_Command_AddToSet',
+        'deletefromset'         => 'Rediska_Command_DeleteFromSet',
+        'getrandomfromset'      => 'Rediska_Command_GetRandomFromSet',
+    	'getsetlength'          => 'Rediska_Command_GetSetLength',
+        'existsinset'           => 'Rediska_Command_ExistsInSet',
+        'intersectsets'         => 'Rediska_Command_IntersectSets',
+        'unionsets'             => 'Rediska_Command_UnionSets',
+        'diffsets'              => 'Rediska_Command_DiffSets',
+        'getset'                => 'Rediska_Command_GetSet',
+        'movetoset'             => 'Rediska_Command_MoveToSet',
+        'addtosortedset'        => 'Rediska_Command_AddToSortedSet',
+        'deletefromsortedset'   => 'Rediska_Command_DeleteFromSortedSet',
+        'getsortedset'          => 'Rediska_Command_GetSortedSet',
+        'getsortedsetbyscore'   => 'Rediska_Command_GetSortedSetByScore',
+        'getsortedsetlength'    => 'Rediska_Command_GetSortedSetLength',
+        'getscorefromsortedset' => 'Rediska_Command_GetScoreFromSortedSet',
+        'selectdb'              => 'Rediska_Command_SelectDb',
+        'movetodb'              => 'Rediska_Command_MoveToDb',
+        'flushdb'               => 'Rediska_Command_FlushDb',
+        'save'                  => 'Rediska_Command_Save',
+        'getlastsavetime'       => 'Rediska_Command_GetLastSaveTime',
+        'shutdown'              => 'Rediska_Command_Shutdown',
+        'info'                  => 'Rediska_Command_Info',
+        'quit'                  => 'Rediska_Command_Quit',
     );
 
     /**
@@ -311,9 +332,9 @@ class Rediska
     	$options['host'] = $host;
     	$options['port'] = $port;
 
-    	$connection = new Rediska_Connection($options);
+    	$connection = null;
 
-    	$this->_connections[$connectionString] = $connection;
+    	$this->_connections[$connectionString] = new Rediska_Connection($options);
 
         $this->_keyDistributor->addConnection(
             $connectionString,
@@ -323,6 +344,13 @@ class Rediska
         return $this;
     }
 
+    /**
+     * Get Rediska connection instance by key name
+     * 
+     * @throws Rediska_Connection_Exception
+     * @param string $name Key name
+     * @return Rediska_Connection
+     */
     public function getConnectionByKeyName($name)
     {
         if (count($this->_connections) == 1) {
@@ -352,6 +380,12 @@ class Rediska
         return $connection;
     }
 
+    /**
+     * Get all Rediska connection instances
+     * 
+     * @throws Rediska_Connection_Exception
+     * @return array
+     */
     public function getConnections()
     {
         if ($this->_specifiedConnection->getConnection()) {
@@ -381,7 +415,7 @@ class Rediska
     /**
      * Chain method to work with keys on specified by alias server
      * 
-     * @param $alias Alias or host:port of server if not specified
+     * @param $alias Alias or [host]:[port] of server if not specified
      * @return Rediska_Connection_Specified
      */
     public function on($alias)
@@ -395,18 +429,23 @@ class Rediska
         return $this->_specifiedConnection;
     }
     
+    /**
+     * Create pipeline
+     * 
+     * @return Rediska_Pipeline
+     */
     public function pipeline()
     {
         require_once 'Rediska/Pipeline.php';
 
         return new Rediska_Pipeline($this, $this->_specifiedConnection);
     }
-    
+
     /**
-     * Add Redis command.
+     * Add Redis command
      * 
-     * @param string $name  Name
-     * @param string $className Class
+     * @param string $name      Command name
+     * @param string $className Name of class
      */
     public static function addCommand($name, $className)
     {
@@ -430,6 +469,11 @@ class Rediska
         return true;
     }
 
+    /**
+     * Remove Redis command
+     * 
+     * @param string $name Command name
+     */
     public static function removeCommand($name)
     {
         $lowerName = strtolower($name);
@@ -440,8 +484,16 @@ class Rediska
 
         return true;
     }
-    
-    public function getCommand($name, $args)
+
+    /**
+     * Get Redis Command instance
+     * 
+     * @throws Rediska_Exception
+     * @param string $name      Command name 
+     * @param array  $arguments Command arguments
+     * @return Rediska_Command_Abstract
+     */
+    public function getCommand($name, $arguments)
     {
         $lowerName = strtolower($name);
         if (!isset(self::$_commands[$lowerName])) {
@@ -453,9 +505,8 @@ class Rediska
             require_once 'Rediska/Command/' . substr(self::$_commands[$lowerName], 16) . '.php';
         }
 
-        // Initailize and invoke command
-        $command = new self::$_commands[$lowerName]($this);
-        call_user_func_array(array($command, 'create'), $args);
+        // Initailize command
+        return new self::$_commands[$lowerName]($this, $name, $arguments);
     }
 
     public function __call($name, $args)
@@ -541,6 +592,12 @@ class Rediska
         return $this;
     }
 
+    /**
+     * Serialize value
+     * 
+     * @param mixin $value Value for serialize
+     * @return string
+     */
     public function serialize($value)
     {
         if (is_numeric($value)) {
@@ -550,6 +607,12 @@ class Rediska
         }
     }
 
+    /**
+     * Unserailize value
+     * 
+     * @param string $value Serialized value
+     * @return mixin
+     */
     public function unserialize($value)
     {
         if (is_null($value)) {
@@ -571,7 +634,3 @@ class Rediska
         }
     }
 }
-
-
-$rediska = new Rediska();
-$rediska->set('test', 'test');

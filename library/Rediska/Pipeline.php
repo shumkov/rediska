@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Rediska pipeline
+ * 
+ * @author Ivan Shumkov
+ * @package Rediska
+ * @version 0.3.0
+ * @link http://rediska.geometria-lab.net
+ * @licence http://www.opensource.org/licenses/bsd-license.php
+ */
 class Rediska_Pipeline
 {
     /**
@@ -22,6 +31,13 @@ class Rediska_Pipeline
      * @var Rediska_Connection
      */
     protected $_defaultConnection;
+    
+    /**
+     * One time connection
+     * 
+     * @var Rediska_Connection
+     */
+    protected $_oneTimeConnection;
 
     /**
      * Commands buffer
@@ -30,6 +46,12 @@ class Rediska_Pipeline
      */
     protected $_commands = array();
 
+    /**
+     * Constructor
+     * 
+     * @param Rediska                      $rediska             Rediska instance
+     * @param Rediska_Connection_Specified $specifiedConnection Specified connection
+     */
     public function __construct(Rediska $rediska, Rediska_Connection_Specified $specifiedConnection)
     {
         $this->_rediska = $rediska;
@@ -37,6 +59,11 @@ class Rediska_Pipeline
         $this->_defaultConnection = $specifiedConnection->getConnection();
     }
 
+    /**
+     * Execute pipelined commands
+     * 
+     * @return array
+     */
     public function execute()
     {
         if (empty($this->_commands)) {
@@ -59,14 +86,31 @@ class Rediska_Pipeline
     {
         if (strtolower($name) == 'on' && isset($args[0])) {
             $this->_rediska->on($args[0]);
-            $connection = $this->_specifiedConnection->getConnection();
+            $this->_oneTimeConnection = $this->_specifiedConnection->getConnection();
+
+            return $this;
+        }
+
+        if ($this->_oneTimeConnection) {
+        	$connection = $this->_oneTimeConnection;
+        	$this->_oneTimeConnection = null;
         } else {
             $connection = $this->_defaultConnection;
         }
 
-        $this->_specifiedConnection->setConnection($connection);
+        if ($connection !== null) {
+            $this->_specifiedConnection->setConnection($connection);
+        } else {
+        	$this->_specifiedConnection->resetConnection();
+        }
  
-        $this->_commands[] = $this->_rediska->getCommand($name, $args);
+        $command = $this->_rediska->getCommand($name, $args);
+
+        if (!$command->isAtomic()) {
+        	throw new Rediska_Exception("Command '$name' doesn't work properly (not atomic) in pipeline on multiple servers");
+        }
+
+        $this->_commands[] = $command;
 
         $this->_specifiedConnection->resetConnection();
 

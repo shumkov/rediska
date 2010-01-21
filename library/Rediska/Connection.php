@@ -10,7 +10,7 @@ require_once 'Rediska/Connection/Exception.php';
  * 
  * @author Ivan Shumkov
  * @package Rediska
- * @version 0.2.2
+ * @version 0.3.0
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
@@ -19,9 +19,28 @@ class Rediska_Connection
 	const DEFAULT_HOST   = '127.0.0.1';
     const DEFAULT_PORT   = 6379;
     const DEFAULT_WEIGHT = 1;
+    const DEFAULT_DB     = 0;
 
+    /**
+     * Socket
+     * 
+     * @var stream
+     */
     protected $_socket;
 
+    /**
+     * Options
+     * 
+     * host       - Server host. For default 127.0.0.1
+     * port       - Server port. For default 6379.
+     * weight     - Server weight for sharding. For default 1.
+     * persistent - Open persistent connection. For default false.
+     * password   - Server password. Optional.
+     * alias      - Connection alias. For default [host]:[port].
+     * db         - Redis server index. For default 0.
+     * 
+     * @var array
+     */
 	protected $_options = array(
 	   'host'       => self::DEFAULT_HOST,
 	   'port'       => self::DEFAULT_PORT,
@@ -29,11 +48,13 @@ class Rediska_Connection
 	   'persistent' => false,
 	   'password'   => null,
 	   'alias'      => null,
+	   'db'         => self::DEFAULT_DB,
 	);
 
 	/**
      * Contruct Rediska connection
      * 
+     * @param Rediska $rediska
      * @param array $options Options (see $_options description)
      */
 	public function __construct(array $options = array())
@@ -133,8 +154,19 @@ class Rediska_Connection
 	        }
 
 	        if ($this->getPassword() != '') {
-	        	$this->write("AUTH {$this->getPassword()}");
+	        	$this->write('AUTH ' . $this->getPassword());
 	        	$reply = $this->readLine();
+                if (substr($reply, 0, 1) == '-') {
+                    throw new Rediska_Connection_Exception("Password error: " . substr($reply, 5));
+                }
+	        }
+
+	        if ($this->_options['db'] !== self::DEFAULT_DB) {
+	        	$this->write('SELECT ' . $this->_options['db']);
+	        	$reply = $this->readLine();
+	        	if (substr($reply, 0, 1) == '-') {
+	        		throw new Rediska_Connection_Exception("Select db error: " . substr($reply, 5));
+	        	}
 	        }
 
 	        return true;
@@ -292,13 +324,23 @@ class Rediska_Connection
     {
         return $this->_options['password'];
     }
-
-    public function __toString()
+    
+    /**
+     * Connection alias
+     * 
+     * @return string
+     */
+    public function getAlias()
     {
-        if ($this->_options['alias'] != '') {
+    	if ($this->_options['alias'] != '') {
             return $this->_options['alias'];
         } else {
             return $this->_options['host'] . ':' . $this->_options['port'];
         }
+    }
+
+    public function __toString()
+    {
+        return $this->getAlias();
     }
 }

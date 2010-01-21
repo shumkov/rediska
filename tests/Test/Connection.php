@@ -1,7 +1,19 @@
 <?php
 
-class Test_SpecifiedConnection extends RediskaTestCase
+class Test_Connection extends RediskaTestCase
 {
+	public function testSelectDb()
+	{
+		$rediska = new Rediska(array('servers' => array(array('host' => '127.0.0.1', 'port' => 6379, 'db' => 2))));
+		$rediska->set('a', 123);
+		$rediska->selectDb(1);
+		$reply = $rediska->get('a');
+		$this->assertNull($reply);
+		$rediska->selectDb(2);
+		$reply = $rediska->get('a');
+        $this->assertEquals(123, $reply);
+	}
+
     public function testOn()
     {
         $this->rediska->on('127.0.0.1:6379')->set('aaa', 'value');
