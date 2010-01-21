@@ -43,6 +43,11 @@ class Rediska_Key extends Rediska_Key_Abstract
 		return $this->getRediska()->get($this->_name);
 	}
 
+	/**
+	 * Get value, if value not present set it from chain method
+	 * 
+	 * @param $object Object of chain method
+	 */
     public function getOrSetValue($object = null)
     {
         return new Rediska_Key_GetOrSetValue($this, $object);

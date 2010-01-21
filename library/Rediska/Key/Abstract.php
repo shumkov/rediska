@@ -45,7 +45,8 @@ abstract class Rediska_Key_Abstract
 	/**
 	 * Construct key
 	 * 
-	 * @param string $name
+	 * @param string  $name   Key name
+	 * @param integer $expire Expire time in seconds
 	 */
 	public function __construct($name, $expire = null)
 	{
