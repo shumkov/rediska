@@ -4,6 +4,7 @@
  * Get key lifetime
  * 
  * @param string $name
+ * @return integer
  * 
  * @author Ivan Shumkov
  * @package Rediska

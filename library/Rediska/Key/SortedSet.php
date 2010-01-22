@@ -72,7 +72,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
      */
     public function getByScore($min, $max, $limit = null, $offset = null)
     {
-        return $this->getRediska()->getSortedSetByScore($this->_name, $min, $max, $limit, $offset);
+        return $this->getRediska()->getFromSortedSetByScore($this->_name, $min, $max, $limit, $offset);
     }
 
     /**

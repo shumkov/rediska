@@ -3,9 +3,9 @@
 /**
  * Set value to a key or muliple values to multiple keys
  * 
- * @param string|array $nameOrData       Key name or array with key => value
- * @param mixed        $valueOrOverwrite Value or overwrite property for array of values (if false don't set and return false if key already exist)
- * @param boolean      $overwrite        Overwrite for single value (if false don't set and return false if key already exist)
+ * @param string|array $nameOrData       Key name or array with key => value.
+ * @param mixed        $valueOrOverwrite Value or overwrite property for array of values. For default true.
+ * @param boolean      $overwrite        Overwrite for single value (if false don't set and return false if key already exist). For default true.
  * @return boolean
  * 
  * @author Ivan Shumkov

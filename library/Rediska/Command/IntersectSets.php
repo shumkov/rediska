@@ -8,7 +8,6 @@ require_once 'Rediska/Command/CompareSets.php';
 /**
  * Return the intersection between the Sets stored at key1, key2, ..., keyN
  * 
- * @todo Refactor
  * @param array       $names     Array of key names
  * @param string|null $storeName Store intersection to set with key name
  * @return array|boolean
