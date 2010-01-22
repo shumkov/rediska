@@ -48,28 +48,28 @@ class Test_SortedSets extends RediskaTestCase
         $this->assertEquals(array(3, 2), $values);
     }
     
-    public function testGetSortedSetByScore()
+    public function testGetFromSortedSetByScore()
     {
         $this->rediska->addToSortedSet('test', 1, 1);
         $this->rediska->addToSortedSet('test', 2, 2);
         $this->rediska->addToSortedSet('test', 3, 3);
 
-        $values = $this->rediska->getSortedSetByScore('test', 1, 2);
+        $values = $this->rediska->getFromSortedSetByScore('test', 1, 2);
         $this->assertTrue(in_array(1, $values));
         $this->assertTrue(in_array(2, $values));
         $this->assertFalse(in_array(3, $values));
 
-        $values = $this->rediska->getSortedSetByScore('test', 1, 2, 1);
+        $values = $this->rediska->getFromSortedSetByScore('test', 1, 2, 1);
         $this->assertTrue(in_array(1, $values));
         $this->assertFalse(in_array(2, $values));
         $this->assertFalse(in_array(3, $values));
 
-        $values = $this->rediska->getSortedSetByScore('test', 1, 2, 1);
+        $values = $this->rediska->getFromSortedSetByScore('test', 1, 2, 1);
         $this->assertTrue(in_array(1, $values));
         $this->assertFalse(in_array(2, $values));
         $this->assertFalse(in_array(3, $values));
 
-        $values = $this->rediska->getSortedSetByScore('test', 1, 3, 1, 1);
+        $values = $this->rediska->getFromSortedSetByScore('test', 1, 3, 1, 1);
         $this->assertFalse(in_array(1, $values));
         $this->assertTrue(in_array(2, $values));
         $this->assertFalse(in_array(3, $values));

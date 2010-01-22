@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Redis command interface
+ * Rediska command interface
  * 
  * @author Ivan Shumkov
  * @package Rediska

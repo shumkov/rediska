@@ -20,6 +20,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
      * Add the specified member to the Sorted set
      * 
      * @param mixin $value Value
+     * @param numeric $score Score
      * @return boolean
      */
     public function add($value, $score)
@@ -71,7 +72,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
      */
     public function getByScore($min, $max, $limit = null, $offset = null)
     {
-        return $this->getRediska()->getSortedSetByScore($this->_name, $min, $max, $limit, $offset);
+        return $this->getRediska()->getFromSortedSetByScore($this->_name, $min, $max, $limit, $offset);
     }
 
     /**

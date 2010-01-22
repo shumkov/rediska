@@ -71,54 +71,65 @@ class Rediska
      * @var array
      */
     protected static $_commands = array(
-        'set'                   => 'Rediska_Command_Set',
-        'setandget'             => 'Rediska_Command_SetAndGet',
-        'get'                   => 'Rediska_Command_Get',
-        'increment'             => 'Rediska_Command_Increment',
-        'decrement'             => 'Rediska_Command_Decrement',
-        'exists'                => 'Rediska_Command_Exists',
-        'delete'                => 'Rediska_Command_Delete',
-        'gettype'               => 'Rediska_Command_GetType',
-        'getkeysbypattern'      => 'Rediska_Command_GetKeysByPattern',
-        'getrandomkey'          => 'Rediska_Command_GetRandomKey',
-        'rename'                => 'Rediska_Command_Rename',
-        'expire'                => 'Rediska_Command_Expire',
-        'getkeyscount'          => 'Rediska_Command_GetKeysCount',
-        'getlifetime'           => 'Rediska_Command_GetLifetime',
-        'appendtolist'          => 'Rediska_Command_AppendToList',
-        'prependtolist'         => 'Rediska_Command_PrependToList',
-        'getlistlength'         => 'Rediska_Command_GetListLength',
-        'getlist'               => 'Rediska_Command_GetList',
-        'truncatelist'          => 'Rediska_Command_TruncateList',
-        'getfromlist'           => 'Rediska_Command_GetFromList',
-        'settolist'             => 'Rediska_Command_SetToList',
-        'deletefromlist'        => 'Rediska_Command_DeleteFromList',
-        'shiftfromlist'         => 'Rediska_Command_ShiftFromList',
-        'popfromlist'           => 'Rediska_Command_PopFromList',
-        'addtoset'              => 'Rediska_Command_AddToSet',
-        'deletefromset'         => 'Rediska_Command_DeleteFromSet',
-        'getrandomfromset'      => 'Rediska_Command_GetRandomFromSet',
-    	'getsetlength'          => 'Rediska_Command_GetSetLength',
-        'existsinset'           => 'Rediska_Command_ExistsInSet',
-        'intersectsets'         => 'Rediska_Command_IntersectSets',
-        'unionsets'             => 'Rediska_Command_UnionSets',
-        'diffsets'              => 'Rediska_Command_DiffSets',
-        'getset'                => 'Rediska_Command_GetSet',
-        'movetoset'             => 'Rediska_Command_MoveToSet',
-        'addtosortedset'        => 'Rediska_Command_AddToSortedSet',
-        'deletefromsortedset'   => 'Rediska_Command_DeleteFromSortedSet',
-        'getsortedset'          => 'Rediska_Command_GetSortedSet',
-        'getsortedsetbyscore'   => 'Rediska_Command_GetSortedSetByScore',
-        'getsortedsetlength'    => 'Rediska_Command_GetSortedSetLength',
-        'getscorefromsortedset' => 'Rediska_Command_GetScoreFromSortedSet',
-        'selectdb'              => 'Rediska_Command_SelectDb',
-        'movetodb'              => 'Rediska_Command_MoveToDb',
-        'flushdb'               => 'Rediska_Command_FlushDb',
-        'save'                  => 'Rediska_Command_Save',
-        'getlastsavetime'       => 'Rediska_Command_GetLastSaveTime',
-        'shutdown'              => 'Rediska_Command_Shutdown',
-        'info'                  => 'Rediska_Command_Info',
-        'quit'                  => 'Rediska_Command_Quit',
+        // Basic
+        'exists'           => 'Rediska_Command_Exists',
+        'delete'           => 'Rediska_Command_Delete',
+        'gettype'          => 'Rediska_Command_GetType',
+        'getkeysbypattern' => 'Rediska_Command_GetKeysByPattern',
+        'getrandomkey'     => 'Rediska_Command_GetRandomKey',
+        'rename'           => 'Rediska_Command_Rename',
+        'getkeyscount'     => 'Rediska_Command_GetKeysCount',
+        'expire'           => 'Rediska_Command_Expire',
+        'getlifetime'      => 'Rediska_Command_GetLifetime',
+        'selectdb'         => 'Rediska_Command_SelectDb',
+        'movetodb'         => 'Rediska_Command_MoveToDb',
+        'flushdb'          => 'Rediska_Command_FlushDb',
+
+        // Single value
+        'set'       => 'Rediska_Command_Set',
+        'setandget' => 'Rediska_Command_SetAndGet',
+        'get'       => 'Rediska_Command_Get',
+        'increment' => 'Rediska_Command_Increment',
+        'decrement' => 'Rediska_Command_Decrement',
+
+        // Lists
+        'appendtolist'   => 'Rediska_Command_AppendToList',
+        'prependtolist'  => 'Rediska_Command_PrependToList',
+        'getlistlength'  => 'Rediska_Command_GetListLength',
+        'getlist'        => 'Rediska_Command_GetList',
+        'truncatelist'   => 'Rediska_Command_TruncateList',
+        'getfromlist'    => 'Rediska_Command_GetFromList',
+        'settolist'      => 'Rediska_Command_SetToList',
+        'deletefromlist' => 'Rediska_Command_DeleteFromList',
+        'shiftfromlist'  => 'Rediska_Command_ShiftFromList',
+        'popfromlist'    => 'Rediska_Command_PopFromList',
+
+        // Sets
+        'addtoset'         => 'Rediska_Command_AddToSet',
+        'deletefromset'    => 'Rediska_Command_DeleteFromSet',
+        'getrandomfromset' => 'Rediska_Command_GetRandomFromSet',
+    	'getsetlength'     => 'Rediska_Command_GetSetLength',
+        'existsinset'      => 'Rediska_Command_ExistsInSet',
+        'intersectsets'    => 'Rediska_Command_IntersectSets',
+        'unionsets'        => 'Rediska_Command_UnionSets',
+        'diffsets'         => 'Rediska_Command_DiffSets',
+        'getset'           => 'Rediska_Command_GetSet',
+        'movetoset'        => 'Rediska_Command_MoveToSet',
+
+        // Sorted sets
+        'addtosortedset'          => 'Rediska_Command_AddToSortedSet',
+        'deletefromsortedset'     => 'Rediska_Command_DeleteFromSortedSet',
+        'getsortedset'            => 'Rediska_Command_GetSortedSet',
+        'getfromsortedsetbyscore' => 'Rediska_Command_GetFromSortedSetByScore',
+        'getsortedsetlength'      => 'Rediska_Command_GetSortedSetLength',
+        'getscorefromsortedset'   => 'Rediska_Command_GetScoreFromSortedSet',
+
+        // Controls
+        'save'            => 'Rediska_Command_Save',
+        'getlastsavetime' => 'Rediska_Command_GetLastSaveTime',
+        'info'            => 'Rediska_Command_Info',
+        'quit'            => 'Rediska_Command_Quit',
+        'shutdown'        => 'Rediska_Command_Shutdown',
     );
 
     /**
@@ -220,6 +231,50 @@ class Rediska
     public static function setDefaultInstace(Rediska $instance)
     {
     	self::$_defaultInstance = $instance;
+    }
+    
+    /**
+     * Add command
+     * 
+     * @param string $name      Command name
+     * @param string $className Name of class
+     */
+    public static function addCommand($name, $className)
+    {
+        if (!class_exists($className)) {
+            throw new Rediska_Exception("Class '$className' not found. You must include before or setup autoload");
+        }
+
+        // Check class
+        $classReflection = new ReflectionClass($className);
+        if (!in_array('Rediska_Command_Interface', $classReflection->getInterfaceNames())) {
+            throw new Rediska_Exception("Class '$className' must implement Rediska_Command_Interface interface");
+        }
+        $methodCreate = $classReflection->getMethod('create');
+        if (!$methodCreate || !$methodCreate->isPublic()) {
+            throw new Rediska_Exception("Class '$className' must have public method 'create'");
+        }
+
+        $lowerName = strtolower($name);
+        self::$_commands[$lowerName] = $className;
+
+        return true;
+    }
+
+    /**
+     * Remove command
+     * 
+     * @param string $name Command name
+     */
+    public static function removeCommand($name)
+    {
+        $lowerName = strtolower($name);
+        if (!isset(self::$_commands[$lowerName])) {
+            throw new Rediska_Exception("Command '$name' not found");
+        }
+        unset(self::$_commands[$lowerName]);
+
+        return true;
     }
 
     /**
@@ -442,51 +497,7 @@ class Rediska
     }
 
     /**
-     * Add Redis command
-     * 
-     * @param string $name      Command name
-     * @param string $className Name of class
-     */
-    public static function addCommand($name, $className)
-    {
-        if (!class_exists($className)) {
-            throw new Rediska_Exception("Class '$className' not found. You must include before or setup autoload");
-        }
-
-        // Check class
-        $classReflection = new ReflectionClass($className);
-        if (!in_array('Rediska_Command_Interface', $classReflection->getInterfaceNames())) {
-            throw new Rediska_Exception("Class '$className' must implement Rediska_Command_Interface interface");
-        }
-        $methodCreate = $classReflection->getMethod('create');
-        if (!$methodCreate || !$methodCreate->isPublic()) {
-            throw new Rediska_Exception("Class '$className' must have public method 'create'");
-        }
-
-        $lowerName = strtolower($name);
-        self::$_commands[$lowerName] = $className;
-
-        return true;
-    }
-
-    /**
-     * Remove Redis command
-     * 
-     * @param string $name Command name
-     */
-    public static function removeCommand($name)
-    {
-        $lowerName = strtolower($name);
-        if (!isset(self::$_commands[$lowerName])) {
-            throw new Rediska_Exception("Command '$name' not found");
-        }
-        unset(self::$_commands[$lowerName]);
-
-        return true;
-    }
-
-    /**
-     * Get Redis Command instance
+     * Get Rediska Command instance
      * 
      * @throws Rediska_Exception
      * @param string $name      Command name 
@@ -507,15 +518,6 @@ class Rediska
 
         // Initailize command
         return new self::$_commands[$lowerName]($this, $name, $arguments);
-    }
-
-    public function __call($name, $args)
-    {
-        $this->_specifiedConnection->resetConnection();
-
-        $command = $this->getCommand($name, $args);
-        $command->write();
-        return $command->read();
     }
 
     /**
@@ -632,5 +634,14 @@ class Rediska
         } else {
             return call_user_func($this->_options['unserializer'], $value);
         }
+    }
+    
+    public function __call($name, $args)
+    {
+        $this->_specifiedConnection->resetConnection();
+
+        $command = $this->getCommand($name, $args);
+        $command->write();
+        return $command->read();
     }
 }
