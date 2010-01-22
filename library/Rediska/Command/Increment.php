@@ -1,15 +1,13 @@
 <?php
 
 /**
- * Add the specified member to the Set value at key
- * 
  * Increment the number value of key by integer
  * 
+ * @throws Rediska_Command_Exception
  * @param string $name Key name
  * @param integer $amount Amount to increment
  * @return integer New value
  * 
- * @throws Rediska_Command_Exception
  * @author Ivan Shumkov
  * @package Rediska
  * @version 0.3.0

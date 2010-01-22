@@ -13,12 +13,6 @@
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-
-/**
-     * 
-     * 
-
-     */
 class Rediska_Command_AppendToList extends Rediska_Command_Abstract
 {
     protected function _create($name, $value)

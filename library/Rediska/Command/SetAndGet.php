@@ -5,7 +5,6 @@
  * 
  * @param string  $name   Key name
  * @param mixin   $value  Value
- * @param integer $expire Number of seconds to expire key
  * @return mixin
  * 
  * @author Ivan Shumkov

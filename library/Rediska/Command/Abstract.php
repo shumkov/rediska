@@ -6,7 +6,7 @@
 require_once 'Rediska/Command/Exception.php';
 
 /**
- * Redis command abstract class
+ * Rediska command abstract class
  * 
  * @author Ivan Shumkov
  * @package Rediska

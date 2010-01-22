@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Get members of Sorted Set by min and max score
+ * Get members from sorted set by min and max score
  * 
  * @throws Rediska_Command_Exception
  * @param string  $name   Key name
@@ -17,7 +17,7 @@
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_Command_GetSortedSetByScore extends Rediska_Command_Abstract
+class Rediska_Command_GetFromSortedSetByScore extends Rediska_Command_Abstract
 {
     protected function _create($name, $min, $max, $limit = null, $offset = null)
     {
