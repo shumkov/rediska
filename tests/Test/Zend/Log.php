@@ -18,7 +18,7 @@ class Test_Zend_Log extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->rediska = new Rediska(array('namespace' => 'Rediska_Test_'));
+        $this->rediska = new Rediska(array('namespace' => 'Rediska_Test_', 'servers' => array(array('host' => REDISKA_HOST, 'port' => REDISKA_PORT))));
         $writer = new Rediska_Zend_Log_Writer_Redis('log');
         $this->log = new Zend_Log($writer);
     }

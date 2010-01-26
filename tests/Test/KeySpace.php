@@ -35,7 +35,7 @@ class Test_KeySpace extends RediskaTestCase
     
     public function testGetKeysByPatternWithManyConnections()
     {
-    	$this->_addServerOrSkipTest('127.0.0.1', 6380);
+    	$this->_addServerOrSkipTest(REDISKA_SECOND_HOST, REDISKA_SECOND_PORT);
 
     	$this->testGetKeysByPattern();
     }
@@ -65,7 +65,7 @@ class Test_KeySpace extends RediskaTestCase
     
     public function testRenameWithManyConnections()
     {
-    	$this->_addServerOrSkipTest('127.0.0.1', 6380);
+    	$this->_addServerOrSkipTest(REDISKA_SECOND_HOST, REDISKA_SECOND_PORT);
 
         $this->testRename();
     }
@@ -83,7 +83,7 @@ class Test_KeySpace extends RediskaTestCase
     
     public function testRenameWithoutOverwriteWithManyConnections()
     {
-    	$this->_addServerOrSkipTest('127.0.0.1', 6380);
+    	$this->_addServerOrSkipTest(REDISKA_SECOND_HOST, REDISKA_SECOND_PORT);
 
         $this->testRenameWithoutOverwrite();
     }
@@ -108,7 +108,7 @@ class Test_KeySpace extends RediskaTestCase
     
     public function testGetKeysCountWithManyConnections()
     {
-    	$this->_addServerOrSkipTest('127.0.0.1', 6380);
+    	$this->_addServerOrSkipTest(REDISKA_SECOND_HOST, REDISKA_SECOND_PORT);
 
         $this->testGetKeysCount();
     }

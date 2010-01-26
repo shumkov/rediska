@@ -16,7 +16,7 @@ class Test_Zend_Queue extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->rediska = new Rediska(array('namespace' => 'Rediska_Test_'));
+        $this->rediska = new Rediska(array('namespace' => 'Rediska_Test_', 'servers' => array(array('host' => REDISKA_HOST, 'port' => REDISKA_PORT))));
         $this->queue = new Zend_Queue('Redis', array('adapterNamespace' => 'Rediska_Zend_Queue_Adapter'));
     }
 

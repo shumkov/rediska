@@ -23,7 +23,7 @@ class Test_Zend_Auth extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->rediska = new Rediska(array('namespace' => 'Rediska_Tests_'));
+        $this->rediska = new Rediska(array('namespace' => 'Rediska_Tests_', 'servers' => array(array('host' => REDISKA_HOST, 'port' => REDISKA_PORT))));
         $this->rediska->set('user_ids:test', 1);
 
         $data = new stdClass;

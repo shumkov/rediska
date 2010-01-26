@@ -1,5 +1,10 @@
 <?php
 
+define('REDISKA_HOST', '127.0.0.1');
+define('REDISKA_PORT', 6380);
+define('REDISKA_SECOND_HOST', '127.0.0.1');
+define('REDISKA_SECOND_PORT', 6381);
+
 set_include_path(implode(PATH_SEPARATOR, array(
     realpath('../library'),
     get_include_path(),

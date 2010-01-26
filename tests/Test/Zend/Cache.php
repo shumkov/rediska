@@ -17,8 +17,8 @@ class Test_Zend_Cache extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->rediska = new Rediska(array('namespace' => 'Rediska_Tests_'));
-        $this->cache = Zend_Cache::factory('Core', 'Rediska_Zend_Cache_Backend_Redis', array('cache_id_prefix' => 'Rediska_Tests_'), array(), false, true);
+        $this->rediska = new Rediska(array('namespace' => 'Rediska_Tests_', 'servers' => array(array('host' => REDISKA_HOST, 'port' => REDISKA_PORT))));
+        $this->cache = Zend_Cache::factory('Core', 'Rediska_Zend_Cache_Backend_Redis', array('cache_id_prefix' => 'Rediska_Tests_'), array('servers' => array(array('host' => REDISKA_HOST, 'port' => REDISKA_PORT))), false, true);
     }
 
     protected function tearDown()

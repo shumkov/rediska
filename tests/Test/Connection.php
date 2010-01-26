@@ -4,7 +4,7 @@ class Test_Connection extends RediskaTestCase
 {
 	public function testSelectDb()
 	{
-		$rediska = new Rediska(array('servers' => array(array('host' => '127.0.0.1', 'port' => 6379, 'db' => 2))));
+		$rediska = new Rediska(array('servers' => array(array('host' => REDISKA_HOST, 'port' => REDISKA_PORT, 'db' => 2))));
 		$rediska->set('a', 123);
 		$rediska->selectDb(1);
 		$reply = $rediska->get('a');
@@ -16,21 +16,21 @@ class Test_Connection extends RediskaTestCase
 
     public function testOn()
     {
-        $this->rediska->on('127.0.0.1:6379')->set('aaa', 'value');
-        $this->assertEquals($this->rediska->on('127.0.0.1:6379')->get('aaa'), 'value');
+        $this->rediska->on(REDISKA_HOST . ':' . REDISKA_PORT)->set('aaa', 'value');
+        $this->assertEquals($this->rediska->on(REDISKA_HOST . ':' . REDISKA_PORT)->get('aaa'), 'value');
     }
 
     public function testOnTwoServers()
     {
-        $this->_addServerOrSkipTest('127.0.0.1', 6380);
+        $this->_addServerOrSkipTest(REDISKA_SECOND_HOST, REDISKA_SECOND_PORT);
 
-        $this->rediska->on('127.0.0.1:6379')->set('aaa', 'value');
-        $this->rediska->on('127.0.0.1:6380')->set('bbb', 'value');
+        $this->rediska->on(REDISKA_HOST . ':' . REDISKA_PORT)->set('aaa', 'value');
+        $this->rediska->on(REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT)->set('bbb', 'value');
 
-        $this->assertEquals($this->rediska->on('127.0.0.1:6379')->get('aaa'), 'value');
-        $this->assertNull($this->rediska->on('127.0.0.1:6380')->get('aaa'));
+        $this->assertEquals($this->rediska->on(REDISKA_HOST . ':' . REDISKA_PORT)->get('aaa'), 'value');
+        $this->assertNull($this->rediska->on(REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT)->get('aaa'));
 
-        $this->assertNull($this->rediska->on('127.0.0.1:6379')->get('bbb'));
-        $this->assertEquals($this->rediska->on('127.0.0.1:6380')->get('bbb'), 'value');
+        $this->assertNull($this->rediska->on(REDISKA_HOST . ':' . REDISKA_PORT)->get('bbb'));
+        $this->assertEquals($this->rediska->on(REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT)->get('bbb'), 'value');
     }
 }

@@ -69,7 +69,7 @@ class Test_Sets extends RediskaTestCase
     
     public function testMoveToSetWithMayConnections()
     {
-    	$this->_addServerOrSkipTest('127.0.0.1', 6380);
+    	$this->_addServerOrSkipTest(REDISKA_SECOND_HOST, REDISKA_SECOND_PORT);
     	$this->testMoveToSet();
     }
     
@@ -117,7 +117,7 @@ class Test_Sets extends RediskaTestCase
 
     public function testIntersectSetsWithManyConnection()
     {
-    	$this->_addServerOrSkipTest('127.0.0.1', 6380);
+    	$this->_addServerOrSkipTest(REDISKA_SECOND_HOST, REDISKA_SECOND_PORT);
         $this->testIntersectSets();
     }
 
@@ -142,7 +142,7 @@ class Test_Sets extends RediskaTestCase
     
     public function testUnionSetsWithManyConnection()
     {
-    	$this->_addServerOrSkipTest('127.0.0.1', 6380);
+    	$this->_addServerOrSkipTest(REDISKA_SECOND_HOST, REDISKA_SECOND_PORT);
         $this->testUnionSets();
     }
     
@@ -167,7 +167,7 @@ class Test_Sets extends RediskaTestCase
     
     public function testDiffSetsWithManyConnection()
     {
-    	$this->_addServerOrSkipTest('127.0.0.1', 6380);
+    	$this->_addServerOrSkipTest(REDISKA_SECOND_HOST, REDISKA_SECOND_PORT);
         $this->testDiffSets();
     }
     

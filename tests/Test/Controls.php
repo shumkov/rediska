@@ -76,12 +76,12 @@ class Test_Controls extends RediskaTestCase
 
     public function testGetLastSaveTimeWithManyConnections()
     {
-    	$this->_addServerOrSkipTest('127.0.0.1', 6380);
+    	$this->_addServerOrSkipTest(REDISKA_SECOND_HOST, REDISKA_SECOND_PORT);
 
     	$timestamp = $this->rediska->getLastSaveTime();
     	$this->assertTrue(is_array($timestamp));
-        $this->assertArrayHasKey('127.0.0.1:6380', $timestamp);
-        $this->assertTrue(is_numeric($timestamp['127.0.0.1:6380']));
+        $this->assertArrayHasKey(REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT, $timestamp);
+        $this->assertTrue(is_numeric($timestamp[REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT]));
     }
 
     public function testShutdown()
@@ -98,11 +98,11 @@ class Test_Controls extends RediskaTestCase
 
     public function testInfoWithManyServers()
     {
-    	$this->_addServerOrSkipTest('127.0.0.1', 6380);
+    	$this->_addServerOrSkipTest(REDISKA_SECOND_HOST, REDISKA_SECOND_PORT);
 
         $info = $this->rediska->info();
         $this->assertTrue(is_array($info));
-        $this->assertArrayHasKey('127.0.0.1:6380', $info);
-        $this->assertArrayHasKey('redis_version', $info['127.0.0.1:6380']);
+        $this->assertArrayHasKey(REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT, $info);
+        $this->assertArrayHasKey('redis_version', $info[REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT]);
     }
 }

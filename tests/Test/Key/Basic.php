@@ -16,7 +16,7 @@ class Test_Key_Basic extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->rediska = new Rediska(array('namespace' => 'Rediska_Tests_'));
+        $this->rediska = new Rediska(array('namespace' => 'Rediska_Tests_', 'servers' => array(array('host' => REDISKA_HOST, 'port' => REDISKA_PORT))));
         $this->key = new Rediska_Key('test');
     }
 

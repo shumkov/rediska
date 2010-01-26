@@ -16,7 +16,7 @@ class Test_Key_SortedSet extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->rediska = new Rediska(array('namespace' => 'Rediska_Tests_'));
+        $this->rediska = new Rediska(array('namespace' => 'Rediska_Tests_', 'servers' => array(array('host' => REDISKA_HOST, 'port' => REDISKA_PORT))));
         $this->set = new Rediska_Key_SortedSet('test');
     }
 
@@ -77,6 +77,15 @@ class Test_Key_SortedSet extends PHPUnit_Framework_TestCase
         $values = $this->set->getByScore(0, 3);
         $this->assertEquals(123, $values[0]);
         $this->assertEquals(456, $values[1]);
+    }
+
+    public function testGetScore()
+    {
+    	$this->rediska->addToSortedSet('test', 123, 1);
+        $this->rediska->addToSortedSet('test', 456, 2);
+
+        $this->assertEquals(1, $this->set->getScore(123));
+        $this->assertEquals(2, $this->set->getScore(456));
     }
 
     public function testToArray()

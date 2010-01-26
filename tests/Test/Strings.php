@@ -135,7 +135,7 @@ class Test_Strings extends RediskaTestCase
     
     public function testGetWithArrayOfKeyNamesWithManyConnections()
     {
-    	$this->_addServerOrSkipTest('127.0.0.1', 6380);
+    	$this->_addServerOrSkipTest(REDISKA_SECOND_HOST, REDISKA_SECOND_PORT);
         $this->testGetWithArrayOfKeyNames();
     }
 
@@ -225,7 +225,7 @@ class Test_Strings extends RediskaTestCase
     
     public function testDeleteWithMultiKeyNamesWithManyConnections()
     {
-    	$this->_addServerOrSkipTest('127.0.0.1', 6380);
+    	$this->_addServerOrSkipTest(REDISKA_SECOND_HOST, REDISKA_SECOND_PORT);
         $this->testDeleteWithMultiKeyNames();
     }
 }

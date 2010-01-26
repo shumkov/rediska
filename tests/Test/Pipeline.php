@@ -40,24 +40,24 @@ class Test_Pipeline extends RediskaTestCase
 
     public function testPipelineWithMultipleConnections()
     {
-    	$this->_addServerOrSkipTest('127.0.0.1', 6380);
+    	$this->_addServerOrSkipTest(REDISKA_SECOND_HOST, REDISKA_SECOND_PORT);
     	$this->testPipeline();
     }
 
     public function testPipelineWithSpecifiedConnection()
     {
-    	$this->_addServerOrSkipTest('127.0.0.1', 6380);
+    	$this->_addServerOrSkipTest(REDISKA_SECOND_HOST, REDISKA_SECOND_PORT);
 
-    	$this->rediska->on('127.0.0.1:6380')->pipeline()
+    	$this->rediska->on(REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT)->pipeline()
     	                                    ->set(1, 1)
     	                                    ->set(2, 2)
-    	                                    ->on('127.0.0.1:6379')->set(3, 3)
+    	                                    ->on(REDISKA_HOST . ':' . REDISKA_PORT)->set(3, 3)
     	                                    ->set(4, 4)
     	                                    ->execute();
 
-        $this->assertEquals(1, $this->rediska->on('127.0.0.1:6380')->get(1));
-        $this->assertEquals(2, $this->rediska->on('127.0.0.1:6380')->get(2));
-        $this->assertEquals(3, $this->rediska->on('127.0.0.1:6379')->get(3));
-        $this->assertEquals(4, $this->rediska->on('127.0.0.1:6380')->get(4));
+        $this->assertEquals(1, $this->rediska->on(REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT)->get(1));
+        $this->assertEquals(2, $this->rediska->on(REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT)->get(2));
+        $this->assertEquals(3, $this->rediska->on(REDISKA_HOST . ':' . REDISKA_PORT)->get(3));
+        $this->assertEquals(4, $this->rediska->on(REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT)->get(4));
     }
 }
