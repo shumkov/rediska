@@ -76,6 +76,17 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
     }
 
     /**
+     * Get member score from Sorted Set
+     * 
+     * @param mixin $value
+     * @return numeric
+     */
+    public function getScore($value)
+    {
+    	return $this->getRediska()->getScoreFromSortedSet($this->_name, $value);
+    }
+
+    /**
      * Get Sorted set values
      * 
      * @param integer|string $limitOrSort Limit of elements or sorting query
