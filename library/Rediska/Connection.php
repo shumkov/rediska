@@ -51,7 +51,7 @@ class Rediska_Connection
 	   'alias'      => null,
 	   'db'         => self::DEFAULT_DB,
 	);
-
+//213
 	/**
      * Contruct Rediska connection
      * 
