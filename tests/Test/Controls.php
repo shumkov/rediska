@@ -89,6 +89,11 @@ class Test_Controls extends RediskaTestCase
     	$this->markTestIncomplete('Not tested!');
     }
 
+    public function testRewriteAppendOnlyFile()
+    {
+        $this->markTestIncomplete('Not tested!');
+    }
+
     public function testInfo()
     {
     	$info = $this->rediska->info();

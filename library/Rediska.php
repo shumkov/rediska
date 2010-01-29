@@ -117,19 +117,21 @@ class Rediska
         'movetoset'        => 'Rediska_Command_MoveToSet',
 
         // Sorted sets
-        'addtosortedset'          => 'Rediska_Command_AddToSortedSet',
-        'deletefromsortedset'     => 'Rediska_Command_DeleteFromSortedSet',
-        'getsortedset'            => 'Rediska_Command_GetSortedSet',
-        'getfromsortedsetbyscore' => 'Rediska_Command_GetFromSortedSetByScore',
-        'getsortedsetlength'      => 'Rediska_Command_GetSortedSetLength',
-        'getscorefromsortedset'   => 'Rediska_Command_GetScoreFromSortedSet',
+        'addtosortedset'            => 'Rediska_Command_AddToSortedSet',
+        'deletefromsortedset'       => 'Rediska_Command_DeleteFromSortedSet',
+        'incrementscoreinsortedset' => 'Rediska_Command_IncrementScoreInSortedSet',
+        'getsortedset'              => 'Rediska_Command_GetSortedSet',
+        'getfromsortedsetbyscore'   => 'Rediska_Command_GetFromSortedSetByScore',
+        'getsortedsetlength'        => 'Rediska_Command_GetSortedSetLength',
+        'getscorefromsortedset'     => 'Rediska_Command_GetScoreFromSortedSet',
 
         // Controls
-        'save'            => 'Rediska_Command_Save',
-        'getlastsavetime' => 'Rediska_Command_GetLastSaveTime',
-        'info'            => 'Rediska_Command_Info',
-        'quit'            => 'Rediska_Command_Quit',
-        'shutdown'        => 'Rediska_Command_Shutdown',
+        'save'                  => 'Rediska_Command_Save',
+        'getlastsavetime'       => 'Rediska_Command_GetLastSaveTime',
+        'info'                  => 'Rediska_Command_Info',
+        'quit'                  => 'Rediska_Command_Quit',
+        'shutdown'              => 'Rediska_Command_Shutdown',
+        'rewriteAppendOnlyFile' => 'Rediska_Command_RewriteAppendOnlyFile',
     );
 
     /**

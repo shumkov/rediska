@@ -32,6 +32,16 @@ class Test_SortedSets extends RediskaTestCase
         $this->assertNotContains('bbb', $values);
     }
 
+    public function testIncrementInScoreSortedSet()
+    {
+    	$this->rediska->addToSortedSet('test', 'aaa', 1);
+
+    	$reply = $this->rediska->incrementScoreInSortedSet('test', 'aaa', 5);
+    	$this->assertEquals(6, $reply);
+
+    	$this->rediska->getScoreFromSortedSet('test', 'aaa');
+    }
+
     public function testGetSortedSet()
     {
         $this->rediska->addToSortedSet('test', 1, 1);
@@ -44,10 +54,18 @@ class Test_SortedSets extends RediskaTestCase
         $this->assertTrue(in_array(3, $values));
         $this->assertFalse(in_array('xxxx', $values));
 
-        $values = $this->rediska->getSortedSet('test', 'limit 0 2 desc');
-        $this->assertEquals(array(3, 2), $values);
+        $values = $this->rediska->getSortedSet('test', false, 2);
+        $this->assertEquals(array(1, 2), $values);
+
+        $values = $this->rediska->getSortedSet('test', true);
+        $this->assertEquals($values[0]['score'], 1);
+        $this->assertEquals($values[0]['value'], 1);
+        $this->assertEquals($values[1]['score'], 2);
+        $this->assertEquals($values[1]['value'], 2);
+        $this->assertEquals($values[2]->score, 3);
+        $this->assertEquals($values[2]->value, 3);
     }
-    
+
     public function testGetFromSortedSetByScore()
     {
         $this->rediska->addToSortedSet('test', 1, 1);

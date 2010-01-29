@@ -25,7 +25,9 @@ class Rediska_Command_PopFromList extends Rediska_Command_Abstract
             $toConnection = $this->_rediska->getConnectionByKeyName($pushToName);
 
             if ($connection->getAlias() == $toConnection->getAlias()) {
-                $command = "RPOPLPUSH {$this->_rediska->getOption('namespace')}$name " . strlen("{$this->_rediska->getOption('namespace')}$pushToName") .  Rediska::EOL . "{$this->_rediska->getOption('namespace')}$pushToName";
+            	$command = array('RPOPLPUSH',
+            	                 "{$this->_rediska->getOption('namespace')}$name",
+            	                 "{$this->_rediska->getOption('namespace')}$pushToName");
             } else {
             	$this->setAtomic(false);
 

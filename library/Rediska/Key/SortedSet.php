@@ -87,18 +87,28 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
     }
 
     /**
+     * Increment score of element
+     * 
+     * @param $value
+     * @return integer
+     */
+    public function incrementScore($value, $score)
+    {
+    	return $this->getRediska()->incrementScoreInSortedSet($this->_name, $value, $score);
+    }
+
+    /**
      * Get Sorted set values
      * 
-     * @param integer|string $limitOrSort Limit of elements or sorting query
-     *                                    ALPHA work incorrect becouse values in List serailized
-     *                                    Read more: http://code.google.com/p/redis/wiki/SortCommand
-     * @param integer        $offset      Offset (not using in sorting)
-     * @param boolean        $revert      Revert elements (not used in sorting)
+     * @param integer $withScores  Return values with scores
+     * @param integer $limit       Limit of elements
+     * @param integer $offset      Offset (not using in sorting)
+     * @param boolean $revert      Revert elements (not used in sorting)
      * @return array
      */
-    public function toArray($limitOrSort = null, $offset = null, $revert = false)
+    public function toArray($withScores = false, $limit = null, $offset = null, $revert = false)
     {
-        return $this->getRediska()->getSortedSet($this->_name, $limitOrSort, $offset, $revert);
+        return $this->getRediska()->getSortedSet($this->_name, $withScores, $limit, $offset, $revert);
     }
 
     /**

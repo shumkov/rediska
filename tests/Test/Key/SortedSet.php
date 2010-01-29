@@ -87,6 +87,16 @@ class Test_Key_SortedSet extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $this->set->getScore(123));
         $this->assertEquals(2, $this->set->getScore(456));
     }
+    
+    public function testIncrementScore()
+    {
+    	$this->rediska->addToSortedSet('test', 123, 1);
+
+    	$reply = $this->set->incrementScore('123', 5);
+    	$this->assertEquals(6, $reply);
+
+    	$this->assertEquals(6, $this->set->getScore(123));
+    }
 
     public function testToArray()
     {
