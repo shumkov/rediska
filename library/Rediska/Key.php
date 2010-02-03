@@ -44,6 +44,26 @@ class Rediska_Key extends Rediska_Key_Abstract
 	}
 
 	/**
+	 * Increment integer value
+	 * 
+	 * @param unknown_type $amount
+	 */
+	public function increment($amount = 1)
+	{
+		return $this->getRediska()->increment($this->_name, $amount);
+	}
+
+	/**
+	 * Decrement integer value
+	 * 
+	 * @param unknown_type $amount
+	 */
+	public function decrement($amount = 1)
+	{
+		return $this->getRediska()->decrement($this->_name, $amount);
+	}
+
+	/**
 	 * Get value, if value not present set it from chain method
 	 * 
 	 * @param $object Object of chain method

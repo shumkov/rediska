@@ -45,6 +45,28 @@ class Test_Key_Basic extends PHPUnit_Framework_TestCase
         $this->assertEquals('123', "{$this->key}");
     }
     
+    public function testIncrement()
+    {
+    	$this->key->getRediska()->set($this->key->getName(), 123);
+
+    	$reply = $this->key->increment(2);
+    	$this->assertEquals(125, $reply);
+
+    	$reply = $this->key->getRediska()->get($this->key->getName());
+    	$this->assertEquals(125, $reply);
+    }
+
+    public function testDecrement()
+    {
+    	$this->key->getRediska()->set($this->key->getName(), 123);
+
+        $reply = $this->key->decrement(2);
+        $this->assertEquals(121, $reply);
+
+        $reply = $this->key->getRediska()->get($this->key->getName());
+        $this->assertEquals(121, $reply);
+    }
+
     public function testGetOrSetValue()
     {
     	require_once REDISKA_TESTS_PATH . '/classes/BasicKeyDataProvider.php';
