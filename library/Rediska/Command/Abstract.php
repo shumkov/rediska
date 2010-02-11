@@ -55,7 +55,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
      * 
      * @var array
      */
-    protected $_commandsByConnections;
+    protected $_commandsByConnections = array();
     
     /**
      * Atomic flag for pipelines
@@ -112,7 +112,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
         	list($connection, $command) = $commandByConnection;
             $connection->write($command);
         }
-        
+
         return true;
     }
 
