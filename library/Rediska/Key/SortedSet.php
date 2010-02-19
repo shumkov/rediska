@@ -25,7 +25,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
      */
     public function add($value, $score)
     {
-        $result = $this->getRediska()->addToSortedSet($this->_name, $value, $score);
+        $result = $this->_getRediskaOn()->addToSortedSet($this->_name, $value, $score);
 
         if ($result && !is_null($this->_expire)) {
             $this->expire($this->_expire);
@@ -42,7 +42,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
      */
     public function remove($value)
     {
-        $result = $this->getRediska()->deleteFromSortedSet($this->_name, $value);
+        $result = $this->_getRediskaOn()->deleteFromSortedSet($this->_name, $value);
 
         if ($result && !is_null($this->_expire)) {
             $this->expire($this->_expire);
@@ -58,7 +58,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
      */
     public function count()
     {
-        return $this->getRediska()->getSortedSetLength($this->_name);
+        return $this->_getRediskaOn()->getSortedSetLength($this->_name);
     }
 
     /**
@@ -72,7 +72,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
      */
     public function getByScore($min, $max, $limit = null, $offset = null)
     {
-        return $this->getRediska()->getFromSortedSetByScore($this->_name, $min, $max, $limit, $offset);
+        return $this->_getRediskaOn()->getFromSortedSetByScore($this->_name, $min, $max, $limit, $offset);
     }
 
     /**
@@ -83,7 +83,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
      */
     public function getScore($value)
     {
-    	return $this->getRediska()->getScoreFromSortedSet($this->_name, $value);
+    	return $this->_getRediskaOn()->getScoreFromSortedSet($this->_name, $value);
     }
 
     /**
@@ -94,7 +94,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
      */
     public function incrementScore($value, $score)
     {
-    	return $this->getRediska()->incrementScoreInSortedSet($this->_name, $value, $score);
+    	return $this->_getRediskaOn()->incrementScoreInSortedSet($this->_name, $value, $score);
     }
 
     /**
@@ -108,7 +108,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
      */
     public function toArray($withScores = false, $limit = null, $offset = null, $revert = false)
     {
-        return $this->getRediska()->getSortedSet($this->_name, $withScores, $limit, $offset, $revert);
+        return $this->_getRediskaOn()->getSortedSet($this->_name, $withScores, $limit, $offset, $revert);
     }
 
     /**
@@ -120,7 +120,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
     {
         // TODO: Use pipelines
         foreach($array as $score => $value) {
-            $this->getRediska()->addToSortedSet($this->_name, $value, $score);
+            $this->_getRediskaOn()->addToSortedSet($this->_name, $value, $score);
         }
 
         if (!is_null($this->_expire)) {

@@ -24,31 +24,33 @@ class Rediska_Command_Get extends Rediska_Command_Abstract
             $this->_multi = true;
             $names = $nameOrNames;
 
+            if (empty($names)) {
+            	throw new Rediska_Command_Exception('Not present keys for get');
+            }
+
             $sortedResult = array();
-            if (!empty($names)) {
-                $this->_keys = $names;
-                $connections = array();
-                $keysByConnections = array();
-                foreach ($names as $name) {
-                    $connection = $this->_rediska->getConnectionByKeyName($name);
-                    $connectionAlias = $connection->getAlias();
-                    if (!array_key_exists($connectionAlias, $connections)) {
-                        $connections[$connectionAlias] = $connection;
-                        $keysByConnections[$connectionAlias] = array();
-                    }
-                    $keysByConnections[$connectionAlias][] = $name;
+            $this->_keys = $names;
+            $connections = array();
+            $keysByConnections = array();
+            foreach ($names as $name) {
+                $connection = $this->_rediska->getConnectionByKeyName($name);
+                $connectionAlias = $connection->getAlias();
+                if (!array_key_exists($connectionAlias, $connections)) {
+                    $connections[$connectionAlias] = $connection;
+                    $keysByConnections[$connectionAlias] = array();
+                }
+                $keysByConnections[$connectionAlias][] = $name;
+            }
+
+            $result = array();
+            foreach($keysByConnections as $connectionAlias => $keys) {
+                $command = "MGET ";
+                foreach($keys as $key) {
+                    $command .= " {$this->_rediska->getOption('namespace')}$key";
+                    $this->_keysByConnections[] = $key;
                 }
 
-                $result = array();
-                foreach($keysByConnections as $connectionAlias => $keys) {
-                    $command = "MGET ";
-                    foreach($keys as $key) {
-                        $command .= " {$this->_rediska->getOption('namespace')}$key";
-                        $this->_keysByConnections[] = $key;
-                    }
-
-                    $this->_addCommandByConnection($connections[$connectionAlias], $command);
-                }
+                $this->_addCommandByConnection($connections[$connectionAlias], $command);
             }
         } else {
             $name = $nameOrNames;

@@ -17,32 +17,32 @@ class Rediska_Command_Delete extends Rediska_Command_Abstract
     protected function _create($nameOrNames)
     {
         if (is_array($nameOrNames)) {
-            $names = $nameOrNames;
-            $result = 0;
-            if (!empty($names)) {
-                $connections = array();
-                $keysByConnections = array();
-                foreach ($names as $name) {
-                    $connection = $this->_rediska->getConnectionByKeyName($name);
-                    $connectionAlias = $connection->getAlias();
-                    if (!array_key_exists($connectionAlias, $connections)) {
-                        $connections[$connectionAlias] = $connection;
-                        $keysByConnections[$connectionAlias] = array();
-                    }
-                    $keysByConnections[$connectionAlias][] = $name;
-                }
+        	$names = $nameOrNames;
 
-                foreach($keysByConnections as $connectionAlias => $keys) {
-                    $command = "DEL ";
-                    foreach($keys as $key) {
-                        $command .= " {$this->_rediska->getOption('namespace')}$key";
-                    }
+        	if (empty($names)) {
+        	   throw new Rediska_Command_Exception('Not present keys for delete');
+        	}
 
-                    $this->_addCommandByConnection($connections[$connectionAlias], $command);
+            $connections = array();
+            $keysByConnections = array();
+            foreach ($names as $name) {
+                $connection = $this->_rediska->getConnectionByKeyName($name);
+                $connectionAlias = $connection->getAlias();
+                if (!array_key_exists($connectionAlias, $connections)) {
+                    $connections[$connectionAlias] = $connection;
+                    $keysByConnections[$connectionAlias] = array();
                 }
+                $keysByConnections[$connectionAlias][] = $name;
             }
 
-            return $result;
+            foreach($keysByConnections as $connectionAlias => $keys) {
+                $command = "DEL ";
+                foreach($keys as $key) {
+                    $command .= " {$this->_rediska->getOption('namespace')}$key";
+                }
+
+                $this->_addCommandByConnection($connections[$connectionAlias], $command);
+            }
         } else {
             $name = $nameOrNames;
 

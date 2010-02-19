@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Add the specified member to the Set value at key
+ * Atomic set value and return old 
  * 
  * @param string  $name   Key name
  * @param mixin   $value  Value

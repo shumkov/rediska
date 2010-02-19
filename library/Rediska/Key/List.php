@@ -24,7 +24,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
 	 */
 	public function append($value)
 	{
-		$result = $this->getRediska()->appendToList($this->_name, $value);
+		$result = $this->_getRediskaOn()->appendToList($this->_name, $value);
 
 	    if ($result && !is_null($this->_expire)) {
             $this->expire($this->_expire);
@@ -41,7 +41,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
 	 */
 	public function prepend($value)
 	{
-		$result = $this->getRediska()->prependToList($this->_name, $value);
+		$result = $this->_getRediskaOn()->prependToList($this->_name, $value);
 		
 		if ($result && !is_null($this->_expire)) {
             $this->expire($this->_expire);
@@ -57,7 +57,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
 	 */
 	public function count()
 	{
-		return $this->getRediska()->getListLength($this->_name);
+		return $this->_getRediskaOn()->getListLength($this->_name);
 	}
 
 	/**
@@ -72,7 +72,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
 	 */
     public function toArray($limitOrSort = null, $offset = null)
     {
-        return $this->getRediska()->getList($this->_name, $limitOrSort, $offset);
+        return $this->_getRediskaOn()->getList($this->_name, $limitOrSort, $offset);
     }
     
     /**
@@ -84,7 +84,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
     {
         // TODO: Use pipelines
     	foreach($array as $item) {
-    	    $this->getRediska()->appendToList($this->_name, $item);
+    	    $this->_getRediskaOn()->appendToList($this->_name, $item);
     	}
 
     	if (!is_null($this->_expire)) {
@@ -103,7 +103,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
      */
     public function truncate($limit, $offset = 0)
     {
-        $result = $this->getRediska()->truncateList($this->_name, $limit, $offset);
+        $result = $this->_getRediskaOn()->truncateList($this->_name, $limit, $offset);
 
         if ($result && !is_null($this->_expire)) {
             $this->expire($this->_expire);
@@ -120,7 +120,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
      */
     public function get($index)
     {
-        return $this->getRediska()->getFromList($this->_name, $index);
+        return $this->_getRediskaOn()->getFromList($this->_name, $index);
     }
     
     /**
@@ -132,7 +132,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
      */
     public function set($index, $value)
     {
-    	$result = $this->getRediska()->setToList($this->_name, $index, $value);
+    	$result = $this->_getRediskaOn()->setToList($this->_name, $index, $value);
 
     	if ($result && !is_null($this->_expire)) {
             $this->expire($this->_expire);
@@ -151,7 +151,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
      */
     public function remove($value, $count = 0)
     {
-        $result = $this->getRediska()->deleteFromList($this->_name, $value, $count);
+        $result = $this->_getRediskaOn()->deleteFromList($this->_name, $value, $count);
 
         if ($result && !is_null($this->_expire)) {
             $this->expire($this->_expire);
@@ -167,7 +167,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
      */
     public function shift()
     {
-    	$result = $this->getRediska()->shiftFromList($this->_name);
+    	$result = $this->_getRediskaOn()->shiftFromList($this->_name);
 
     	if ($result && !is_null($this->_expire)) {
             $this->expire($this->_expire);
@@ -183,7 +183,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
      */
     public function pop()
     {
-    	$result = $this->getRediska()->popFromList($this->_name);
+    	$result = $this->_getRediskaOn()->popFromList($this->_name);
 
     	if ($result && !is_null($this->_expire)) {
             $this->expire($this->_expire);

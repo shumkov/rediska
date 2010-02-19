@@ -420,20 +420,6 @@ class Rediska
             $connection = $this->_connections[$alias];
         }
 
-        try {
-            $connection->connect();
-        } catch (Rediska_Connection_Exception $e) {
-            $alias = "$connection";
-            unset($this->_connections[$alias]);
-            $this->_keyDistributor->removeConnection($alias);
-            trigger_error($e->getMessage(), E_USER_WARNING);
-            if (empty($this->_connections)) {
-                throw new Rediska_Connection_Exception('No one working server connections!');
-            } else {
-                $connection = $this->getConnectionByKeyName($name);
-            }
-        }
-
         return $connection;
     }
 
@@ -446,25 +432,8 @@ class Rediska
     public function getConnections()
     {
         if ($this->_specifiedConnection->getConnection()) {
-            $connection = $this->_specifiedConnection->getConnection();
-            $connection->connect();
-
-            return $connection;
+            return array($this->_specifiedConnection->getConnection());
         } else {
-            foreach ($this->_connections as $alias => $connection) {
-                try {
-                    $connection->connect();
-                } catch (Rediska_Connection_Exception $e) {
-                    unset($this->_connections[$alias]);
-                    $this->_keyDistributor->removeConnection($alias);
-                    trigger_error($e->getMessage(), E_USER_WARNING);
-                }
-            }
-
-            if (empty($this->_connections)) {
-                throw new Rediska_Connection_Exception('No one working server connections!');
-            }
-
             return array_values($this->_connections);
         }
     }

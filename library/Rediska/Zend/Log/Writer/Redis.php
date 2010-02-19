@@ -69,6 +69,28 @@ class Rediska_Zend_Log_Writer_Redis extends Zend_Log_Writer_Abstract
     {
         $this->_list = null;
     }
+    
+    /**
+     * Create a new instance of Rediska_Zend_Log_Writer_Redis
+     * 
+     * @param  array|Zend_Config $config
+     * @return Zend_Log_Writer_Mock
+     * @throws Zend_Log_Exception
+     */
+    static public function factory($config)
+    {
+        $config = self::_parseConfig($config);
+        
+        if (!isset($config['keyName'])) {
+        	throw new Zend_Log_Exception('keyName not present');
+        }
+
+        if (!isset($config['options'])) {
+            $config['options'] = array();
+        }
+
+        return new self($config['keyName'], $config['options']);
+    }
 
     /**
      * Write a message to the log.

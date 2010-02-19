@@ -24,7 +24,7 @@ class Rediska_Key extends Rediska_Key_Abstract
 	 */
 	public function setValue($value)
 	{
-		$reply = $this->getRediska()->set($this->_name, $value);
+		$reply = $this->_getRediskaOn()->set($this->_name, $value);
 
 		if ($reply && !is_null($this->_expire)) {
 		    $this->expire($this->_expire);
@@ -40,7 +40,7 @@ class Rediska_Key extends Rediska_Key_Abstract
 	 */
 	public function getValue()
 	{
-		return $this->getRediska()->get($this->_name);
+		return $this->_getRediskaOn()->get($this->_name);
 	}
 
 	/**
@@ -50,7 +50,7 @@ class Rediska_Key extends Rediska_Key_Abstract
 	 */
 	public function increment($amount = 1)
 	{
-		return $this->getRediska()->increment($this->_name, $amount);
+		return $this->_getRediskaOn()->increment($this->_name, $amount);
 	}
 
 	/**
@@ -60,7 +60,7 @@ class Rediska_Key extends Rediska_Key_Abstract
 	 */
 	public function decrement($amount = 1)
 	{
-		return $this->getRediska()->decrement($this->_name, $amount);
+		return $this->_getRediskaOn()->decrement($this->_name, $amount);
 	}
 
 	/**

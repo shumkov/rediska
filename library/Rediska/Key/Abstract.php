@@ -41,6 +41,13 @@ abstract class Rediska_Key_Abstract
      * @var integer
      */
     protected $_expire;
+    
+    /**
+     * Server alias
+     * 
+     * @var string
+     */
+    protected $_serverAlias;
 
 	/**
 	 * Construct key
@@ -48,10 +55,11 @@ abstract class Rediska_Key_Abstract
 	 * @param string  $name   Key name
 	 * @param integer $expire Expire time in seconds
 	 */
-	public function __construct($name, $expire = null)
+	public function __construct($name, $expire = null, $serverAlias = null)
 	{
-		$this->_name = $name;
-		$this->_expire = $expire;
+		$this->_name        = $name;
+		$this->_expire      = $expire;
+		$this->_serverAlias = $serverAlias;
 
 		$this->_setupRediskaDefaultInstance();
 	}
@@ -63,7 +71,7 @@ abstract class Rediska_Key_Abstract
 	 */
 	public function delete()
 	{
-		return $this->getRediska()->delete($this->_name);
+		return $this->_getRediskaOn()->delete($this->_name);
 	}
 
 	/**
@@ -73,7 +81,7 @@ abstract class Rediska_Key_Abstract
      */
 	public function isExists()
 	{
-		return $this->getRediska()->exists($this->_name);
+		return $this->_getRediskaOn()->exists($this->_name);
 	}
 
 	/**
@@ -84,7 +92,7 @@ abstract class Rediska_Key_Abstract
 	 */
 	public function getType()
 	{
-		return $this->getRediska()->getType($this->_name);
+		return $this->_getRediskaOn()->getType($this->_name);
 	}
 
 	/**
@@ -97,7 +105,7 @@ abstract class Rediska_Key_Abstract
 	public function rename($newName, $overwrite = true)
 	{
 		try {
-            $this->getRediska()->rename($this->_name, $newName, $overwrite);
+            $this->_getRediskaOn()->rename($this->_name, $newName, $overwrite);
 		} catch (Rediska_Exception $e) {
 			return false;
 		}
@@ -119,7 +127,7 @@ abstract class Rediska_Key_Abstract
 	 */
 	public function expire($seconds)
 	{
-		return $this->getRediska()->expire($this->_name, $seconds);
+		return $this->_getRediskaOn()->expire($this->_name, $seconds);
 	}
 
 	/**
@@ -129,7 +137,7 @@ abstract class Rediska_Key_Abstract
 	 */
 	public function getLifetime()
 	{
-		return $this->getRediska()->getLifetime($this->_name);
+		return $this->_getRediskaOn()->getLifetime($this->_name);
 	}
 
 	/**
@@ -141,7 +149,7 @@ abstract class Rediska_Key_Abstract
 	 */
 	public function moveToDb($dbIndex)
 	{
-		$result = $this->getRediska()->moveToDb($this->_name, $dbIndex);
+		$result = $this->_getRediskaOn()->moveToDb($this->_name, $dbIndex);
 
         if ($result && !is_null($this->_expire)) {
             $this->expire($this->_expire);
@@ -198,6 +206,43 @@ abstract class Rediska_Key_Abstract
         }
 
         return $this->_rediska;
+    }
+
+    /**
+     * Set server alias
+     * 
+     * @param $serverAlias
+     * @return Rediska_Key_Abstract
+     */
+    public function setServerAlias($serverAlias)
+    {
+    	$this->_serverAlias = $serverAlias;
+    	
+    	return $this;
+    }
+
+    /**
+     * Get server alias
+     * 
+     * @return null|string
+     */
+    public function getServerAlias()
+    {
+    	return $this->_serverAlias;
+    }
+
+    /**
+     *  Get rediska and set specified conndection
+     */
+    protected function _getRediskaOn()
+    {
+    	$rediska = $this->getRediska();
+
+    	if (!is_null($this->_serverAlias)) {
+    		$rediska = $rediska->on($this->_serverAlias);
+    	}
+
+    	return $rediska;
     }
 
 	/**

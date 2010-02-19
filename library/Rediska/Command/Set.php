@@ -24,8 +24,10 @@ class Rediska_Command_Set extends Rediska_Command_Abstract
             $this->_multiple = true;
             $data = $nameOrData;
             $overwrite = ($valueOrOverwrite === null || $valueOrOverwrite);
-
+            
             if (!empty($data)) {
+
+            
                 $connections = array();
                 $keysByConnections = array();
                 foreach ($data as $key => $value) {

@@ -2,28 +2,17 @@
 
 require_once 'Rediska/Key.php';
 
-class Test_Key_Abstract extends PHPUnit_Framework_TestCase
+class Test_Key_Abstract extends RediskaTestCase
 {
 	/**
      * @var Rediska_Key
      */
     private $key;
-    
-    /**
-     * @var Rediska
-     */
-    private $rediska;
 
     protected function setUp()
     {
-        $this->rediska = new Rediska(array('namespace' => 'Rediska_Tests_', 'servers' => array(array('host' => REDISKA_HOST, 'port' => REDISKA_PORT))));
+    	parent::setUp();
         $this->key = new Rediska_Key('test');
-    }
-
-    protected function tearDown()
-    {
-        $this->rediska->flushDb();
-        $this->rediska = null;
     }
 
     public function testDefaultRediskaInstance()
@@ -98,5 +87,21 @@ class Test_Key_Abstract extends PHPUnit_Framework_TestCase
 
     	$reply = $this->key->getLifetime();
     	$this->assertGreaterThan(45, $reply);
+    }
+    
+    public function testSpecifiedServerAlias()
+    {
+        $this->_addServerOrSkipTest(REDISKA_SECOND_HOST, REDISKA_SECOND_PORT);
+
+        $key1 = new Rediska_Key('test', null, REDISKA_HOST . ':' . REDISKA_PORT);
+        $key1->setValue(1);
+        $key2 = new Rediska_Key('test', null, REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT);
+        $key2->setValue(2);
+
+        $reply = $this->rediska->on(REDISKA_HOST . ':' . REDISKA_PORT)->get('test');
+        $this->assertEquals(1, $reply);
+
+        $reply = $this->rediska->on(REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT)->get('test');
+        $this->assertEquals(2, $reply);
     }
 }
