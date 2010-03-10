@@ -44,7 +44,7 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
         $result = $this->_getRediskaOn()->deleteFromSet($this->_name, $value);
 
         if ($result && !is_null($this->_expire)) {
-            $this->expire($this->_expire);
+        	$this->expire($this->_expire);
         }
 
         return $result;
@@ -186,13 +186,16 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
     public function fromArray(array $array)
     {
         // TODO: Use pipelines
+        $pipeline = $this->_getRediskaOn()->pipeline();
         foreach($array as $item) {
-            $this->_getRediskaOn()->addToSet($this->_name, $item);
+            $pipeline->addToSet($this->_name, $item);
         }
 
         if (!is_null($this->_expire)) {
-            $this->expire($this->_expire);
+        	$pipeline->expire($this->_name, $this->_expire);
         }
+
+        $pipeline->execute();
 
         return true;
     }

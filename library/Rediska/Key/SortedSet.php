@@ -118,14 +118,17 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
      */
     public function fromArray(array $array)
     {
-        // TODO: Use pipelines
+        $pipeline = $this->_getRediskaOn()->pipeline();
+
         foreach($array as $score => $value) {
-            $this->_getRediskaOn()->addToSortedSet($this->_name, $value, $score);
+            $pipeline->addToSortedSet($this->_name, $value, $score);
         }
 
         if (!is_null($this->_expire)) {
-            $this->expire($this->_expire);
+            $pipeline->expire($this->_name, $this->_expire);
         }
+
+        $pipeline->execute();
 
         return true;
     }
