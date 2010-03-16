@@ -46,7 +46,7 @@ This is an alpha release, see README.txt for examples.
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
-   <dir name="library">
+   <dir name="library" baseinstalldir="/">
     <dir name="Rediska">
      <dir name="Command">
       <file name="Abstract.php" role="php" />
