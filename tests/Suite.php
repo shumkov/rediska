@@ -6,7 +6,7 @@ define('REDISKA_SECOND_HOST', '127.0.0.1');
 define('REDISKA_SECOND_PORT', 6381);
 
 set_include_path(implode(PATH_SEPARATOR, array(
-    realpath('../library'),
+    realpath(dirname(__FILE__) . '/../library'),
     get_include_path(),
 )));
 
