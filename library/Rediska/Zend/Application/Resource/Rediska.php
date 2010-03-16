@@ -16,7 +16,7 @@ require_once 'Zend/Application/Resource/ResourceAbstract.php';
  * 
  * @author Ivan Shumkov
  * @package Rediska
- * @version 0.3.0
+ * @version @package_version@
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
