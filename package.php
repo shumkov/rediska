@@ -116,19 +116,6 @@ $files = array(); // classes and tests
 readDirectory(dirname(__FILE__) . '/library');
 readDirectory(dirname(__FILE__) . '/tests');
 
-$files = array(
-// classes
-    'Services/UseKetchup.php', 'Services/UseKetchup/Common.php',
-    'Services/UseKetchup/Items.php', 'Services/UseKetchup/Meetings.php',
-    'Services/UseKetchup/Notes.php', 'Services/UseKetchup/Projects.php',
-    'Services/UseKetchup/User.php',
-// tests
-    'tests/AllTests.php', 'tests/config.ini-dist', 'tests/UseKetchupBaseTestCase.php',
-    'tests/UseKetchupMeetingsTestCase.php', 'tests/UseKetchupProjectsTestCase.php',
-    'tests/UseKetchupUserTestCase.php', 'tests/UseKetchupItemsTestCase.php',
-    'tests/UseKetchupNotesTestCase.php', 'tests/UseKetchupTestCase.php',
-);
-
 foreach ($files as $file) {
 
     $package->addReplacement(
@@ -146,8 +133,17 @@ foreach ($files as $file) {
     );
 }
 
-$package->setPhpDep('5.2.1');
+$files = array();
+readDirectory(dirname(__FILE__) . '/library');
 
+$base = dirname(__FILE__) . '/';
+foreach ($files as $file) {
+    $file = str_replace($base, '', $file);
+    $package->addInstallAs($file, str_replace('library/', '', $file));
+}
+
+
+$package->setPhpDep('5.2.1');
 
 $package->setPearInstallerDep('1.7.0');
 $package->generateContents();
