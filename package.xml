@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.9.0" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+    http://pear.php.net/dtd/tasks-1.0.xsd
+    http://pear.php.net/dtd/package-2.0
+    http://pear.php.net/dtd/package-2.0.xsd">
+ <name>Rediska</name>
+ <channel>till.pearfarm.org</channel>
+ <summary>A PHP API wrapper for Redis.</summary>
+ <description>Rediska (radish on russian) - PHP client for Redis.
+
+Redis is an advanced fast key-value database written in C. It can be used like memcached, in front of a traditional 
+database, or on its own thanks to the fact that the in-memory datasets are not volatile but instead persisted on disk. 
+One of the cool features is that you can store not only strings, but lists and sets with atomic operations to push/pop 
+elements.</description>
+ <lead>
+  <name>Ivan Shumkov</name>
+  <user>shumkov</user>
+  <email>ivan@shumkov.ru</email>
+  <active>yes</active>
+ </lead>
+ <lead>
+  <name>Maxim Ivanov</name>
+  <user>ivanov</user>
+  <email>maximiv@gmail.com</email>
+  <active>yes</active>
+ </lead>
+ <developer>
+  <name>Till Klampaeckel</name>
+  <user>till</user>
+  <email>till@php.net</email>
+  <active>yes</active>
+ </developer>
+ <date>2010-03-16</date>
+ <time>14:16:01</time>
+ <version>
+  <release>0.4.0</release>
+  <api>0.4.0</api>
+ </version>
+ <stability>
+  <release>alpha</release>
+  <api>alpha</api>
+ </stability>
+ <license uri="http://www.opensource.org/licenses/bsd-license.php">New BSD License</license>
+ <notes>
+This is an alpha release, see README.txt for examples.
+ </notes>
+ <contents>
+  <dir baseinstalldir="/" name="/">
+   <dir name="library">
+    <dir name="Rediska">
+     <dir name="Command">
+      <file name="Abstract.php" role="php" />
+      <file name="AddToSet.php" role="php" />
+      <file name="AddToSortedSet.php" role="php" />
+      <file name="AppendToList.php" role="php" />
+      <file name="CompareSets.php" role="php" />
+      <file name="Decrement.php" role="php" />
+      <file name="Delete.php" role="php" />
+      <file name="DeleteFromList.php" role="php" />
+      <file name="DeleteFromSet.php" role="php" />
+      <file name="DeleteFromSortedSet.php" role="php" />
+      <file name="DiffSets.php" role="php" />
+      <file name="Exception.php" role="php" />
+      <file name="Exists.php" role="php" />
+      <file name="ExistsInSet.php" role="php" />
+      <file name="Expire.php" role="php" />
+      <file name="FlushDb.php" role="php" />
+      <file name="Get.php" role="php" />
+      <file name="GetFromList.php" role="php" />
+      <file name="GetFromSortedSetByScore.php" role="php" />
+      <file name="GetKeysByPattern.php" role="php" />
+      <file name="GetKeysCount.php" role="php" />
+      <file name="GetLastSaveTime.php" role="php" />
+      <file name="GetLifetime.php" role="php" />
+      <file name="GetList.php" role="php" />
+      <file name="GetListLength.php" role="php" />
+      <file name="GetRandomFromSet.php" role="php" />
+      <file name="GetRandomKey.php" role="php" />
+      <file name="GetScoreFromSortedSet.php" role="php" />
+      <file name="GetSet.php" role="php" />
+      <file name="GetSetLength.php" role="php" />
+      <file name="GetSortedSet.php" role="php" />
+      <file name="GetSortedSetLength.php" role="php" />
+      <file name="GetType.php" role="php" />
+      <file name="Increment.php" role="php" />
+      <file name="IncrementScoreInSortedSet.php" role="php" />
+      <file name="Info.php" role="php" />
+      <file name="Interface.php" role="php" />
+      <file name="IntersectSets.php" role="php" />
+      <file name="MoveToDb.php" role="php" />
+      <file name="MoveToSet.php" role="php" />
+      <file name="PopFromList.php" role="php" />
+      <file name="PrependToList.php" role="php" />
+      <file name="Quit.php" role="php" />
+      <file name="Rename.php" role="php" />
+      <file name="RewriteAppendOnlyFile.php" role="php" />
+      <file name="Save.php" role="php" />
+      <file name="SelectDb.php" role="php" />
+      <file name="Set.php" role="php" />
+      <file name="SetAndGet.php" role="php" />
+      <file name="SetToList.php" role="php" />
+      <file name="ShiftFromList.php" role="php" />
+      <file name="Shutdown.php" role="php" />
+      <file name="TruncateList.php" role="php" />
+      <file name="UnionSets.php" role="php" />
+     </dir> <!-- /library/Rediska/Command -->
+     <dir name="Connection">
+      <file name="Exception.php" role="php" />
+      <file name="Specified.php" role="php" />
+     </dir> <!-- /library/Rediska/Connection -->
+     <dir name="Key">
+      <file name="Abstract.php" role="php" />
+      <file name="Exception.php" role="php" />
+      <file name="List.php" role="php" />
+      <file name="Set.php" role="php" />
+      <file name="SortedSet.php" role="php" />
+     </dir> <!-- /library/Rediska/Key -->
+     <dir name="KeyDistributor">
+      <file name="ConsistentHashing.php" role="php" />
+      <file name="Crc32.php" role="php" />
+      <file name="Exception.php" role="php" />
+      <file name="Interface.php" role="php" />
+      <file name="Ketama.php" role="php" />
+     </dir> <!-- /library/Rediska/KeyDistributor -->
+     <dir name="Zend">
+      <dir name="Application">
+       <dir name="Resource">
+        <file name="Rediska.php" role="php" />
+       </dir> <!-- /library/Rediska/Zend/Application/Resource -->
+      </dir> <!-- /library/Rediska/Zend/Application -->
+      <dir name="Auth">
+       <dir name="Adapter">
+        <file name="Redis.php" role="php" />
+       </dir> <!-- /library/Rediska/Zend/Auth/Adapter -->
+      </dir> <!-- /library/Rediska/Zend/Auth -->
+      <dir name="Cache">
+       <dir name="Backend">
+        <file name="Redis.php" role="php" />
+       </dir> <!-- /library/Rediska/Zend/Cache/Backend -->
+      </dir> <!-- /library/Rediska/Zend/Cache -->
+      <dir name="Log">
+       <dir name="Writer">
+        <file name="Redis.php" role="php" />
+       </dir> <!-- /library/Rediska/Zend/Log/Writer -->
+      </dir> <!-- /library/Rediska/Zend/Log -->
+      <dir name="Queue">
+       <dir name="Adapter">
+        <file name="Redis.php" role="php" />
+       </dir> <!-- /library/Rediska/Zend/Queue/Adapter -->
+      </dir> <!-- /library/Rediska/Zend/Queue -->
+      <dir name="Session">
+       <dir name="SaveHandler">
+        <file name="Redis.php" role="php" />
+       </dir> <!-- /library/Rediska/Zend/Session/SaveHandler -->
+       <file name="Set.php" role="php" />
+      </dir> <!-- /library/Rediska/Zend/Session -->
+     </dir> <!-- /library/Rediska/Zend -->
+     <file name="Connection.php" role="php" />
+     <file name="Exception.php" role="php" />
+     <file name="Key.php" role="php" />
+     <file name="Pipeline.php" role="php" />
+    </dir> <!-- /library/Rediska -->
+    <file name="Rediska.php" role="php" />
+   </dir> <!-- /library -->
+   <dir name="tests">
+    <dir name="classes">
+     <file name="BasicKeyDataProvider.php" role="test" />
+     <file name="RediskaTestCase.php" role="test" />
+    </dir> <!-- /tests/classes -->
+    <dir name="Test">
+     <dir name="Key">
+      <file name="Abstract.php" role="test" />
+      <file name="Basic.php" role="test" />
+      <file name="List.php" role="test" />
+      <file name="Set.php" role="test" />
+      <file name="SortedSet.php" role="test" />
+     </dir> <!-- /tests/Test/Key -->
+     <dir name="KeyDistributor">
+      <file name="ConsistentHashing.php" role="test" />
+      <file name="Crc32.php" role="test" />
+     </dir> <!-- /tests/Test/KeyDistributor -->
+     <dir name="Zend">
+      <dir name="Application">
+       <file name="application.ini" role="test" />
+       <file name="Resource.php" role="test" />
+      </dir> <!-- /tests/Test/Zend/Application -->
+      <file name="Auth.php" role="test" />
+      <file name="Cache.php" role="test" />
+      <file name="Log.php" role="test" />
+      <file name="Queue.php" role="test" />
+      <file name="Session.php" role="test" />
+     </dir> <!-- /tests/Test/Zend -->
+     <file name="Connection.php" role="test" />
+     <file name="Controls.php" role="test" />
+     <file name="KeySpace.php" role="test" />
+     <file name="Lists.php" role="test" />
+     <file name="Pipeline.php" role="test" />
+     <file name="Serializer.php" role="test" />
+     <file name="Sets.php" role="test" />
+     <file name="SortedSets.php" role="test" />
+     <file name="Strings.php" role="test" />
+    </dir> <!-- /tests/Test -->
+    <file name="Suite.php" role="test" />
+   </dir> <!-- /tests -->
+   <file name="README.txt" role="doc" />
+  </dir> <!-- / -->
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5.2.1</min>
+   </php>
+   <pearinstaller>
+    <min>1.7.0</min>
+   </pearinstaller>
+  </required>
+ </dependencies>
+ <phprelease />
+ <changelog>
+  <release>
+   <version>
+    <release>0.4.0</release>
+    <api>0.4.0</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2010-03-16</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">New BSD License</license>
+   <notes>
+This is an alpha release, see README.txt for examples.
+   </notes>
+  </release>
+ </changelog>
+</package>
