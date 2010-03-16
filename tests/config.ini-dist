@@ -1,0 +1,6 @@
+
+rediska_host[] = 127.0.0.1
+rediska_port[] = 6380
+
+rediska_host[] = 127.0.0.1
+rediska_port[] = 6381

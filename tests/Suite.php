@@ -1,10 +1,29 @@
 <?php
+/**
+ * @todo Convert this to a fullfeatured AllTests
+ */
 
-define('REDISKA_HOST', '127.0.0.1');
-define('REDISKA_PORT', 6380);
-define('REDISKA_SECOND_HOST', '127.0.0.1');
-define('REDISKA_SECOND_PORT', 6381);
 
+if (file_exists(dirname(__FILE__) . '/config.ini')) {
+    $config = parse_ini_file(dirname(__FILE__) . '/config.ini');
+
+    define('REDISKA_HOST', $config['rediska_host'][0]);
+    define('REDISKA_PORT', $config['rediska_port'][0]);
+    define('REDISKA_SECOND_HOST', $config['rediska_host'][1]);
+    define('REDISKA_SECOND_PORT', $config['rediska_port'][1]);
+
+
+} else {
+    // this is the default setup
+    define('REDISKA_HOST', '127.0.0.1');
+    define('REDISKA_PORT', 6380);
+    define('REDISKA_SECOND_HOST', '127.0.0.1');
+    define('REDISKA_SECOND_PORT', 6381);
+}
+
+/**
+ * @todo Currently we assume the test suite is run from source.
+ */
 set_include_path(implode(PATH_SEPARATOR, array(
     realpath(dirname(__FILE__) . '/../library'),
     get_include_path(),
