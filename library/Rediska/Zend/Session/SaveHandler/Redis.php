@@ -63,6 +63,7 @@ class Rediska_Zend_Session_SaveHandler_Redis implements Zend_Session_SaveHandler
     protected $_options = array(
         'keyprefix' => 'PHPSESSIONS_',
         'lifetime'  => null,
+        'servers'   => null,
     );
 
     /**
