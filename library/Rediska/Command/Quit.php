@@ -26,12 +26,17 @@ class Rediska_Command_Quit extends Rediska_Command_Abstract
         }
     }
 
-    protected function _parseResponse($response)
-    {
-        foreach($this->_affectedConnections as $connection) {
+	public function write()
+	{
+		parent::write();
+
+		foreach($this->_affectedConnections as $connection) {
             $connection->disconnect();
         }
+	}
 
-    	return true;
-    }
+	public function read()
+	{
+		return true;
+	}
 }
