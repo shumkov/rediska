@@ -1,2 +1,6 @@
 *.tgz
+.buildpath
+.project
+.settings
 tests/config.ini
+library/Zend

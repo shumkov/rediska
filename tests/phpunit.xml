@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpunit bootstrap="./bootstrap.php"
+    colors="true"
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="false"
+    convertWarningsToExceptions="true"
+    stopOnFailure="false"
+    syntaxCheck="true">
+
+    <testsuite name="AllTests">
+        <directory>./library</directory>
+    </testsuite>
+
+    <testsuite name="BasicCommands">
+        <file>./library/Rediska/Command/ExistsTest.php</file>
+        <file>./library/Rediska/Command/DeleteTest.php</file>
+        <file>./library/Rediska/Command/GetTypeTest.php</file>
+        <file>./library/Rediska/Command/GetKeysByPatternTest.php</file>
+        <file>./library/Rediska/Command/GetRandomKeyTest.php</file>
+        <file>./library/Rediska/Command/RenameTest.php</file>
+        <file>./library/Rediska/Command/GetKeysCountTest.php</file>
+        <file>./library/Rediska/Command/ExpireTest.php</file>
+        <file>./library/Rediska/Command/GetLifetimeTest.php</file>
+        <file>./library/Rediska/Command/SelectDbTest.php</file>
+        <file>./library/Rediska/Command/MoveToDbTest.php</file>
+        <file>./library/Rediska/Command/FlushDbTest.php</file>
+    </testsuite>
+
+    <testsuite name="SingleValueCommands">
+        <file>./library/Rediska/Command/SetTest.php</file>
+        <file>./library/Rediska/Command/SetAndGetTest.php</file>
+        <file>./library/Rediska/Command/GetTest.php</file>
+        <file>./library/Rediska/Command/IncrementTest.php</file>
+        <file>./library/Rediska/Command/DecrementTest.php</file>
+    </testsuite>
+
+    <testsuite name="ListCommands">
+        <file>./library/Rediska/Command/AppendToListTest.php</file>
+        <file>./library/Rediska/Command/PrependToListTest.php</file>
+        <file>./library/Rediska/Command/GetListLengthTest.php</file>
+        <file>./library/Rediska/Command/GetListTest.php</file>
+        <file>./library/Rediska/Command/TruncateListTest.php</file>
+        <file>./library/Rediska/Command/GetFromListTest.php</file>
+        <file>./library/Rediska/Command/SetToListTest.php</file>
+        <file>./library/Rediska/Command/DeleteFromListTest.php</file>
+        <file>./library/Rediska/Command/ShiftFromListTest.php</file>
+        <file>./library/Rediska/Command/PopFromListTest.php</file>
+    </testsuite>
+
+    <testsuite name="SetCommands">
+        <file>./library/Rediska/Command/AddToSetTest.php</file>
+        <file>./library/Rediska/Command/DeleteFromSetTest.php</file>
+        <file>./library/Rediska/Command/GetRandomFromSetTest.php</file>
+        <file>./library/Rediska/Command/GetSetLengthTest.php</file>
+        <file>./library/Rediska/Command/ExistsInSetTest.php</file>
+        <file>./library/Rediska/Command/IntersectSetsTest.php</file>
+        <file>./library/Rediska/Command/UnionSetsTest.php</file>
+        <file>./library/Rediska/Command/DiffSetsTest.php</file>
+        <file>./library/Rediska/Command/GetSetTest.php</file>
+        <file>./library/Rediska/Command/MoveToSetTest.php</file>
+    </testsuite>
+
+    <testsuite name="SortedSetCommands">
+        <file>./library/Rediska/Command/AddToSortedSetTest.php</file>
+        <file>./library/Rediska/Command/DeleteFromSortedSetTest.php</file>
+        <file>./library/Rediska/Command/IncrementScoreInSortedSetTest.php</file>
+        <file>./library/Rediska/Command/GetSortedSetTest.php</file>
+        <file>./library/Rediska/Command/GetFromSortedSetByScoreTest.php</file>
+        <file>./library/Rediska/Command/GetSortedSetLengthTest.php</file>
+        <file>./library/Rediska/Command/GetScoreFromSortedSetTest.php</file>
+    </testsuite>
+
+    <testsuite name="ControlCommands">
+        <file>./library/Rediska/Command/SaveTest.php</file>
+        <file>./library/Rediska/Command/GetLastSaveTimeTest.php</file>
+        <file>./library/Rediska/Command/InfoTest.php</file>
+        <file>./library/Rediska/Command/QuitTest.php</file>
+        <file>./library/Rediska/Command/ShutdownTest.php</file>
+        <file>./library/Rediska/Command/RewriteAppendOnlyFileTest.php</file>
+    </testsuite>
+
+    <filter>
+        <blacklist>
+            <directory suffix=".php">../</directory>
+        </blacklist>
+        <whitelist>
+            <directory suffix=".php">../library</directory>
+            <exclude>
+                <directory suffix=".phtml">../library</directory>
+                <file>./bootstrap.php</file>
+            </exclude>
+        </whitelist>
+    </filter>
+    <!-- <logging>
+        <log type="junit" target="log/result.xml" logIncompleteSkipped="false"/>
+    </logging> -->
+</phpunit>

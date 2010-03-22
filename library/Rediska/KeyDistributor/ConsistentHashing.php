@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @see Rediska_Connection
+ */
+require_once 'Rediska/Connection.php';
+
+/**
  * @see Rediska_KeyDistributor_Interface
  */
 require_once 'Rediska/KeyDistributor/Interface.php';
@@ -12,48 +17,30 @@ require_once 'Rediska/KeyDistributor/Exception.php';
 
 /**
  * @package Rediska
- * @version 0.4.1
- * @author Paul Annesley
- * @link http://github.com/pda/flexihash
+ * @author Kijin Sung <kijinbear@gmail.com>
+ * @link http://github.com/kijin/distrib
+ * @version 0.1.1
  * @link http://rediska.geometria-lab.net
- * @licence http://www.opensource.org/licenses/mit-license.php
+ * @licence http://www.opensource.org/licenses/bsd-license.php
  */
 class Rediska_KeyDistributor_ConsistentHashing implements Rediska_KeyDistributor_Interface
 {
-	/**
-     * The number of positions to hash each connection to
-     *
-     * @var integer
-     */
-	protected $_replicas = 64;
+    protected $_backends = array();
+    protected $_backendsCount = 0;
 
-    /**
-     * Internal counter for current number of connections
-     * 
-     * @var integer
-     */
-    protected $_connectionCount = 0;
+    protected $_hashring = array();
+    protected $_hashringCount = 0;
 
-    /**
-     * Internal map of positions (hash outputs) to connections
-     * 
-     * @var array
-     */
-    protected $_positionToConnection = array();
+    protected $_replicas = 256;
+    protected $_slicesCount = 0;
+    protected $_slicesHalf = 0;
+    protected $_slicesDiv = 0;
 
-    /**
-     * Internal map of connections to lists of positions that connection is hashed to
-     * 
-     * @var array
-     */
-    protected $_connectionToPositions = array();
+    protected $_cache = array();
+    protected $_cacheCount = 0;
+    protected $_cacheMax = 256;
 
-    /**
-     * Whether the internal map of positions to connections is already sorted
-     * 
-     * @var boolean
-     */
-    protected $_positionToConnectionSorted = false;
+    protected $_hashringIsInitialized = false;
 
     /**
      * (non-PHPdoc)
@@ -61,21 +48,15 @@ class Rediska_KeyDistributor_ConsistentHashing implements Rediska_KeyDistributor
      */
     public function addConnection($connectionString, $weight = Rediska_Connection::DEFAULT_WEIGHT)
     {
-        if (isset($this->_connectionToPositions[$connectionString])) {
+        if (isset($this->_backends[$connectionString])) {
             throw new Rediska_KeyDistributor_Exception("Connection '$connectionString' already exists.");
         }
 
-        $this->_connectionToPositions[$connectionString] = array();
+        $this->_backends[$connectionString] = $weight;
 
-        // hash the connection into multiple positions
-        for ($i = 0; $i < round($this->_replicas * $weight); $i++) {
-            $position = crc32($connectionString . $i);
-            $this->_positionToConnection[$position] = $connectionString; // lookup
-            $this->_connectionToPositions[$connectionString] []= $position; // connection removal
-        }
+        $this->_backendsCount++;
 
-        $this->_positionToConnectionSorted = false;
-        $this->_connectionCount++;
+        $this->_hashringIsInitialized = false;
 
         return $this;
     }
@@ -86,21 +67,19 @@ class Rediska_KeyDistributor_ConsistentHashing implements Rediska_KeyDistributor
      */
     public function removeConnection($connectionString)
     {
-        if (!isset($this->_connectionToPositions[$connectionString])) {
-            throw new Rediska_KeyDistributor_Exception("Connection '$connectionString' does not exist.");
+        if (!isset($this->_backends[$connectionString])) {
+            throw new Rediska_KeyDistributor_Exception("Connection '$connectionString' not exist.");
         }
 
-        foreach ($this->_connectionToPositions[$connectionString] as $position) {
-            unset($this->_positionToConnection[$position]);
-        }
+        unset($this->_backends[$connectionString]);
 
-        unset($this->_connectionToPositions[$connectionString]);
-
-        $this->_connectionCount--;
+        $this->_backendsCount--;
+        
+        $this->_hashringIsInitialized = false;
 
         return $this;
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see Rediska_KeyDistributor_Interface#getConnectionByKeyName
@@ -109,7 +88,7 @@ class Rediska_KeyDistributor_ConsistentHashing implements Rediska_KeyDistributor
     {
         $connections = $this->getConnectionsByKeyName($name, 1);
         if (empty($connections)) {
-        	throw new Rediska_KeyDistributor_Exception('No connections exist');
+            throw new Rediska_KeyDistributor_Exception('No connections exist');
         }
         return $connections[0];
     }
@@ -121,79 +100,135 @@ class Rediska_KeyDistributor_ConsistentHashing implements Rediska_KeyDistributor
      * @param int $requestedCount The length of the list to return
      * @return array List of connections
      */
-    public function getConnectionsByKeyName($name, $requestedCount)
+    public function getConnectionsByKeyName($name, $count)
     {
-        if (!$requestedCount) {
-            throw new Rediska_KeyDistributor_Exception('Invalid count requested');
+        // If we have only one backend, return it.
+        if ($this->_backendsCount == 1) {
+            return array_keys($this->_backends);
         }
 
-        // handle no targets
-        if (empty($this->_positionToConnection)) {
-            return array();
+        if (!$this->_hashringIsInitialized) {
+            $this->_initializeHashring();
+            $this->_hashringIsInitialized = true;
         }
 
-        // optimize single connection
-        if ($this->_connectionCount == 1)
-            return array_unique(array_values($this->_positionToConnection));
+        // If the key has already been mapped, return the cached entry.
+        if ($this->_cacheMax > 0 && isset($this->_cache[$name])) {
+            return $this->_cache[$name];
+        }
 
-        // hash key to a position
-        $keyPosition = crc32($name);
+        // If $count is greater than or equal to the number of available backends, return all.
+        if ($count >= $this->_backendsCount) return array_keys($this->_backends);
 
-        $results = array();
-        $collect = false;
+        // Initialize the return array.
+        $return = array();
 
-        $this->_sortPositionConnections();
+        $crc32 = crc32($name);
 
-        // search values above the keyPosition
-        foreach ($this->_positionToConnection as $key => $value)
-        {
-            // start collecting connections after passing key position
-            if (!$collect && $key > $keyPosition)
-            {
-                $collect = true;
+        // Select the slice to begin with.
+        $slice = floor($crc32 / $this->_slicesDiv) + $this->_slicesHalf;
+
+        // This counter prevents going through more than 1 loop.
+        $looped = false;
+
+        while (true) {
+            // Go through the hashring, one slice at a time.
+            foreach ($this->_hashring[$slice] as $position => $backend) {
+                // If we have a usable backend, add to the return array.
+                if ($position >= $crc32) {
+                    // If $count = 1, no more checks are necessary.
+                    if ($count === 1) {
+                        $return = array($backend);
+                        break 2;
+                    } elseif (!in_array($backend, $return)) {
+                        $return[] = $backend;
+                        if (count($return) >= $count) break 2;
+                    }
+
+                    $return = array($backend);
+                    break 1;
+                }
             }
 
-            // only collect the first instance of any connection
-            if ($collect && !in_array($value, $results))
-            {
-                $results[]= $value;
-            }
+            // Continue to the next slice.
+            $slice++;
 
-            // return when enough results, or list exhausted
-            if (count($results) == $requestedCount || count($results) == $this->_connectionCount)
-            {
-                return $results;
+            // If at the end of the hashring.
+            if ($slice >= $this->_slicesCount) {
+                // If already looped once, something is wrong.
+                if ($looped) {
+                    break 2;
+                }
+
+                // Otherwise, loop back to the beginning.       
+                $crc32 = -2147483648;
+                $slice = 0;
+                $looped = true;
             }
         }
 
-        // loop to start - search values below the keyPosition
-        foreach ($this->_positionToConnection as $key => $value)
-        {
-            if (!in_array($value, $results))
-            {
-                $results []= $value;
-            }
+        // Cache the result for quick retrieval in the future.
+        if ($this->_cacheMax > 0) {
+            // Add to internal cache.
+            $this->_cache[$name] = $return;
+            $this->_cacheCount++;
 
-            // return when enough results, or list exhausted
-            if (count($results) == $requestedCount || count($results) == $this->_connectionCount)
-            {
-                return $results;
+            // If the cache is getting too big, clear it.
+            if ($this->_cacheCount > $this->_cacheMax) {
+                $this->_cleanCache();
             }
         }
 
-        // return results after iterating through both "parts"
-        return $results;
+        // Return the result.
+
+        return $return;
     }
 
-    /**
-     * Sorts the internal mapping (positions to connections) by position
-     */
-    protected function _sortPositionConnections()
+    protected function _initializeHashring()
     {
-        // sort by key (position) if not already
-        if (!$this->_positionToConnectionSorted) {
-            ksort($this->_positionToConnection, SORT_REGULAR);
-            $this->_positionToConnectionSorted = true;
+        if ($this->_backendsCount < 2) {
+            $this->_hashring = array();
+            $this->_hashringCount = 0;
+
+            $this->_slicesCount = 0;
+            $this->_slicesHalf = 0;
+            $this->_slicesDiv = 0;
+        } else {
+            $this->_slicesCount = ($this->_replicas * $this->_backendsCount) / 8;
+            $this->_slicesHalf = $this->_slicesCount / 2;
+            $this->_slicesDiv = (2147483648 / $this->_slicesHalf);
+
+            // Initialize the hashring.
+            $this->_hashring = array_fill(0, $this->_slicesCount, array());
+
+            // Calculate the average weight.
+            $avg = round(array_sum($this->_backends) / $this->_backendsCount, 2);
+
+            // Interate over the backends.
+            foreach ($this->_backends as $backend => $weight) {
+                // Adjust the weight.
+                $weight = round(($weight / $avg) * $this->_replicas);
+    
+                // Create as many replicas as $weight.
+                for ($i = 0; $i < $weight; $i++) {
+                    $position = crc32($backend . ':' . $i);
+                    $slice = floor($position / $this->_slicesDiv) + $this->_slicesHalf;
+                    $this->_hashring[$slice][$position] = $backend;
+                }
+            }
+
+            // Sort each slice of the hashring.
+            for ($i = 0; $i < $this->_slicesCount; $i++) {
+                ksort($this->_hashring[$i], SORT_NUMERIC);
+            }
         }
+
+        $this->_cleanCache();
+    }
+
+    protected function _cleanCache()
+    {
+        $this->_cache = array();
+        $this->_cacheCount = 0;
     }
 }

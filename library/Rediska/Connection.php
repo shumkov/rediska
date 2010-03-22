@@ -37,8 +37,8 @@ class Rediska_Connection
      * weight     - Weight of Redis server for key distribution. For default 1
      * persistent - Persistent connection to Redis server. For default false
      * password   - Redis server password. Optional
+     * timeout    - Connection timeout for Redis server. Optional
      * alias      - Redis server alias for operate keys on specified server. For default [host]:[port]
-
      * 
      * @var array
      */
@@ -48,6 +48,7 @@ class Rediska_Connection
 	   'weight'     => self::DEFAULT_WEIGHT,
 	   'persistent' => false,
 	   'password'   => null,
+	   'timeout'    => null,
 	   'alias'      => null,
 	   'db'         => self::DEFAULT_DB,
 	);
@@ -136,12 +137,18 @@ class Rediska_Connection
      */
     public function connect() 
     {
-        if (!is_resource($this->_socket)) {
-            if ($this->_options['persistent']) {
-                $this->_socket = @pfsockopen($this->getHost(), $this->getPort(), $errno, $errmsg);
+        if (!$this->isConnected()) {
+        	// TODO: stream_set_timeout() ?
+
+        	$socketAddress = 'tcp://' . $this->getHost() . ':' . $this->getPort();
+        	
+        	if ($this->_options['persistent']) {
+                $flag = STREAM_CLIENT_PERSISTENT | STREAM_CLIENT_CONNECT;
             } else {
-                $this->_socket = @fsockopen($this->getHost(), $this->getPort(), $errno, $errmsg);
+                $flag = STREAM_CLIENT_CONNECT;
             }
+
+            $this->_socket = @stream_socket_client($socketAddress, $errno, $errmsg, $this->getTimeout(), $flag);
 
 	        if (!is_resource($this->_socket)) {
 	            $msg = "Can't connect to Redis server on {$this->getHost()}:{$this->getPort()}";
@@ -175,6 +182,32 @@ class Rediska_Connection
         	return false;
         }
     }
+    
+    /**
+     * Disconnect
+     * 
+     * @return boolean
+     */
+    public function disconnect() 
+    {
+        if ($this->isConnected()) {
+            @fclose($this->_socket);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Is connected
+     * 
+     * @return boolean
+     */
+    public function isConnected()
+    {
+        return is_resource($this->_socket);
+    }
 
     /**
      * Write to connection stream
@@ -184,12 +217,12 @@ class Rediska_Connection
      */
     public function write($string) 
     {
-        if ($string != '') {
+        if ($string !== '') {
             $string = (string)$string . Rediska::EOL;
 
             $this->connect();
 
-	        while ($string) {
+	        while ($string !== '') {
 	            $bytes = @fwrite($this->_socket, $string);
 	
 	            if ($bytes === false) {
@@ -209,29 +242,7 @@ class Rediska_Connection
         	return false;
         }
     }
-
-    /**
-     * Read line from connection stream
-     * 
-     * @throws Rediska_Connection_Exception
-     * @return string
-     */
-    public function readLine()
-    {
-    	if (!is_resource($this->_socket)) {
-            throw new Rediska_Connection_Exception("Can't read without connection to Redis server. Do connect or write first.");
-    	}
-
-    	$string = @fgets($this->_socket);
-
-        if ($string === false) {
-        	$this->disconnect();
-            throw new Rediska_Connection_Exception("Can't read from socket.");
-        }
-
-        return trim($string);
-    }
-
+    
     /**
      * Read length bytes from connection stram
      * 
@@ -241,49 +252,43 @@ class Rediska_Connection
      */
     public function read($length)
     {
-        if (!is_resource($this->_socket)) {
+        if (!$this->isConnected()) {
             throw new Rediska_Connection_Exception("Can't read without connection to Redis server. Do connect or write first.");
         }
 
-        $buffer = '';
-
-    	while ($length) {
-            $data = @fread($this->_socket, $length);
-            if ($data === false) {
-            	$this->disconnect();
-                throw new Rediska_Connection_Exception("Can't read from socket.");
-            }
-            $length -= strlen($data);
-            $buffer .= $data;
+        if ($length > 0) {
+        	$data = $this->_readAndThrowException($length);
+        } else {
+        	$data = null;
         }
 
-        $eof = @fread($this->_socket, 2);
-        if ($eof === false) {
+        if ($length !== -1) {
+            $this->_readAndThrowException(2);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Read line from connection stream
+     * 
+     * @throws Rediska_Connection_Exception
+     * @return string
+     */
+    public function readLine()
+    {
+    	if (!$this->isConnected()) {
+            throw new Rediska_Connection_Exception("Can't read without connection to Redis server. Do connect or write first.");
+    	}
+
+    	$string = @fgets($this->_socket);
+
+        if ($string === false) {
             $this->disconnect();
             throw new Rediska_Connection_Exception("Can't read from socket.");
         }
 
-        return $buffer;
-    }
-
-    /**
-     * Disconnect
-     * 
-     * @return boolean
-     */
-    public function disconnect() 
-    {
-    	if ($this->_socket) {
-    		if (is_resource($this->_socket)) {
-    			$this->write('QUIT');
-	            @fclose($this->_socket);
-	        }
-	        unset($this->_socket);
-
-	        return true;
-    	} else {
-    		return false;
-    	}
+        return trim($string);
     }
 
     /**
@@ -327,6 +332,20 @@ class Rediska_Connection
     }
     
     /**
+     * Get option timout
+     * 
+     * @return string
+     */
+    public function getTimeout()
+    {
+    	if (null !== $this->_options['timeout']) {
+    		return $this->_options['timeout'];
+    	} else {
+    		return ini_get('default_socket_timeout');
+    	}
+    }
+    
+    /**
      * Connection alias
      * 
      * @return string
@@ -338,6 +357,18 @@ class Rediska_Connection
         } else {
             return $this->_options['host'] . ':' . $this->_options['port'];
         }
+    }
+    
+    protected function _readAndThrowException($length)
+    {
+        $data = @stream_get_contents($this->_socket, $length);
+
+        if ($data === false) {
+            $this->disconnect();
+            throw new Rediska_Connection_Exception("Can't read from socket.");
+        }
+
+        return $data;
     }
 
     public function __toString()

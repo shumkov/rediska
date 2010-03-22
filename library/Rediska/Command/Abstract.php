@@ -237,7 +237,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
                     $replies[] = $this->_readResponseFromConnection($connection);
                 }
 
-                return $replies;
+                return $replies;          
             default:
                 throw new Rediska_Command_Exception("Invalid reply type: '$type'");
         }

@@ -27,7 +27,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
 		$result = $this->_getRediskaOn()->appendToList($this->_name, $value);
 
 	    if ($result && !is_null($this->_expire)) {
-            $this->expire($this->_expire);
+            $this->expire($this->_expire, $this->_isExpireTimestamp);
         }
 
         return $result;
@@ -44,7 +44,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
 		$result = $this->_getRediskaOn()->prependToList($this->_name, $value);
 		
 		if ($result && !is_null($this->_expire)) {
-            $this->expire($this->_expire);
+            $this->expire($this->_expire, $this->_isExpireTimestamp);
         }
 
         return $result;
@@ -88,9 +88,9 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
     	}
 
     	if (!is_null($this->_expire)) {
-            $pipeline->expire($this->_name, $this->_expire);
+            $pipeline->expire($this->_name, $this->_expire, $this->_isExpireTimestamp);
         }
-        
+
         $pipeline->execute();
 
     	return true;
@@ -108,7 +108,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
         $result = $this->_getRediskaOn()->truncateList($this->_name, $limit, $offset);
 
         if ($result && !is_null($this->_expire)) {
-            $this->expire($this->_expire);
+            $this->expire($this->_expire, $this->_isExpireTimestamp);
         }
 
         return $result;
@@ -137,7 +137,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
     	$result = $this->_getRediskaOn()->setToList($this->_name, $index, $value);
 
     	if ($result && !is_null($this->_expire)) {
-            $this->expire($this->_expire);
+            $this->expire($this->_expire, $this->_isExpireTimestamp);
         }
 
         return $result;
@@ -156,7 +156,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
         $result = $this->_getRediskaOn()->deleteFromList($this->_name, $value, $count);
 
         if ($result && !is_null($this->_expire)) {
-            $this->expire($this->_expire);
+            $this->expire($this->_expire, $this->_isExpireTimestamp);
         }
 
         return $result;
@@ -172,7 +172,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
     	$result = $this->_getRediskaOn()->shiftFromList($this->_name);
 
     	if ($result && !is_null($this->_expire)) {
-            $this->expire($this->_expire);
+            $this->expire($this->_expire, $this->_isExpireTimestamp);
         }
 
         return $result;
@@ -188,7 +188,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
     	$result = $this->_getRediskaOn()->popFromList($this->_name);
 
     	if ($result && !is_null($this->_expire)) {
-            $this->expire($this->_expire);
+            $this->expire($this->_expire, $this->_isExpireTimestamp);
         }
 
         return $result;

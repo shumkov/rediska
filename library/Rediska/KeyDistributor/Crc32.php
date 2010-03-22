@@ -1,8 +1,9 @@
 <?php
 
 /**
- * Basic crc32 key distributor
+ * @see Rediska_Connection
  */
+require_once 'Rediska/Connection.php';
 
 /**
  * @see Rediska_KeyDistributor_Interface

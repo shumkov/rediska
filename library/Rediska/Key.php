@@ -27,7 +27,7 @@ class Rediska_Key extends Rediska_Key_Abstract
 		$reply = $this->_getRediskaOn()->set($this->_name, $value);
 
 		if ($reply && !is_null($this->_expire)) {
-		    $this->expire($this->_expire);
+		    $this->expire($this->_expire, $this->_isExpireTimestamp);
 		}
 
 		return $reply;

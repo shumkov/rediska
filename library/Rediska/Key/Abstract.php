@@ -43,6 +43,13 @@ abstract class Rediska_Key_Abstract
     protected $_expire;
     
     /**
+     * Expire is timestamp
+     * 
+     * @var boolean
+     */
+    protected $_isExpireTimestamp = false;
+    
+    /**
      * Server alias
      * 
      * @var string
@@ -113,7 +120,7 @@ abstract class Rediska_Key_Abstract
 		$this->_name = $newName;
 
         if (!is_null($this->_expire)) {
-            $this->expire($this->_expire);
+            $this->expire($this->_expire, $this->_isExpireTimestamp);
         }
 
 		return true;
@@ -125,9 +132,9 @@ abstract class Rediska_Key_Abstract
 	 * @param integer $seconds
 	 * @return boolean
 	 */
-	public function expire($seconds)
+	public function expire($secondsOrTimestamp, $isTimestamp = false)
 	{
-		return $this->_getRediskaOn()->expire($this->_name, $seconds);
+		return $this->_getRediskaOn()->expire($this->_name, $secondsOrTimestamp, $isTimestamp);
 	}
 
 	/**
@@ -152,7 +159,7 @@ abstract class Rediska_Key_Abstract
 		$result = $this->_getRediskaOn()->moveToDb($this->_name, $dbIndex);
 
         if ($result && !is_null($this->_expire)) {
-            $this->expire($this->_expire);
+            $this->expire($this->_expire, $this->_isExpireTimestamp);
         }
 
         return $result;
@@ -206,6 +213,40 @@ abstract class Rediska_Key_Abstract
         }
 
         return $this->_rediska;
+    }
+
+    /**
+     * 
+     * @param $secondsOrTimestamp
+     * @param $isTimestamp
+     * @return Rediska_Key_Abstract
+     */
+    public function setExpire($secondsOrTimestamp, $isTimestamp = false)
+    {
+    	$this->_expire = $secondsOrTimestamp;
+    	$this->_isExpireTimestamp = $isTimestamp;
+    	
+    	return $this;
+    }
+
+    /**
+     * Get expire seconds or timestamp
+     * 
+     * @return integer
+     */
+    public function getExpire()
+    {
+    	return $this->_expire;
+    }
+
+    /**
+     * Is expire is timestamp
+     * 
+     * @return boolean
+     */
+    public function isExpireTimestamp()
+    {
+    	return $this->_isExpireTimestamp;
     }
 
     /**
