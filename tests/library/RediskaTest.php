@@ -48,8 +48,8 @@ class RediskaTest extends Rediska_TestCase
     public function testSetAndGetObjectWithPersonalSerializer()
     {
         $this->rediska->setOptions(array(
-            'serializer' => array('Test_Serializer', 'serializer'),
-            'unserializer' => array('Test_Serializer', 'unserializer')
+            'serializer' => array('RediskaTest', 'serializer'),
+            'unserializer' => array('RediskaTest', 'unserializer')
         ));
 
         $this->_setAndGetObject();

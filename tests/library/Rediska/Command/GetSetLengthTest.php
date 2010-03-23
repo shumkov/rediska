@@ -2,10 +2,10 @@
 
 class Rediska_Command_GetSetLengthTest extends Rediska_TestCase
 {
-	public function testEmptySetReturnFalse()
+	public function testEmptySetReturnZero()
 	{
 		$reply = $this->rediska->getSetLength('test');
-        $this->assertFalse($reply);
+        $this->assertEquals(0, $reply);
 	}
 
     public function testReturnLength()

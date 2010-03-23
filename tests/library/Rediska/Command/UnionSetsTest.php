@@ -40,7 +40,8 @@ class Rediska_Command_UnionSetsTest extends Rediska_TestCase
 
     protected function _unionViaPhp()
     {
-        $myUnion = array_intersect($this->_sets['set1'], $this->_sets['set2'], $this->_sets['set2']);
+        $myUnion = array_unique(array_merge($this->_sets['set1'], $this->_sets['set2'], $this->_sets['set3']));
+        
         sort($myUnion);
 
         return $myUnion;

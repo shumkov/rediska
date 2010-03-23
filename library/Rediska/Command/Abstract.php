@@ -243,5 +243,8 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
         }
     }
 
-    abstract protected function _parseResponse($response);
+    protected function _parseResponse($response)
+    {
+        return $response;
+    }
 }

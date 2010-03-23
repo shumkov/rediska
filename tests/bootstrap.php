@@ -43,9 +43,7 @@ class ZendStudioLauncher extends PHPUnit_Framework_TestSuite
         $testSuite = $configuration->getTestSuiteConfiguration(false);
         chdir($zendPath);
         foreach ($testSuite->tests() as $test) {
-            if ($test instanceof PHPUnit_Framework_Warning) {
-                trigger_error($test->getMessage(), E_USER_WARNING);
-            } else {
+            if (!$test instanceof PHPUnit_Framework_Warning) {
                 $this->addTestSuite($test);
             }
         }

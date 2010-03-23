@@ -2,10 +2,10 @@
 
 class Rediska_Command_GetSetTest extends Rediska_TestCase
 {
-	public function testEmptySetReturnFalse()
+	public function testEmptySetReturnEmptySet()
 	{
 		$values = $this->rediska->getSet('test');
-		$this->assertFalse($values);
+		$this->assertEquals(array(), $values);
 	}
 
     public function testGetMembers()

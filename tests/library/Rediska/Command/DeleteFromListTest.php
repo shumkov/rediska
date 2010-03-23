@@ -5,15 +5,15 @@ class Rediska_Command_DeleteFromListTest extends Rediska_TestCase
     public function testDeleteNotPresentMember()
     {
         $reply = $this->rediska->deleteFromList('test', 'bbb');
-        $this->assertFalse($reply);
+        $this->assertEquals(0, $reply);
     }
 
-    public function testDeleteMemberAndReturnTrue()
+    public function testDeleteMemberAndReturnNumberOfDeleted()
     {
-        $this->rediska->addToSet('test', 'bbb');
+        $this->rediska->appendToList('test', 'bbb');
 
         $reply = $this->rediska->deleteFromList('test', 'bbb');
-        $this->assertTrue($reply);
+        $this->assertEquals(1, $reply);
     }
  
     public function testMemberIsDeletedFromSet()
@@ -21,7 +21,7 @@ class Rediska_Command_DeleteFromListTest extends Rediska_TestCase
         $this->rediska->appendToList('test', 'aaa');
         $this->rediska->appendToList('test', 'bbb');
 
-        $this->rediska->deleteFromList('test', 'ccc');
+        $this->rediska->deleteFromList('test', 'bbb');
 
         $values = $this->rediska->getList('test');
 

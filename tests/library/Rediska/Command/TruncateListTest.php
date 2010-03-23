@@ -2,12 +2,6 @@
 
 class Rediska_Command_TruncateListTest extends Rediska_TestCase
 {
-	public function testTrunctateEmptyListReturnFalse()
-	{
-		$reply = $this->rediska->truncateList('test', 2);
-        $this->assertFalse($reply);
-	}
-	
 	public function testTruncateListReturnTrue()
 	{
 		$this->_appendFourMembers();
@@ -29,13 +23,15 @@ class Rediska_Command_TruncateListTest extends Rediska_TestCase
     
     public function testTruncateListWithOffset()
     {
+        $this->_appendFourMembers();
+        
         $this->rediska->appendToList('test', 'iii');
         $this->rediska->appendToList('test', 'fff');
 
-        $reply = $this->rediska->truncateList('test', 2, 1);
+        $this->rediska->truncateList('test', 2, 1);
 
         $reply = $this->rediska->getList('test');
-        $this->assertEquals(array('bbb', 'iii'), $reply);
+        $this->assertEquals(array('bbb', 'ccc'), $reply);
     }
 
     protected function _appendFourMembers()

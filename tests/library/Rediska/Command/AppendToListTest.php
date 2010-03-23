@@ -17,6 +17,6 @@ class Rediska_Command_AppendToListTest extends Rediska_TestCase
         $this->assertEquals('bbb', $reply);
         
          $reply = $this->rediska->getListLength('test');
-        $this->assertEquals(1, $reply);
+        $this->assertEquals(2, $reply);
 	}
 }
