@@ -33,6 +33,8 @@ class Rediska_Command_Quit extends Rediska_Command_Abstract
 		foreach($this->_affectedConnections as $connection) {
             $connection->disconnect();
         }
+
+		return true;
 	}
 
 	public function read()
