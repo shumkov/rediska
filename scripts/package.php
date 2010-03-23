@@ -43,6 +43,7 @@ $package = new PEAR_PackageFileManager2();
 $package->setOptions(
     array(
         'filelistgenerator'       => 'file',
+        'outputdirectory'         => dirname(dirname(__FILE__)),
         'simpleoutput'            => true,
         'baseinstalldir'          => '/',
         'packagedirectory'        => './',

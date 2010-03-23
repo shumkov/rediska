@@ -10,7 +10,7 @@ require_once 'Rediska/Key/Abstract.php';
  * 
  * @author Ivan Shumkov
  * @package Rediska
- * @version 0.3.0
+ * @version @package_version@
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
@@ -84,7 +84,7 @@ class Rediska_Key extends Rediska_Key_Abstract
  * 
  * @author Ivan Shumkov
  * @package Rediska
- * @version 0.3.0
+ * @version @package_version@
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
