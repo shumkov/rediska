@@ -26,6 +26,13 @@ Coming soon:
     * Tags for group expiring keys
     * Benchmarks and performance optimization
     * Example application
+    
+Project structure:
+    * benchmarks/ - Rediska benchmarks. In progress...
+    * library/    - Rediska library. Put files from library to you include_path and use: require_once 'Rediska.php'.
+    * package.xml - Install Rediska to PHP library dir: 'pear install package.xml'. Now use Rediska is easy (without include_path configuration): require_once 'Rediska.php'.
+    * scripts/    - Maintenance scripts.
+    * tests/      - PHPUnit tests. Use 'phpunit' console command or right click on bootstrap.php and 'Run As' -> 'PHPUnit Test' in Zend Studio.
 
 Contributions:
 Rediska is an open source project: you can participate in development or become an author of integration module for your favorite framework

@@ -18,7 +18,7 @@ require_once 'Rediska/KeyDistributor/Exception.php';
 /**
  * @author Ivan Shumkov
  * @package Rediska
- * @version 0.4.1
+ * @version @package_version@
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
