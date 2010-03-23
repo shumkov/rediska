@@ -61,9 +61,8 @@ class Rediska_Zend_Session_SaveHandler_Redis implements Zend_Session_SaveHandler
      * @var array
      */
     protected $_options = array(
-        'keyprefix' => 'PHPSESSIONS_',
-        'lifetime'  => null,
-        'servers'   => null,
+        'keyprefix'      => 'PHPSESSIONS_',
+        'lifetime'       => null,
     );
 
     /**
@@ -80,20 +79,16 @@ class Rediska_Zend_Session_SaveHandler_Redis implements Zend_Session_SaveHandler
     	// Set default lifetime
     	$this->_options['lifetime'] = (integer)ini_get('session.gc_maxlifetime');
 
-    	$this->setOptions($options);
-
-        foreach($this->_options as $name => $value) {
-            if (isset($options[$name])) {
-                unset($options[$name]);
-            }
-        }
-
-    	$defaultInstance = Rediska::getDefaultInstance();
-        if (empty($options) && $defaultInstance) {
+    	// Get Rediska instance
+        $defaultInstance = Rediska::getDefaultInstance();
+        if ($defaultInstance && !isset($options['rediskaOptions'])) {
             $this->_rediska = $defaultInstance;
         } else {
-            $this->_rediska = new Rediska($options);
+            $this->_rediska = new Rediska($options['rediskaOptions']);
+            unset($options['rediskaOptions']);
         }
+
+    	$this->setOptions($options);
 
         Rediska_Zend_Session_Set::setSaveHandler($this);
 
