@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Add the specified member to the Set value at key
+ * Delete the specified member from the sorted set by value
  * 
  * @param string $name  Key name
  * @param mixin  $value Member
