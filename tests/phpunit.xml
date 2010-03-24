@@ -66,6 +66,7 @@
         <file>./library/Rediska/Command/IncrementScoreInSortedSetTest.php</file>
         <file>./library/Rediska/Command/GetSortedSetTest.php</file>
         <file>./library/Rediska/Command/GetFromSortedSetByScoreTest.php</file>
+        <file>./library/Rediska/Command/DeleteFromSortedSetByScoreTest.php</file>
         <file>./library/Rediska/Command/GetSortedSetLengthTest.php</file>
         <file>./library/Rediska/Command/GetScoreFromSortedSetTest.php</file>
     </testsuite>
@@ -77,6 +78,7 @@
         <file>./library/Rediska/Command/QuitTest.php</file>
         <file>./library/Rediska/Command/ShutdownTest.php</file>
         <file>./library/Rediska/Command/RewriteAppendOnlyFileTest.php</file>
+        <file>./library/Rediska/Command/SlaveOfTest.php</file>
     </testsuite>
 
     <filter>

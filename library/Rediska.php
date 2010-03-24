@@ -132,7 +132,8 @@ class Rediska
         'info'                  => 'Rediska_Command_Info',
         'quit'                  => 'Rediska_Command_Quit',
         'shutdown'              => 'Rediska_Command_Shutdown',
-        'rewriteAppendOnlyFile' => 'Rediska_Command_RewriteAppendOnlyFile',
+        'rewriteappendonlyfile' => 'Rediska_Command_RewriteAppendOnlyFile',
+        'slaveof'               => 'Rediska_Command_SlaveOf',
     );
 
     /**
@@ -423,6 +424,15 @@ class Rediska
 
         return $connection;
     }
+    
+    public function getConnectionByAlias($alias)
+    {
+        if (!isset($this->_connections[$alias])) {
+            throw new Rediska_Exception("Can't find connection '$alias'");
+        }
+
+        return $this->_connections[$alias];
+    }
 
     /**
      * Get all Rediska connection instances
@@ -445,13 +455,16 @@ class Rediska
      * @param $alias Alias or [host]:[port] of server if not specified
      * @return Rediska_Connection_Specified
      */
-    public function on($alias)
+    public function on($aliasOrConnection)
     {
-        if (!isset($this->_connections[$alias])) {
-            throw new Rediska_Exception("Can't find connection '$alias'");
+        if ($aliasOrConnection instanceof Rediska_Connection) {
+            $connection = $aliasOrConnection;
+        } else {
+            $alias = $aliasOrConnection;
+            $connection = $this->getConnectionByAlias($alias);
         }
 
-        $this->_specifiedConnection->setConnection($this->_connections[$alias]);
+        $this->_specifiedConnection->setConnection($connection);
 
         return $this->_specifiedConnection;
     }
