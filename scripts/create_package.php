@@ -1,6 +1,10 @@
 #!/usr/bin/env php
 <?php
 
+// Fix warinigs
+error_reporting(error_reporting() ^ E_DEPRECATED);
+date_default_timezone_set('Europe/Moscow');
+
 require_once 'PEAR/PackageFileManager2.php';
 PEAR::setErrorHandling(PEAR_ERROR_DIE);
 
@@ -71,7 +75,7 @@ $package->setOptions(
 $package->setPackage('Rediska');
 $package->setSummary($summary);
 $package->setDescription($description);
-$package->setChannel('till.pearfarm.org');
+$package->setChannel('pear.geometria-lab.net');
 $package->setPackageType('php');
 $package->setLicense(
     'New BSD License',
@@ -115,8 +119,8 @@ foreach ($maintainers as $_m) {
 }
 
 $files = array(); // classes and tests
-readDirectory(dirname(__FILE__) . '/library');
-readDirectory(dirname(__FILE__) . '/tests');
+readDirectory(dirname(__FILE__) . '/../library');
+readDirectory(dirname(__FILE__) . '/../tests');
 
 foreach ($files as $file) {
 
