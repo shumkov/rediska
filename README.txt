@@ -29,6 +29,7 @@ Coming soon:
     
 Project structure:
     * benchmarks/ - Rediska benchmarks. In progress...
+    * examples/   - Rediska expamples.
     * library/    - Rediska library. Put files from library to you include_path and use: require_once 'Rediska.php'.
     * package.xml - Install Rediska to PHP library dir: 'pear install package.xml'. Now use Rediska is easy (without include_path configuration): require_once 'Rediska.php'.
     * scripts/    - Maintenance scripts.

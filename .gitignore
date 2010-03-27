@@ -1,6 +1,7 @@
-*.tgz
 .buildpath
 .project
 .settings
+.DS_Store
+*.tgz
 tests/config.ini
 library/Zend
