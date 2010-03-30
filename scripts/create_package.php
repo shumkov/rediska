@@ -2,7 +2,7 @@
 <?php
 
 // Fix warinigs
-// error_reporting(error_reporting() ^ E_DEPRECATED);
+error_reporting(error_reporting() ^ E_DEPRECATED);
 date_default_timezone_set('Europe/Moscow');
 
 require_once 'PEAR/PackageFileManager2.php';
