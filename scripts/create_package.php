@@ -34,7 +34,7 @@ $api_state       = 'alpha';
 
 $release_version = $version;
 $release_state   = 'alpha';
-$release_notes   = "This is an alpha release, see README.txt for examples.";
+$release_notes   = "This is an alpha release, see README.markdown for examples.";
 
 $summary     = "A PHP API wrapper for Redis.";
 
@@ -62,7 +62,9 @@ $package->setOptions(
             'tests'               => 'test',
         ),
         'exceptions'              => array(
-            'README.txt'          => 'doc',
+            'CHANGELOG.txt'       => 'doc',
+            'README.markdown'     => 'doc',
+            'VERSION.txt'         => 'doc',
         ),
         'ignore'                  => array(
             'coverage/*',
@@ -167,5 +169,3 @@ if (   isset($_GET['make'])
 } else {
     $package->debugPackageFile();
 }
-
-?>
