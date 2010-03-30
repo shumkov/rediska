@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Select the DB having the specified index
+ * Change the replication settings of a slave on the fly
  * 
  * @throws Rediska_Command_Exception
  * @param string|Rediska_Connection|false $aliasOrConnection Server alias, Rediska_Connection object or false if not slave

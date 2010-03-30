@@ -74,6 +74,18 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
     {
         return $this->_getRediskaOn()->getFromSortedSetByScore($this->_name, $min, $max, $limit, $offset);
     }
+    
+    /**
+     * Remove members from sorted set by score
+     * 
+     * @param $min Min score
+     * @param $max Max score
+     * @return integer
+     */
+    public function removeByScore($min, $max)
+    {
+        return $this->_getRediskaOn()->DeleteFromSortedSetByScore($this->_name, $min, $max);
+    }
 
     /**
      * Get member score from Sorted Set

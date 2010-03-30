@@ -3,7 +3,7 @@ Rediska (radish on russian) - PHP client for Redis.
 
 Redis is an advanced fast key-value database written in C. It can be used like memcached, in front of a traditional database, or on its own thanks to the fact that the in-memory datasets are not volatile but instead persisted on disk. One of the cool features is that you can store not only strings, but lists and sets with atomic operations to push/pop elements.
 
-More information and documentation on homepage: http://rediska.geometria-lab.net
+More information and documentation on homepage: [http://rediska.geometria-lab.net](http://rediska.geometria-lab.net)
 
 Features
 ---
@@ -14,11 +14,11 @@ Features
 * Use Lists, Sets and Sorted sets as native PHP arrays
 * Pipelining
 * Easy extending Rediska by adding you own commands or overwrite standart
-* Zend Framework integration
-* Syfmony Framework integration
-* Full documentation
+* [Zend Framework](http://framework.zend.com/) integration
+* [Syfmony](http://www.symfony-project.org/) framework integration
+* Full [documentation](http://localhost:3000/documentation)
 * Example application
-* PHPUnit tests
+* [PHPUnit](http://phpunit.de/) tests
 
 Coming soon
 ---
@@ -35,15 +35,15 @@ Get started!
 Project structure
 ---
 
-* CHANGELOG.txt - Histroy of Rediska
-* README.txt    - This document
-* VERSION.txt   - Current version of Rediska
-* benchmarks/   - Rediska benchmarks. In progress...
-* examples/     - Rediska expamples
-* library/      - Rediska library. Put files from library to you include_path and use: require_once 'Rediska.php'.
-* package.xml   - Install Rediska to PHP library dir: 'pear install package.xml'. Now use Rediska is easy (without include_path configuration): require_once 'Rediska.php'
-* scripts/      - Maintenance scripts
-* tests/        - PHPUnit tests. Use 'phpunit' console command or right click on bootstrap.php and 'Run As' -> 'PHPUnit Test' in Zend Studio
+* __CHANGELOG.txt__ - Histroy of Rediska
+* __README.txt__    - This document
+* __VERSION.txt__   - Current version of Rediska
+* __benchmarks/__   - Rediska benchmarks. In progress...
+* __examples/__     - Rediska expamples
+* __library/__      - Rediska library. Put files from library to you include_path and use: `require_once "Rediska.php"`
+* __package.xml__   - Install Rediska to PHP library dir: `pear install package.xml`. Now use Rediska is easy (without `include_path` configuration): `require_once "Rediska.php"`
+* __scripts/__      - Maintenance scripts
+* __tests/__        - PHPUnit tests. Use `phpunit` console command or right click on bootstrap.php and `Run As -> PHPUnit Test` in Zend Studio
 
 Contributions
 ---
@@ -53,5 +53,7 @@ Rediska is an open source project: you can participate in development or become 
 Authors:
 ---
 
-* Ivan Shumkov <ivan@shumkov.ru>
-* Maxim Ivanov <maximiv@gmail.com>
+* [Ivan Shumkov](mailto:ivan@shumkov.ru)
+* [Maxim Ivanov](mailto:maximiv@gmail.com)
+* [Ryan Grenz](mailto:info@ryangrenz.com) (Symfony integration)
+* [Till Klampaeckel](mailto:till@php.net) (PEAR package)

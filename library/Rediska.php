@@ -119,8 +119,8 @@ class Rediska
         // Sorted sets
         'addtosortedset'             => 'Rediska_Command_AddToSortedSet',
         'deletefromsortedset'        => 'Rediska_Command_DeleteFromSortedSet',
-        'incrementscoreinsortedset'  => 'Rediska_Command_IncrementScoreInSortedSet',
         'getsortedset'               => 'Rediska_Command_GetSortedSet',
+        'incrementscoreinsortedset'  => 'Rediska_Command_IncrementScoreInSortedSet',
         'getfromsortedsetbyscore'    => 'Rediska_Command_GetFromSortedSetByScore',
         'deletefromsortedsetbyscore' => 'Rediska_Command_DeleteFromSortedSetByScore',
         'getsortedsetlength'         => 'Rediska_Command_GetSortedSetLength',
@@ -425,6 +425,12 @@ class Rediska
         return $connection;
     }
     
+    /**
+     * Get connection by alias
+     * 
+     * @param string $alias
+     * @return Rediska_Connection
+     */
     public function getConnectionByAlias($alias)
     {
         if (!isset($this->_connections[$alias])) {
@@ -452,7 +458,7 @@ class Rediska
     /**
      * Chain method to work with keys on specified by alias server
      * 
-     * @param $alias Alias or [host]:[port] of server if not specified
+     * @param $aliasOrConnection Alias or Rediska_Connection object
      * @return Rediska_Connection_Specified
      */
     public function on($aliasOrConnection)

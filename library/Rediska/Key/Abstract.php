@@ -59,8 +59,9 @@ abstract class Rediska_Key_Abstract
 	/**
 	 * Construct key
 	 * 
-	 * @param string  $name   Key name
-	 * @param integer $expire Expire time in seconds
+	 * @param string      $name        Key name
+	 * @param integer     $expire      Expire time in seconds
+	 * @param string|null $serverAlias Server alias where key is placed
 	 */
 	public function __construct($name, $expire = null, $serverAlias = null)
 	{
@@ -129,7 +130,8 @@ abstract class Rediska_Key_Abstract
 	/**
 	 * Expire key
 	 * 
-	 * @param integer $seconds
+	 * @param integer $secondsOrTimestamp Time in seconds or timestamp
+	 * @param boolean $isTimestamp        Time is timestamp? Default is false.
 	 * @return boolean
 	 */
 	public function expire($secondsOrTimestamp, $isTimestamp = false)
@@ -189,6 +191,64 @@ abstract class Rediska_Key_Abstract
 	}
 
     /**
+     * Set expire time
+     * 
+     * @param $secondsOrTimestamp Time in seconds or timestamp
+     * @param $isTimestamp        Time is timestamp? Default is false.
+     * @return Rediska_Key_Abstract
+     */
+    public function setExpire($secondsOrTimestamp, $isTimestamp = false)
+    {
+        $this->_expire = $secondsOrTimestamp;
+        $this->_isExpireTimestamp = $isTimestamp;
+        
+        return $this;
+    }
+
+    /**
+     * Get expire seconds or timestamp
+     * 
+     * @return integer
+     */
+    public function getExpire()
+    {
+        return $this->_expire;
+    }
+
+    /**
+     * Is expire is timestamp
+     * 
+     * @return boolean
+     */
+    public function isExpireTimestamp()
+    {
+        return $this->_isExpireTimestamp;
+    }
+
+    /**
+     * Set server alias
+     * 
+     * @param $serverAlias
+     * @return Rediska_Key_Abstract
+     */
+    public function setServerAlias($serverAlias)
+    {
+    	$this->_serverAlias = $serverAlias;
+    	
+    	return $this;
+    }
+
+    /**
+     * Get server alias
+     * 
+     * @return null|string
+     */
+    public function getServerAlias()
+    {
+    	return $this->_serverAlias;
+    }
+    
+    /**
      * Set Rediska instance
      * 
      * @param Rediska $rediska
@@ -213,63 +273,6 @@ abstract class Rediska_Key_Abstract
         }
 
         return $this->_rediska;
-    }
-
-    /**
-     * 
-     * @param $secondsOrTimestamp
-     * @param $isTimestamp
-     * @return Rediska_Key_Abstract
-     */
-    public function setExpire($secondsOrTimestamp, $isTimestamp = false)
-    {
-    	$this->_expire = $secondsOrTimestamp;
-    	$this->_isExpireTimestamp = $isTimestamp;
-    	
-    	return $this;
-    }
-
-    /**
-     * Get expire seconds or timestamp
-     * 
-     * @return integer
-     */
-    public function getExpire()
-    {
-    	return $this->_expire;
-    }
-
-    /**
-     * Is expire is timestamp
-     * 
-     * @return boolean
-     */
-    public function isExpireTimestamp()
-    {
-    	return $this->_isExpireTimestamp;
-    }
-
-    /**
-     * Set server alias
-     * 
-     * @param $serverAlias
-     * @return Rediska_Key_Abstract
-     */
-    public function setServerAlias($serverAlias)
-    {
-    	$this->_serverAlias = $serverAlias;
-    	
-    	return $this;
-    }
-
-    /**
-     * Get server alias
-     * 
-     * @return null|string
-     */
-    public function getServerAlias()
-    {
-    	return $this->_serverAlias;
     }
 
     /**

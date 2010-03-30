@@ -1,11 +1,12 @@
 <?php
 
 /**
- * Set a time to live in seconds on a key
+ * Set a time to live in seconds or timestamp on a key
  * 
  * @throws Rediska_Command_Exception
- * @param string  $name    Key name
- * @param integer $seconds Seconds from now to expire
+ * @param string  $name               Key name
+ * @param integer $secondsOrTimestamp Time in seconds or timestamp
+ * @param boolean $isTimestamp        Time is timestamp. For default is false.
  * @return boolean 
  * 
  * @author Ivan Shumkov
