@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  </head>
+  <body>
+    <p>
+        <?php $auth = Zend_Auth::getInstance(); if ($auth->hasIdentity()) { ?>
+            <a href="/post/my">My posts</a> | 
+            <a href="/post/index">Posts from people I follow</a> | 
+            <a href="/user/index">Users</a> |
+            <a href="/user/logout">Logout</a>
+        <?php } else { ?>
+            <a href="/user/login">Login</a>
+            <a href="/user/signup">Signup</a>
+        <?php } ?>
+    </p>
+    <?php echo $this->layout()->content ?>
+  </body>
+</html>

@@ -5,7 +5,7 @@ class Form_UserLogin extends Zend_Form
     public function init()
     {
         $this->addElement('text', 'login', array(
-            'label'    => 'Ник',
+            'label'    => 'Login',
             'required' => true,
             'validators'  => array(
                 array('Alnum', true, array(true)),
@@ -15,8 +15,10 @@ class Form_UserLogin extends Zend_Form
         ));
 
         $this->addElement('password', 'password', array(
-            'label'      => 'Пароль',
+            'label'      => 'Password',
             'required'   => true,
         ));
+        
+        $this->addElement('submit', 'submit', array('label' => 'Submit'));
     }
 }   

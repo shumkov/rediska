@@ -1,0 +1,10 @@
+<?php if (empty($this->posts)) { ?>
+    <p>There are no posts</p>
+<?php } else { ?>
+    <?php foreach ($this->posts as $row) { ?>
+        <div class="post" style="border-bottom:1px solid #aaa;">
+            <strong class="from"><?php echo $row['user']['login'] ?></strong>
+            <p class="message"><?php echo $row['post']['text'] ?></p>
+        </div>
+    <?php } ?>
+<?php } ?>

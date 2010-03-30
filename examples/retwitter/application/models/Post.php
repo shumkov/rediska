@@ -17,4 +17,5 @@ class Post extends Rediska_Key
 	{
 		return 'posts:' . $id;
 	}
+	
 }

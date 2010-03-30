@@ -1,2 +1,2 @@
 ReTwitter
-Twitter clone on Zend Framework and Rediska.
+Twitter clone based on Zend Framework and Rediska.

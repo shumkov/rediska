@@ -1,0 +1,19 @@
+<?php $currentUser = Zend_Auth::getInstance()->getStorage()->read(); ?>
+<?php if (empty($this->users)) { ?>
+    <p>There are no users</p>
+<?php } else { ?>
+    <?php foreach ($this->users as $user) { ?>
+        <div class="user">
+            <strong class="name"><?php echo $user['login'] ?></strong>
+            <?php if ($currentUser['id'] != $user['id']) { ?>
+                <?php if (in_array($user['id'], $this->userIdsIFollow)) { ?>
+                    <a href="/user/unfollow/userId/<?php echo $user['id'] ?>">Unfollow</a>
+                <?php } else { ?>
+                    <a href="/user/follow/userId/<?php echo $user['id'] ?>">Follow</a>
+                <?php } ?>
+            <?php } else { ?>
+                <span>(it's you)</span>
+            <?php } ?>
+        </div>
+    <?php } ?>
+<?php } ?>

@@ -11,15 +11,20 @@ class UserController extends Zend_Controller_Action
     	
     	if ($this->getRequest()->isPost() && $form->isValid($this->getRequest()->getPost())) {
     		
-    		$userData = $form->toArray();
+    		$userData = $form->getValues();
     		$userData['id'] = User::fetchNextId();
     		
     		// save user
     		$user = new User($userData['id']);
-    		$user->setValue($form->toArray());
+    		$user->setValue($userData);
+    		
+    		$users = new Users();
+    		$users->add($userData['id']);
     		
     		// save login to id link
     		User::setLoginToIdLink($userData['login'], $userData['id']);
+    		
+    		$this->_redirect('/user/login');
     	}
     	
     	$this->view->form = $form;
@@ -37,7 +42,8 @@ class UserController extends Zend_Controller_Action
 
             $options = array(
                 'userIdKey'   => 'userIdKey:*',
-                'userDataKey' => 'user:*',
+                'userDataKey' => 'users:*',
+                'userDataIsArray' => true
             );
             $adapter = new Rediska_Zend_Auth_Adapter_Redis($options);
 
@@ -60,6 +66,8 @@ class UserController extends Zend_Controller_Action
                 $form->getElement('login')->addError('Wrong login/password combination');
             }
         }
+        
+        $this->view->form = $form;
     }
     
     /**
@@ -69,9 +77,13 @@ class UserController extends Zend_Controller_Action
     {
     	$userId = $this->_getParam('userId');
     	
+    	$user = new User($userId);
+    	$this->view->user = $user->getValue();
+    	
     	$followers = new Followers($userId);
     	
     	$this->view->users = User::getMultiple($followers->toArray());
+    	$this->_setUsersIFollow();
     }
     
     /**
@@ -84,6 +96,7 @@ class UserController extends Zend_Controller_Action
         $following = new Following($userId);
         
         $this->view->users = User::getMultiple($following->toArray());
+        $this->_setUsersIFollow();
     }
     
     /**
@@ -99,10 +112,69 @@ class UserController extends Zend_Controller_Action
     	$userId = $this->_getParam('userId');
     	$follower = $auth->getStorage()->read();
     	
-    	$followers = new Followers($userId);
-    	$followers[] = $follower['id'];
-    	
-    	$following = new Following($follower['id']);
-    	$following[] = $userId;
+    	if ($userId != $follower['id']) {
+	    	$followers = new Followers($userId);
+	    	$followers[] = $follower['id'];
+	    	
+	    	$following = new Following($follower['id']);
+	    	$following[] = $userId;
+    	}
+    	$this->_redirect('/user/followers/userId/' . $userId);
+    }
+    
+    /**
+     * Stop following given userId
+     */
+    public function unfollowAction()
+    {
+        $auth = Zend_Auth::getInstance();
+        if (!$auth->hasIdentity()) {
+            throw new Zend_Auth_Exception("You're not authorized to see this page");
+        }
+        
+        $userId = $this->_getParam('userId');
+        $follower = $auth->getStorage()->read();
+        
+        if ($userId != $follower['id']) {
+            $followers = new Followers($userId);
+            $followers->remove($follower['id']);
+            
+            $following = new Following($follower['id']);
+            $following->remove($userId);
+        }
+        $this->_redirect('/user/followers/userId/' . $userId);
+    }
+    
+    public function logoutAction()
+    {
+    	Zend_Session::destroy();
+    	$this->_redirect('/user/login');
+    }
+    
+    public function indexAction()
+    {
+        $this->view->users = array();
+        
+        $users = new Users();
+        
+        // just for example, better use multiget
+        foreach ($users as $userId) {
+            $user = new User($userId);
+            $this->view->users[] = $user->getValue();
+        }
+        $this->_setUsersIFollow();
+    }
+    
+    protected function _setUsersIFollow()
+    {
+    	$auth = Zend_Auth::getInstance();
+        if (!$auth->hasIdentity()) {
+            throw new Zend_Auth_Exception("You're not authorized to see this page");
+        }
+        
+        $currentUser = $auth->getStorage()->read();
+        $following = new Following($currentUser['id']);
+        
+        $this->view->userIdsIFollow = $following->toArray();
     }
 }
