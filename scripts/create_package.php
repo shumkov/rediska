@@ -27,7 +27,9 @@ function readDirectory($path)
     }   
 }
 
-$version = file_get_contents(dirname(__FILE__) . '/../VERSION.txt');
+$outsideDir = realpath(dirname(__FILE__) . '/../');
+
+$version = file_get_contents($outsideDir . '/VERSION.txt');
 
 $api_version     = $version;
 $api_state       = 'alpha';
@@ -53,7 +55,7 @@ $package->setOptions(
         'outputdirectory'         => dirname(dirname(__FILE__)),
         'simpleoutput'            => true,
         'baseinstalldir'          => '/',
-        'packagedirectory'        => dirname(__FILE__) . '/../',
+        'packagedirectory'        => $outsideDir,
         'dir_roles'               => array(
             'benchmarks'          => 'doc',
             'examples'            => 'doc',
@@ -68,7 +70,6 @@ $package->setOptions(
         ),
         'ignore'                  => array(
             'coverage/*',
-            'package.php',
             'package.xml',
             'scripts/create_package.php',
             '.git',
@@ -126,8 +127,8 @@ foreach ($maintainers as $_m) {
 }
 
 $files = array(); // classes and tests
-readDirectory(dirname(__FILE__) . '/../library');
-readDirectory(dirname(__FILE__) . '/../tests');
+readDirectory($outsideDir . '/library');
+readDirectory($outsideDir . '/tests');
 
 foreach ($files as $file) {
 
@@ -146,10 +147,10 @@ foreach ($files as $file) {
     );
 }
 
-$files = array();
-readDirectory(dirname(__FILE__) . '/library');
+$files = array(); // reset global
+readDirectory($outsideDir . '/library');
 
-$base = dirname(__FILE__) . '/';
+$base = $outsideDir . '/';
 foreach ($files as $file) {
     $file = str_replace($base, '', $file);
     $package->addInstallAs($file, str_replace('library/', '', $file));
