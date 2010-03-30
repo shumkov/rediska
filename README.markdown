@@ -6,7 +6,7 @@ Redis is an advanced fast key-value database written in C. It can be used like m
 More information and documentation on homepage: http://rediska.geometria-lab.net
 
 Features
-------
+---
 
 * Multiple servers support
 * Consistent hashing, crc32 or you personal algorythm for key distribution
@@ -21,7 +21,7 @@ Features
 * PHPUnit tests
 
 Coming soon
-------
+---
 
 * Cloud key distribution
 * Ketama (fast C library for key distribution) support
@@ -29,11 +29,11 @@ Coming soon
 * Benchmarks and performance optimization
 
 Get started!
-------
+---
 
     
 Project structure
-------
+---
 
 * CHANGELOG.txt - Histroy of Rediska
 * README.txt    - This document
@@ -46,10 +46,12 @@ Project structure
 * tests/        - PHPUnit tests. Use 'phpunit' console command or right click on bootstrap.php and 'Run As' -> 'PHPUnit Test' in Zend Studio
 
 Contributions
-------
+---
 
-Rediska is an open source project: you can participate in development or become an author of integration module for your favorite framework
+Rediska is an open source project: you can participate in development or become an author of integration module for your favorite framework.
 
 Authors:
-    * Ivan Shumkov <ivan@shumkov.ru>
-    * Maxim Ivanov <maximiv@gmail.com>
+---
+
+* Ivan Shumkov <ivan@shumkov.ru>
+* Maxim Ivanov <maximiv@gmail.com>
