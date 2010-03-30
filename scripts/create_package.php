@@ -38,7 +38,7 @@ $release_notes   = "This is an alpha release, see README.markdown for examples."
 
 $summary     = "A PHP API wrapper for Redis.";
 
-$description = "Rediska (radish on russian) - PHP client for Redis.
+$description = "Rediska (radish in Russian) - PHP client for Redis.
 
 Redis is an advanced fast key-value database written in C. It can be used like memcached, in front of a traditional 
 database, or on its own thanks to the fact that the in-memory datasets are not volatile but instead persisted on disk. 
