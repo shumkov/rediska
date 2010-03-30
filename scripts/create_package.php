@@ -2,7 +2,7 @@
 <?php
 
 // Fix warinigs
-error_reporting(error_reporting() ^ E_DEPRECATED);
+// error_reporting(error_reporting() ^ E_DEPRECATED);
 date_default_timezone_set('Europe/Moscow');
 
 require_once 'PEAR/PackageFileManager2.php';
@@ -27,10 +27,12 @@ function readDirectory($path)
     }   
 }
 
-$api_version     = '0.4.0';
+$version = file_get_contents(dirname(__FILE__) . '/../VERSION.txt');
+
+$api_version     = $version;
 $api_state       = 'alpha';
 
-$release_version = '0.4.0';
+$release_version = $version;
 $release_state   = 'alpha';
 $release_notes   = "This is an alpha release, see README.txt for examples.";
 
