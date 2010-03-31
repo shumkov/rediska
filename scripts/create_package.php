@@ -2,7 +2,9 @@
 <?php
 
 // Fix warinigs
-error_reporting(error_reporting() ^ E_DEPRECATED);
+if (version_compare(PHP_VERSION, '5.3.2') >= 0) {
+    error_reporting(error_reporting() ^ E_DEPRECATED);
+}
 date_default_timezone_set('Europe/Moscow');
 
 require_once 'PEAR/PackageFileManager2.php';
