@@ -98,6 +98,9 @@ $package->setReleaseStability($release_state);
 $package->setAPIVersion($api_version);
 $package->setAPIStability($api_state);
 
+// optional (but recommended) ZendFramework dependency
+$package->addPackageDepWithChannel('optional', 'zf', 'pear.zfcampus.org', '1.10.2', false, true);
+
 $maintainers = array(
     array(
         'name'  => 'Ivan Shumkov',
