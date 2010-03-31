@@ -138,7 +138,11 @@ $files = array(); // classes and tests
 readDirectory($outsideDir . '/library');
 readDirectory($outsideDir . '/tests');
 
+$base = $outsideDir . '/';
+
 foreach ($files as $file) {
+
+    $file = str_replace($base, '', $file);
 
     $package->addReplacement(
         $file,
@@ -158,7 +162,6 @@ foreach ($files as $file) {
 $files = array(); // reset global
 readDirectory($outsideDir . '/library');
 
-$base = $outsideDir . '/';
 foreach ($files as $file) {
     $file = str_replace($base, '', $file);
     $package->addInstallAs($file, str_replace('library/', '', $file));
