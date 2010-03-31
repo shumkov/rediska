@@ -1,4 +1,4 @@
-Version 0.4.0 (1.04.2010):
+Version 0.4.0 (April 1, 2010):
   * Features #583: Create expample application
   * Features #766: Create pear package
   * Features #1926: Symfony integration
