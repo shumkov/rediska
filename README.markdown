@@ -92,8 +92,8 @@ Get started!
 
     * [Full usage documentation](http://rediska.geometria-lab.net/documentation/usage)
     * Using Rediska with frameworks:
-          * [Zend Framework](http://rediska.geometria-lab.net/documentation/integration-with-frameworks/zend-framework)
-          * [Symfony](http://rediska.geometria-lab.net/documentation/integration-with-frameworks/symfony)
+       * [Zend Framework](http://rediska.geometria-lab.net/documentation/integration-with-frameworks/zend-framework)
+       * [Symfony](http://rediska.geometria-lab.net/documentation/integration-with-frameworks/symfony)
 
     
 Project structure
