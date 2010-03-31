@@ -31,6 +31,71 @@ Coming soon
 Get started!
 ---
 
+1. **Get Rediska**
+   
+   You can install Rediska from PEAR, download zip archive or get from git repository.
+
+   1.1. **Install from PEAR**
+
+      For begining you need to discover our PEAR channel:
+
+      `pear channel-discover pear.geometria-lab.net`
+
+      And install package:
+
+      `pear install geometria-lab/Rediska`
+
+   1.2. **Download or get from repository**
+
+      [Download zip archive](http://rediska.geometria-lab.net/download/latest) with latest version or get last **unstable** version from git repository:
+
+      `git clone http://github.com/shumkov/rediska.git`
+
+      For adding Rediska to your applcation you need copy Rediska from library folder to you application library folder (which must be in PHP's `include_path`)
+
+
+    
+  * [Add Rediska to your Zend Framework application](http://rediska.geometria-lab.net/documentation/integration-with-frameworks/zend-framework/configuration-and-bootstraping)
+
+  * [Add Rediska plugin to your Symfony application](http://rediska.geometria-lab.net/documentation/integration-with-frameworks/symfony)
+
+
+2. **Configure Rediska**
+
+         <?php
+
+         $options = array(
+           'namespace' => 'Application_',
+           'servers'   => array(
+             array('host' => '127.0.0.1', 'port' => 6379),
+             array('host' => '127.0.0.1', 'port' => 6380)
+           )
+         );
+
+         require_once 'Rediska.php';
+         $rediska = new Rediska($options);
+
+         ?>
+
+      [All configuration options](http://rediska.geometria-lab.net/documentation/configuration).
+
+3. **Use Rediska**
+
+         <?php
+
+         require_once 'Rediska/Key.php';
+
+         // Set 'value' to key 'keyName'
+         $key = new Rediska_Key('keyName');
+         $key->setValue('value');
+
+         ?>
+
+    * [Full usage documentation](http://rediska.geometria-lab.net/documentation/usage)
+    * Using Rediska with frameworks:
+          * [Zend Framework](http://rediska.geometria-lab.net/documentation/integration-with-frameworks/zend-framework)
+          * [Symfony](http://rediska.geometria-lab.net/documentation/integration-with-frameworks/symfony)
+
     
 Project structure
 ---
