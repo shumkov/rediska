@@ -39,17 +39,17 @@ Get started!
 
       For begining you need to discover our PEAR channel:
 
-      `pear channel-discover pear.geometria-lab.net`
+        pear channel-discover pear.geometria-lab.net
 
       And install package:
 
-      `pear install geometria-lab/Rediska`
+        pear install geometria-lab/Rediska
 
    1.2. **Download or get from repository**
 
       [Download zip archive](http://rediska.geometria-lab.net/download/latest) with latest version or get last **unstable** version from git repository:
 
-      `git clone http://github.com/shumkov/rediska.git`
+        git clone http://github.com/shumkov/rediska.git
 
       For adding Rediska to your applcation you need copy Rediska from library folder to you application library folder (which must be in PHP's `include_path`)
 
