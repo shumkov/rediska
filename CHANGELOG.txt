@@ -1,2 +1,45 @@
-Version 0.4.0 (31.03.2010):
-  * ...
+Version 0.4.0 (April 1, 2010):
+  * Features #583: Create expample application
+  * Features #766: Create pear package
+  * Features #1926: Symfony integration
+  * Features #591: Implement BGREWRITEAOF
+  * Features #594: Implement ZINCRBY
+  * Features #802: Implement ZREMRANGEBYSCORE
+  * Features #803: Implement slaveof no one
+  * Features #902: Add README and CHANGELOG
+  * Improvements #760: Optimize consistent hashing
+  * Improvements #763: Move to stream_socket_client
+  * Improvements #797: Add timeout for connection
+  * Improvements #582: Specify connection alias for key objects
+  * Improvements #640: Add with scores to ZRANGE
+  * Improvements #675: Throw exceptions if empty arguments
+  * Improvements #835: On method can get connection object
+  * Improvements #581: Add multiple values to set and list by pipeline
+  * Improvements #595: Add getScoreFromSortedSet to sorted set object
+  * Improvements #765: New test suite
+  * Improvements #794: Add EXPIREAT
+  * Bugs #641: Broken RPOPLPUSH command
+  * Bugs #648: Add increment and decrement to rediska key wrapper
+  * Bugs #669: Create exception if connection not found
+  * Bugs #670: Warning: Invalid argument supplied for foreach() in .../library/Rediska/Command/Abstract.php on line 128 (111)
+  * Bugs #813: Quit must disconnect connections
+  * Bugs #825: Save Handler throw exception on Rediska options
+
+Version 0.3.0 (January 22, 2010)
+  * Features #355: Alias for servers
+  * Features #356: Operate with keys on specified (by alias) server
+  * Features #471: Documentation
+  * Features #472: Pipeline
+  * Improvements #520: Refactor commands
+  * Improvements #521: Support Redis 1.2 API
+  * Improvements #522: Lazy loading command classes
+  * Bugs #524: Messages count return queues count
+  * Bugs #559: Select specified db after connect
+
+Version 0.2.2 (November 27, 2009)
+ * Features #577: Persistent connection
+ * Features #578: Move to BSD license
+
+Version 0.2.1 (November 25, 2009)
+ * Features #363: Writer for Zend_Log
+ * Features #364: Adapter for Zend_Queue
