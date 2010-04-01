@@ -5,13 +5,15 @@
     http://pear.php.net/dtd/package-2.0.xsd">
  <name>Rediska</name>
  <channel>pear.geometria-lab.net</channel>
- <summary>A PHP API wrapper for Redis.</summary>
+ <summary>Rediska (radish in Russian) - PHP client for Redis.</summary>
  <description>Rediska (radish in Russian) - PHP client for Redis.
 
 Redis is an advanced fast key-value database written in C. It can be used like memcached, in front of a traditional 
 database, or on its own thanks to the fact that the in-memory datasets are not volatile but instead persisted on disk. 
 One of the cool features is that you can store not only strings, but lists and sets with atomic operations to push/pop 
-elements.</description>
+elements.
+
+More information and documentation on homepage: http://rediska.geometria-lab.net</description>
  <lead>
   <name>Ivan Shumkov</name>
   <user>shumkov</user>
@@ -37,18 +39,18 @@ elements.</description>
   <active>yes</active>
  </developer>
  <date>2010-04-01</date>
- <time>14:05:57</time>
+ <time>14:26:19</time>
  <version>
   <release>0.4.0</release>
   <api>0.4.0</api>
  </version>
  <stability>
-  <release>alpha</release>
-  <api>alpha</api>
+  <release>beta</release>
+  <api>beta</api>
  </stability>
  <license uri="http://www.opensource.org/licenses/bsd-license.php">New BSD License</license>
  <notes>
-This is an alpha release, see README.markdown for examples.
+This is an beta release, see README.markdown for examples.
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
@@ -447,13 +449,13 @@ This is an alpha release, see README.markdown for examples.
     <api>0.4.0</api>
    </version>
    <stability>
-    <release>alpha</release>
-    <api>alpha</api>
+    <release>beta</release>
+    <api>beta</api>
    </stability>
    <date>2010-04-01</date>
    <license uri="http://www.opensource.org/licenses/bsd-license.php">New BSD License</license>
    <notes>
-This is an alpha release, see README.markdown for examples.
+This is an beta release, see README.markdown for examples.
    </notes>
   </release>
  </changelog>
