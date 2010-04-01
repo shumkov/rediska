@@ -43,7 +43,7 @@ Get started!
 
      And install package:
 
-     `pear install geometria-lab/Rediska`
+     `pear install geometria-lab/Rediska-beta`
 
      1.2. **Download or get from repository**
 
