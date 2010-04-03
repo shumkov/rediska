@@ -36,8 +36,8 @@ More information and documentation on homepage: http://rediska.geometria-lab.net
   <email>till@php.net</email>
   <active>yes</active>
  </developer>
- <date>2010-04-01</date>
- <time>16:32:03</time>
+ <date>2010-04-03</date>
+ <time>09:50:07</time>
  <version>
   <release>0.4.0</release>
   <api>0.4.0</api>
@@ -332,6 +332,7 @@ This is an beta release, see README.markdown for examples.
     <file baseinstalldir="/" name="bootstrap.php" role="test" />
     <file baseinstalldir="/" name="config.ini-dist" role="test" />
     <file baseinstalldir="/" name="phpunit.xml" role="test" />
+    <file baseinstalldir="/" name="README.txt" role="test" />
    </dir> <!-- /tests -->
    <file baseinstalldir="/" name="CHANGELOG.txt" role="doc" />
    <file baseinstalldir="/" name="README.markdown" role="doc" />
@@ -450,7 +451,7 @@ This is an beta release, see README.markdown for examples.
     <release>beta</release>
     <api>beta</api>
    </stability>
-   <date>2010-04-01</date>
+   <date>2010-04-03</date>
    <license uri="http://www.opensource.org/licenses/bsd-license.php">New BSD License</license>
    <notes>
 This is an beta release, see README.markdown for examples.
