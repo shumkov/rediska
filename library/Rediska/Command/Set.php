@@ -21,34 +21,36 @@ class Rediska_Command_Set extends Rediska_Command_Abstract
     protected function _create($nameOrData, $valueOrOverwrite = null, $overwrite = true)
     {
         if (is_array($nameOrData)) {
+            $this->_checkVersion('1.1');
+
             $this->_multiple = true;
             $data = $nameOrData;
             $overwrite = ($valueOrOverwrite === null || $valueOrOverwrite);
-            
-            if (!empty($data)) {
 
-            
-                $connections = array();
-                $keysByConnections = array();
-                foreach ($data as $key => $value) {
-                    $connection = $this->_rediska->getConnectionByKeyName($key);
-                    $connectionAlias = $connection->getAlias();
-                    if (!array_key_exists($connectionAlias, $connections)) {
-                        $connections[$connectionAlias] = $connection;
-                        $keysByConnections[$connectionAlias] = array();
-                    }
-                    $keysByConnections[$connectionAlias][$key] = $value;
+            if (empty($data)) {
+                throw new Rediska_Command_Exception('Not present keys and values for set');
+            }
+
+            $connections = array();
+            $keysByConnections = array();
+            foreach ($data as $key => $value) {
+                $connection = $this->_rediska->getConnectionByKeyName($key);
+                $connectionAlias = $connection->getAlias();
+                if (!array_key_exists($connectionAlias, $connections)) {
+                    $connections[$connectionAlias] = $connection;
+                    $keysByConnections[$connectionAlias] = array();
+                }
+                $keysByConnections[$connectionAlias][$key] = $value;
+            }
+
+            foreach($keysByConnections as $connectionAlias => $data) {
+                $command = array($overwrite ? 'MSET' : 'MSETNX');
+                foreach($data as $key => $value) {
+                    $command[] = $this->_rediska->getOption('namespace') . $key;
+                    $command[] = $this->_rediska->serialize($value);
                 }
 
-                foreach($keysByConnections as $connectionAlias => $data) {
-                    $command = array($overwrite ? 'MSET' : 'MSETNX');
-                    foreach($data as $key => $value) {
-                        $command[] = $this->_rediska->getOption('namespace') . $key;
-                        $command[] = $this->_rediska->serialize($value);
-                    }
-
-                    $this->_addCommandByConnection($connections[$connectionAlias], $command);
-                }
+                $this->_addCommandByConnection($connections[$connectionAlias], $command);
             }
         } else {
             $name = $nameOrData;

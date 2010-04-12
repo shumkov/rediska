@@ -14,6 +14,8 @@
  */
 class Rediska_Command_GetSortedSetLength extends Rediska_Command_Abstract
 {
+    protected $_version = '1.1';
+    
     protected function _create($name)
     {
         $connection = $this->_rediska->getConnectionByKeyName($name);

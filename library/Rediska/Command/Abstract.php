@@ -21,6 +21,13 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
     const REPLY_INTEGER    = ':';
     const REPLY_BULK       = '$';
     const REPLY_MULTY_BULK = '*';
+    
+    /**
+     * Command version
+     * 
+     * @var $_version string
+     */
+    protected $_version = '1.0';
 
     /**
      * Rediska instance
@@ -63,6 +70,13 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
      * @var boolean
      */
     protected $_atomic = true;
+
+    /**
+     * Command is writed to connection
+     * 
+     * @var unknown_type
+     */
+    protected $_isWrited = false;
 
     /**
      * Constructor
@@ -110,8 +124,13 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
     {
         foreach($this->_commandsByConnections as $commandByConnection) {
         	list($connection, $command) = $commandByConnection;
+
+        	$this->_checkVersion();
+
             $connection->write($command);
         }
+
+        $this->_isWrited = true;
 
         return true;
     }
@@ -123,6 +142,10 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
      */
     public function read()
     {
+        if (!$this->_isWrited) {
+            throw new Rediska_Command_Exception('You must write command before read');
+        }
+
         $response = array();
 
         foreach ($this->_commandsByConnections as $commandByConnection) {
@@ -246,5 +269,18 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
     protected function _parseResponse($response)
     {
         return $response;
+    }
+    
+    protected function _checkVersion($version = null)
+    {
+        if (null === $version) {
+            $version = $this->_version;
+        }
+
+        $redisVersion = $this->_rediska->getOption('redisVersion');
+
+        if (version_compare($version, $redisVersion)) {
+            throw new Rediska_Command_Exception("Command '{$this->_name}' requires {$this->_version}+ version of Redis server. Current version is {$redisVersion}. To change it specify 'redisVersion' option.");
+        }
     }
 }

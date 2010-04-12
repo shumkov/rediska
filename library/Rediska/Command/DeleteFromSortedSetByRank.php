@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Remove all the elements in the sorted set at key with a score between min and max (including elements with score equal to min or max).
+ * Remove all elements in the sorted set at key with rank between start  and end
  * 
  * @param string  $name  Key name
- * @param numeric $min   Min value
- * @param numeric $max   Max value
+ * @param numeric $start Start position
+ * @param numeric $end   End position
  * @return integer
  * 
  * @author Ivan Shumkov
@@ -14,15 +14,15 @@
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_Command_DeleteFromSortedSetByScore extends Rediska_Command_Abstract
+class Rediska_Command_DeleteFromSortedSetByRank extends Rediska_Command_Abstract
 {
-    protected $_version = '1.1';
+    protected $_version = '1.3.4';
 
-    protected function _create($name, $min, $max)
+    protected function _create($name, $start, $end)
     {
         $connection = $this->_rediska->getConnectionByKeyName($name);
 
-        $command = array('ZREMRANGEBYSCORE', "{$this->_rediska->getOption('namespace')}$name", $min, $max);
+        $command = array('ZREMRANGEBYRANK', "{$this->_rediska->getOption('namespace')}$name", $start, $end);
 
         $this->_addCommandByConnection($connection, $command);
     }

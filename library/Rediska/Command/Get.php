@@ -13,7 +13,7 @@
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
 class Rediska_Command_Get extends Rediska_Command_Abstract
-{
+{ 
     protected $_multi = false;
     protected $_keys = array();
     protected $_keysByConnections = array();

@@ -25,7 +25,14 @@ class Rediska_Command_Expire extends Rediska_Command_Abstract
 
         $connection = $this->_rediska->getConnectionByKeyName($name);
 
-        $command = ($isTimestamp ? 'EXPIREAT' : 'EXPIRE' ) . " {$this->_rediska->getOption('namespace')}$name $secondsOrTimestamp";
+        if ($isTimestamp) {
+            $this->_checkVersion('1.1');
+            $command = 'EXPIREAT';
+        } else {
+            $command = 'EXPIRE';
+        }
+
+        $command = "$command {$this->_rediska->getOption('namespace')}$name $secondsOrTimestamp";
 
         $this->_addCommandByConnection($connection, $command);
     }

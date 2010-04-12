@@ -15,6 +15,8 @@
  */
 class Rediska_Command_GetScoreFromSortedSet extends Rediska_Command_Abstract
 {
+    protected $_version = '1.1';
+
     protected function _create($name, $value)
     {
         $connection = $this->_rediska->getConnectionByKeyName($name);

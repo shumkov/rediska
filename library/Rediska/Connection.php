@@ -358,7 +358,7 @@ class Rediska_Connection
             return $this->_options['host'] . ':' . $this->_options['port'];
         }
     }
-    
+
     protected function _readAndThrowException($length)
     {
         $data = @stream_get_contents($this->_socket, $length);
