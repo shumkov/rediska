@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @see Rediska_Command_GetSortedSet_ValueAndScore
+ */
+require_once 'Rediska/Command/GetSortedSet/ValueAndScore.php';
+
+/**
  * Get members from sorted set by min and max score
  * 
  * @throws Rediska_Command_Exception
@@ -19,7 +24,9 @@
  */
 class Rediska_Command_GetFromSortedSetByScore extends Rediska_Command_Abstract
 {
-    protected function _create($name, $min, $max, $limit = null, $offset = null)
+    protected $_version = '1.1';
+    
+    protected function _create($name, $min, $max, $withScores = false, $limit = null, $offset = null)
     {
         if (!is_null($limit) && !is_integer($limit)) {
             throw new Rediska_Command_Exception("Limit must be integer");
@@ -41,6 +48,12 @@ class Rediska_Command_GetFromSortedSetByScore extends Rediska_Command_Abstract
             $command[] = $offset;
             $command[] = $limit;
         }
+        
+        if ($withScores) {
+            $this->_checkVersion('1.3.4');
+
+            $command[] = 'WITHSCORES';
+        }
 
         $this->_addCommandByConnection($connection, $command);
     }
@@ -49,8 +62,12 @@ class Rediska_Command_GetFromSortedSetByScore extends Rediska_Command_Abstract
     {
         $values = $response[0];
 
-        foreach($values as &$value) {
-            $value = $this->_rediska->unserialize($value);
+        if ($this->withScores) {
+            $values = Rediska_Command_GetSortedSet_ValueAndScore::combine($values);
+        } else {
+            foreach($values as &$value) {
+                $value = $this->_rediska->unserialize($value);
+            }
         }
 
         return $values;

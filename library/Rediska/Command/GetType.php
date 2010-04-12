@@ -25,6 +25,7 @@ class Rediska_Command_GetType extends Rediska_Command_Abstract
 
     protected function _parseResponse($response)
     {
+        
         return $response[0];
     }
 }

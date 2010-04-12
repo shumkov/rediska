@@ -1,4 +1,10 @@
 <?php
+
+/**
+ * @see Rediska_Command_GetSortedSet_ValueAndScore
+ */
+require_once 'Rediska/Command/GetSortedSet/ValueAndScore.php';
+
 /**
  * Get all the members of the Sorted Set value at key
  * 
@@ -18,6 +24,8 @@
  */
 class Rediska_Command_GetSortedSet extends Rediska_Command_Abstract
 {
+    protected $_version = '1.1';
+    
     protected function _create($name, $withScores = false, $limit = null, $offset = null, $revert = false)
     {
         $connection = $this->_rediska->getConnectionByKeyName($name);
@@ -57,39 +65,13 @@ class Rediska_Command_GetSortedSet extends Rediska_Command_Abstract
         $values = $response[0];
 
         if ($this->withScores) {
-        	$isValue = true;
-        	$valuesWithScores = array();
-            foreach($values as $valueOrScore) {
-            	if ($isValue) {
-            		$value = $this->_rediska->unserialize($valueOrScore);
-            	} else {
-            		$score = $valueOrScore;
-            		$valuesWithScores[] = new Rediska_Command_GetSortedSet_ValueAndScore(array('value' => $value, 'score' => $score));
-            	}
-
-            	$isValue = !$isValue;
-            }
-        	
-        	return $valuesWithScores;
+        	$values = Rediska_Command_GetSortedSet_ValueAndScore::combine($values);
         } else {
             foreach($values as &$value) {
         	   $value = $this->_rediska->unserialize($value);
             }
-
-            return $values;	
         }
-    }
-}
 
-class Rediska_Command_GetSortedSet_ValueAndScore extends ArrayObject
-{
-    public function __set($name, $value)
-    {
-        $this[$name] = $value;
-    }
-
-    public function __get($name)
-    {
-        return $this[$name];
+        return $values;
     }
 }

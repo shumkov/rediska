@@ -6,10 +6,10 @@
 require_once 'Rediska/Command/CompareSets.php';
 
 /**
- * Return the intersection between the Sets stored at key1, key2, ..., keyN
+ * Return the union between the Sets stored at key1, key2, ..., keyN
  * 
  * @param array       $names     Array of key names
- * @param string|null $storeName Store intersection to set with key name
+ * @param string|null $storeName Store union to set with key name
  * @return array|boolean
  * 
  * @author Ivan Shumkov
@@ -18,7 +18,7 @@ require_once 'Rediska/Command/CompareSets.php';
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_Command_IntersectSortedSets extends Rediska_Command_CompareSortedSets
+class Rediska_Command_UnionSortedSets extends Rediska_Command_CompareSortedSets
 {
-    protected $_command = 'ZINTER';
+	protected $_command = 'ZUNION';
 }

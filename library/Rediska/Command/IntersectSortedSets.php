@@ -20,5 +20,5 @@ require_once 'Rediska/Command/CompareSets.php';
  */
 class Rediska_Command_IntersectSortedSets extends Rediska_Command_CompareSortedSets
 {
-    protected $_command = 'ZINTER';
+	protected $_command = 'SINTER';
 }
