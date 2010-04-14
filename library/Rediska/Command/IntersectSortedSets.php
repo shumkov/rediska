@@ -3,14 +3,15 @@
 /**
  * @see Rediska_Command_CompareSets
  */
-require_once 'Rediska/Command/CompareSets.php';
+require_once 'Rediska/Command/CompareSortedSets.php';
 
 /**
- * Return the intersection between the Sets stored at key1, key2, ..., keyN
+ * Store to key intersection between sorted sets
  * 
- * @param array       $names     Array of key names
- * @param string|null $storeName Store intersection to set with key name
- * @return array|boolean
+ * @param array  $names       Array of key names
+ * @param string $storeName   Store union to sorted set with key name
+ * @param string $aggregation Aggregation method: SUM (for default), MIN, MAX.
+ * @return integer
  * 
  * @author Ivan Shumkov
  * @package Rediska
@@ -20,5 +21,10 @@ require_once 'Rediska/Command/CompareSets.php';
  */
 class Rediska_Command_IntersectSortedSets extends Rediska_Command_CompareSortedSets
 {
-	protected $_command = 'SINTER';
+	protected $_command = 'ZINTER';
+	
+    protected function _compareSets($sets)
+    {
+        return call_user_func_array('array_intersect', array_values($sets));
+    }
 }

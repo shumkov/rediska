@@ -33,7 +33,7 @@ class Rediska_Command_GetSortedSetTest extends Rediska_TestCase
 
         $values = $this->rediska->getSortedSet('test', true);
 
-        $this->assertType('Rediska_Command_GetSortedSet_ValueAndScore', $values[0]);
+        $this->assertType('Rediska_Command_Response_ValueAndScore', $values[0]);
 
         $this->assertEquals($values[0]['score'], 1);
         $this->assertEquals($values[0]['value'], 1);

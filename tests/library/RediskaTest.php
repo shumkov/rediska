@@ -4,39 +4,39 @@ class RediskaTest extends Rediska_TestCase
 {
     public function testOn()
     {
-        $this->rediska->on(REDISKA_HOST . ':' . REDISKA_PORT)->set('aaa', 'value');
-        $this->assertEquals($this->rediska->on(REDISKA_HOST . ':' . REDISKA_PORT)->get('aaa'), 'value');
+        list($firstServer) = $this->rediska->getConnections();
+        
+        $this->rediska->on($firstServer)->set('aaa', 'value');
+        $this->assertEquals($this->rediska->on($firstServer->getAlias())->get('aaa'), 'value');
     }
 
     public function testOnTwoServers()
     {
         $this->_addSecondServerOrSkipTest();
 
-        $this->rediska->on(REDISKA_HOST . ':' . REDISKA_PORT)->set('aaa', 'value');
-        $this->rediska->on(REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT)->set('bbb', 'value');
+        list($firstServer, $secondServer) = $this->rediska->getConnections();
 
-        $this->assertEquals($this->rediska->on(REDISKA_HOST . ':' . REDISKA_PORT)->get('aaa'), 'value');
-        $this->assertNull($this->rediska->on(REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT)->get('aaa'));
+        $this->rediska->on($firstServer)->set('aaa', 'value');
+        $this->rediska->on($secondServer)->set('bbb', 'value');
 
-        $this->assertNull($this->rediska->on(REDISKA_HOST . ':' . REDISKA_PORT)->get('bbb'));
-        $this->assertEquals($this->rediska->on(REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT)->get('bbb'), 'value');
+        $this->assertEquals($this->rediska->on($firstServer->getAlias())->get('aaa'), 'value');
+        $this->assertNull($this->rediska->on($secondServer->getAlias())->get('aaa'));
+
+        $this->assertNull($this->rediska->on($firstServer->getAlias())->get('bbb'));
+        $this->assertEquals($this->rediska->on($secondServer->getAlias())->get('bbb'), 'value');
     }
-    
-    
-    
-    /**
-     * @expectedException Rediska_Exception
-     */
+
     public function testSetSerializerException()
     {
+        $this->setExpectedException('Rediska_Exception');
+
         $this->rediska->setSerializer(array('wrong', 'serializer'));
     }
 
-    /**
-     * @expectedException Rediska_Exception
-     */
     public function testsetUnSerializerException()
     {
+        $this->setExpectedException('Rediska_Exception');
+        
         $this->rediska->setUnSerializer(array('wrong', 'serializer'));
     }
 

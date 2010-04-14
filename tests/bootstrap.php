@@ -9,19 +9,14 @@ set_include_path(implode(PATH_SEPARATOR, array(
 )));
 
 // Configuration
-if (file_exists(dirname(__FILE__) . '/config.ini')) {
-    $config = parse_ini_file(dirname(__FILE__) . '/config.ini');
-
-    define('REDISKA_HOST', $config['rediska_host'][0]);
-    define('REDISKA_PORT', $config['rediska_port'][0]);
-    define('REDISKA_SECOND_HOST', $config['rediska_host'][1]);
-    define('REDISKA_SECOND_PORT', $config['rediska_port'][1]);
-} else {
-	define('REDISKA_HOST', '127.0.0.1');
-    define('REDISKA_PORT', 6380);
-    define('REDISKA_SECOND_HOST', '127.0.0.1');
-    define('REDISKA_SECOND_PORT', 6381);
+require_once 'Zend/Config/Ini.php';
+$configPath = dirname(__FILE__) . '/config.ini';
+if (!file_exists($configPath)) {
+    $configPath = dirname(__FILE__) . '/config.ini-dist';
 }
+$config = new Zend_Config_Ini($configPath);
+$config = $config->toArray();
+$GLOBALS['rediskaConfigs'] = $config['rediska'];
 
 require_once dirname(__FILE__) . '/library/Rediska/TestCase.php';
 

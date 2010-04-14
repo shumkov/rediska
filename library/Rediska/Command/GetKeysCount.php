@@ -21,11 +21,11 @@ class Rediska_Command_GetKeysCount extends Rediska_Command_Abstract
         }
     }
 
-    protected function _parseResponse($response)
+    protected function _parseResponses($responses)
     {
         $count = 0;
-        foreach($response as $result) {
-            $count += $result;
+        foreach($responses as $response) {
+            $count += $response;
         }
         return $count;
     }

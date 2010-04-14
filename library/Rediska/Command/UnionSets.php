@@ -23,12 +23,12 @@ class Rediska_Command_UnionSets extends Rediska_Command_CompareSets
 	protected $_command = 'SUNION';
     protected $_storeCommand = 'SUNIONSTORE';
 
-    protected function _prepareValues($response)
+    protected function _compareSets($sets)
     {
-        $results = array();
-        foreach($response as $result) {
-            $results = array_merge($results, $result);
+        $comparedSet = array();
+        foreach($sets as $setValues) {
+            $comparedSet = array_merge($comparedSet, $setValues);
         }
-        return array_unique($results);
+        return array_unique($comparedSet);
     }
 }

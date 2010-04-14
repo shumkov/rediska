@@ -146,14 +146,14 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
             throw new Rediska_Command_Exception('You must write command before read');
         }
 
-        $response = array();
+        $responses = array();
 
         foreach ($this->_commandsByConnections as $commandByConnection) {
         	list($connection, $command) = $commandByConnection;
-            $response[] = $this->_readResponseFromConnection($connection);
+            $responses[] = $this->_readResponseFromConnection($connection);
         }
 
-        return $this->_parseResponse($response);
+        return $this->_parseResponses($responses);
     }
 
     /**
@@ -266,9 +266,9 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
         }
     }
 
-    protected function _parseResponse($response)
+    protected function _parseResponses($responses)
     {
-        return $response;
+        return $responses;
     }
     
     protected function _checkVersion($version = null)
@@ -279,8 +279,8 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
 
         $redisVersion = $this->_rediska->getOption('redisVersion');
 
-        if (version_compare($version, $redisVersion)) {
-            throw new Rediska_Command_Exception("Command '{$this->_name}' requires {$this->_version}+ version of Redis server. Current version is {$redisVersion}. To change it specify 'redisVersion' option.");
+        if (version_compare($version, $redisVersion) == 1) {
+            throw new Rediska_Command_Exception("Command '{$this->_name}' requires {$version}+ version of Redis server. Current version is {$redisVersion}. To change it specify 'redisVersion' option.");
         }
     }
 }

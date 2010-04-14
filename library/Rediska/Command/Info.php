@@ -25,14 +25,14 @@ class Rediska_Command_Info extends Rediska_Command_Abstract
         }
     }
 
-    protected function _parseResponse($response)
+    protected function _parseResponses($responses)
     {
     	$info = array();
     	$count = 0;
     	foreach($this->_connections as $connection) {
     		$info[$connection] = array();
     		
-            foreach (explode(Rediska::EOL, $response[$count]) as $param) {
+            foreach (explode(Rediska::EOL, $responses[$count]) as $param) {
                 if (!$param) {
                     continue;
                 }

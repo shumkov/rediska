@@ -39,7 +39,7 @@ class Rediska_Command_SlaveOf extends Rediska_Command_Abstract
         }
     }
 
-    protected function _parseResponse($response)
+    protected function _parseResponses($responses)
     {
         return true;
     }

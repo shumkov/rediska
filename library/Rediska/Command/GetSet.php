@@ -29,9 +29,9 @@ class Rediska_Command_GetSet extends Rediska_Command_Abstract
         $this->_addCommandByConnection($connection, $command);
     }
 
-    protected function _parseResponse($response)
+    protected function _parseResponses($responses)
     {
-        $values = $response[0];
+        $values = $responses[0];
 
         foreach($values as &$value) {
             $value = $this->_rediska->unserialize($value);

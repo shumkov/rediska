@@ -23,8 +23,8 @@ class Rediska_Command_DiffSets extends Rediska_Command_CompareSets
 	protected $_command = 'SDIFF';
     protected $_storeCommand = 'SDIFFSTORE';
 
-    protected function _prepareValues($response)
+    protected function _compareSets($sets)
     {
-        return call_user_func_array('array_diff', $response);
+        return call_user_func_array('array_diff', $sets);
     }
 }

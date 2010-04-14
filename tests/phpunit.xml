@@ -69,6 +69,10 @@
         <file>./library/Rediska/Command/DeleteFromSortedSetByScoreTest.php</file>
         <file>./library/Rediska/Command/GetSortedSetLengthTest.php</file>
         <file>./library/Rediska/Command/GetScoreFromSortedSetTest.php</file>
+        <file>./library/Rediska/Command/GetRankFromSortedSetTest.php</file>
+        <file>./library/Rediska/Command/DeleteFromSortedSetByRankTest.php</file>
+        <file>./library/Rediska/Command/UnionSortedSetsTest.php</file>
+        <file>./library/Rediska/Command/IntersectSortedSetsTest.php</file>
     </testsuite>
 
     <testsuite name="ControlCommands">

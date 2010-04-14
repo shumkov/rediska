@@ -35,17 +35,17 @@ class Rediska_Command_MoveToSet extends Rediska_Command_Abstract
         $this->_addCommandByConnection($fromNameConnection, $command);
     }
 
-    protected function _parseResponse($response)
+    protected function _parseResponse($responses)
     {
         if (!$this->isAtomic()) {
-        	if ($response[0]) {
+        	if ($responses[0]) {
         		$this->_rediska->deleteFromSet($this->fromName, $this->value);
         		return $this->_rediska->addToSet($this->toName, $this->value);
         	} else {
         		return false;
         	}
         } else {
-            return (boolean)$response[0];
+            return (boolean)$responses[0];
         }
     }
 }

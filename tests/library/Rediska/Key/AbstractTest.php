@@ -39,16 +39,18 @@ class Rediska_Key_AbstractTest extends Rediska_TestCase
     public function testSpecifiedServerAlias()
     {
         $this->_addSecondServerOrSkipTest();
+        
+        list($firstServer, $secondServer) = $this->rediska->getConnections();
 
-        $key1 = new Rediska_Key('test', null, REDISKA_HOST . ':' . REDISKA_PORT);
+        $key1 = new Rediska_Key('test', null, $firstServer);
         $key1->setValue(1);
-        $key2 = new Rediska_Key('test', null, REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT);
+        $key2 = new Rediska_Key('test', null, $secondServer);
         $key2->setValue(2);
 
-        $reply = $this->rediska->on(REDISKA_HOST . ':' . REDISKA_PORT)->get('test');
+        $reply = $this->rediska->on($firstServer->getAlias())->get('test');
         $this->assertEquals(1, $reply);
 
-        $reply = $this->rediska->on(REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT)->get('test');
+        $reply = $this->rediska->on($secondServer->getAlias())->get('test');
         $this->assertEquals(2, $reply);
     }
 

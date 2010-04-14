@@ -32,8 +32,8 @@ class Rediska_Command_SetToList extends Rediska_Command_Abstract
         $this->_addCommandByConnection($connection, $command);
     }
 
-    protected function _parseResponse($response)
+    protected function _parseResponse($responses)
     {
-        return (boolean)$response[0];
+        return (boolean)$responses[0];
     }
 }

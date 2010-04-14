@@ -15,7 +15,10 @@ class Rediska_Command_InfoTest extends Rediska_TestCase
 
         $info = $this->rediska->info();
         $this->assertTrue(is_array($info));
-        $this->assertArrayHasKey(REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT, $info);
-        $this->assertArrayHasKey('redis_version', $info[REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT]);
+
+        foreach($this->rediska->getConnections() as $connection) {
+            $this->assertArrayHasKey($connection->getAlias(), $info);
+            $this->assertArrayHasKey('redis_version', $info[$connection->getAlias()]);
+        }
     }
 }

@@ -50,18 +50,18 @@ abstract class Rediska_Key_Abstract
     protected $_isExpireTimestamp = false;
     
     /**
-     * Server alias
+     * Server alias or connection object
      * 
-     * @var string
+     * @var string|Rediska_Connection
      */
     protected $_serverAlias;
 
 	/**
 	 * Construct key
 	 * 
-	 * @param string      $name        Key name
-	 * @param integer     $expire      Expire time in seconds
-	 * @param string|null $serverAlias Server alias where key is placed
+	 * @param string                    $name        Key name
+	 * @param integer                   $expire      Expire time in seconds
+	 * @param string|Rediska_Connection $serverAlias Server alias or Rediska_Connection object where key is placed
 	 */
 	public function __construct($name, $expire = null, $serverAlias = null)
 	{
