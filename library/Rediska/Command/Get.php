@@ -63,14 +63,14 @@ class Rediska_Command_Get extends Rediska_Command_Abstract
         }
     }
 
-    protected function _parseResponse($response)
+    protected function _parseResponses($responses)
     {
         if ($this->_multi) {
             $result = array();
-            if (!empty($response)) {
+            if (!empty($responses)) {
                 $responses = array();
-                foreach($response as $responseByConnection) {
-                    $responses = array_merge($responses, $responseByConnection);
+                foreach($responses as $response) {
+                    $responses = array_merge($responses, $response);
                 }
                 $unsortedResult = array();
                 foreach($this->_keysByConnections as $i => $key) {
@@ -85,7 +85,7 @@ class Rediska_Command_Get extends Rediska_Command_Abstract
 
             return $result;
         } else {
-            return $this->_rediska->unserialize($response[0]);
+            return $this->_rediska->unserialize($responses[0]);
         }
     }
 }

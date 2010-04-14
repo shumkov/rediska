@@ -6,7 +6,7 @@ class Test_Zend_Application_Resource extends PHPUnit_Framework_TestCase
 {
     public function testBootstrap()
     {
-        $application = new Zend_Application('tests', REDISKA_TESTS_PATH . '/Test/Zend/Application/application.ini');
+        $application = new Zend_Application('tests', dirname(__FILE__) . '/application.ini');
         $rediska = $application->bootstrap()
                                ->getBootstrap()
                                ->getResource('rediska');

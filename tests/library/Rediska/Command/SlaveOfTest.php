@@ -16,32 +16,33 @@ class Rediska_Command_SlaveOfTest extends Rediska_TestCase
     {
         $this->_addSecondServerOrSkipTest();
 
-        $this->_checkRoleOnFirstServer('master');
+        list($firstServer, $secondServer) = $this->rediska->getConnections();
 
-        $firstAlias = REDISKA_HOST . ':' . REDISKA_PORT;
-        $secondAlias = REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT;
+        $this->_checkRole($firstServer, 'master');
+        $this->_checkRole($secondServer, 'master');
 
         try {
             if ($alias) {
-                $connection = $this->rediska->getConnectionByAlias($secondAlias);
-                $this->rediska->on($firstAlias)->slaveOf($connection);
+                $this->rediska->on($firstServer)->slaveOf($secondServer);
             } else {
-                $this->rediska->on($firstAlias)->slaveOf($secondAlias);
+                $this->rediska->on($firstServer)->slaveOf($secondServer->getAlias());
             }
+
+            $this->_checkRole($firstServer, 'slave');
+            $this->_checkRole($secondServer, 'master');
     
-            $this->_checkRoleOnFirstServer('slave');
+            $this->rediska->on($firstServer)->slaveOf(false);
     
-            $this->rediska->on($firstAlias)->slaveOf(false);
-    
-            $this->_checkRoleOnFirstServer('master');
+            $this->_checkRole($firstServer, 'master');
+            $this->_checkRole($secondServer, 'master');
         } catch (Exception $e) {
-            $this->rediska->on($firstAlias)->slaveOf(false);
+            $this->rediska->on($firstServer)->slaveOf(false);
         }
     }
-    
-    protected function _checkRoleOnFirstServer($role)
+
+    protected function _checkRole($server, $role)
     {
-        $info = $this->rediska->on(REDISKA_HOST . ':' . REDISKA_PORT)->info();
+        $info = $this->rediska->on($server->getAlias())->info();
         $this->assertEquals($role, $info['role']);
     }
 }

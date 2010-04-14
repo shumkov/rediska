@@ -37,8 +37,8 @@ class Rediska_Command_TruncateList extends Rediska_Command_Abstract
         $this->_addCommandByConnection($connection, $command);
     }
 
-    protected function _parseResponse($response)
+    protected function _parseResponses($responses)
     {
-        return (boolean)$response[0];
+        return (boolean)$responses[0];
     }
 }

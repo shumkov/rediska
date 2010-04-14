@@ -71,12 +71,12 @@ class Rediska_Command_Set extends Rediska_Command_Abstract
         }
     }
 
-    protected function _parseResponse($response)
+    protected function _parseResponses($responses)
     {
         if ($this->_multiple) {
-            if (!empty($response)) {
-                foreach($response as $result) {
-                    if (!$result) {
+            if (!empty($responses)) {
+                foreach($responses as $response) {
+                    if (!$response) {
                         return false;
                     }
                 }
@@ -85,7 +85,7 @@ class Rediska_Command_Set extends Rediska_Command_Abstract
                 return false;
             }
         } else {
-            return (boolean)$response[0];
+            return (boolean)$responses[0];
         }
     }
 }

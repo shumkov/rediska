@@ -4,7 +4,10 @@ class Rediska_Command_SelectDbTest extends Rediska_TestCase
 {
     public function testSelect()
     {
-        $rediska = new Rediska(array('servers' => array(array('host' => REDISKA_HOST, 'port' => REDISKA_PORT, 'db' => 2))));
+        $config = $GLOBALS['rediskaConfigs'][0];
+        $config['servers'][0]['db'] = 2;
+        $rediska = new Rediska($config);
+
         $rediska->set('a', 123);
         
         $rediska->selectDb(1);

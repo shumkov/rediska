@@ -48,17 +48,19 @@ class Rediska_PipelineTest extends Rediska_TestCase
     public function testPipelineWithSpecifiedConnection()
     {
     	$this->_addSecondServerOrSkipTest();
+    	
+    	list($firstServer, $secondServer) = $this->rediska->getConnections();
 
-    	$this->rediska->on(REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT)->pipeline()
-    	                                    ->set(1, 1)
-    	                                    ->set(2, 2)
-    	                                    ->on(REDISKA_HOST . ':' . REDISKA_PORT)->set(3, 3)
-    	                                    ->set(4, 4)
-    	                                    ->execute();
+    	$this->rediska->on($secondServer)->pipeline()
+    	                                 ->set(1, 1)
+    	                                 ->set(2, 2)
+    	                                 ->on($firstServer)->set(3, 3)
+    	                                 ->set(4, 4)
+    	                                 ->execute();
 
-        $this->assertEquals(1, $this->rediska->on(REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT)->get(1));
-        $this->assertEquals(2, $this->rediska->on(REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT)->get(2));
-        $this->assertEquals(3, $this->rediska->on(REDISKA_HOST . ':' . REDISKA_PORT)->get(3));
-        $this->assertEquals(4, $this->rediska->on(REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT)->get(4));
+        $this->assertEquals(1, $this->rediska->on($secondServer)->get(1));
+        $this->assertEquals(2, $this->rediska->on($secondServer)->get(2));
+        $this->assertEquals(3, $this->rediska->on($firstServer)->get(3));
+        $this->assertEquals(4, $this->rediska->on($secondServer)->get(4));
     }
 }

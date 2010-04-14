@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @see Rediska_Command_GetSortedSet_ValueAndScore
+ * @see Rediska_Command_Response_ValueAndScore
  */
-require_once 'Rediska/Command/GetSortedSet/ValueAndScore.php';
+require_once 'Rediska/Command/Response/ValueAndScore.php';
 
 /**
  * Get members from sorted set by min and max score
@@ -58,12 +58,12 @@ class Rediska_Command_GetFromSortedSetByScore extends Rediska_Command_Abstract
         $this->_addCommandByConnection($connection, $command);
     }
 
-    protected function _parseResponse($response)
+    protected function _parseResponses($responses)
     {
-        $values = $response[0];
+        $values = $responses[0];
 
         if ($this->withScores) {
-            $values = Rediska_Command_GetSortedSet_ValueAndScore::combine($values);
+            $values = Rediska_Command_Response_ValueAndScore::combine($this->_rediska, $values);
         } else {
             foreach($values as &$value) {
                 $value = $this->_rediska->unserialize($value);

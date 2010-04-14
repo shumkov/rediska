@@ -2,7 +2,6 @@
 
 require_once 'Rediska.php';
 
-// Abstract test class
 require_once 'PHPUnit/Framework/TestCase.php';
 
 class Rediska_TestCase extends PHPUnit_Framework_TestCase
@@ -14,7 +13,7 @@ class Rediska_TestCase extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->rediska = new Rediska(array('namespace' => 'Rediska_Tests_', 'servers' => array(array('host' => REDISKA_HOST, 'port' => REDISKA_PORT))));
+        $this->rediska = new Rediska($GLOBALS['rediskaConfigs'][0]);
     }
 
     protected function tearDown()
@@ -25,13 +24,20 @@ class Rediska_TestCase extends PHPUnit_Framework_TestCase
 
     protected function _addSecondServerOrSkipTest()
     {
-        $socket = @fsockopen(REDISKA_SECOND_HOST, REDISKA_SECOND_PORT);
+        if (isset($GLOBALS['rediskaConfigs'][1])) {
+            $config = $GLOBALS['rediskaConfigs'][1];
+            $socket = @fsockopen($config['servers'][1]['host'], $config['servers'][1]['port']);
 
-        if (is_resource($socket)) {
-            @fclose($socket);
-            $this->rediska->addServer(REDISKA_SECOND_HOST, REDISKA_SECOND_PORT, array('persistent' => true));
-        } else {
-            $this->markTestSkipped("You must start server " . REDISKA_SECOND_HOST . ":" . REDISKA_SECOND_PORT . " before run test");
+            if (is_resource($socket)) {
+                @fclose($socket);
+                $this->rediska = new Rediska($config);
+
+                return true;
+            }
         }
+
+        $this->markTestSkipped("You must add to config.ini and start second redis server before run test");
+        
+        return false;
     }
 }

@@ -13,9 +13,12 @@ abstract class Rediska_Command_CompareSets extends Rediska_Command_Abstract
 {
 	protected $_storeConnection;
 
+	abstract protected $_command;
+    abstract protected $_storeCommand;
+
     protected function _create(array $names, $storeName = null) 
     {
-        if (!empty($names)) {
+        if (empty($names)) {
             throw new Rediska_Command_Exception('You must specify sets');
         }
 
@@ -69,15 +72,15 @@ abstract class Rediska_Command_CompareSets extends Rediska_Command_Abstract
         }
     }
 
-    abstract protected function _prepareValues($response);
+    abstract protected function _compareSets($sets);
 
-    protected function _parseResponse($response)
+    protected function _parseResponses($responses)
     {
 		if (!$this->isAtomic()) {
     		if ($this->_storeConnection) {
-                $values = $response[0];
+                $values = $responses[0];
     		} else {
-    			$values = array_values($this->_prepareValues($response));
+    			$values = array_values($this->_compareSets($responses));
     		}
 
     		$unserializedValues = array();
@@ -95,7 +98,7 @@ abstract class Rediska_Command_CompareSets extends Rediska_Command_Abstract
                 return true;
     		}
         } else {
-            $reply = $response[0];
+            $reply = $responses[0];
             if (is_null($this->storeName)) {
                 foreach($reply as &$value) {
                     $value = $this->_rediska->unserialize($value);

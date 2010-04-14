@@ -29,8 +29,8 @@ class Rediska_Command_IncrementScoreInSortedSet extends Rediska_Command_Abstract
         $this->_addCommandByConnection($connection, $command);
     }
 
-    protected function _parseResponse($response)
+    protected function _parseResponse($responses)
     {
-        return $response[0];
+        return $responses[0];
     }
 }

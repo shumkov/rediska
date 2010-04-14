@@ -123,14 +123,14 @@ class Rediska
         'deletefromsortedset'        => 'Rediska_Command_DeleteFromSortedSet',
         'getsortedset'               => 'Rediska_Command_GetSortedSet',
         'incrementscoreinsortedset'  => 'Rediska_Command_IncrementScoreInSortedSet',
-        'getrankfromsortedset'       => 'Rediska_Command_GetRankFromSortedSet', !!!!!
-        'getfromsortedsetbyscore'    => 'Rediska_Command_GetFromSortedSetByScore', !!!!!
+        'getrankfromsortedset'       => 'Rediska_Command_GetRankFromSortedSet',
+        'getfromsortedsetbyscore'    => 'Rediska_Command_GetFromSortedSetByScore',
         'deletefromsortedsetbyscore' => 'Rediska_Command_DeleteFromSortedSetByScore',
-        'deletefromsortedsetbyrank'  => 'Rediska_Command_DeleteFromSortedSetByRank', !!!!!
+        'deletefromsortedsetbyrank'  => 'Rediska_Command_DeleteFromSortedSetByRank',
         'getsortedsetlength'         => 'Rediska_Command_GetSortedSetLength',
         'getscorefromsortedset'      => 'Rediska_Command_GetScoreFromSortedSet',
         'unionsortedsets'            => 'Rediska_Command_UnionSortedSets',
-        'intersectsortedsets'        => 'Rediska_Command_IntersectSortedSets', !!!!
+        'intersectsortedsets'        => 'Rediska_Command_IntersectSortedSets',
 
         // Controls
         'save'                  => 'Rediska_Command_Save',
@@ -184,7 +184,7 @@ class Rediska
         'serializer'          => 'serialize',
         'unserializer'        => 'unserialize',
         'keydistributor'      => 'consistentHashing',
-        'redisVersion'        => self::STABLE_REDIS_VERSION,
+        'redisversion'        => self::STABLE_REDIS_VERSION,
     );
 
     /**

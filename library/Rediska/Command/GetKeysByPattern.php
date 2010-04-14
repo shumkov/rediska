@@ -31,12 +31,12 @@ class Rediska_Command_GetKeysByPattern extends Rediska_Command_Abstract
         }
     }
 
-    protected function _parseResponse($response)
+    protected function _parseResponses($responses)
     {
         $keys = array();
-        foreach($response as $result) {
-            if ($result != '') {
-                $keys = array_merge($keys, explode(' ', $result));
+        foreach($responses as $response) {
+            if (!empty($response)) {
+                $keys = array_merge($keys, is_array($response) ? $response : explode(' ', $response));
             }
         }
 

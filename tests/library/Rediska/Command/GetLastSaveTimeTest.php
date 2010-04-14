@@ -14,7 +14,10 @@ class Rediska_Command_GetLastSaveTimeTest extends Rediska_TestCase
 
         $timestamp = $this->rediska->getLastSaveTime();
         $this->assertTrue(is_array($timestamp));
-        $this->assertArrayHasKey(REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT, $timestamp);
-        $this->assertTrue(is_numeric($timestamp[REDISKA_SECOND_HOST . ':' . REDISKA_SECOND_PORT]));
+
+        foreach($this->rediska->getConnections() as $connection) {
+            $this->assertArrayHasKey($connection->getAlias(), $timestamp);
+            $this->assertTrue(is_numeric($timestamp[$connection->getAlias()]));
+        }
     }
 }

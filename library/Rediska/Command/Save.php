@@ -27,7 +27,7 @@ class Rediska_Command_Save extends Rediska_Command_Abstract
         }
     }
 
-    protected function _parseResponse($response)
+    protected function _parseResponses($responses)
     {
         return true;
     }

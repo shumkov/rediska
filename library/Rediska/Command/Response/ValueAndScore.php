@@ -1,6 +1,6 @@
 <?php
 
-class Rediska_Command_GetSortedSet_ValueAndScore extends ArrayObject
+class Rediska_Command_Response_ValueAndScore extends ArrayObject
 {
     public function __set($name, $value)
     {
@@ -12,13 +12,13 @@ class Rediska_Command_GetSortedSet_ValueAndScore extends ArrayObject
         return $this[$name];
     }
 
-    public static function combine($valuesAndScores)
+    public static function combine(Rediska $rediska, $valuesAndScores)
     {
         $isValue = true;
         $valuesWithScores = array();
         foreach($valuesAndScores as $valueOrScore) {
             if ($isValue) {
-                $value = $this->_rediska->unserialize($valueOrScore);
+                $value = $rediska->unserialize($valueOrScore);
             } else {
                 $score = $valueOrScore;
                 $valuesWithScores[] = new self(array('value' => $value, 'score' => $score));

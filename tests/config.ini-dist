@@ -1,6 +1,9 @@
+rediska.0.namespace = Rediska_Tests_
+rediska.0.servers.0.host = 127.0.0.1
+rediska.0.servers.0.port = 6380
 
-rediska_host[] = 127.0.0.1
-rediska_port[] = 6380
-
-rediska_host[] = 127.0.0.1
-rediska_port[] = 6381
+rediska.1.namespace = Rediska_Tests_
+rediska.1.servers.0.host = 127.0.0.1
+rediska.1.servers.0.port = 6380
+rediska.1.servers.1.host = 127.0.0.1
+rediska.1.servers.1.port = 6381

@@ -18,7 +18,13 @@ require_once 'Rediska/Command/CompareSets.php';
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_Command_IntersectSortedSets extends Rediska_Command_CompareSortedSets
+class Rediska_Command_IntersectSets extends Rediska_Command_CompareSets
 {
-    protected $_command = 'ZINTER';
+	protected $_command = 'SINTER';
+    protected $_storeCommand = 'SINTERSTORE';
+
+    protected function _compareSets($sets)
+    {
+    	return call_user_func_array('array_intersect', $sets);
+    }
 }

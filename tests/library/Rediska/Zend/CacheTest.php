@@ -12,7 +12,11 @@ class Rediska_Zend_CacheTest extends Rediska_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->cache = Zend_Cache::factory('Core', 'Rediska_Zend_Cache_Backend_Redis', array('cache_id_prefix' => 'Rediska_Tests_'), array('servers' => array(array('host' => REDISKA_HOST, 'port' => REDISKA_PORT))), false, true);
+        $config = $GLOBALS['rediskaConfigs'][0];
+        if (isset($config['namespace'])) {
+            unset($config['namespace']);
+        }
+        $this->cache = Zend_Cache::factory('Core', 'Rediska_Zend_Cache_Backend_Redis', array('cache_id_prefix' => $this->rediska->getOption('namespace')), $config, false, true);
     }
 	
 	public function testLoad()
