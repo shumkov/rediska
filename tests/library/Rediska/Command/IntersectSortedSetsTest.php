@@ -1,17 +1,39 @@
 <?php
 
-class Rediska_Command_IntersectSetsTest extends Rediska_TestCase
+require_once 'Rediska/Command/Response/ValueAndScore.php';
+
+class Rediska_Command_IntersectSortedSetsTest extends Rediska_TestCase
 {
-	public function testIntersect()
-    {      
+    public function testIntersectReturnCount()
+    {
         $keys = $this->_createThreeSets();
 
-        $intersection = $this->rediska->intersectSets($keys);
-        sort($intersection);
-        
-        $this->assertEquals($this->_intersectViaPhp(), $intersection);
+        $setByPHP = $this->_compareSets($keys);
+
+        $reply = $this->rediska->intersectSortedSets($keys, 'test');
+
+        $this->assertEquals(count($setByPHP), $reply);
     }
-    
+
+    public function testIntersectReturnCountWithManyConnection()
+    {
+        $this->_addSecondServerOrSkipTest();
+
+        $this->testIntersectReturnCount();
+    }
+
+    public function testIntersect()
+    {
+        $keys = $this->_createThreeSets();
+
+        $this->rediska->intersectSortedSets($keys, 'test');
+
+        $set = $this->rediska->getSortedSet('test', true);
+        $setByPHP = $this->_compareSets($keys);
+
+        $this->assertEquals($setByPHP, $set);
+    }
+
     public function testIntersectWithManyConnection()
     {
         $this->_addSecondServerOrSkipTest();
@@ -19,48 +41,142 @@ class Rediska_Command_IntersectSetsTest extends Rediska_TestCase
         $this->testIntersect();
     }
 
-    public function testIntersetAndSave()
+    public function testIntersectWithWeights()
     {
-    	$keys = $this->_createThreeSets();
+        $this->_createThreeSets();
 
-        $reply = $this->rediska->intersectSets($keys, 'new-set');
-        $this->assertTrue($reply);
+        $keys = array('set1' => 2, 'set2' => 4, 'set3' => 1);
 
-        $intersection = $this->rediska->getSet('new-set');
-        sort($intersection);
+        $this->rediska->intersectSortedSets($keys, 'test');
 
-        $this->assertEquals($this->_intersectViaPhp(), $intersection);
+        $set = $this->rediska->getSortedSet('test', true);
+        $setByPHP = $this->_compareSets($keys);
+
+        $this->assertEquals($setByPHP, $set);
     }
 
-    public function testIntersetAndSaveWithManyConnection()
+    public function testIntersectWithWeightsWithManyConnections()
     {
         $this->_addSecondServerOrSkipTest();
-        
-        $this->testIntersetAndSave();
+
+        $this->testIntersectWithWeights();
+    }
+    
+    public function testIntersectWithAggregationMax()
+    {
+        $keys = $this->_createThreeSets();
+
+        $this->rediska->intersectSortedSets($keys, 'test', 'max');
+
+        $set = $this->rediska->getSortedSet('test', true);
+        $setByPHP = $this->_compareSets($keys, 'max');
+
+        $this->assertEquals($setByPHP, $set);
     }
 
-    protected function _intersectViaPhp()
+    public function testIntersectWithAggregationMaxWithManyConnections()
     {
-    	$myIntersection = array_intersect($this->_sets['set1'], $this->_sets['set2'], $this->_sets['set2']);
-        sort($myIntersection);
+        $this->_addSecondServerOrSkipTest();
 
-        return $myIntersection;
+        $this->testIntersectWithAggregationMax();
+    }
+    
+    public function testIntersectWithAggregationMin()
+    {
+        $keys = $this->_createThreeSets();
+
+        $this->rediska->intersectSortedSets($keys, 'test', 'min');
+
+        $set = $this->rediska->getSortedSet('test', true);
+        $setByPHP = $this->_compareSets($keys, 'min');
+
+        $this->assertEquals($setByPHP, $set);
+    }
+
+    public function testIntersectWithAggregationMinWithManyConnections()
+    {
+        $this->_addSecondServerOrSkipTest();
+
+        $this->testIntersectWithAggregationMin();
+    }
+
+    protected function _compareSets($names, $aggregation = 'sum')
+    {
+        // With weights?
+        $weights = array();
+        foreach($names as $nameOrIndex => $weightOrName) {
+            if (is_string($nameOrIndex)) {
+                $weights = $names;
+                $names = array_keys($names);
+                break;
+            }
+        }
+
+        if (empty($weights)) {
+            $weights = array_fill_keys($names, 1);
+        }
+
+        $values = array();
+        $valuesWithScores = array();
+        foreach ($names as $name) {
+            $set = $this->rediska->getSortedSet($name, true);
+            
+            $values[$name] = array();
+            foreach ($set as $valueOrScore) {
+                $value = $this->rediska->serialize($valueOrScore->value);
+                $score = $valueOrScore->score;
+                
+                $values[$name][] = $value;
+                if (!isset($valuesWithScores[$value])) {
+                    $valuesWithScores[$value] = array();
+                }
+                $valuesWithScores[$value][] = $score * $weights[$name];
+            }
+        }
+
+        $comparedValues = call_user_func_array('array_intersect', array_values($values));
+
+        $pipeline = $this->rediska->pipeline();
+        foreach($comparedValues as $value) {
+            $scores = $valuesWithScores[$value];
+            switch ($aggregation) {
+                case 'sum':
+                    $score = array_sum($scores);
+                    break;
+                case 'min':
+                    $score = min($scores);
+                    break;
+                case 'max':
+                    $score = max($scores);
+                    break;
+                default:
+                    throw new Exception('Unknown aggregation method ' . $aggregation);
+            }
+            
+            $value = $this->rediska->unserialize($value);
+            
+            $pipeline->addToSortedSet('test2', $value, $score);
+        }
+        
+        $pipeline->execute();
+
+        return $this->rediska->getSortedSet('test2', true);
     }
 
     protected $_sets = array(
-        'set1' => array(1, 3, 6, 4, 2, 'fds', 312, array('1a', 1, 2)),
-        'set2' => array(1, 5, 3, 7, 'aaa', 534),
-        'set3' => array('asdas', 1, 6, 3, 'y', 'aaa', 4)
+        'set1' => array(1 => 3, 3 => 1, 6 => 431, 4 => 1, 2 => 53, 'fds' => 2),
+        'set2' => array(1 => 123, 'aaa' => 143, 534 => 132),
+        'set3' => array('asdas' => 12, 1 => 1, 'aaa' => 13, 4 => 1.1)
     );
 
     protected function _createThreeSets()
     {
         foreach($this->_sets as $key => $values) {
-            foreach($values as $value) {
-                $this->rediska->addToSet($key, $value);
+            foreach($values as $value => $weight) {
+                $this->rediska->addToSortedSet($key, $value, $weight);
             }
         }
-        
+
         return array_keys($this->_sets);
     }
 }

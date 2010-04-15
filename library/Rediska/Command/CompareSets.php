@@ -13,8 +13,8 @@ abstract class Rediska_Command_CompareSets extends Rediska_Command_Abstract
 {
 	protected $_storeConnection;
 
-	abstract protected $_command;
-    abstract protected $_storeCommand;
+	protected $_command;
+    protected $_storeCommand;
 
     protected function _create(array $names, $storeName = null) 
     {

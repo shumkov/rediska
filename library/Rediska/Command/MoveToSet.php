@@ -35,7 +35,7 @@ class Rediska_Command_MoveToSet extends Rediska_Command_Abstract
         $this->_addCommandByConnection($fromNameConnection, $command);
     }
 
-    protected function _parseResponse($responses)
+    protected function _parseResponses($responses)
     {
         if (!$this->isAtomic()) {
         	if ($responses[0]) {

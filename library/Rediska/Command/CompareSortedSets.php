@@ -16,16 +16,16 @@ abstract class Rediska_Command_CompareSortedSets extends Rediska_Command_Abstrac
     const MIN = 'min';
 
     protected $_version = '1.3.5';
-    
-    abstract protected $_command;
-	
+
+    protected $_command;
+
 	protected $_storeConnection;
 	protected $_names   = array();
 	protected $_weights = array();
 
     protected function _create(array $names, $storeName, $aggregation = self::SUM)
     {
-        if (!empty($names)) {
+        if (empty($names)) {
             throw new Rediska_Command_Exception('You must specify sorted sets');
         }
 
@@ -33,8 +33,8 @@ abstract class Rediska_Command_CompareSortedSets extends Rediska_Command_Abstrac
         $withWeights = false;
         foreach($names as $nameOrIndex => $weightOrName) {
             if (is_string($nameOrIndex)) {
-                $names = array_keys($names);
                 $this->_weights = $names;
+                $names = array_keys($names);
                 $withWeights = true;
                 break;
             }
@@ -59,11 +59,15 @@ abstract class Rediska_Command_CompareSortedSets extends Rediska_Command_Abstrac
             $storeConnection = $this->_rediska->getConnectionByKeyName($storeName);
 
             if ($storeConnection->getAlias() == $connection->getAlias()) {
-                $command = array($this->_command, count($names)) + $names;
+                $command = array($this->_command, "{$this->_rediska->getOption('namespace')}$storeName", count($names));
+                
+                foreach($names as $name) {
+                    $command[] = "{$this->_rediska->getOption('namespace')}$name";
+                }
     
                 if ($withWeights) {
                     $command[] = 'WEIGHTS';
-                    $command += array_values($this->_weights);
+                    $command = array_merge($command, $this->_weights);
                 }
 
                 if (strtolower($aggregation) != self::SUM) {
@@ -92,33 +96,32 @@ abstract class Rediska_Command_CompareSortedSets extends Rediska_Command_Abstrac
         }
     }
     
-    abstract function _compareSets($sets);
+    abstract protected function _compareSets($sets);
 
     protected function _parseResponses($responses)
     {
         if ($this->isAtomic()) {
     	   return $responses[0];
         } else {
-            $values = array();
+            $sets = array();
             $valuesWithScores = array();
             foreach ($this->_names as $name) {
-                $values[$name] = array();
-                $response = next($responses);
-                foreach ($response as $valuesAndScores) {
-                    $isValue = true;
-                    foreach ($valuesAndScores as $valueOrScore) {
-                        if ($isValue) {
-                            $value = $valueOrScore;
-                            $values[$name][] = $value;
-                        } else {
-                            $score = $valueOrScore;
-                            if (isset($valuesWithScores[$value])) {
-                                $valuesWithScores[$value] = array();
-                            }
-                            $valuesWithScores[$value][] = $score * $this->_weights[$name];
+                $sets[$name] = array();
+                $response = current($responses);
+                next($responses);
+                $isValue = true;
+                foreach ($response as $valueOrScore) {
+                    if ($isValue) {
+                        $value = $valueOrScore;
+                        $sets[$name][] = $value;
+                        if (!isset($valuesWithScores[$value])) {
+                            $valuesWithScores[$value] = array();
                         }
-                        $isValue = !$isValue;
+                    } else {
+                        $score = $valueOrScore;
+                        $valuesWithScores[$value][] = $score * $this->_weights[$name];
                     }
+                    $isValue = !$isValue;
                 }
             }
 
@@ -127,7 +130,7 @@ abstract class Rediska_Command_CompareSortedSets extends Rediska_Command_Abstrac
             $pipeline = $this->_rediska->pipeline();
 
             $count = 0;
-            foreach($this->_compareSets($values) as $value) {
+            foreach($this->_compareSets($sets) as $value) {
                 $scores = $valuesWithScores[$value];
                 switch ($aggregation) {
                     case self::SUM:
@@ -142,6 +145,9 @@ abstract class Rediska_Command_CompareSortedSets extends Rediska_Command_Abstrac
                     default:
                         throw new Rediska_Command_Exception('Unknown aggregation method ' . $this->aggregation);
                 }
+
+                // TODO: Fix dirty hack
+                //$score = floor($score * 100000) / 100000;
 
                 $value = $this->_rediska->unserialize($value);
 
