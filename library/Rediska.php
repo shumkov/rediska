@@ -132,6 +132,9 @@ class Rediska
         'unionsortedsets'            => 'Rediska_Command_UnionSortedSets',
         'intersectsortedsets'        => 'Rediska_Command_IntersectSortedSets',
 
+        // Sorting
+        'sort' => 'Rediska_Command_Sort',
+
         // Controls
         'save'                  => 'Rediska_Command_Save',
         'getlastsavetime'       => 'Rediska_Command_GetLastSaveTime',

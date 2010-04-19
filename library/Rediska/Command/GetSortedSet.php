@@ -11,8 +11,8 @@ require_once 'Rediska/Command/Response/ValueAndScore.php';
  * @throws Rediska_Command_Exception
  * @param string  $name        Key name
  * @param integer $withScores  Return values with scores
- * @param integer $limit       Limit of elements
- * @param integer $offset      Offset (not using in sorting)
+ * @param integer $start       Start index
+ * @param integer $end         End index
  * @param boolean $revert      Revert elements (not used in sorting)
  * @return array
  * 
@@ -25,28 +25,17 @@ require_once 'Rediska/Command/Response/ValueAndScore.php';
 class Rediska_Command_GetSortedSet extends Rediska_Command_Abstract
 {
     protected $_version = '1.1';
-    
-    protected function _create($name, $withScores = false, $limit = null, $offset = null, $revert = false)
+
+    protected function _create($name, $withScores = false, $start = 0, $end = -1, $revert = false)
     {
+        if (!is_integer($start)) {
+            throw new Rediska_Command_Exception("Start must be integer");
+        }
+        if (!is_integer($end)) {
+            throw new Rediska_Command_Exception("End must be integer");
+        }
+
         $connection = $this->_rediska->getConnectionByKeyName($name);
-
-        if (!is_null($limit) && !is_integer($limit)) {
-            throw new Rediska_Command_Exception("Limit must be integer");
-        }
-
-        if (is_null($offset)) {
-            $offset = 0;
-        } else if (!is_integer($offset)) {
-            throw new Rediska_Command_Exception("Offset must be integer");
-        }
-
-        $start = $offset;
-
-        if (is_null($limit)) {
-            $end = -1;
-        } else {
-            $end = $offset + $limit - 1;
-        }
 
         $command = array($revert ? 'ZREVRANGE' : 'ZRANGE',
                          "{$this->_rediska->getOption('namespace')}$name",

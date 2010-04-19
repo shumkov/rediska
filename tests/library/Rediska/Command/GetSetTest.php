@@ -21,13 +21,9 @@ class Rediska_Command_GetSetTest extends Rediska_TestCase
         $this->assertFalse(in_array('xxxx', $values));
     }
     
-    public function testSorting()
+    public function testSortingIsDepricated()
     {
-    	$this->rediska->addToSet('test', 1);
-        $this->rediska->addToSet('test', 2);
-        $this->rediska->addToSet('test', 3);
-
-        $values = $this->rediska->getSet('test', 'limit 0 2 desc');
-        $this->assertEquals(array(3, 2), $values);
+        $this->setExpectedException('Rediska_Command_Exception');
+        $this->rediska->getSet('test', 'limit 0 2 desc');
     }
 }

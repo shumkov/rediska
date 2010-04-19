@@ -82,7 +82,7 @@ class Rediska_Command_UnionSortedSetsTest extends Rediska_TestCase
     }
     
     public function testUnionWithAggregationMin()
-    {
+    {   
         $keys = $this->_createThreeSets();
 
         $this->rediska->unionSortedSets($keys, 'test', 'min');

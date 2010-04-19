@@ -9,11 +9,12 @@ require_once 'Rediska/Command/Response/ValueAndScore.php';
  * Get members from sorted set by min and max score
  * 
  * @throws Rediska_Command_Exception
- * @param string  $name   Key name
- * @param number  $min    Min score
- * @param number  $max    Max score
- * @param integer $limit  Limit
- * @param integer $offset Offset
+ * @param string  $name       Key name
+ * @param number  $min        Min score
+ * @param number  $max        Max score
+ * @param boolean $withScores Get with scores
+ * @param integer $limit      Limit
+ * @param integer $offset     Offset
  * @return array
  * 
  * @author Ivan Shumkov
@@ -25,7 +26,7 @@ require_once 'Rediska/Command/Response/ValueAndScore.php';
 class Rediska_Command_GetFromSortedSetByScore extends Rediska_Command_Abstract
 {
     protected $_version = '1.1';
-    
+
     protected function _create($name, $min, $max, $withScores = false, $limit = null, $offset = null)
     {
         if (!is_null($limit) && !is_integer($limit)) {

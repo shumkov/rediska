@@ -4,8 +4,7 @@
  * Return all the members of the Set value at key
  * 
  * @param string $name Key name
- * @param string $sort Sorting query see: http://code.google.com/p/redis/wiki/SortCommand
- *                     ALPHA work incorrect becouse values in Set serailized
+ * @param string $sort Deprecated
  * @return array
  * 
  * @author Ivan Shumkov
@@ -23,7 +22,7 @@ class Rediska_Command_GetSet extends Rediska_Command_Abstract
         if (is_null($sort)) {
             $command = "SMEMBERS {$this->_rediska->getOption('namespace')}$name";
         } else {
-            $command = "SORT {$this->_rediska->getOption('namespace')}$name $sort";
+            throw new Rediska_Command_Exception("This attribute is depricated. You must use 'sort' command for it.");
         }
         
         $this->_addCommandByConnection($connection, $command);

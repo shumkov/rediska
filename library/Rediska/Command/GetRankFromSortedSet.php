@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Get rank of member from sorted set
  * 
