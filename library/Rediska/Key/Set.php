@@ -166,11 +166,24 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
     }
 
     /**
+     * Get sorted the elements
+     * 
+     * @param string|array  $value Options or SORT query string (http://code.google.com/p/redis/wiki/SortCommand).
+     *                             Important notes for SORT query string:
+     *                                 1. If you set Rediska namespace option don't forget add it to key names.
+     *                                 2. If you use more then one connection to Redis servers, it will choose by key name,
+     *                                    and key by you pattern's may not present on it.
+     * @return array
+     */
+    public function sort($options = array())
+    {
+        return $this->_getRediskaOn()->sort($this->_name, $options);
+    }
+
+    /**
      * Get Set values
      * 
-     * @see Rediska#getSet
-     * @param string $sort Sorting query see: http://code.google.com/p/redis/wiki/SortCommand
-     *                     ALPHA work incorrect becouse values in Set serailized
+     * @param string $sort Deprecated
      * @return array
      */
     public function toArray($sort = null)

@@ -33,7 +33,7 @@ class Rediska_Command_Decrement extends Rediska_Command_Abstract
         $this->_addCommandByConnection($connection, $command);
     }
 
-    protected function _parseResponse($responses)
+    protected function _parseResponses($responses)
     {
         return $responses[0];
     }

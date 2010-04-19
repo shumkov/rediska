@@ -5,11 +5,9 @@
  * Get List by key
  * 
  * @throws Rediska_Command_Exception
- * @param string         $name        Key name
- * @param integer|string $limitOrSort Limit of elements or sorting query
- *                                    ALPHA work incorrect becouse values in List serailized
- *                                    Read more: http://code.google.com/p/redis/wiki/SortCommand
- * @param integer        $offset      Offset
+ * @param string  $name  Key name
+ * @param integer $start Start index
+ * @param integer $end   End index
  * @return array
  * 
  * @author Ivan Shumkov
@@ -20,41 +18,18 @@
  */
 class Rediska_Command_GetList extends Rediska_Command_Abstract
 {
-    protected function _create($name, $limitOrSort = null, $offset = null)
+    protected function _create($name, $start = 0, $end = -1)
     {
+        if (!is_integer($start)) {
+            throw new Rediska_Command_Exception("Start must be integer");
+        }
+        if (!is_integer($end)) {
+            throw new Rediska_Command_Exception("End must be integer");
+        }
+
         $connection = $this->_rediska->getConnectionByKeyName($name);
 
-        if (is_null($limitOrSort) || is_numeric($limitOrSort)) {
-            $limit = $limitOrSort;
-
-            if (!is_null($limit) && !is_integer($limit)) {
-                throw new Rediska_Command_Exception("Limit must be integer");
-            }
-
-            if (is_null($offset)) {
-                $offset = 0;
-            } else if (!is_integer($offset)) {
-                throw new Rediska_Command_Exception("Offset must be integer");
-            }
-
-            $start = $offset;
-
-            if (is_null($limit)) {
-                $end = -1;
-            } else {
-                $end = $offset + $limit - 1;
-            }
-    
-            $command = "LRANGE {$this->_rediska->getOption('namespace')}$name $start $end";
-        } else {
-            $sort = $limitOrSort;
-
-            if (!is_null($offset)) {
-                throw new Rediska_Command_Exception("Offset not used with sorting query. Use LIMIT in query.");
-            }
-            
-            $command = "SORT {$this->_rediska->getOption('namespace')}$name $sort";
-        }
+        $command = "LRANGE {$this->_rediska->getOption('namespace')}$name $start $end";
 
         $this->_addCommandByConnection($connection, $command);
     }

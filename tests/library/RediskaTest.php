@@ -3,9 +3,9 @@
 class RediskaTest extends Rediska_TestCase
 {
     public function testOn()
-    {
+    {   
         list($firstServer) = $this->rediska->getConnections();
-        
+
         $this->rediska->on($firstServer)->set('aaa', 'value');
         $this->assertEquals($this->rediska->on($firstServer->getAlias())->get('aaa'), 'value');
     }

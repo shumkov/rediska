@@ -32,15 +32,10 @@ class Rediska_Command_GetListTest extends Rediska_TestCase
         $this->assertEquals(array('bbb', 'ccc'), $reply);
     }
     
-    public function testGetListWithSort()
+    public function testGetListWithSortIsDepricated()
     {
-    	$this->rediska->appendToList('test', 1);
-        $this->rediska->appendToList('test', 2);
-        $this->rediska->appendToList('test', 3);
-        $this->rediska->appendToList('test', 4);
-
-        $values = $this->rediska->getList('test', 'limit 0 3 desc');
-        $this->assertEquals(array(4, 3, 2), $values);
+    	$this->setExpectedException('Rediska_Command_Exception');
+        $this->rediska->getList('test', 'limit 0 3 desc');
     }
 
     protected function _appendThreeMembers()

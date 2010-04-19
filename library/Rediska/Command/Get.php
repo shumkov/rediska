@@ -68,13 +68,13 @@ class Rediska_Command_Get extends Rediska_Command_Abstract
         if ($this->_multi) {
             $result = array();
             if (!empty($responses)) {
-                $responses = array();
+                $mergedResponses = array();
                 foreach($responses as $response) {
-                    $responses = array_merge($responses, $response);
+                    $mergedResponses = array_merge($mergedResponses, $response);
                 }
                 $unsortedResult = array();
                 foreach($this->_keysByConnections as $i => $key) {
-                    $unsortedResult[$key] = $responses[$i];
+                    $unsortedResult[$key] = $mergedResponses[$i];
                 }
                 foreach($this->_keys as $key) {
                     if (isset($unsortedResult[$key])) {

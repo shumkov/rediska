@@ -19,6 +19,9 @@ class Rediska_TestCase extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         $this->rediska->flushDb(true);
+        foreach($this->rediska->getConnections() as $connection) {
+            $connection->disconnect();
+        }
         $this->rediska = null;
     }
 

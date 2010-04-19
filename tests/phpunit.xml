@@ -58,6 +58,7 @@
         <file>./library/Rediska/Command/DiffSetsTest.php</file>
         <file>./library/Rediska/Command/GetSetTest.php</file>
         <file>./library/Rediska/Command/MoveToSetTest.php</file>
+        <file>./library/Rediska/Command/SortTest.php</file>
     </testsuite>
 
     <testsuite name="SortedSetCommands">

@@ -1,15 +1,37 @@
 <?php
 
+require_once 'Rediska/Command/Response/ValueAndScore.php';
+
 class Rediska_Command_UnionSortedSetsTest extends Rediska_TestCase
 {
+    public function testUnionReturnCount()
+    {
+        $keys = $this->_createThreeSets();
+
+        $setByPHP = $this->_compareSets($keys);
+
+        $reply = $this->rediska->unionSortedSets($keys, 'test');
+
+        $this->assertEquals(count($setByPHP), $reply);
+    }
+
+    public function testUnionReturnCountWithManyConnection()
+    {
+        $this->_addSecondServerOrSkipTest();
+
+        $this->testUnionReturnCount();
+    }
+
     public function testUnion()
     {
         $keys = $this->_createThreeSets();
 
-        $union = $this->rediska->unionSets($keys);
-        sort($union);
+        $this->rediska->unionSortedSets($keys, 'test');
 
-        $this->assertEquals($this->_unionViaPhp(), $union);
+        $set = $this->rediska->getSortedSet('test', true);
+        $setByPHP = $this->_compareSets($keys);
+
+        $this->assertEquals($setByPHP, $set);
     }
 
     public function testUnionWithManyConnection()
@@ -19,74 +41,130 @@ class Rediska_Command_UnionSortedSetsTest extends Rediska_TestCase
         $this->testUnion();
     }
 
-    public function testUnionAndSave()
+    public function testUnionWithWeights()
     {
-    	$keys = $this->_createThreeSets();
-    	
-        $reply = $this->rediska->unionSets($keys, 'new-set');
-        $this->assertTrue($reply);
-        
-        $union = $this->rediska->getSet('new-set');
-        sort($union);
-        $this->assertEquals($this->_unionViaPhp(), $union);
+        $this->_createThreeSets();
+
+        $keys = array('set1' => 2, 'set2' => 4, 'set3' => 1);
+
+        $this->rediska->unionSortedSets($keys, 'test');
+
+        $set = $this->rediska->getSortedSet('test', true);
+        $setByPHP = $this->_compareSets($keys);
+
+        $this->assertEquals($setByPHP, $set);
     }
 
-    public function testUnionAndSaveWithManyConnection()
+    public function testUnionWithWeightsWithManyConnections()
     {
         $this->_addSecondServerOrSkipTest();
-        
-        $this->testUnionAndSave();
+
+        $this->testUnionWithWeights();
+    }
+    
+    public function testUnionWithAggregationMax()
+    {
+        $keys = $this->_createThreeSets();
+
+        $this->rediska->unionSortedSets($keys, 'test', 'max');
+
+        $set = $this->rediska->getSortedSet('test', true);
+        $setByPHP = $this->_compareSets($keys, 'max');
+
+        $this->assertEquals($setByPHP, $set);
     }
 
-    protected function _compareSets($weights = array(), $aggregation = 'sum')
+    public function testUnionWithAggregationMaxWithManyConnections()
     {
-        if (empty($weights)) {
-            $weights = array(
-                'set1' => 1,
-                'set2' => 1,
-                'set3' => 1,
-            );
+        $this->_addSecondServerOrSkipTest();
+
+        $this->testUnionWithAggregationMax();
+    }
+    
+    public function testUnionWithAggregationMin()
+    {   
+        $keys = $this->_createThreeSets();
+
+        $this->rediska->unionSortedSets($keys, 'test', 'min');
+
+        $set = $this->rediska->getSortedSet('test', true);
+        $setByPHP = $this->_compareSets($keys, 'min');
+
+        $this->assertEquals($setByPHP, $set);
+    }
+
+    public function testUnionWithAggregationMinWithManyConnections()
+    {
+        $this->_addSecondServerOrSkipTest();
+
+        $this->testUnionWithAggregationMin();
+    }
+
+    protected function _compareSets($names, $aggregation = 'sum')
+    {
+        // With weights?
+        $weights = array();
+        foreach($names as $nameOrIndex => $weightOrName) {
+            if (is_string($nameOrIndex)) {
+                $weights = $names;
+                $names = array_keys($names);
+                break;
+            }
         }
-         
+
+        if (empty($weights)) {
+            $weights = array_fill_keys($names, 1);
+        }
+
         $values = array();
         $valuesWithScores = array();
-        foreach (array('set1', 'set2', 'set3') as $name) {
+        foreach ($names as $name) {
+            $set = $this->rediska->getSortedSet($name, true);
+            
             $values[$name] = array();
-            foreach ($this->_sets[$name] as $value => $score) {
+            foreach ($set as $valueOrScore) {
+                $value = $this->rediska->serialize($valueOrScore->value);
+                $score = $valueOrScore->score;
+                
                 $values[$name][] = $value;
-                if (isset($valuesWithScores[$value])) {
+                if (!isset($valuesWithScores[$value])) {
                     $valuesWithScores[$value] = array();
                 }
                 $valuesWithScores[$value][] = $score * $weights[$name];
             }
         }
-        
+
         $comparedValues = array();
         foreach($values as $name => $value) {
-            $value = array_merge($comparedValues, $value);
+            $comparedValues = array_merge($comparedValues, $value);
         }
         $comparedValues = array_unique($comparedValues);
 
-        foreach($comparedValues as &$value) {
+        $pipeline = $this->rediska->pipeline();
+        foreach($comparedValues as $value) {
             $scores = $valuesWithScores[$value];
             switch ($aggregation) {
-                case self::SUM:
+                case 'sum':
                     $score = array_sum($scores);
                     break;
-                case self::MIN:
+                case 'min':
                     $score = min($scores);
                     break;
-                case self::MAX:
+                case 'max':
                     $score = max($scores);
                     break;
                 default:
                     throw new Exception('Unknown aggregation method ' . $aggregation);
             }
-
-            $value = $this->_rediska->unserialize($value);
+            
+            $value = $this->rediska->unserialize($value);
+            
+            $pipeline->addToSortedSet('test2', $value, $score);
         }
         
-        return $comparedValues;
+        $pipeline->execute();
+
+        return $this->rediska->getSortedSet('test2', true);
     }
 
     protected $_sets = array(
