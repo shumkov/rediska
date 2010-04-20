@@ -8,8 +8,8 @@ require_once 'Rediska/Command/CompareSortedSets.php';
 /**
  * Store to key intersection between sorted sets
  * 
- * @param array  $names       Array of key names
- * @param string $storeName   Store union to sorted set with key name
+ * @param array  $names       Array of key names or associative array with weights
+ * @param string $storeName   Result sorted set key name
  * @param string $aggregation Aggregation method: SUM (for default), MIN, MAX.
  * @return integer
  * 

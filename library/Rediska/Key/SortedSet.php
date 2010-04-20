@@ -98,7 +98,19 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
     {
     	return $this->_getRediskaOn()->getScoreFromSortedSet($this->_name, $value);
     }
-    
+
+    /**
+     * Remove all elements in the sorted set at key with rank between start and end
+     * 
+     * @param numeric $start Start position
+     * @param numeric $end   End position
+     * @return integer
+     */ 
+    public function removeByRank($start, $end)
+    {
+        return $this->_getRediskaOn()->deleteFromSortedSetByRank($this->_name, $start, $end);
+    }
+
     /**
      * Get rank of member
      * 
@@ -120,6 +132,36 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
     public function incrementScore($value, $score)
     {
     	return $this->_getRediskaOn()->incrementScoreInSortedSet($this->_name, $value, $score);
+    }
+    
+    /**
+     * Store to key union between the sorted sets
+     * 
+     * @param string|array  $setOrSets    Sorted set key name or object, or array of its
+     * @param string        $storeKeyName Result sorted set key name
+     * @param string        $aggregation  Aggregation method: SUM (for default), MIN, MAX.
+     * @return integer
+     */
+    public function union($setOrSets, $storeKeyName, $aggregation = self::SUM)
+    {
+        $sets = $this->_prepareSetsForComapre($setOrSets);
+
+        return $this->_getRediskaOn()->unionSortedSets($sets, $storeKeyName, $aggregation);
+    }
+    
+    /**
+     * Store to key intersection between sorted sets
+     * 
+     * @param string|array  $setOrSets    Sorted set key name or object, or array of its
+     * @param string        $storeKeyName Result sorted set key name
+     * @param string        $aggregation  Aggregation method: SUM (for default), MIN, MAX.
+     * @return integer
+     */
+    public function intersect($setOrSets, $storeKeyName, $aggregation = self::SUM)
+    {
+        $sets = $this->_prepareSetsForComapre($setOrSets);
+
+        return $this->_getRediskaOn()->intersectSortedSets($sets, $storeKeyName, $aggregation);
     }
 
     /**
@@ -217,5 +259,41 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
         if (!empty($values)) {
             return $values[0];
         }
+    }
+
+    protected function _prepareSetsForComapre($setOrSets)
+    {
+        if (!is_array($setOrSets)) {
+            $sets = array($setOrSets);
+        } else {
+            $sets = $setOrSets;
+        }
+        
+        // With weights?
+        $withWeights = false;
+        foreach($sets as $nameOrIndex => $weightOrName) {
+            if (is_string($nameOrIndex)) {
+                $withWeights = true;
+                break;
+            }
+        }
+
+        if ($withWeights) {
+            if (!array_key_exists($this->getName(), $sets)) {
+                $sets[$this->getName()] = 1;
+            }
+        } else {
+            foreach($sets as &$set) {
+                if ($set instanceof Rediska_Key_Set) {
+                    $set = $set->getName();
+                }
+            }
+
+            if (!in_array($this->getName(), $sets)) {
+                $sets[] = $this->getName();
+            }
+        }
+
+        return $sets;
     }
 }
