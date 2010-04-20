@@ -96,19 +96,7 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
      */
     public function intersect($setOrSets, $storeKeyName = null)
     {
-    	if (!is_array($setOrSets)) {
-    		$sets = array($setOrSets);
-    	} else {
-    		$sets = $setOrSets;
-    	}
-    	
-    	array_unshift($sets, $this->_name);
-
-    	foreach($sets as &$set) {
-	    	if ($set instanceof Rediska_Key_Set) {
-	            $set = $set->getName();
-	        }
-    	}
+    	$sets = $this->_prepareSetsForCompare($setOrSets);
     	
     	return $this->_getRediskaOn()->intersectSets($sets, $storeKeyName);
     }
@@ -122,19 +110,7 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
      */
     public function union($setOrSets, $storeKeyName = null)
     {
-        if (!is_array($setOrSets)) {
-            $sets = array($setOrSets);
-        } else {
-            $sets = $setOrSets;
-        }
-    	
-    	array_unshift($sets, $this->_name);
-
-        foreach($sets as &$set) {
-            if ($set instanceof Rediska_Key_Set) {
-                $set = $set->getName();
-            }
-        }
+        $sets = $this->_prepareSetsForCompare($setOrSets);
 
         return $this->_getRediskaOn()->unionSets($sets, $storeKeyName);
     }
@@ -148,19 +124,7 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
      */
     public function diff($setOrSets, $storeKeyName = null)
     {
-        if (!is_array($setOrSets)) {
-            $sets = array($setOrSets);
-        } else {
-            $sets = $setOrSets;
-        }
-    	
-    	array_unshift($sets, $this->_name);
-
-        foreach($sets as &$set) {
-            if ($set instanceof Rediska_Key_Set) {
-                $set = $set->getName();
-            }
-        }
+        $sets = $this->_prepareSetsForCompare($setOrSets);
 
         return $this->_getRediskaOn()->diffSets($sets, $storeKeyName);
     }
@@ -246,5 +210,26 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
     public function offsetGet($value)
     {
         throw new Rediska_Key_Exception('Offset is not allowed in sets');
+    }
+    
+    protected function _prepareSetsForCompare($setOrSets)
+    {
+        if (!is_array($setOrSets)) {
+            $sets = array($setOrSets);
+        } else {
+            $sets = $setOrSets;
+        }
+
+        foreach($sets as &$set) {
+            if ($set instanceof Rediska_Key_Set) {
+                $set = $set->getName();
+            }
+        }
+
+        if (in_array($this->_name, $sets)) {
+            $sets[] = $this->_name;
+        }
+
+        return $set;
     }
 }
