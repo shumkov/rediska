@@ -36,11 +36,11 @@ More information and documentation on homepage: http://rediska.geometria-lab.net
   <email>till@php.net</email>
   <active>yes</active>
  </developer>
- <date>2010-04-03</date>
- <time>10:17:35</time>
+ <date>2010-04-21</date>
+ <time>13:47:55</time>
  <version>
-  <release>0.4.0</release>
-  <api>0.4.0</api>
+  <release>0.4.2</release>
+  <api>0.4.2</api>
  </version>
  <stability>
   <release>beta</release>
@@ -130,16 +130,21 @@ This is an beta release, see README.markdown for examples.
    <dir name="library">
     <dir name="Rediska">
      <dir name="Command">
+      <dir name="Response">
+       <file baseinstalldir="/" name="ValueAndScore.php" role="php" />
+      </dir> <!-- /library/Rediska/Command/Response -->
       <file baseinstalldir="/" name="Abstract.php" role="php" />
       <file baseinstalldir="/" name="AddToSet.php" role="php" />
       <file baseinstalldir="/" name="AddToSortedSet.php" role="php" />
       <file baseinstalldir="/" name="AppendToList.php" role="php" />
       <file baseinstalldir="/" name="CompareSets.php" role="php" />
+      <file baseinstalldir="/" name="CompareSortedSets.php" role="php" />
       <file baseinstalldir="/" name="Decrement.php" role="php" />
       <file baseinstalldir="/" name="Delete.php" role="php" />
       <file baseinstalldir="/" name="DeleteFromList.php" role="php" />
       <file baseinstalldir="/" name="DeleteFromSet.php" role="php" />
       <file baseinstalldir="/" name="DeleteFromSortedSet.php" role="php" />
+      <file baseinstalldir="/" name="DeleteFromSortedSetByRank.php" role="php" />
       <file baseinstalldir="/" name="DeleteFromSortedSetByScore.php" role="php" />
       <file baseinstalldir="/" name="DiffSets.php" role="php" />
       <file baseinstalldir="/" name="Exception.php" role="php" />
@@ -158,6 +163,7 @@ This is an beta release, see README.markdown for examples.
       <file baseinstalldir="/" name="GetListLength.php" role="php" />
       <file baseinstalldir="/" name="GetRandomFromSet.php" role="php" />
       <file baseinstalldir="/" name="GetRandomKey.php" role="php" />
+      <file baseinstalldir="/" name="GetRankFromSortedSet.php" role="php" />
       <file baseinstalldir="/" name="GetScoreFromSortedSet.php" role="php" />
       <file baseinstalldir="/" name="GetSet.php" role="php" />
       <file baseinstalldir="/" name="GetSetLength.php" role="php" />
@@ -169,6 +175,7 @@ This is an beta release, see README.markdown for examples.
       <file baseinstalldir="/" name="Info.php" role="php" />
       <file baseinstalldir="/" name="Interface.php" role="php" />
       <file baseinstalldir="/" name="IntersectSets.php" role="php" />
+      <file baseinstalldir="/" name="IntersectSortedSets.php" role="php" />
       <file baseinstalldir="/" name="MoveToDb.php" role="php" />
       <file baseinstalldir="/" name="MoveToSet.php" role="php" />
       <file baseinstalldir="/" name="PopFromList.php" role="php" />
@@ -184,8 +191,10 @@ This is an beta release, see README.markdown for examples.
       <file baseinstalldir="/" name="ShiftFromList.php" role="php" />
       <file baseinstalldir="/" name="Shutdown.php" role="php" />
       <file baseinstalldir="/" name="SlaveOf.php" role="php" />
+      <file baseinstalldir="/" name="Sort.php" role="php" />
       <file baseinstalldir="/" name="TruncateList.php" role="php" />
       <file baseinstalldir="/" name="UnionSets.php" role="php" />
+      <file baseinstalldir="/" name="UnionSortedSets.php" role="php" />
      </dir> <!-- /library/Rediska/Command -->
      <dir name="Connection">
       <file baseinstalldir="/" name="Exception.php" role="php" />
@@ -254,6 +263,7 @@ This is an beta release, see README.markdown for examples.
        <file baseinstalldir="/" name="DecrementTest.php" role="test" />
        <file baseinstalldir="/" name="DeleteFromListTest.php" role="test" />
        <file baseinstalldir="/" name="DeleteFromSetTest.php" role="test" />
+       <file baseinstalldir="/" name="DeleteFromSortedSetByRankTest.php" role="test" />
        <file baseinstalldir="/" name="DeleteFromSortedSetByScoreTest.php" role="test" />
        <file baseinstalldir="/" name="DeleteFromSortedSetTest.php" role="test" />
        <file baseinstalldir="/" name="DeleteTest.php" role="test" />
@@ -272,6 +282,7 @@ This is an beta release, see README.markdown for examples.
        <file baseinstalldir="/" name="GetListTest.php" role="test" />
        <file baseinstalldir="/" name="GetRandomFromSetTest.php" role="test" />
        <file baseinstalldir="/" name="GetRandomKeyTest.php" role="test" />
+       <file baseinstalldir="/" name="GetRankFromSortedSetTest.php" role="test" />
        <file baseinstalldir="/" name="GetScoreFromSortedSetTest.php" role="test" />
        <file baseinstalldir="/" name="GetSetLengthTest.php" role="test" />
        <file baseinstalldir="/" name="GetSetTest.php" role="test" />
@@ -283,6 +294,7 @@ This is an beta release, see README.markdown for examples.
        <file baseinstalldir="/" name="IncrementTest.php" role="test" />
        <file baseinstalldir="/" name="InfoTest.php" role="test" />
        <file baseinstalldir="/" name="IntersectSetsTest.php" role="test" />
+       <file baseinstalldir="/" name="IntersectSortedSetsTest.php" role="test" />
        <file baseinstalldir="/" name="MoveToDbTest.php" role="test" />
        <file baseinstalldir="/" name="MoveToSetTest.php" role="test" />
        <file baseinstalldir="/" name="PopFromListTest.php" role="test" />
@@ -298,8 +310,10 @@ This is an beta release, see README.markdown for examples.
        <file baseinstalldir="/" name="ShiftFromListTest.php" role="test" />
        <file baseinstalldir="/" name="ShutdownTest.php" role="test" />
        <file baseinstalldir="/" name="SlaveOfTest.php" role="test" />
+       <file baseinstalldir="/" name="SortTest.php" role="test" />
        <file baseinstalldir="/" name="TruncateListTest.php" role="test" />
        <file baseinstalldir="/" name="UnionSetsTest.php" role="test" />
+       <file baseinstalldir="/" name="UnionSortedSetsTest.php" role="test" />
       </dir> <!-- /tests/library/Rediska/Command -->
       <dir name="Key">
        <file baseinstalldir="/" name="AbstractTest.php" role="test" />
@@ -335,6 +349,7 @@ This is an beta release, see README.markdown for examples.
     <file baseinstalldir="/" name="README.txt" role="test" />
    </dir> <!-- /tests -->
    <file baseinstalldir="/" name="CHANGELOG.txt" role="doc" />
+   <file baseinstalldir="/" name="LICENSE.txt" role="data" />
    <file baseinstalldir="/" name="README.markdown" role="doc" />
    <file baseinstalldir="/" name="VERSION.txt" role="doc" />
   </dir> <!-- / -->
@@ -364,11 +379,13 @@ This is an beta release, see README.markdown for examples.
    <install as="Rediska/Command/AddToSortedSet.php" name="library/Rediska/Command/AddToSortedSet.php" />
    <install as="Rediska/Command/AppendToList.php" name="library/Rediska/Command/AppendToList.php" />
    <install as="Rediska/Command/CompareSets.php" name="library/Rediska/Command/CompareSets.php" />
+   <install as="Rediska/Command/CompareSortedSets.php" name="library/Rediska/Command/CompareSortedSets.php" />
    <install as="Rediska/Command/Decrement.php" name="library/Rediska/Command/Decrement.php" />
    <install as="Rediska/Command/Delete.php" name="library/Rediska/Command/Delete.php" />
    <install as="Rediska/Command/DeleteFromList.php" name="library/Rediska/Command/DeleteFromList.php" />
    <install as="Rediska/Command/DeleteFromSet.php" name="library/Rediska/Command/DeleteFromSet.php" />
    <install as="Rediska/Command/DeleteFromSortedSet.php" name="library/Rediska/Command/DeleteFromSortedSet.php" />
+   <install as="Rediska/Command/DeleteFromSortedSetByRank.php" name="library/Rediska/Command/DeleteFromSortedSetByRank.php" />
    <install as="Rediska/Command/DeleteFromSortedSetByScore.php" name="library/Rediska/Command/DeleteFromSortedSetByScore.php" />
    <install as="Rediska/Command/DiffSets.php" name="library/Rediska/Command/DiffSets.php" />
    <install as="Rediska/Command/Exception.php" name="library/Rediska/Command/Exception.php" />
@@ -387,6 +404,7 @@ This is an beta release, see README.markdown for examples.
    <install as="Rediska/Command/GetListLength.php" name="library/Rediska/Command/GetListLength.php" />
    <install as="Rediska/Command/GetRandomFromSet.php" name="library/Rediska/Command/GetRandomFromSet.php" />
    <install as="Rediska/Command/GetRandomKey.php" name="library/Rediska/Command/GetRandomKey.php" />
+   <install as="Rediska/Command/GetRankFromSortedSet.php" name="library/Rediska/Command/GetRankFromSortedSet.php" />
    <install as="Rediska/Command/GetScoreFromSortedSet.php" name="library/Rediska/Command/GetScoreFromSortedSet.php" />
    <install as="Rediska/Command/GetSet.php" name="library/Rediska/Command/GetSet.php" />
    <install as="Rediska/Command/GetSetLength.php" name="library/Rediska/Command/GetSetLength.php" />
@@ -398,12 +416,14 @@ This is an beta release, see README.markdown for examples.
    <install as="Rediska/Command/Info.php" name="library/Rediska/Command/Info.php" />
    <install as="Rediska/Command/Interface.php" name="library/Rediska/Command/Interface.php" />
    <install as="Rediska/Command/IntersectSets.php" name="library/Rediska/Command/IntersectSets.php" />
+   <install as="Rediska/Command/IntersectSortedSets.php" name="library/Rediska/Command/IntersectSortedSets.php" />
    <install as="Rediska/Command/MoveToDb.php" name="library/Rediska/Command/MoveToDb.php" />
    <install as="Rediska/Command/MoveToSet.php" name="library/Rediska/Command/MoveToSet.php" />
    <install as="Rediska/Command/PopFromList.php" name="library/Rediska/Command/PopFromList.php" />
    <install as="Rediska/Command/PrependToList.php" name="library/Rediska/Command/PrependToList.php" />
    <install as="Rediska/Command/Quit.php" name="library/Rediska/Command/Quit.php" />
    <install as="Rediska/Command/Rename.php" name="library/Rediska/Command/Rename.php" />
+   <install as="Rediska/Command/Response/ValueAndScore.php" name="library/Rediska/Command/Response/ValueAndScore.php" />
    <install as="Rediska/Command/RewriteAppendOnlyFile.php" name="library/Rediska/Command/RewriteAppendOnlyFile.php" />
    <install as="Rediska/Command/Save.php" name="library/Rediska/Command/Save.php" />
    <install as="Rediska/Command/SelectDb.php" name="library/Rediska/Command/SelectDb.php" />
@@ -413,8 +433,10 @@ This is an beta release, see README.markdown for examples.
    <install as="Rediska/Command/ShiftFromList.php" name="library/Rediska/Command/ShiftFromList.php" />
    <install as="Rediska/Command/Shutdown.php" name="library/Rediska/Command/Shutdown.php" />
    <install as="Rediska/Command/SlaveOf.php" name="library/Rediska/Command/SlaveOf.php" />
+   <install as="Rediska/Command/Sort.php" name="library/Rediska/Command/Sort.php" />
    <install as="Rediska/Command/TruncateList.php" name="library/Rediska/Command/TruncateList.php" />
    <install as="Rediska/Command/UnionSets.php" name="library/Rediska/Command/UnionSets.php" />
+   <install as="Rediska/Command/UnionSortedSets.php" name="library/Rediska/Command/UnionSortedSets.php" />
    <install as="Rediska/Connection/Exception.php" name="library/Rediska/Connection/Exception.php" />
    <install as="Rediska/Connection/Specified.php" name="library/Rediska/Connection/Specified.php" />
    <install as="Rediska/Connection.php" name="library/Rediska/Connection.php" />
@@ -444,14 +466,14 @@ This is an beta release, see README.markdown for examples.
  <changelog>
   <release>
    <version>
-    <release>0.4.0</release>
-    <api>0.4.0</api>
+    <release>0.4.2</release>
+    <api>0.4.2</api>
    </version>
    <stability>
     <release>beta</release>
     <api>beta</api>
    </stability>
-   <date>2010-04-03</date>
+   <date>2010-04-21</date>
    <license uri="http://www.opensource.org/licenses/bsd-license.php">New BSD License</license>
    <notes>
 This is an beta release, see README.markdown for examples.
