@@ -1,3 +1,16 @@
+Version 0.4.2 (April 21, 2010):
+ * Features #2236: Add Redis server version specification (added 'redisVersion' option)
+ * Features #2029: Implement ZRANK and ZREVRANK
+ * Features #2030: Implement WITHSCORES argument for ZRANGEBYSCORE
+ * Features #2031: Implement ZREMRANGEBYRANK
+ * Features #2032: Implement ZUNION and ZINTER
+ * Features #2195: Implement SORT command as standalone
+ * Improvements #2233: Refactor configuration of test suite (now requires Zend Framework)
+ * Improvements #2314: Deprecate SORT attributes in GetList and GetSet
+ * Bugs #2197: Limit and offset broke inverted selects (arguments changed for 'getList', 'getSortedSet', 'truncateList', 'getFromSortedSetByScore)
+ * Bugs #2290: If sessions set is empty trown exception
+ * Bugs #2321: Null lifetime not supported in cache backend
+
 Version 0.4.0 (April 1, 2010):
   * Features #583: Create expample application
   * Features #766: Create pear package

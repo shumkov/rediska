@@ -6,7 +6,7 @@ class Rediska_Command_TruncateListTest extends Rediska_TestCase
 	{
 		$this->_appendFourMembers();
 
-        $reply = $this->rediska->truncateList('test', 2);
+        $reply = $this->rediska->truncateList('test', 0, 2);
         $this->assertTrue($reply);
 	}
 
@@ -14,7 +14,7 @@ class Rediska_Command_TruncateListTest extends Rediska_TestCase
     {
         $this->_appendFourMembers();
 
-        $reply = $this->rediska->truncateList('test', 2);
+        $reply = $this->rediska->truncateList('test', 0, 1);
         $this->assertTrue($reply);
 
         $reply = $this->rediska->getList('test');
@@ -28,7 +28,7 @@ class Rediska_Command_TruncateListTest extends Rediska_TestCase
         $this->rediska->appendToList('test', 'iii');
         $this->rediska->appendToList('test', 'fff');
 
-        $this->rediska->truncateList('test', 2, 1);
+        $this->rediska->truncateList('test', 1, 2);
 
         $reply = $this->rediska->getList('test');
         $this->assertEquals(array('bbb', 'ccc'), $reply);

@@ -19,8 +19,8 @@ class Rediska_Command_GetListTest extends Rediska_TestCase
     public function testGetListWithLimit()
     {
     	$this->_appendThreeMembers();
-    	
-        $reply = $this->rediska->getList('test', 2);
+
+        $reply = $this->rediska->getList('test', 0, 1);
         $this->assertEquals(array('aaa', 'bbb'), $reply);
     }
     
@@ -28,7 +28,7 @@ class Rediska_Command_GetListTest extends Rediska_TestCase
     {
     	$this->_appendThreeMembers();
     	
-    	$reply = $this->rediska->getList('test', 2, 1);
+    	$reply = $this->rediska->getList('test', 1);
         $this->assertEquals(array('bbb', 'ccc'), $reply);
     }
     

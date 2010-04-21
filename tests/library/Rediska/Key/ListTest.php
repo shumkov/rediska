@@ -69,7 +69,7 @@ class Rediska_Key_ListTest extends Rediska_TestCase
     	$this->rediska->appendToList('test', 123);
         $this->rediska->appendToList('test', 456);
 
-        $reply = $this->list->truncate(1);
+        $reply = $this->list->truncate(0, 0);
         $this->assertTrue($reply);
 
         $values = $this->rediska->getList('test');
@@ -129,6 +129,19 @@ class Rediska_Key_ListTest extends Rediska_TestCase
         
         $value = $this->rediska->getFromList('test', 1);
         $this->assertNull($value);
+    }
+
+    public function testSort()
+    {
+        $this->rediska->appendToList('test', 123);
+        $this->rediska->appendToList('test', 456);
+        $this->rediska->appendToList('test', 789);
+
+        $values = $this->list->sort(array('order' => 'desc', 'limit' => 2));
+        $this->assertEquals(array(789, 456), $values);
+
+        $values = $this->list->sort('LIMIT 0 2 DESC');
+        $this->assertEquals(array(789, 456), $values);
     }
 
     public function testIteration()
