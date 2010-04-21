@@ -226,10 +226,10 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
             }
         }
 
-        if (in_array($this->_name, $sets)) {
-            $sets[] = $this->_name;
+        if (!in_array($this->_name, $sets)) {
+            array_unshift($sets, $this->_name);
         }
 
-        return $set;
+        return $sets;
     }
 }

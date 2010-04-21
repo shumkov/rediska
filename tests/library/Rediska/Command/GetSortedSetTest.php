@@ -23,7 +23,7 @@ class Rediska_Command_GetSortedSetTest extends Rediska_TestCase
     {
     	$this->_addThreeMembers();
 
-    	$values = $this->rediska->getSortedSet('test', false, 2);
+    	$values = $this->rediska->getSortedSet('test', false, 0, 1);
         $this->assertEquals(array(1, 2), $values);
     }
 

@@ -119,12 +119,25 @@ class Rediska_Key_SetTest extends Rediska_TestCase
 
         $values = $this->set->diff('test2');
         $this->assertEquals(array(123), $values);
-        
+
         $values = $this->set->diff(new Rediska_Key_Set('test2'));
         $this->assertEquals(array(123), $values);
-        
+
         $values = $this->set->diff(array('test2'));
         $this->assertEquals(array(123), $values);
+    }
+    
+    public function testSort()
+    {
+        $this->rediska->addToSet('test', 123);
+        $this->rediska->addToSet('test', 456);
+        $this->rediska->addToSet('test', 789);
+
+        $values = $this->set->sort(array('order' => 'desc', 'limit' => 2));
+        $this->assertEquals(array(789, 456), $values);
+
+        $values = $this->set->sort('LIMIT 0 2 DESC');
+        $this->assertEquals(array(789, 456), $values);
     }
     
     public function testToArray()

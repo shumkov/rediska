@@ -98,6 +98,17 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
     {
     	return $this->_getRediskaOn()->getScoreFromSortedSet($this->_name, $value);
     }
+    
+    /**
+     * Increment score of element
+     * 
+     * @param $value
+     * @return integer
+     */
+    public function incrementScore($value, $score)
+    {
+        return $this->_getRediskaOn()->incrementScoreInSortedSet($this->_name, $value, $score);
+    }
 
     /**
      * Remove all elements in the sorted set at key with rank between start and end
@@ -122,17 +133,6 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
     {
         return $this->_getRediskaOn()->getRankFromSortedSet($this->_name, $value, $revert);
     }
-
-    /**
-     * Increment score of element
-     * 
-     * @param $value
-     * @return integer
-     */
-    public function incrementScore($value, $score)
-    {
-    	return $this->_getRediskaOn()->incrementScoreInSortedSet($this->_name, $value, $score);
-    }
     
     /**
      * Store to key union between the sorted sets
@@ -142,7 +142,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
      * @param string        $aggregation  Aggregation method: SUM (for default), MIN, MAX.
      * @return integer
      */
-    public function union($setOrSets, $storeKeyName, $aggregation = self::SUM)
+    public function union($setOrSets, $storeKeyName, $aggregation = 'sum')
     {
         $sets = $this->_prepareSetsForComapre($setOrSets);
 
@@ -157,7 +157,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
      * @param string        $aggregation  Aggregation method: SUM (for default), MIN, MAX.
      * @return integer
      */
-    public function intersect($setOrSets, $storeKeyName, $aggregation = self::SUM)
+    public function intersect($setOrSets, $storeKeyName, $aggregation = 'sum')
     {
         $sets = $this->_prepareSetsForComapre($setOrSets);
 

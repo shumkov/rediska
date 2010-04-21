@@ -120,7 +120,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
 
         $result = $this->_rediska->set($id, array($data, time(), $lifetime));
 
-        if ($result) {
+        if ($result && $lifetime) {
             $this->_rediska->expire($id, $lifetime);
         }
 
