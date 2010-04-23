@@ -36,8 +36,8 @@ More information and documentation on homepage: http://rediska.geometria-lab.net
   <email>till@php.net</email>
   <active>yes</active>
  </developer>
- <date>2010-04-21</date>
- <time>13:47:55</time>
+ <date>2010-04-23</date>
+ <time>18:21:15</time>
  <version>
   <release>0.4.2</release>
   <api>0.4.2</api>
@@ -473,7 +473,7 @@ This is an beta release, see README.markdown for examples.
     <release>beta</release>
     <api>beta</api>
    </stability>
-   <date>2010-04-21</date>
+   <date>2010-04-23</date>
    <license uri="http://www.opensource.org/licenses/bsd-license.php">New BSD License</license>
    <notes>
 This is an beta release, see README.markdown for examples.
