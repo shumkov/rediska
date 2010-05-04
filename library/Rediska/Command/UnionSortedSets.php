@@ -1,11 +1,6 @@
 <?php
 
 /**
- * @see Rediska_Command_CompareSets
- */
-require_once 'Rediska/Command/CompareSortedSets.php';
-
-/**
  * Store to key union between the sorted sets
  * 
  * @param array  $names       Array of key names or associative array with weights

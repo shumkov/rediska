@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Rediska/Key/Set.php';
-
 class Rediska_Key_SetTest extends Rediska_TestCase
 {
 	/**

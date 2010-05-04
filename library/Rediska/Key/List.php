@@ -1,9 +1,9 @@
 <?php
 
-/**
- * @see Rediska_Key_Abstract
- */
-require_once 'Rediska/Key/Abstract.php';
+// Require Rediska
+if (!class_exists('Rediska')) {
+    require_once dirname(__FILE__) . '/../../Rediska.php';
+}
 
 /**
  * Rediska List key
@@ -59,54 +59,6 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
 	{
 		return $this->_getRediskaOn()->getListLength($this->_name);
 	}
-	
-    /**
-     * Get sorted the elements
-     * 
-     * @param string|array  $value Options or SORT query string (http://code.google.com/p/redis/wiki/SortCommand).
-     *                             Important notes for SORT query string:
-     *                                 1. If you set Rediska namespace option don't forget add it to key names.
-     *                                 2. If you use more then one connection to Redis servers, it will choose by key name,
-     *                                    and key by you pattern's may not present on it.
-     * @return array
-     */
-    public function sort($options = array())
-    {
-        return $this->_getRediskaOn()->sort($this->_name, $options);
-    }
-
-	/**
-	 * Get List values
-	 * 
-     * @param integer $start Start index
-     * @param integer $end   End index
-     * @return array
-	 */
-    public function toArray($start = 0, $end = -1)
-    {
-        return $this->_getRediskaOn()->getList($this->_name, $start, $end);
-    }
-
-    /**
-     * Add array to List
-     * 
-     * @param array $array
-     */
-    public function fromArray(array $array)
-    {
-        $pipeline = $this->_getRediskaOn()->pipeline();
-    	foreach($array as $item) {
-    	    $pipeline->appendToList($this->_name, $item);
-    	}
-
-    	if (!is_null($this->_expire)) {
-            $pipeline->expire($this->_name, $this->_expire, $this->_isExpireTimestamp);
-        }
-
-        $pipeline->execute();
-
-    	return true;
-    }
 
     /**
      * Trim the list at key to the specified range of elements
@@ -204,6 +156,54 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
         }
 
         return $result;
+    }
+    
+    /**
+     * Get sorted the elements
+     * 
+     * @param string|array  $value Options or SORT query string (http://code.google.com/p/redis/wiki/SortCommand).
+     *                             Important notes for SORT query string:
+     *                                 1. If you set Rediska namespace option don't forget add it to key names.
+     *                                 2. If you use more then one connection to Redis servers, it will choose by key name,
+     *                                    and key by you pattern's may not present on it.
+     * @return array
+     */
+    public function sort($options = array())
+    {
+        return $this->_getRediskaOn()->sort($this->_name, $options);
+    }
+    
+    /**
+     * Get List values
+     * 
+     * @param integer $start Start index
+     * @param integer $end   End index
+     * @return array
+     */
+    public function toArray($start = 0, $end = -1)
+    {
+        return $this->_getRediskaOn()->getList($this->_name, $start, $end);
+    }
+    
+    /**
+     * Add array to List
+     * 
+     * @param array $array
+     */
+    public function fromArray(array $array)
+    {
+        $pipeline = $this->_getRediskaOn()->pipeline();
+        foreach($array as $item) {
+            $pipeline->appendToList($this->_name, $item);
+        }
+
+        if (!is_null($this->_expire)) {
+            $pipeline->expire($this->_name, $this->_expire, $this->_isExpireTimestamp);
+        }
+
+        $pipeline->execute();
+
+        return true;
     }
     
     /**

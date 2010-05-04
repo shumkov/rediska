@@ -1,16 +1,6 @@
 <?php
 
 /**
- * @see Rediska
- */
-require_once 'Rediska.php';
-
-/**
- * @see Rediska_Key_Exception
- */
-require_once 'Rediska/Key/Exception.php';
-
-/**
  * Rediska key abstract class
  * 
  * @author Ivan Shumkov

@@ -1,9 +1,9 @@
 <?php
 
-/**
- * @see Rediska_Key_Abstract
- */
-require_once 'Rediska/Key/Abstract.php';
+// Require Rediska
+if (!class_exists('Rediska')) {
+    require_once dirname(__FILE__) . '/../../Rediska.php';
+}
 
 /**
  * Rediska Sorted set key

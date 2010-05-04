@@ -1,14 +1,9 @@
 <?php
 
-/**
- * @see Rediska
- */
-require_once 'Rediska.php';
-
-/** 
- * @see Rediska_Zend_Session_Set
- */
-require_once 'Rediska/Zend/Session/Set.php';
+// Require Rediska
+if (!class_exists('Rediska')) {
+    require_once dirname(__FILE__) . '/../../../../Rediska.php';
+}
 
 /**
  * @see Zend_Session

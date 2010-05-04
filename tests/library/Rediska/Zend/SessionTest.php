@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Rediska/Zend/Session/SaveHandler/Redis.php';
-
 class Rediska_Zend_SessionTest extends Rediska_TestCase
 {
     /**

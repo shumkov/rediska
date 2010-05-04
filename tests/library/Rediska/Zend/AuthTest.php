@@ -1,7 +1,6 @@
 <?php
 
 require_once 'Zend/Auth.php';
-require_once 'Rediska/Zend/Auth/Adapter/Redis.php';
 
 class Rediska_Zend_AuthTest extends Rediska_TestCase
 {

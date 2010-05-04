@@ -1,10 +1,9 @@
 <?php
 
-/**
- * @see Rediska
- */
-require_once 'Rediska.php';
-
+// Require Rediska
+if (!class_exists('Rediska')) {
+    require_once dirname(__FILE__) . '/../../../../../Rediska.php';
+}
 /**
  * @see Zend_Auth_Adapter_Interface
  */

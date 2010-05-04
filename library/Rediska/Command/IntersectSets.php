@@ -1,11 +1,6 @@
 <?php
 
 /**
- * @see Rediska_Command_CompareSets
- */
-require_once 'Rediska/Command/CompareSets.php';
-
-/**
  * Return the intersection between the Sets stored at key1, key2, ..., keyN
  * 
  * @param array       $names     Array of key names

@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Zend/Application.php';
-
 class Test_Zend_Application_Resource extends PHPUnit_Framework_TestCase
 {
     public function testBootstrap()

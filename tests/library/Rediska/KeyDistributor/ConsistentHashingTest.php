@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Rediska/KeyDistributor/ConsistentHashing.php';
-
 class Rediska_KeyDistributor_ConsistentHashingTest extends PHPUnit_Framework_TestCase
 {
 	/**

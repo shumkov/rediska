@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Rediska/Key.php';
-
 class Rediska_Key_AbstractTest extends Rediska_TestCase
 {
 	/**

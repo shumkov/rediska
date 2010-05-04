@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Rediska/KeyDistributor/Crc32.php';
-
 class Rediska_KeyDistributor_Crc32Test extends PHPUnit_Framework_TestCase
 {
     /**
