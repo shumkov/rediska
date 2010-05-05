@@ -1,11 +1,6 @@
 <?php
 
 /**
- * @see Rediska_Command_Exception
- */
-require_once 'Rediska/Command/Exception.php';
-
-/**
  * Rediska command abstract class
  * 
  * @author Ivan Shumkov

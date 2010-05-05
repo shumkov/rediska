@@ -2,8 +2,6 @@
 
 require_once 'Zend/Log.php';
 
-require_once 'Rediska/Zend/Log/Writer/Redis.php';
-
 class Rediska_Zend_LogTest extends Rediska_TestCase
 {
     /**

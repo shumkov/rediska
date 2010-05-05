@@ -1,19 +1,9 @@
 <?php
 
-/**
- * @see Rediska
- */
-require_once 'Rediska.php';
-
-/**
- * @see Rediska_Key_List
- */
-require_once 'Rediska/Key/List.php';
-
-/**
- * @see Rediska_Key_Set
- */
-require_once 'Rediska/Key/Set.php';
+// Require Rediska
+if (!class_exists('Rediska')) {
+    require_once dirname(__FILE__) . '/../../../../Rediska.php';
+}
 
 /**
  * @see Zend_Queue_Adapter_AdapterAbstract

@@ -1,34 +1,6 @@
 <?php
 
-/**
- * @see Rediska_Exception
- */
-require_once 'Rediska/Exception.php';
-
-/**
- * @see Rediska_Connection
- */
-require_once 'Rediska/Connection.php';
-
-/**
- * @see Rediska_Connection_Specified
- */
-require_once 'Rediska/Connection/Specified.php';
-
-/**
- * @see Rediska_Command_Interface
- */
-require_once 'Rediska/Command/Interface.php';
-
-/**
- * @see Rediska_Command_Abstract
- */
-require_once 'Rediska/Command/Abstract.php';
-
-/**
- * @see Rediska_KeyDistributor_Interface
- */
-require_once 'Rediska/KeyDistributor/Interface.php';
+require_once dirname(__FILE__) . '/Rediska/Connection.php';
 
 /**
  * Rediska (radish on russian) - PHP client 
@@ -42,8 +14,18 @@ require_once 'Rediska/KeyDistributor/Interface.php';
  */
 class Rediska
 {
+    /**
+     * End of line
+     * 
+     * @var string
+     */
     const EOL = "\r\n";
 
+    /**
+     * Current stable Redis version
+     * 
+     * @var string
+     */
     const STABLE_REDIS_VERSION = '1.2.6';
 
     /**
@@ -52,6 +34,13 @@ class Rediska
      * @var Rediska
      */
     protected static $_defaultInstance;
+    
+    /**
+     * Is registred Rediska autoload
+     * 
+     * @var boolean
+     */
+    protected static $_autoloaRegistred;
 
     /**
      * Connections
@@ -122,13 +111,13 @@ class Rediska
         'addtosortedset'             => 'Rediska_Command_AddToSortedSet',
         'deletefromsortedset'        => 'Rediska_Command_DeleteFromSortedSet',
         'getsortedset'               => 'Rediska_Command_GetSortedSet',
-        'incrementscoreinsortedset'  => 'Rediska_Command_IncrementScoreInSortedSet',
-        'getrankfromsortedset'       => 'Rediska_Command_GetRankFromSortedSet',
         'getfromsortedsetbyscore'    => 'Rediska_Command_GetFromSortedSetByScore',
+        'getsortedsetlength'         => 'Rediska_Command_GetSortedSetLength',
+        'incrementscoreinsortedset'  => 'Rediska_Command_IncrementScoreInSortedSet',
         'deletefromsortedsetbyscore' => 'Rediska_Command_DeleteFromSortedSetByScore',
         'deletefromsortedsetbyrank'  => 'Rediska_Command_DeleteFromSortedSetByRank',
-        'getsortedsetlength'         => 'Rediska_Command_GetSortedSetLength',
         'getscorefromsortedset'      => 'Rediska_Command_GetScoreFromSortedSet',
+        'getrankfromsortedset'       => 'Rediska_Command_GetRankFromSortedSet',
         'unionsortedsets'            => 'Rediska_Command_UnionSortedSets',
         'intersectsortedsets'        => 'Rediska_Command_IntersectSortedSets',
 
@@ -448,8 +437,6 @@ class Rediska
      */
     public function pipeline()
     {
-        require_once 'Rediska/Pipeline.php';
-
         return new Rediska_Pipeline($this, $this->_specifiedConnection);
     }
     
@@ -512,11 +499,6 @@ class Rediska
             throw new Rediska_Exception("Command '$name' not found");
         }
 
-        // Load native Rediska command class
-        if (strpos(self::$_commands[$lowerName], 'Rediska_Command_') === 0) {
-            require_once 'Rediska/Command/' . substr(self::$_commands[$lowerName], 16) . '.php';
-        }
-
         // Initailize command
         return new self::$_commands[$lowerName]($this, $name, $arguments);
     }
@@ -551,7 +533,6 @@ class Rediska
             $this->_keyDistributor = $name;
         } else if (in_array($name, array('crc32', 'consistentHashing'))) {
             $name = ucfirst($name);
-            require_once "Rediska/KeyDistributor/$name.php";
             $className = "Rediska_KeyDistributor_$name";
             $this->_keyDistributor = new $className;
         } else {
@@ -652,4 +633,68 @@ class Rediska
             return call_user_func($this->_options['unserializer'], $value);
         }
     }
+
+    /**
+     * Register Rediska autoload
+     * 
+     * @return boolean
+     */
+    public static function registerAutoload()
+    {
+        if (self::isRegistredAutoload()) {
+            return false;
+        }
+
+        self::$_autoloaRegistred = spl_autoload_register(array('Rediska', 'autoload'));
+
+        return self::$_autoloaRegistred;
+    }
+
+    /**
+     * Unregister Rediska autoload
+     * 
+     * @return boolean
+     */
+    public static function unregisterAutoload()
+    {
+        if (!self::isRegistredAutoload()) {
+            return false;
+        }
+
+        self::$_autoloaRegistred = !spl_autoload_unregister(array('Rediska', 'autoload'));
+
+        return self::$_autoloaRegistred;
+    }
+
+    /**
+     * Is Rediska autoload registered
+     * 
+     * @return boolean
+     */
+    public static function isRegistredAutoload()
+    {
+        return self::$_autoloaRegistred;
+    }
+
+    /**
+     * Autoload method
+     * 
+     * @param string $className
+     */
+    public static function autoload($className)
+    {
+        if (0 !== strpos($className, 'Rediska')) {
+            return false;
+        }
+
+        $path = dirname(__FILE__) . '/' . str_replace('_', '/', $className) . '.php';
+
+        if (!file_exists($path)) {
+            return false;
+        }
+
+        require_once $path;
+    }
 }
+
+Rediska::registerAutoload();

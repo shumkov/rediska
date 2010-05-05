@@ -1,11 +1,6 @@
 <?php
 
 /**
- * @see Rediska_Connection_Exception
- */
-require_once 'Rediska/Connection/Exception.php';
-
-/**
  * Rediska connection
  * 
  * @author Ivan Shumkov

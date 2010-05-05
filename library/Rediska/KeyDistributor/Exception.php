@@ -1,11 +1,6 @@
 <?php
 
 /**
- * @see Rediska_Exception
- */
-require_once 'Rediska/Exception.php';
-
-/**
  * Rediska key distributor exception
  * 
  * @author Ivan Shumkov

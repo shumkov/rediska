@@ -8,4 +8,4 @@ Before running the tests you need to setup environment: rename `config.ini-dist`
 
 Warning: Data on both servers will be cleared!
 
-To run tests use commands phpunit in tests folder or if you use Zend Studio click with right mouse button on `bootstrap.php` and pick `Run As.. -> PHPUnit Test`.
+To run tests use `phpunit` command in tests folder or if you use Zend Studio click with right mouse button on `bootstrap.php` and pick `Run As.. -> PHPUnit Test`.

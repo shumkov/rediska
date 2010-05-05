@@ -1,9 +1,9 @@
 <?php
 
-/**
- * @see Rediska_Key_List
- */
-require_once 'Rediska/Key/List.php';
+// Require Rediska
+if (!class_exists('Rediska')) {
+    require_once dirname(__FILE__) . '/../../../../Rediska.php';
+}
 
 /**
  * @see Zend_Log_Writer_Abstract

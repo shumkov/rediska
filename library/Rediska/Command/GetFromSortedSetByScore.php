@@ -1,11 +1,6 @@
 <?php
 
 /**
- * @see Rediska_Command_Response_ValueAndScore
- */
-require_once 'Rediska/Command/Response/ValueAndScore.php';
-
-/**
  * Get members from sorted set by min and max score
  * 
  * @throws Rediska_Command_Exception

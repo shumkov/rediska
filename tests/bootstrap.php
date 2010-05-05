@@ -1,12 +1,7 @@
 <?php
 
-/**
- * @todo Currently we assume the test suite is run from source.
- */
-set_include_path(implode(PATH_SEPARATOR, array(
-    realpath(dirname(__FILE__) . '/../library'),
-    get_include_path(),
-)));
+// Require Rediska
+require_once dirname(__FILE__) . '/../library/Rediska.php';
 
 // Configuration
 require_once 'Zend/Config/Ini.php';

@@ -1,21 +1,6 @@
 <?php
 
 /**
- * @see Rediska_Connection
- */
-require_once 'Rediska/Connection.php';
-
-/**
- * @see Rediska_KeyDistributor_Interface
- */
-require_once 'Rediska/KeyDistributor/Interface.php';
-
-/**
- * @see Rediska_KeyDistributor_Exception
- */
-require_once 'Rediska/KeyDistributor/Exception.php';
-
-/**
  * @package Rediska
  * @author Kijin Sung <kijinbear@gmail.com>
  * @link http://github.com/kijin/distrib

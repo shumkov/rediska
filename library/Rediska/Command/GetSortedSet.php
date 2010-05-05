@@ -1,11 +1,6 @@
 <?php
 
 /**
- * @see Rediska_Command_Response_ValueAndScore
- */
-require_once 'Rediska/Command/Response/ValueAndScore.php';
-
-/**
  * Get all the members of the Sorted Set value at key
  * 
  * @throws Rediska_Command_Exception

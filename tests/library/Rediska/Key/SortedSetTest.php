@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Rediska/Key/SortedSet.php';
-
 class Rediska_Key_SortedSetTest extends Rediska_TestCase
 {
 	/**

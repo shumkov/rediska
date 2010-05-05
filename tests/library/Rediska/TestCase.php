@@ -1,9 +1,5 @@
 <?php
 
-require_once 'Rediska.php';
-
-require_once 'PHPUnit/Framework/TestCase.php';
-
 class Rediska_TestCase extends PHPUnit_Framework_TestCase
 {
     /**

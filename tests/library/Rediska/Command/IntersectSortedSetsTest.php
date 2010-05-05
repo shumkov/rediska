@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Rediska/Command/Response/ValueAndScore.php';
-
 class Rediska_Command_IntersectSortedSetsTest extends Rediska_TestCase
 {
     public function testIntersectReturnCount()
