@@ -34,13 +34,13 @@ class Rediska
      * @var Rediska
      */
     protected static $_defaultInstance;
-    
+
     /**
-     * Is registred Rediska autoload
+     * Is registered Rediska autoload
      * 
      * @var boolean
      */
-    protected static $_autoloaRegistred;
+    protected static $_autoloadRegistered;
 
     /**
      * Connections
@@ -641,13 +641,13 @@ class Rediska
      */
     public static function registerAutoload()
     {
-        if (self::isRegistredAutoload()) {
+        if (self::isRegisteredAutoload()) {
             return false;
         }
 
-        self::$_autoloaRegistred = spl_autoload_register(array('Rediska', 'autoload'));
+        self::$_autoloadRegistered = spl_autoload_register(array('Rediska', 'autoload'));
 
-        return self::$_autoloaRegistred;
+        return self::$_autoloadRegistered;
     }
 
     /**
@@ -657,13 +657,13 @@ class Rediska
      */
     public static function unregisterAutoload()
     {
-        if (!self::isRegistredAutoload()) {
+        if (!self::isRegisteredAutoload()) {
             return false;
         }
 
-        self::$_autoloaRegistred = !spl_autoload_unregister(array('Rediska', 'autoload'));
+        self::$_autoloadRegistered = !spl_autoload_unregister(array('Rediska', 'autoload'));
 
-        return self::$_autoloaRegistred;
+        return self::$_autoloadRegistered;
     }
 
     /**
@@ -671,9 +671,9 @@ class Rediska
      * 
      * @return boolean
      */
-    public static function isRegistredAutoload()
+    public static function isRegisteredAutoload()
     {
-        return self::$_autoloaRegistred;
+        return self::$_autoloadRegistered;
     }
 
     /**
