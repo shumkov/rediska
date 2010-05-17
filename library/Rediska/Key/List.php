@@ -67,9 +67,9 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
      * @param integer $end End index
      * @return boolean
      */
-    public function truncate($limit, $offset = 0)
+    public function truncate($start, $end)
     {
-        $result = $this->_getRediskaOn()->truncateList($this->_name, $limit, $offset);
+        $result = $this->_getRediskaOn()->truncateList($this->_name, $start, $end);
 
         if ($result && !is_null($this->_expire)) {
             $this->expire($this->_expire, $this->_isExpireTimestamp);
