@@ -33,7 +33,7 @@ class RediskaTest extends Rediska_TestCase
         $this->rediska->setSerializer(array('wrong', 'serializer'));
     }
 
-    public function testsetUnSerializerException()
+    public function testSetUnSerializerException()
     {
         $this->setExpectedException('Rediska_Exception');
         
@@ -48,7 +48,7 @@ class RediskaTest extends Rediska_TestCase
     public function testSetAndGetObjectWithPersonalSerializer()
     {
         $this->rediska->setOptions(array(
-            'serializer' => array('RediskaTest', 'serializer'),
+            'serializer'   => array('RediskaTest', 'serializer'),
             'unserializer' => array('RediskaTest', 'unserializer')
         ));
 
