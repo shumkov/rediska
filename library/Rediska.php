@@ -618,7 +618,7 @@ class Rediska
         if (is_null($value)) {
             return null;
         } else if (is_numeric($value)) {
-            if (strpos($value, '.') !== false) {
+            if (strpos($value, '.') === false) {
                 $number = (integer)$value;
             } else {
                 $number = (float)$value;
