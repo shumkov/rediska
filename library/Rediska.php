@@ -452,14 +452,9 @@ class Rediska
             throw new Rediska_Exception("Class '$className' not found. You must include before or setup autoload");
         }
 
-        // Check class
         $classReflection = new ReflectionClass($className);
         if (!in_array('Rediska_Command_Interface', $classReflection->getInterfaceNames())) {
             throw new Rediska_Exception("Class '$className' must implement Rediska_Command_Interface interface");
-        }
-        $methodCreate = $classReflection->getMethod('create');
-        if (!$methodCreate || !$methodCreate->isPublic()) {
-            throw new Rediska_Exception("Class '$className' must have public method 'create'");
         }
 
         $lowerName = strtolower($name);
