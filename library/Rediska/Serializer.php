@@ -34,7 +34,7 @@ class Rediska_Serializer
                 $this->_adapter = new $className;
             } else {
                 if (!@class_exists($adapter)) {
-                    throw new Rediska_Exception("Serializer adapter '$adapter' not found. You need include it before or setup autoload.");
+                    throw new Rediska_Exception("Serialize adapter '$adapter' not found. You need include it before or setup autoload.");
                 }
                 $this->_adapter = new $adapter;
             }
