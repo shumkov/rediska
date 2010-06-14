@@ -25,7 +25,7 @@ class Rediska_Command_DeleteFromList extends Rediska_Command_Abstract
 
         $connection = $this->_rediska->getConnectionByKeyName($name);
 
-        $value = $this->_rediska->serialize($value);
+        $value = $this->_rediska->getSerializer()->serialize($value);
 
         $command = "LREM {$this->_rediska->getOption('namespace')}$name $count " . strlen($value) . Rediska::EOL . $value;
 

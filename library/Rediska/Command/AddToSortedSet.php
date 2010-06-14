@@ -22,7 +22,7 @@ class Rediska_Command_AddToSortedSet extends Rediska_Command_Abstract
     {
     	$connection = $this->_rediska->getConnectionByKeyName($name);
 
-        $value = $this->_rediska->serialize($value);
+        $value = $this->_rediska->getSerializer()->serialize($value);
 
         $command = array('ZADD', "{$this->_rediska->getOption('namespace')}$name", $score, $value);
 

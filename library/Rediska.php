@@ -1,6 +1,10 @@
 <?php
 
-require_once dirname(__FILE__) . '/Rediska/Connection.php';
+if (!defined('REDISKA_PATH')) {
+	define('REDISKA_PATH', dirname(__FILE__));
+	require_once REDISKA_PATH . '/Rediska/Options.php';
+	require_once REDISKA_PATH . '/Rediska/Connection.php';
+}
 
 /**
  * Rediska (radish on russian) - PHP client 
@@ -12,7 +16,7 @@ require_once dirname(__FILE__) . '/Rediska/Connection.php';
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska
+class Rediska extends Rediska_Options
 {
     /**
      * End of line
@@ -140,43 +144,47 @@ class Rediska
      * @var Rediska_KeyDistributor_Abstract
      */
     protected $_keyDistributor;
+    
+    /**
+     * Serializer object
+     * 
+     * @var Rediska_Serializer_Interface
+     */
+    protected $_serializer;
 
     /**
      * Configuration
      * 
-     * namespace      - Key names prefix
-     * servers        - Array of servers: array(
+     * namespace        - Key names prefix
+     * servers          - Array of servers: array(
      *                                        array('host' => '127.0.0.1', 'port' => 6379, 'weight' => 1, 'password' => '123', 'alias' => 'example'),
      *                                        'alias' => array('host' => '127.0.0.1', 'port' => 6380, 'weight' => 2)
      *                                    )
-     * serializer     - Callback function for serialization.
-     *                  You may use PHP extensions like igbinary (http://opensource.dynamoid.com/)
-     *                  or you personal function.
-     *                  For default php function serialize.             
-     * unserializer   - Unserialize callback.
-     * keyDistributor - Algorithm of keys distribution on redis servers.
-     *                  For default 'consistentHashing' which implement
-     *                  consistent hashing algorithm (http://weblogs.java.net/blog/tomwhite/archive/2007/11/consistent_hash.html)
-     *                  You may use basic 'crc32' (crc32(key) % servers_count) algorithm
-     *                  or you personal implementation (option value - name of class
-     *                  which implements Rediska_KeyDistributor_Interface).
-     * redisVersion   - Redis server version for command specification.
+     * serializeAdapter - Value's serialize method. For default 'phpSerialize' (PHP serialize functions).
+     *                    You may use 'json' or you personal serializer class
+     *                    which implements Rediska_Serializer_Interface
+     * keyDistributor   - Algorithm of keys distribution on redis servers.
+     *                    For default 'consistentHashing' which implement
+     *                    consistent hashing algorithm (http://weblogs.java.net/blog/tomwhite/archive/2007/11/consistent_hash.html)
+     *                    You may use basic 'crc32' (crc32(key) % servers_count) algorithm
+     *                    or you personal implementation (option value - name of class
+     *                    which implements Rediska_KeyDistributor_Interface).
+     * redisVersion     - Redis server version for command specification.
      *
      * @var array
      */
     protected $_options = array(
-        'namespace'           => '',
-        'servers'             => array(
+        'namespace' => '',
+        'servers'   => array(
             array(
                 'host'   => Rediska_Connection::DEFAULT_HOST,
                 'port'   => Rediska_Connection::DEFAULT_PORT,
                 'weight' => Rediska_Connection::DEFAULT_WEIGHT,
             )
         ),
-        'serializer'          => 'serialize',
-        'unserializer'        => 'unserialize',
-        'keydistributor'      => 'consistentHashing',
-        'redisversion'        => self::STABLE_REDIS_VERSION,
+        'serializeadapter' => 'phpSerialize',
+        'keydistributor'   => 'consistentHashing',
+        'redisversion'     => self::STABLE_REDIS_VERSION,
     );
 
     /**
@@ -189,11 +197,14 @@ class Rediska
      *                                        array('host' => '127.0.0.1', 'port' => 6379, 'weight' => 1, 'password' => '123', 'alias' => 'example'),
      *                                        'alias' => array('host' => '127.0.0.1', 'port' => 6380, 'weight' => 2)
      *                                    )
-     * serializer     - Callback function for serialization.
+     * serializer     - Value's serialize method. For default 'phpSerialize' (PHP serialize functions).
+     *                  You may use 'json' or you personal serializer class
+     *                  which implements Rediska_Serializer_Interface
+     *                                   
+     *                  [DEPRECATED] Callback function for serialization.
      *                  You may use PHP extensions like igbinary (http://opensource.dynamoid.com/)
      *                  or you personal function.
-     *                  For default php function serialize.             
-     * unserializer   - Unserialize callback.
+     *                  For default php function serialize. 
      * keyDistributor - Algorithm of keys distribution on redis servers.
      *                  For default 'consistentHashing' which implement
      *                  consistent hashing algorithm (http://weblogs.java.net/blog/tomwhite/archive/2007/11/consistent_hash.html)
@@ -204,14 +215,7 @@ class Rediska
      */
     public function __construct(array $options = array()) 
     {
-    	$options = array_change_key_case($options, CASE_LOWER);
-        $options = array_merge($this->_options, $options);
-
-        // Set key distributer before setting servers
-        $this->setKeyDistributor($options['keydistributor']);
-        unset($options['keydistributor']);
-
-        $this->setOptions($options);
+        parent::__construct($options);
 
         self::setDefaultInstace($this);
 
@@ -236,64 +240,6 @@ class Rediska
     public static function setDefaultInstace(Rediska $instance)
     {
     	self::$_defaultInstance = $instance;
-    }
-
-    /**
-     * Set options array
-     * 
-     * @param array $options Options (see $_options description)
-     * @return Rediska
-     */
-    public function setOptions(array $options)
-    {
-        foreach($options as $name => $value) {
-            if (method_exists($this, "set$name")) {
-                call_user_func(array($this, "set$name"), $value);
-            } else {
-                $this->setOption($name, $value);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set option
-     * 
-     * @throws Rediska_Exception
-     * @param string $name Name of option
-     * @param mixed $value Value of option
-     * @return Rediska
-     */
-    public function setOption($name, $value)
-    {
-    	$lowerName = strtolower($name);
-
-        if (!array_key_exists($lowerName, $this->_options)) {
-            throw new Rediska_Exception("Unknown option '$name'");
-        }
-
-        $this->_options[$lowerName] = $value;
-
-        return $this;
-    }
-
-    /**
-     * Get option
-     * 
-     * @throws Rediska_Exception 
-     * @param string $name Name of option
-     * @return mixed
-     */
-    public function getOption($name)
-    {
-    	$lowerName = strtolower($name);
-
-        if (!array_key_exists($lowerName, $this->_options)) {
-            throw new Rediska_Exception("Unknown option '$name'");
-        }
-
-        return $this->_options[$lowerName];
     }
 
     /**
@@ -350,10 +296,12 @@ class Rediska
 
     	$this->_connections[$connectionString] = new Rediska_Connection($options);
 
-        $this->_keyDistributor->addConnection(
-            $connectionString,
-            isset($options['weight']) ? $options['weight'] : Rediska_Connection::DEFAULT_WEIGHT
-        );
+    	if ($this->_keyDistributor) {
+            $this->_keyDistributor->addConnection(
+                $connectionString,
+                isset($options['weight']) ? $options['weight'] : Rediska_Connection::DEFAULT_WEIGHT
+            );
+    	}
 
         return $this;
     }
@@ -519,11 +467,13 @@ class Rediska
      * See options description for more information.
      * 
      * @throws Rediska_Exception
-     * @param string $name Name of key distributor (crc32, consistentHashing or you personal class) or object
+     * @param string $name Object or name of key distributor (crc32, consistentHashing or you personal class)
      * @return rediska
      */
     public function setKeyDistributor($name)
     {
+        $this->_options['keydistributor'] = $name;
+
         if (is_object($name)) {
             $this->_keyDistributor = $name;
         } else if (in_array($name, array('crc32', 'consistentHashing'))) {
@@ -541,94 +491,83 @@ class Rediska
             throw new Rediska_Exception("'$name' must implement Rediska_KeyDistributor_Interface");
         }
 
-        // Return prev key distributor connections
+        // Add available connections
         foreach($this->_connections as $connectionString => $connection) {
             $this->_keyDistributor->addConnection($connectionString);
         }
 
         return $this;
     }
+    
+   /**
+    * Set serializer callback
+    * For example: "unserializer" or array($object, "unserializer")
+    *
+    * @deprecated
+    */
+    public function setSerializer($serializer)
+    {
+        throw new Rediska_Exception("Serializer is deprecated. Use 'serializeAdapter' option to set phpSerializer, json or you personal class which implements Rediska_Serialize_Adapter_Interface");
+    }
+
+   /**
+    * Set unserializer callback
+    * For example: "unserializer" or array($object, "unserializer")
+    *
+    * @deprecated
+    */
+    public function setUnserializer($serializer)
+    {
+        throw new Rediska_Exception("Unserializer is deprecated. Use 'serializeAdapter' option to set phpSerializer, json or you personal class which implements Rediska_Serialize_Adapter_Interface");
+    }
 
     /**
-     * Set serializer callback
-     * For example: "serializer" or array($object, "serializer")
+     * Set Rediska serializer adapter
      * 
-     * @throws Rediska_Exception
-     * @param $callback Callback
-     * @return Rediska
+     * @param unknown_type $serializer
      */
-    public function setSerializer($callback)
+    public function setSerializeAdapter($adapter)
     {
-        if (!is_callable($callback)) {
-            throw new Rediska_Exception("Wrong serialize callback");
-        }
-
-        $this->_options['serializer'] = $callback;
+        $this->_options['serializeadapter'] = $adapter;
+        $this->_serializer = null;
 
         return $this;
     }
 
     /**
-     * Set unserializer callback
-     * For example: "unserializer" or array($object, "unserializer")
+     * Get Rediska serializer
      * 
-     * @throws Rediska_Exception
-     * @param $callback Callback
-     * @return Rediska
+     * @return Rediska_Serializer
      */
-    public function setUnserializer($callback)
+    public function getSerializer()
     {
-        if (!is_callable($callback)) {
-            throw new Rediska_Exception("Wrong unserialize callback");
+        if (!$this->_serializer) {
+            $this->_serializer = new Rediska_Serializer($this->_options['serializeadapter']);
         }
 
-        $this->_options['unserializer'] = $callback;
-
-        return $this;
+        return $this->_serializer;
     }
 
-    /**
-     * Serialize value
-     * 
-     * @param mixin $value Value for serialize
-     * @return string
-     */
+   /**
+    * Serialize value
+    *
+    * @deprecated
+    */
     public function serialize($value)
     {
-        if (is_numeric($value)) {
-            return (string)$value;
-        } else {
-            return call_user_func($this->_options['serializer'], $value);
-        }
+        throw new Rediska_Exception("Rediska#serialize(\$value) is deprecated. Use Rediska#getSerializer()->serialize(\$value)");
     }
 
-    /**
-     * Unserailize value
-     * 
-     * @param string $value Serialized value
-     * @return mixin
-     */
+   /**
+    * Unserailize value
+    *
+    * @deprecated
+    */
     public function unserialize($value)
     {
-        if (is_null($value)) {
-            return null;
-        } else if (is_numeric($value)) {
-            if (strpos($value, '.') === false) {
-                $number = (integer)$value;
-            } else {
-                $number = (float)$value;
-            }
-
-            if ((string)$number != $value) {
-                $number = $value;
-            }
-
-            return $number;
-        } else {
-            return call_user_func($this->_options['unserializer'], $value);
-        }
+        throw new Rediska_Exception("Rediska#unserialize(\$value) is deprecated. Use Rediska#getSerializer()->unserialize(\$value)");
     }
-
+    
     /**
      * Register Rediska autoload
      * 

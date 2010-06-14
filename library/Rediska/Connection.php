@@ -9,7 +9,7 @@
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_Connection
+class Rediska_Connection extends Rediska_Options
 {
 	const DEFAULT_HOST   = '127.0.0.1';
     const DEFAULT_PORT   = 6379;
@@ -47,82 +47,6 @@ class Rediska_Connection
 	   'alias'      => null,
 	   'db'         => self::DEFAULT_DB,
 	);
-
-	/**
-     * Contruct Rediska connection
-     * 
-     * @param Rediska $rediska
-     * @param array $options Options (see $_options description)
-     */
-	public function __construct(array $options = array())
-	{
-		$options = array_change_key_case($options, CASE_LOWER);
-        $options = array_merge($this->_options, $options);
-
-		$this->setOptions($options);
-	}
-
-	/**
-	 * Disconnect on destrcuct connection object
-	 */
-    public function __destruct()
-    {
-        $this->disconnect();
-    }
-
-    /**
-     * Set options array
-     * 
-     * @param array $options Options (see $_options description)
-     * @return Rediska_Connection
-     */
-    public function setOptions(array $options)
-    {
-        foreach($options as $name => $value) {
-            if (method_exists($this, "set$name")) {
-                call_user_func(array($this, "set$name"), $value);
-            } else {
-                $this->setOption($name, $value);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set option
-     * 
-     * @throws Rediska_Connection_Exception
-     * @param string $name Name of option
-     * @param mixed $value Value of option
-     * @return Rediska_Connection
-     */
-    public function setOption($name, $value)
-    {
-        if (!array_key_exists($name, $this->_options)) {
-            throw new Rediska_Connection_Exception("Unknown option '$name'");
-        }
-
-        $this->_options[$name] = $value;
-
-        return $this;
-    }
-
-    /**
-     * Get option
-     * 
-     * @throws Rediska_Connection_Exception 
-     * @param string $name Name of option
-     * @return mixed
-     */
-    public function getOption($name)
-    {
-        if (!array_key_exists($name, $this->_options)) {
-            throw new Rediska_Connection_Exception("Unknown option '$name'");
-        }
-
-        return $this->_options[$name];
-    }
 
     /**
      * Connect to redis server
@@ -354,6 +278,12 @@ class Rediska_Connection
         }
     }
 
+    /**
+     * Read and throw exception if somthing wrong
+     * 
+     * @param $length Lenght of bytes to read
+     * @return string
+     */
     protected function _readAndThrowException($length)
     {
         $data = @stream_get_contents($this->_socket, $length);
@@ -366,8 +296,19 @@ class Rediska_Connection
         return $data;
     }
 
+    /**
+     * Return alias to strings
+     */
     public function __toString()
     {
         return $this->getAlias();
+    }
+
+    /**
+     * Disconnect on destrcuct connection object
+     */
+    public function __destruct()
+    {
+        $this->disconnect();
     }
 }

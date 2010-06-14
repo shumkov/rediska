@@ -19,7 +19,7 @@ class Rediska_Command_AddToSet extends Rediska_Command_Abstract
     {
         $connection = $this->_rediska->getConnectionByKeyName($name);
 
-        $value = $this->_rediska->serialize($value);
+        $value = $this->_rediska->getSerializer()->serialize($value);
 
         $command = "SADD {$this->_rediska->getOption('namespace')}$name " . strlen($value) . Rediska::EOL . $value;
 

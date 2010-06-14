@@ -146,10 +146,7 @@ abstract class Rediska_Command_CompareSortedSets extends Rediska_Command_Abstrac
                         throw new Rediska_Command_Exception('Unknown aggregation method ' . $this->aggregation);
                 }
 
-                // TODO: Fix dirty hack
-                //$score = floor($score * 100000) / 100000;
-
-                $value = $this->_rediska->unserialize($value);
+                $value = $this->_rediska->getSerializer()->unserialize($value);
 
                 $pipeline->addToSortedSet($this->storeName, $value, $score);
 

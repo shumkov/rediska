@@ -21,7 +21,7 @@ class Rediska_Command_DeleteFromSortedSet extends Rediska_Command_Abstract
     {
         $connection = $this->_rediska->getConnectionByKeyName($name);
 
-        $value = $this->_rediska->serialize($value);
+        $value = $this->_rediska->getSerializer()->serialize($value);
         
         $command = array('ZREM', "{$this->_rediska->getOption('namespace')}$name", $value);
 

@@ -32,6 +32,6 @@ class Rediska_Command_GetRandomFromSet extends Rediska_Command_Abstract
 
     protected function _parseResponses($responses)
     {
-        return $this->_rediska->unserialize($responses[0]);
+        return $this->_rediska->getSerializer()->unserialize($responses[0]);
     }
 }

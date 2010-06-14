@@ -117,7 +117,7 @@ class Rediska_Command_Sort extends Rediska_Command_Abstract
         $values = $responses[0];
 
         foreach($values as &$value) {
-            $value = $this->_rediska->unserialize($value);
+            $value = $this->_rediska->getSerializer()->unserialize($value);
         }
 
         return $values;
