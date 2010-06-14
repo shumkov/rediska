@@ -23,7 +23,7 @@ class Rediska_Command_MoveToSet extends Rediska_Command_Abstract
         $fromNameConnection = $this->_rediska->getConnectionByKeyName($fromName);
         $toNameConnection = $this->_rediska->getConnectionByKeyName($toName);
         
-        $value = $this->_rediska->serialize($value);
+        $value = $this->_rediska->getSerializer()->serialize($value);
 
         if ("$fromNameConnection" == "$toNameConnection") {
             $command = "SMOVE {$this->_rediska->getOption('namespace')}$fromName {$this->_rediska->getOption('namespace')}$toName "  . strlen($value) . Rediska::EOL . $value;

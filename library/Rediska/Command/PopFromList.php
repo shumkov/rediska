@@ -43,11 +43,11 @@ class Rediska_Command_PopFromList extends Rediska_Command_Abstract
     protected function _parseResponses($responses)
     {
         if (!$this->isAtomic()) {
-            $value = $this->_rediska->unserialize($responses[0]);
+            $value = $this->_rediska->getSerializer()->unserialize($responses[0]);
 
             return $this->_rediska->prependToList($this->pushToName, $value);
         } else {
-            return $this->_rediska->unserialize($responses[0]);
+            return $this->_rediska->getSerializer()->unserialize($responses[0]);
         }
     }
 }

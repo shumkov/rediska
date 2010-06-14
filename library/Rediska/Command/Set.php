@@ -47,7 +47,7 @@ class Rediska_Command_Set extends Rediska_Command_Abstract
                 $command = array($overwrite ? 'MSET' : 'MSETNX');
                 foreach($data as $key => $value) {
                     $command[] = $this->_rediska->getOption('namespace') . $key;
-                    $command[] = $this->_rediska->serialize($value);
+                    $command[] = $this->_rediska->getSerializer()->serialize($value);
                 }
 
                 $this->_addCommandByConnection($connections[$connectionAlias], $command);
@@ -58,7 +58,7 @@ class Rediska_Command_Set extends Rediska_Command_Abstract
 
             $connection = $this->_rediska->getConnectionByKeyName($name);
 
-            $value = $this->_rediska->serialize($value);
+            $value = $this->_rediska->getSerializer()->serialize($value);
     
             if ($overwrite) {
                 $command = 'SET';

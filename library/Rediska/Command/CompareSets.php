@@ -85,7 +85,7 @@ abstract class Rediska_Command_CompareSets extends Rediska_Command_Abstract
 
     		$unserializedValues = array();
             foreach($values as $value) {
-                $unserializedValues[] = $this->_rediska->unserialize($value);
+                $unserializedValues[] = $this->_rediska->getSerializer()->unserialize($value);
             }
 
     		if (is_null($this->storeName)) {
@@ -101,7 +101,7 @@ abstract class Rediska_Command_CompareSets extends Rediska_Command_Abstract
             $reply = $responses[0];
             if (is_null($this->storeName)) {
                 foreach($reply as &$value) {
-                    $value = $this->_rediska->unserialize($value);
+                    $value = $this->_rediska->getSerializer()->unserialize($value);
                 }
             } else {
                 $reply = (boolean)$reply;

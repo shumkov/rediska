@@ -19,7 +19,7 @@ class Rediska_Command_ExistsInSet extends Rediska_Command_Abstract
     {
         $connection = $this->_rediska->getConnectionByKeyName($name);
         
-        $value = $this->_rediska->serialize($value);
+        $value = $this->_rediska->getSerializer()->serialize($value);
 
         $command = "SISMEMBER {$this->_rediska->getOption('namespace')}$name " . strlen($value) . Rediska::EOL . $value;
 

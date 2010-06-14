@@ -19,7 +19,7 @@ class Rediska_Command_SetAndGet extends Rediska_Command_Abstract
     {
         $connection = $this->_rediska->getConnectionByKeyName($name);
 
-        $value = $this->_rediska->serialize($value);
+        $value = $this->_rediska->getSerializer()->serialize($value);
 
         $command = "GETSET {$this->_rediska->getOption('namespace')}$name " . strlen($value) . Rediska::EOL . $value;
 
@@ -28,6 +28,6 @@ class Rediska_Command_SetAndGet extends Rediska_Command_Abstract
 
     protected function _parseResponses($responses)
     {
-        return $this->_rediska->unserialize($responses[0]);
+        return $this->_rediska->getSerializer()->unserialize($responses[0]);
     }
 }

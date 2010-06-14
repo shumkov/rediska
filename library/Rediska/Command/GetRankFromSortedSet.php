@@ -22,7 +22,7 @@ class Rediska_Command_GetRankFromSortedSet extends Rediska_Command_Abstract
     {
         $connection = $this->_rediska->getConnectionByKeyName($name);
         
-        $value = $this->_rediska->serialize($value);
+        $value = $this->_rediska->getSerializer()->serialize($value);
 
         $command = array($revert ? 'ZREVRANK' : 'ZRANK',
                          "{$this->_rediska->getOption('namespace')}$name",

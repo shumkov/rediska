@@ -78,14 +78,14 @@ class Rediska_Command_Get extends Rediska_Command_Abstract
                 }
                 foreach($this->_keys as $key) {
                     if (isset($unsortedResult[$key])) {
-                        $result[$key] = $this->_rediska->unserialize($unsortedResult[$key]);
+                        $result[$key] = $this->_rediska->getSerializer()->unserialize($unsortedResult[$key]);
                     }
                 }
             }
 
             return $result;
         } else {
-            return $this->_rediska->unserialize($responses[0]);
+            return $this->_rediska->getSerializer()->unserialize($responses[0]);
         }
     }
 }

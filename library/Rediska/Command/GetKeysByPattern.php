@@ -40,9 +40,12 @@ class Rediska_Command_GetKeysByPattern extends Rediska_Command_Abstract
             }
         }
 
+        $namespaceLength = strlen($this->_rediska->getOption('namespace'));
         $keys = array_unique($keys);
         foreach($keys as &$key) {
-            $key = substr($key, strlen($this->_rediska->getOption('namespace')));
+            if (strpos($key, $this->_rediska->getOption('namespace')) === 0) {
+                $key = substr($key, $namespaceLength);
+            }
         }
 
         return $keys;
