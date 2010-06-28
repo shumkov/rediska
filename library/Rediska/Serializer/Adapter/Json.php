@@ -1,7 +1,7 @@
 <?php
 
 /**
- * JSON serializer
+ * JSON adpter
  * 
  * @author Ivan Shumkov
  * @package Rediska
