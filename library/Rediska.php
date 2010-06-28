@@ -182,7 +182,7 @@ class Rediska extends Rediska_Options
                 'weight' => Rediska_Connection::DEFAULT_WEIGHT,
             )
         ),
-        'serializerAdapter' => 'phpSerialize',
+        'serializeradapter' => 'phpSerialize',
         'keydistributor'    => 'consistentHashing',
         'redisversion'      => self::STABLE_REDIS_VERSION,
     );
@@ -538,7 +538,7 @@ class Rediska extends Rediska_Options
     public function getSerializer()
     {
         if (!$this->_serializer) {
-            $this->_serializer = new Rediska_Serializer($this->_options['serializeadapter']);
+            $this->_serializer = new Rediska_Serializer($this->_options['serializeradapter']);
         }
 
         return $this->_serializer;
