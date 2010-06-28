@@ -84,7 +84,7 @@ class Rediska_Serializer
             if ($this->_adapter) {
                 try {
                     $unserializedValue = $this->_adapter->unserialize($value);
-                } catch (Rediska_Unserialize_Exception $e) {
+                } catch (Rediska_Serializer_Exception $e) {
                     $unserializedValue = $value;
                 }
             } else {

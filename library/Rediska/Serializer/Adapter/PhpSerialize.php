@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Default PHP serializer
+ * Default PHP adapter
  * 
  * @author Ivan Shumkov
  * @package Rediska

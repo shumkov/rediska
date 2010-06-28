@@ -155,21 +155,21 @@ class Rediska extends Rediska_Options
     /**
      * Configuration
      * 
-     * namespace        - Key names prefix
-     * servers          - Array of servers: array(
+     * namespace         - Key names prefix
+     * servers           - Array of servers: array(
      *                                        array('host' => '127.0.0.1', 'port' => 6379, 'weight' => 1, 'password' => '123', 'alias' => 'example'),
      *                                        'alias' => array('host' => '127.0.0.1', 'port' => 6380, 'weight' => 2)
-     *                                    )
-     * serializeAdapter - Value's serialize method. For default 'phpSerialize' (PHP serialize functions).
-     *                    You may use 'json' or you personal serializer class
-     *                    which implements Rediska_Serializer_Interface
-     * keyDistributor   - Algorithm of keys distribution on redis servers.
-     *                    For default 'consistentHashing' which implement
-     *                    consistent hashing algorithm (http://weblogs.java.net/blog/tomwhite/archive/2007/11/consistent_hash.html)
-     *                    You may use basic 'crc32' (crc32(key) % servers_count) algorithm
-     *                    or you personal implementation (option value - name of class
-     *                    which implements Rediska_KeyDistributor_Interface).
-     * redisVersion     - Redis server version for command specification.
+     *                                       )
+     * serializerAdapter - Value's serialize method. For default 'phpSerialize' (PHP serialize functions).
+     *                     You may use 'json' or you personal serializer class
+     *                     which implements Rediska_Serializer_Interface
+     * keyDistributor    - Algorithm of keys distribution on redis servers.
+     *                     For default 'consistentHashing' which implement
+     *                     consistent hashing algorithm (http://weblogs.java.net/blog/tomwhite/archive/2007/11/consistent_hash.html)
+     *                     You may use basic 'crc32' (crc32(key) % servers_count) algorithm
+     *                     or you personal implementation (option value - name of class
+     *                     which implements Rediska_KeyDistributor_Interface).
+     * redisVersion      - Redis server version for command specification.
      *
      * @var array
      */
@@ -182,9 +182,9 @@ class Rediska extends Rediska_Options
                 'weight' => Rediska_Connection::DEFAULT_WEIGHT,
             )
         ),
-        'serializeadapter' => 'phpSerialize',
-        'keydistributor'   => 'consistentHashing',
-        'redisversion'     => self::STABLE_REDIS_VERSION,
+        'serializerAdapter' => 'phpSerialize',
+        'keydistributor'    => 'consistentHashing',
+        'redisversion'      => self::STABLE_REDIS_VERSION,
     );
 
     /**
@@ -192,25 +192,21 @@ class Rediska extends Rediska_Options
      * 
      * @param array $options Options
      * 
-     * namespace      - Key names prefix
-     * servers        - Array of servers: array(
+     * namespace         - Key names prefix
+     * servers           - Array of servers: array(
      *                                        array('host' => '127.0.0.1', 'port' => 6379, 'weight' => 1, 'password' => '123', 'alias' => 'example'),
      *                                        'alias' => array('host' => '127.0.0.1', 'port' => 6380, 'weight' => 2)
-     *                                    )
-     * serializer     - Value's serialize method. For default 'phpSerialize' (PHP serialize functions).
-     *                  You may use 'json' or you personal serializer class
-     *                  which implements Rediska_Serializer_Interface
-     *                                   
-     *                  [DEPRECATED] Callback function for serialization.
-     *                  You may use PHP extensions like igbinary (http://opensource.dynamoid.com/)
-     *                  or you personal function.
-     *                  For default php function serialize. 
-     * keyDistributor - Algorithm of keys distribution on redis servers.
-     *                  For default 'consistentHashing' which implement
-     *                  consistent hashing algorithm (http://weblogs.java.net/blog/tomwhite/archive/2007/11/consistent_hash.html)
-     *                  You may use basic 'crc32' (crc32(key) % servers_count) algorithm
-     *                  or you personal implementation (option value - name of class
-     *                  which implements Rediska_KeyDistributor_Interface).
+     *                                       )
+     * serializerAdapter - Value's serialize method. For default 'phpSerialize' (PHP serialize functions).
+     *                     You may use 'json' or you personal serializer class
+     *                     which implements Rediska_Serializer_Interface
+     * keyDistributor    - Algorithm of keys distribution on redis servers.
+     *                     For default 'consistentHashing' which implement
+     *                     consistent hashing algorithm (http://weblogs.java.net/blog/tomwhite/archive/2007/11/consistent_hash.html)
+     *                     You may use basic 'crc32' (crc32(key) % servers_count) algorithm
+     *                     or you personal implementation (option value - name of class
+     *                     which implements Rediska_KeyDistributor_Interface).
+     * redisVersion      - Redis server version for command specification.
      * 
      */
     public function __construct(array $options = array()) 
@@ -327,7 +323,7 @@ class Rediska extends Rediska_Options
 
         return $connection;
     }
-    
+
     /**
      * Get connection by alias
      * 
@@ -377,7 +373,7 @@ class Rediska extends Rediska_Options
 
         return $this->_specifiedConnection;
     }
-    
+
     /**
      * Create pipeline
      * 
@@ -387,7 +383,7 @@ class Rediska extends Rediska_Options
     {
         return new Rediska_Pipeline($this, $this->_specifiedConnection);
     }
-    
+
     /**
      * Add command
      * 
@@ -426,7 +422,7 @@ class Rediska extends Rediska_Options
 
         return true;
     }
-    
+
     /**
      * Get Rediska Command instance
      * 
@@ -498,7 +494,7 @@ class Rediska extends Rediska_Options
 
         return $this;
     }
-    
+
    /**
     * Set serializer callback
     * For example: "unserializer" or array($object, "unserializer")
@@ -507,7 +503,7 @@ class Rediska extends Rediska_Options
     */
     public function setSerializer($serializer)
     {
-        throw new Rediska_Exception("Serializer is deprecated. Use 'serializeAdapter' option to set phpSerializer, json or you personal class which implements Rediska_Serialize_Adapter_Interface");
+        throw new Rediska_Exception("Serializer is deprecated. Use 'serializerAdapter' option to set phpSerializer, json or you personal class which implements Rediska_Serialize_Adapter_Interface");
     }
 
    /**
@@ -518,17 +514,17 @@ class Rediska extends Rediska_Options
     */
     public function setUnserializer($serializer)
     {
-        throw new Rediska_Exception("Unserializer is deprecated. Use 'serializeAdapter' option to set phpSerializer, json or you personal class which implements Rediska_Serialize_Adapter_Interface");
+        throw new Rediska_Exception("Unserializer is deprecated. Use 'serializerAdapter' option to set phpSerializer, json or you personal class which implements Rediska_Serialize_Adapter_Interface");
     }
 
     /**
      * Set Rediska serializer adapter
      * 
-     * @param unknown_type $serializer
+     * @param mixin $serializer
      */
-    public function setSerializeAdapter($adapter)
+    public function setSerializerAdapter($adapter)
     {
-        $this->_options['serializeadapter'] = $adapter;
+        $this->_options['serializeradapter'] = $adapter;
         $this->_serializer = null;
 
         return $this;
