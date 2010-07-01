@@ -16,17 +16,31 @@ class Rediska_Serializer_Adapter_Json extends Rediska_Options implements Rediska
 
     /**
      * Options
-     *  
+     * 
+     * Encode options:
+     * 
+     * encodeAsObject       - Force encode as object
+     * encodeHexQuote       - Encode quote to hex
+     * encodeHexTag         - Encode tag to hex
+     * encodeHexAmp         - Encode amp to hex
+     * encodeHexApos        - Encode apos to hex
+     * 
+     * 
+     * Decode options:
+     * 
      * decodeType           - Return associative array or object. Array by default.
      * decodeDepth          - Depth of returned objects. 512 by default.
      * decodeBigintAsString - Convert bigint to strings in returned objects.
-     * 
-     * @todo Add encode options
      */
 	protected $_options = array(
-		'decodetype'    	   => self::DECODE_TYPE_ARRAY,
-		'decodedepth'   	   => 512,
-		'decodebigintasstring' => false,
+	    'encodeasobject'       => false,
+        'encodehexquote'       => false,
+        'encodehextag'         => false,
+        'encodehexamp'         => false,
+        'encodehexapos'        => false,
+    	'decodetype'    	   => self::DECODE_TYPE_ARRAY,
+    	'decodedepth'   	   => 512,
+    	'decodebigintasstring' => false,
 	);
 
 	/**
@@ -37,7 +51,31 @@ class Rediska_Serializer_Adapter_Json extends Rediska_Options implements Rediska
 	 */
 	public function serialize($value)
 	{
-		return json_encode($value);
+	    $options = 0;
+
+	    if ($this->_options['encodeasobject']) {
+	        $options = $options | JSON_FORCE_OBJECT;
+	    }
+	    if ($this->_options['encodehexquote']) {
+            $options = $options | JSON_HEX_QUOT;
+        }
+	    if ($this->_options['encodehextag']) {
+            $options = $options | JSON_HEX_TAG;
+        }
+	    if ($this->_options['encodehexamp']) {
+            $options = $options | JSON_HEX_AMP;
+        }
+        if ($this->_options['encodehexapos']) {
+            $options = $options | JSON_HEX_APOS;
+        }
+
+		$serializedValue = json_encode($value);
+
+	    if (json_last_error() != JSON_ERROR_NONE) {
+            throw new Rediska_Serializer_Exception("Can't serialize value");
+        }
+
+		return $serializedValue;
 	}
 
 	/**
@@ -50,8 +88,8 @@ class Rediska_Serializer_Adapter_Json extends Rediska_Options implements Rediska
 	{
 		$value = json_decode($value);
 
-		if ($value === NULL) {
-			throw new Rediska_Serializer_Exception("Can't unserialize string");
+		if (json_last_error() != JSON_ERROR_NONE) {
+			throw new Rediska_Serializer_Exception("Can't unserialize value");
 		}
 
 		return $value;

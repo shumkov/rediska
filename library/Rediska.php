@@ -521,6 +521,7 @@ class Rediska extends Rediska_Options
      * Set Rediska serializer adapter
      * 
      * @param mixin $serializer
+     * @return Rediska
      */
     public function setSerializerAdapter($adapter)
     {
