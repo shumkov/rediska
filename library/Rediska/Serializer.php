@@ -34,13 +34,13 @@ class Rediska_Serializer
                 $this->_adapter = new $className;
             } else {
                 if (!@class_exists($adapter)) {
-                    throw new Rediska_Exception("Serialize adapter '$adapter' not found. You need include it before or setup autoload.");
+                    throw new Rediska_Serializer_Exception("Serializer adapter '$adapter' not found. You need include it before or setup autoload.");
                 }
                 $this->_adapter = new $adapter;
             }
     
             if (!$this->_adapter instanceof Rediska_Serializer_Adapter_Interface) {
-                throw new Rediska_Exception("'$adapter' must implement Rediska_Serializer_Adapter_Interface");
+                throw new Rediska_Serializer_Exception("'$adapter' must implement Rediska_Serializer_Adapter_Interface");
             }
         }
     }
@@ -84,7 +84,7 @@ class Rediska_Serializer
             if ($this->_adapter) {
                 try {
                     $unserializedValue = $this->_adapter->unserialize($value);
-                } catch (Rediska_Serializer_Exception $e) {
+                } catch (Rediska_Serializer_Adapter_Exception $e) {
                     $unserializedValue = $value;
                 }
             } else {
