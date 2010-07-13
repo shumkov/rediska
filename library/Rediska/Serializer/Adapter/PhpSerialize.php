@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Default PHP adapter
+ * Default PHP serializer adapter
  * 
  * @author Ivan Shumkov
  * @package Rediska
@@ -11,6 +11,8 @@
  */
 class Rediska_Serializer_Adapter_PhpSerialize implements Rediska_Serializer_Adapter_Interface
 {
+    const SERIALIZED_FALSE = 'b:0;';
+
 	/**
 	 * Serialize value
 	 *
@@ -26,21 +28,17 @@ class Rediska_Serializer_Adapter_PhpSerialize implements Rediska_Serializer_Adap
 	 * Unserialize value
 	 *
 	 * @throws Rediska_Serializer_Exception
-	 * @param mixin $value
-	 * @return string
+	 * @param string $value
+	 * @return mixin
 	 */
 	public function unserialize($value)
 	{
-		$beforeSerializeError = error_get_last();
+        $unserializedValue = @unserialize($value);
 
-		$value = @unserialize($value);
+        if ($unserializedValue === false && $value != self::SERIALIZED_FALSE) {
+            throw new Rediska_Serializer_Adapter_Exception("Can't unserialize string");
+        }
 
-		$serializeError = error_get_last();
-
-		if ($beforeSerializeError !== $serializeError) {
-			throw new Rediska_Serializer_Exception("Can't unserialize string");
-		}
-
-		return $value;
+        return $unserializedValue;
 	}
 }

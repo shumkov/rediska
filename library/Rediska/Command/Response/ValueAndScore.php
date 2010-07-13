@@ -18,7 +18,7 @@ class Rediska_Command_Response_ValueAndScore extends ArrayObject
         $valuesWithScores = array();
         foreach($valuesAndScores as $valueOrScore) {
             if ($isValue) {
-                $value = $rediska->unserialize($valueOrScore);
+                $value = $rediska->getSerializer()->unserialize($valueOrScore);
             } else {
                 $score = $valueOrScore;
                 $valuesWithScores[] = new self(array('value' => $value, 'score' => $score));

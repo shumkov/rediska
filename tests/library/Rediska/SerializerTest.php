@@ -1,54 +1,24 @@
 <?php
 
 class Rediska_SerializerTest extends Rediska_TestCase
-
-    public function testSetSerializerException()
+{
+    public function testSetAdapter()
     {
-        $this->setExpectedException('Rediska_Exception');
-
-        $this->rediska->setSerializer(array('wrong', 'serializer'));
+        $this->markTestIncomplete();
     }
 
-    public function testSetUnSerializerException()
+    public function testGetAdapter()
     {
-        $this->setExpectedException('Rediska_Exception');
-        
-        $this->rediska->setUnSerializer(array('wrong', 'serializer'));
+        $this->markTestIncomplete();
     }
 
-    public function testSetAndGetObjectWithDefaultSerializer()
+    public function testSerialize()
     {
-        $this->_setAndGetObject();
+        $this->markTestIncomplete();
     }
 
-    public function testSetAndGetObjectWithPersonalSerializer()
+    public function testUnserialize()
     {
-        $this->rediska->setOptions(array(
-            'serializer'   => array('RediskaTest', 'serializer'),
-            'unserializer' => array('RediskaTest', 'unserializer')
-        ));
-
-        $this->_setAndGetObject();
+        $this->markTestIncomplete();
     }
-
-    public static function serializer($value)
-    {
-        return serialize($value);
-    }
-
-    public static function unserializer($value)
-    {
-        return unserialize($value);
-    }
-
-    protected function _setAndGetObject()
-    {
-        $object = new stdClass;
-        $object->a = 'b';
-
-        $this->rediska->set('a', $object);
-
-        $replyObject = $this->rediska->get('a');
-        $this->assertObjectHasAttribute('a', $replyObject);
-        $this->assertEquals($object->a, $replyObject->a);
-    }
+}
