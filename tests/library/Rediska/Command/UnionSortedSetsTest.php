@@ -121,7 +121,7 @@ class Rediska_Command_UnionSortedSetsTest extends Rediska_TestCase
             
             $values[$name] = array();
             foreach ($set as $valueOrScore) {
-                $value = $this->rediska->serialize($valueOrScore->value);
+                $value = $this->rediska->getSerializer()->serialize($valueOrScore->value);
                 $score = $valueOrScore->score;
                 
                 $values[$name][] = $value;
@@ -155,7 +155,7 @@ class Rediska_Command_UnionSortedSetsTest extends Rediska_TestCase
                     throw new Exception('Unknown aggregation method ' . $aggregation);
             }
             
-            $value = $this->rediska->unserialize($value);
+            $value = $this->rediska->getSerializer()->unserialize($value);
             
             $pipeline->addToSortedSet('test2', $value, $score);
         }

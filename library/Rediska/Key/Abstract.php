@@ -175,7 +175,7 @@ abstract class Rediska_Key_Abstract
      */
 	public function setName($name)
 	{
-		$this->name = $name;
+		$this->_name = $name;
 
 		return $this;
 	}
