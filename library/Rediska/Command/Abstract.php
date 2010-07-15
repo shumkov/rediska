@@ -11,7 +11,7 @@
  */
 abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
 {
-    const QUEUED     = 'QUEUED';
+    const QUEUED = 'QUEUED';
 
     /**
      * Command version
@@ -68,6 +68,13 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
      * @var unknown_type
      */
     protected $_isWrited = false;
+    
+    /**
+     * Is queued to transaction
+     * 
+     * @var boolean
+     */
+    protected $_isQueued = false;
 
     /**
      * Constructor
@@ -145,6 +152,8 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
         }
 
         if ($responses[0] === self::QUEUED) {
+            $this->_isQueued = true;
+
             return true;
         } else {
             $this->_isWrited = false;
@@ -174,7 +183,12 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
 
     	return $this;
     }
-    
+
+    public function isQueued()
+    {
+        return $this->_isQueued;
+    }
+
     public function execute()
     {
         $this->write();

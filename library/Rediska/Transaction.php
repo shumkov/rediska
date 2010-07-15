@@ -72,6 +72,8 @@ class Rediska_Transaction
 
         $multi = new Rediska_Command($this->_connection, 'MULTI');
         $multi->execute();
+        
+        $this->_isStarted = true;
 
         return true;
     }
@@ -154,7 +156,14 @@ class Rediska_Transaction
         if (!$command->isAtomic()) {
         	throw new Rediska_Exception("Command '$name' doesn't work properly (not atomic) in pipeline on multiple servers");
         }
+        
+        $command->execute();
+        
+        if (!$command->isQueued()) {
+            throw new Rediska_Transaction_Exception("Command not added to transaction!");
+        }
 
+        /*
         $commandError = false;
         try {
             $command->execute();
@@ -165,6 +174,7 @@ class Rediska_Transaction
         if (!$commandError) {
             $this->_commands[] = $command;
         }
+        */
 
         $this->_specifiedConnection->resetConnection();
 

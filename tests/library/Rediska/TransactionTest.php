@@ -1,34 +1,48 @@
 <?php
 
 class Rediska_TransactionTest extends Rediska_TestCase
-{
-    public function testTransaction()
-    {
+{   
+    /**
+     * 
+     * @var Rediska_Transaction
+     */
+    protected $transaction;
     
+    public function setUp()
+    {
+        parent::setUp();
+        
+        $this->transaction = $this->rediska->transaction();
     }
     
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->transaction->discard();
+    }
+
     public function testStart()
     {
-        $this->markTestIncomplete('Write me!');
+        $this->transaction->start();
+        $this->assertTrue($this->transaction->isStarted());
     }
-    
-    public function testIsStarted()
+
+    public function testAddCommands()
     {
-        $this->markTestIncomplete('Write me!');
+        $response = $this->transaction->set('a', 1)->get('a')->delete('a')->set('b', 2);
+        $this->assertEquals($this->rediska->get('b'), null);
     }
-    
+
     public function testExecute()
     {
-        $this->markTestIncomplete('Write me!');
+        $response = $this->transaction->set('a', 1)->get('a')->delete('a')->execute();
+        $this->assertEquals(array(true, 1, true), $response);
     }
-    
+
     public function testDiscard()
     {
-        $this->markTestIncomplete('Write me!');
-    }
-    
-    public function testAddCommandToTransaction()
-    {
-        $this->markTestIncomplete('Write me!');
+        $response = $this->transaction->set('a', 1)->get('a')->delete('a')->set('b', 2)->discard();
+        $this->assertEquals($this->rediska->get('b'), null);
     }
 }
