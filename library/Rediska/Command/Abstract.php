@@ -11,12 +11,8 @@
  */
 abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
 {
-    const REPLY_STATUS     = '+';
-    const REPLY_ERROR      = '-';
-    const REPLY_INTEGER    = ':';
-    const REPLY_BULK       = '$';
-    const REPLY_MULTY_BULK = '*';
-    
+    const QUEUED     = 'QUEUED';
+
     /**
      * Command version
      * 
@@ -145,10 +141,15 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
 
         foreach ($this->_commandsByConnections as $commandByConnection) {
         	list($connection, $command) = $commandByConnection;
-            $responses[] = $this->_readResponseFromConnection($connection);
+            $responses[] = Rediska_Command::readResponseFromConnection($connection);
         }
 
-        return $this->_parseResponses($responses);
+        if ($responses[0] === self::QUEUED) {
+            return true;
+        } else {
+            $this->_isWrited = false;
+            return $this->_parseResponses($responses);
+        }
     }
 
     /**
@@ -173,6 +174,12 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
 
     	return $this;
     }
+    
+    public function execute()
+    {
+        $this->write();
+        return $this->read();
+    }
 
     public function __get($name)
     {
@@ -191,81 +198,17 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
     protected function _addCommandByConnection(Rediska_Connection $connection, $command)
     {
         if (is_array($command)) {
-            $commandString = '*' . count($command) . Rediska::EOL;
-            foreach($command as $argument) {
-                $commandString .= '$' . strlen($argument) . Rediska::EOL . $argument . Rediska::EOL;
-            }
-            $command = $commandString;
+            $command = Rediska_Command::transformMultiBulkCommand($command);
         }
 
         $this->_commandsByConnections[] = array($connection, $command);
-    }
-
-    protected function _readResponseFromConnection(Rediska_Connection $connection)
-    {
-        $reply = $connection->readLine();
-
-        $type = substr($reply, 0, 1);
-        $data = substr($reply, 1);
-
-        switch($type) {
-            case self::REPLY_STATUS:
-                if ($data == 'OK') {
-                    return true;
-                } else {
-                    return $data;
-                }
-            case self::REPLY_ERROR:
-                $message = substr($data, 4);
-
-                throw new Rediska_Command_Exception($message);
-            case self::REPLY_INTEGER:
-                if (strpos($data, '.') !== false) {
-                    $number = (integer)$data;
-                } else {
-                    $number = (float)$data;
-                }
-
-                if ((string)$number != $data) {
-                    throw new Rediska_Command_Exception("Can't convert data ':$data' to integer");
-                }
-
-                return $number;
-            case self::REPLY_BULK:
-                if ($data == '-1') {
-                    return null;
-                } else {
-                    $length = (integer)$data;
-        
-                    if ((string)$length != $data) {
-                        throw new Rediska_Command_Exception("Can't convert bulk reply header '$$data' to integer");
-                    }
-
-                    return $connection->read($length);
-                }
-            case self::REPLY_MULTY_BULK:
-                $count = (integer)$data;
-
-                if ((string)$count != $data) {
-                    throw new Rediska_Command_Exception("Can't convert multi-response header '$data' to integer");
-                }
-
-                $replies = array();
-                for ($i = 0; $i < $count; $i++) {
-                    $replies[] = $this->_readResponseFromConnection($connection);
-                }
-
-                return $replies;          
-            default:
-                throw new Rediska_Command_Exception("Invalid reply type: '$type'");
-        }
     }
 
     protected function _parseResponses($responses)
     {
         return $responses;
     }
-    
+
     protected function _checkVersion($version = null)
     {
         if (null === $version) {

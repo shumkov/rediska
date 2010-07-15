@@ -66,17 +66,16 @@ class Rediska_Pipeline
      */
     public function execute()
     {
-        if (empty($this->_commands)) {
-            throw new Rediska_Exception("Nothing to execute!");
-        }
-
-        foreach($this->_commands as $command) {
-            $command->write();
-        }
-
         $results = array();
-        foreach($this->_commands as $command) {
-            $results[] = $command->read();
+
+        if (!empty($this->_commands)) {
+            foreach($this->_commands as $command) {
+                $command->write();
+            }
+    
+            foreach($this->_commands as $command) {
+                $results[] = $command->read();
+            }
         }
 
         return $results;
@@ -89,6 +88,11 @@ class Rediska_Pipeline
             $this->_oneTimeConnection = $this->_specifiedConnection->getConnection();
 
             return $this;
+        }
+        
+        // TODO: Add transaction
+        if (strtolower($name) == 'transaction') {
+            throw new Rediska_Exception('Transation in pipeline not implemented yet.');
         }
 
         if ($this->_oneTimeConnection) {

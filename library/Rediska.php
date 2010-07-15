@@ -162,7 +162,7 @@ class Rediska extends Rediska_Options
      *                                       )
      * serializerAdapter - Value's serialize method. For default 'phpSerialize' (PHP serialize functions).
      *                     You may use 'json' or you personal serializer class
-     *                     which implements Rediska_Serializer_Interface
+     *                     which implements Rediska_Serializer_Adapter_Interface
      * keyDistributor    - Algorithm of keys distribution on redis servers.
      *                     For default 'consistentHashing' which implement
      *                     consistent hashing algorithm (http://weblogs.java.net/blog/tomwhite/archive/2007/11/consistent_hash.html)
@@ -385,6 +385,40 @@ class Rediska extends Rediska_Options
     }
 
     /**
+     * Create transaction
+     * 
+     * @param $aliasOrConnection Server alias or Rediska_Connection object
+     * @return Rediska_Transation
+     */
+    public function transaction($aliasOrConnection = null)
+    {
+        // Check Redis version
+        $version = '1.3.8';
+        $redisVersion = $this->getOption('redisVersion');
+        if (version_compare($version, $this->getOption('redisVersion')) == 1) {
+            throw new Rediska_Transaction_Exception("Transaction requires {$version}+ version of Redis server. Current version is {$redisVersion}. To change it specify 'redisVersion' option.");
+        }
+
+        // Get connection
+        if ($aliasOrConnection instanceof Rediska_Connection) {
+            $connection = $aliasOrConnection;
+        } elseif ($aliasOrConnection !== null) {
+            $connection = $this->getConnectionByAlias($aliasOrConnection);
+        } elseif ($this->_specifiedConnection->getConnection()) {
+            $connection = $this->_specifiedConnection->getConnection();
+        } else {
+            $connections = $this->getConnections();
+            if (count($connections) == 1) {
+                $connection = $connections[0];
+            } else {
+                throw new Rediska_Transaction_Exception('You must specify connection by $aliasOrConnection argument!');
+            }
+        }
+
+        return new Rediska_Transaction($this, $this->_specifiedConnection, $connection);
+    }
+
+    /**
      * Add command
      * 
      * @param string $name      Command name
@@ -454,8 +488,8 @@ class Rediska extends Rediska_Options
         $this->_specifiedConnection->resetConnection();
 
         $command = $this->getCommand($name, $args);
-        $command->write();
-        return $command->read();
+
+        return $command->execute();
     }
 
     /**

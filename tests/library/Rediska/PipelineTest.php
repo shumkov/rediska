@@ -18,14 +18,6 @@ class Rediska_PipelineTest extends Rediska_TestCase
     	$this->assertNull($reply);
     }
 
-    /**
-     * @expectedException Rediska_Exception
-     */
-    public function testPipelineNothingToExecute()
-    {
-    	$this->rediska->pipeline()->execute();
-    }
-
     public function testPipeline()
     {
     	$reply = $this->rediska->pipeline()

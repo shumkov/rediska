@@ -4,21 +4,21 @@ class Rediska_SerializerTest extends Rediska_TestCase
 {
     public function testSetAdapter()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Write me!');
     }
 
     public function testGetAdapter()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Write me!');
     }
 
     public function testSerialize()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Write me!');
     }
 
     public function testUnserialize()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Write me!');
     }
 }

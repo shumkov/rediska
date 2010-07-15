@@ -15,4 +15,5 @@ interface Rediska_Command_Interface
     public function write();
     public function read();
     public function isAtomic();
+    public function execute();
 }
