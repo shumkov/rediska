@@ -81,19 +81,21 @@ class Rediska_Connection extends Rediska_Options
 	        }
 
 	        if ($this->getPassword() != '') {
-	        	$this->write('AUTH ' . $this->getPassword());
-	        	$reply = $this->readLine();
-                if (substr($reply, 0, 1) == '-') {
-                    throw new Rediska_Connection_Exception("Password error: " . substr($reply, 5));
-                }
+	            $auth = new Rediska_Command($this, "AUTH {$this->getPassword()}");
+	            try {
+	               $auth->execute();
+	            } catch (Rediska_Command_Exception $e) {
+	                throw new Rediska_Connection_Exception("Password error: {$e->getMessage()}");
+	            }
 	        }
 
 	        if ($this->_options['db'] !== self::DEFAULT_DB) {
-	        	$this->write('SELECT ' . $this->_options['db']);
-	        	$reply = $this->readLine();
-	        	if (substr($reply, 0, 1) == '-') {
-	        		throw new Rediska_Connection_Exception("Select db error: " . substr($reply, 5));
-	        	}
+	            $selectDb = new Rediska_Command($this, "SELECT {$this->_options['db']}");
+                try {
+                   $selectDb->execute();
+                } catch (Rediska_Command_Exception $e) {
+                    throw new Rediska_Connection_Exception("Select db error: {$e->getMessage()}");
+                }
 	        }
 
 	        return true;
@@ -101,7 +103,7 @@ class Rediska_Connection extends Rediska_Options
         	return false;
         }
     }
-    
+
     /**
      * Disconnect
      * 
@@ -141,7 +143,7 @@ class Rediska_Connection extends Rediska_Options
 
             $this->connect();
 
-	        while ($string !== '') {
+	        while ($string) {
 	            $bytes = @fwrite($this->_socket, $string);
 	
 	            if ($bytes === false) {
@@ -161,7 +163,7 @@ class Rediska_Connection extends Rediska_Options
         	return false;
         }
     }
-    
+
     /**
      * Read length bytes from connection stram
      * 
@@ -249,7 +251,7 @@ class Rediska_Connection extends Rediska_Options
     {
         return $this->_options['password'];
     }
-    
+
     /**
      * Get option timout
      * 
@@ -263,7 +265,7 @@ class Rediska_Connection extends Rediska_Options
     		return ini_get('default_socket_timeout');
     	}
     }
-    
+
     /**
      * Connection alias
      * 
@@ -310,5 +312,12 @@ class Rediska_Connection extends Rediska_Options
     public function __destruct()
     {
         $this->disconnect();
+    }
+
+    /**
+     * Do not clone socket
+     */
+    public function __clone() {
+        $this->_socket = null;
     }
 }
