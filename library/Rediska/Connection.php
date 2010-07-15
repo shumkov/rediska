@@ -143,7 +143,7 @@ class Rediska_Connection extends Rediska_Options
 
             $this->connect();
 
-	        while ($string !== '') {
+	        while ($string) {
 	            $bytes = @fwrite($this->_socket, $string);
 	
 	            if ($bytes === false) {

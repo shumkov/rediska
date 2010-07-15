@@ -37,7 +37,7 @@ class Rediska_TransactionTest extends Rediska_TestCase
     public function testExecute()
     {
         $response = $this->transaction->set('a', 1)->get('a')->delete('a')->execute();
-        $this->assertEquals(array(true, 1, true), $response);
+        $this->assertEquals(array(true, 1, 1), $response);
     }
 
     public function testDiscard()

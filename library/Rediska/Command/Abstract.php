@@ -195,6 +195,11 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
         return $this->read();
     }
 
+    public function parseResponse($response)
+    {
+        return $this->_parseResponses(array($response));
+    }
+
     public function __get($name)
     {
     	if (array_key_exists($name, $this->_arguments)) {

@@ -311,11 +311,11 @@ class Rediska extends Rediska_Options
      */
     public function getConnectionByKeyName($name)
     {
-        if (count($this->_connections) == 1) {
+        if ($this->_specifiedConnection->getConnection()) {
+            $connection = $this->_specifiedConnection->getConnection();
+        } elseif (count($this->_connections) == 1) {
             $connections = array_values($this->_connections);
             $connection = $connections[0];
-        } else if ($this->_specifiedConnection->getConnection()) {
-            $connection = $this->_specifiedConnection->getConnection();
         } else {
             $alias = $this->_keyDistributor->getConnectionByKeyName($name);
             $connection = $this->_connections[$alias];

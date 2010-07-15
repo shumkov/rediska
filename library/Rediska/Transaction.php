@@ -99,11 +99,15 @@ class Rediska_Transaction
 
         if ($this->isStarted()) {
             $exec = new Rediska_Command($this->_connection, 'EXEC');
-            $exec->execute();
+            $responses = $exec->execute();
 
             if (!empty($this->_commands)) {
-                foreach($this->_commands as $command) {
-                    $command->read();
+                if (!$responses) {
+                    throw new Rediska_Transaction_Exception('Transaction has been aborted by server');
+                }
+
+                foreach($this->_commands as $i => $command) {
+                    $results[] = $command->parseResponse($responses[$i]);
                 }
             }
 
@@ -162,19 +166,8 @@ class Rediska_Transaction
         if (!$command->isQueued()) {
             throw new Rediska_Transaction_Exception("Command not added to transaction!");
         }
-
-        /*
-        $commandError = false;
-        try {
-            $command->execute();
-        } catch (Rediska_Command_Exception $e) {
-            $commandError = true;
-        }
-
-        if (!$commandError) {
-            $this->_commands[] = $command;
-        }
-        */
+        
+        $this->_commands[] = $command;
 
         $this->_specifiedConnection->resetConnection();
 
