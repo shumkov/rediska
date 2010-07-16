@@ -88,29 +88,9 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
         $this->_rediska = $rediska;
         $this->_name    = $name;
 
-		$className = get_class($this);
-        if (!isset(self::$_argumentNames[$className])) {
-    		$reflection = new ReflectionMethod($this, '_create');
-    		self::$_argumentNames[$className] = array();
-    		foreach($reflection->getParameters() as $parameter) {
-    			self::$_argumentNames[$className][] = $parameter;
-    		}
-    	}
+		$arguments = $this->_validateArguments($arguments);
 
-    	$count = 0;
-    	foreach(self::$_argumentNames[$className] as $parameter) {
-    		if (array_key_exists($count, $arguments)) {
-    			$value = $arguments[$count];
-    		} else if ($parameter->isOptional()) {
-    			$value = $parameter->getDefaultValue();
-    		} else {
-    			throw new Rediska_Command_Exception("Argument '{$parameter->getName()}' not present for command '$this->_name'");
-    		}
-    		$this->_arguments[$parameter->getName()] = $value;
-    		$count++;
-    	}
-
-        call_user_func_array(array($this, '_create'), $arguments);
+		call_user_func_array(array($this, '_create'), $arguments);
     }
 
     /**
@@ -184,6 +164,11 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
     	return $this;
     }
 
+	public function getName()
+	{
+		return $this->_name;
+	}
+
     public function isQueued()
     {
         return $this->_isQueued;
@@ -213,6 +198,33 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
     {
     	return isset($this->_arguments[$name]);
     }
+
+	protected function _validateArguments($arguments)
+	{
+		$className = get_class($this);
+        if (!isset(self::$_argumentNames[$className])) {
+    		$reflection = new ReflectionMethod($this, '_create');
+    		self::$_argumentNames[$className] = array();
+    		foreach($reflection->getParameters() as $parameter) {
+    			self::$_argumentNames[$className][] = $parameter;
+    		}
+    	}
+
+    	$count = 0;
+    	foreach(self::$_argumentNames[$className] as $parameter) {
+    		if (array_key_exists($count, $arguments)) {
+    			$value = $arguments[$count];
+    		} else if ($parameter->isOptional()) {
+    			$value = $parameter->getDefaultValue();
+    		} else {
+    			throw new Rediska_Command_Exception("Argument '{$parameter->getName()}' not present for command '$this->_name'");
+    		}
+    		$this->_arguments[$parameter->getName()] = $value;
+    		$count++;
+    	}
+
+		return $arguments;
+	}
 
     protected function _addCommandByConnection(Rediska_Connection $connection, $command)
     {
