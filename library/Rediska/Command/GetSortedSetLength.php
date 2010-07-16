@@ -16,17 +16,12 @@ class Rediska_Command_GetSortedSetLength extends Rediska_Command_Abstract
 {
     protected $_version = '1.1';
     
-    protected function _create($name)
+    public function create($name)
     {
         $connection = $this->_rediska->getConnectionByKeyName($name);
 
         $command = array('ZCARD', "{$this->_rediska->getOption('namespace')}$name");
 
-        $this->_addCommandByConnection($connection, $command);
-    }
-
-    protected function _parseResponses($responses)
-    {
-        return $responses[0];
+        return new Rediska_Connection_Exec($connection, $command);
     }
 }

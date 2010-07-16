@@ -70,7 +70,7 @@ class Rediska_Transaction
             return false;
         }
 
-        $multi = new Rediska_Command($this->_connection, 'MULTI');
+        $multi = new Rediska_Connection_Exec($this->_connection, 'MULTI');
         $multi->execute();
         
         $this->_isStarted = true;
@@ -98,7 +98,7 @@ class Rediska_Transaction
         $results = array();
 
         if ($this->isStarted()) {
-            $exec = new Rediska_Command($this->_connection, 'EXEC');
+            $exec = new Rediska_Connection_Exec($this->_connection, 'EXEC');
             $responses = $exec->execute();
 
             if (!empty($this->_commands)) {
@@ -107,7 +107,7 @@ class Rediska_Transaction
                 }
 
                 foreach($this->_commands as $i => $command) {
-                    $results[] = $command->parseResponse($responses[$i]);
+                    $results[] = $command->parseResponses(array($responses[$i]));
                 }
             }
 
@@ -129,7 +129,7 @@ class Rediska_Transaction
             return false;
         }
 
-        $discard = new Rediska_Command($this->_connection, 'DISCARD');
+        $discard = new Rediska_Connection_Exec($this->_connection, 'DISCARD');
         $reply = $discard->execute();
 
         $this->_commands = array();

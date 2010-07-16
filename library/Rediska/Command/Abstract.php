@@ -49,11 +49,11 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
     static protected $_argumentNames = array();
 
     /**
-     * Commands sorted by connection
+     * Commands
      * 
      * @var array
      */
-    protected $_commandsByConnections = array();
+    protected $_commands = array();
     
     /**
      * Atomic flag for pipelines
@@ -88,24 +88,22 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
         $this->_rediska = $rediska;
         $this->_name    = $name;
 
+        $this->_throwExceptionIfNotSupported();
+
 		$arguments = $this->_validateArguments($arguments);
 
-		call_user_func_array(array($this, '_create'), $arguments);
+		$this->_commands = (array)call_user_func_array(array($this, 'create'), $arguments);
     }
 
     /**
-     * Write command to connection
+     * Write commands
      * 
      * @return boolean
      */
     public function write()
     {
-        foreach($this->_commandsByConnections as $commandByConnection) {
-        	list($connection, $command) = $commandByConnection;
-
-        	$this->_checkVersion();
-
-            $connection->write($command);
+        foreach($this->_commands as $command) {
+        	$command->write();
         }
 
         $this->_isWrited = true;
@@ -114,21 +112,16 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
     }
 
     /**
-     * Read command from connection
+     * Read reponses from connection
      * 
      * @return array
      */
     public function read()
     {
-        if (!$this->_isWrited) {
-            throw new Rediska_Command_Exception('You must write command before read');
-        }
-
         $responses = array();
 
-        foreach ($this->_commandsByConnections as $commandByConnection) {
-        	list($connection, $command) = $commandByConnection;
-            $responses[] = Rediska_Command::readResponseFromConnection($connection);
+        foreach ($this->_commands as $command) {
+            $responses[] = $command->read();
         }
 
         if ($responses[0] === self::QUEUED) {
@@ -137,8 +130,30 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
             return true;
         } else {
             $this->_isWrited = false;
-            return $this->_parseResponses($responses);
+            return $this->parseResponses($responses);
         }
+    }
+
+    public function execute()
+    {
+        $this->write();
+        return $this->read();
+    }
+
+    public function parseResponses($responses)
+    {
+        foreach($responses as &$response) {
+            $response = $this->parseResponse($response);
+        }
+
+        if (sizeof($responses) == 1) {
+            return $responses[0];
+        }
+    }
+
+    public function parseResponse($response)
+    {
+        return $response;
     }
 
     /**
@@ -174,17 +189,6 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
         return $this->_isQueued;
     }
 
-    public function execute()
-    {
-        $this->write();
-        return $this->read();
-    }
-
-    public function parseResponse($response)
-    {
-        return $this->_parseResponses(array($response));
-    }
-
     public function __get($name)
     {
     	if (array_key_exists($name, $this->_arguments)) {
@@ -203,7 +207,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
 	{
 		$className = get_class($this);
         if (!isset(self::$_argumentNames[$className])) {
-    		$reflection = new ReflectionMethod($this, '_create');
+    		$reflection = new ReflectionMethod($this, 'create');
     		self::$_argumentNames[$className] = array();
     		foreach($reflection->getParameters() as $parameter) {
     			self::$_argumentNames[$className][] = $parameter;
@@ -226,21 +230,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
 		return $arguments;
 	}
 
-    protected function _addCommandByConnection(Rediska_Connection $connection, $command)
-    {
-        if (is_array($command)) {
-            $command = Rediska_Command::transformMultiBulkCommand($command);
-        }
-
-        $this->_commandsByConnections[] = array($connection, $command);
-    }
-
-    protected function _parseResponses($responses)
-    {
-        return $responses;
-    }
-
-    protected function _checkVersion($version = null)
+    protected function _throwExceptionIfNotSupported($version = null)
     {
         if (null === $version) {
             $version = $this->_version;

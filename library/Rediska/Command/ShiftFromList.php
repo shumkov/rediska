@@ -14,17 +14,17 @@
  */
 class Rediska_Command_ShiftFromList extends Rediska_Command_Abstract
 {
-    protected function _create($name) 
+    public function create($name) 
     {
         $connection = $this->_rediska->getConnectionByKeyName($name);
 
         $command = "LPOP {$this->_rediska->getOption('namespace')}$name";
 
-        $this->_addCommandByConnection($connection, $command);
+        return new Rediska_Connection_Exec($connection, $command);
     }
 
-    protected function _parseResponses($responses)
+    public function parseResponse($response)
     {
-        return $this->_rediska->getSerializer()->unserialize($responses[0]);
+        return $this->_rediska->getSerializer()->unserialize($response);
     }
 }

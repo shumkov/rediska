@@ -16,7 +16,7 @@ abstract class Rediska_Command_CompareSets extends Rediska_Command_Abstract
 	protected $_command;
     protected $_storeCommand;
 
-    protected function _create(array $names, $storeName = null) 
+    public function create(array $names, $storeName = null) 
     {
         if (empty($names)) {
             throw new Rediska_Command_Exception('You must specify sets');
@@ -58,23 +58,25 @@ abstract class Rediska_Command_CompareSets extends Rediska_Command_Abstract
                 $command .= " {$this->_rediska->getOption('namespace')}$name";
             }
 
-            $this->_addCommandByConnection($connection, $command);
+            return new Rediska_Connection_Exec($connection, $command);
         } else {
             $this->setAtomic(false);
 
+            $commands = array();
             foreach($namesByConnections as $connectionAlias => $keys) {
-                foreach($keys as $key) {
+                foreach ($keys as $key) {
                     $command = "SMEMBERS {$this->_rediska->getOption('namespace')}$key";
-
-                    $this->_addCommandByConnection($connections[$connectionAlias], $command);
+                    $commands[] = new Rediska_Connection_Exec($connections[$connectionAlias], $command);
                 }
             }
+
+            return $commands;
         }
     }
 
     abstract protected function _compareSets($sets);
 
-    protected function _parseResponses($responses)
+    public function parseResponses($responses)
     {
 		if (!$this->isAtomic()) {
     		if ($this->_storeConnection) {

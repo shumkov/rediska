@@ -17,7 +17,7 @@ class Rediska_Command_GetScoreFromSortedSet extends Rediska_Command_Abstract
 {
     protected $_version = '1.1';
 
-    protected function _create($name, $value)
+    public function create($name, $value)
     {
         $connection = $this->_rediska->getConnectionByKeyName($name);
 
@@ -25,11 +25,6 @@ class Rediska_Command_GetScoreFromSortedSet extends Rediska_Command_Abstract
 
         $command = array('ZSCORE', "{$this->_rediska->getOption('namespace')}$name", $value);
 
-        $this->_addCommandByConnection($connection, $command);
-    }
-
-    protected function _parseResponses($responses)
-    {
-        return $responses[0];
+        return new Rediska_Connection_Exec($connection, $command);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Rediska command
+ * Rediska connection exec
  * 
  * @author Ivan Shumkov
  * @package Rediska
@@ -9,7 +9,7 @@
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_Command
+class Rediska_Connection_Exec
 {
     const REPLY_STATUS     = '+';
     const REPLY_ERROR      = '-';
@@ -30,6 +30,13 @@ class Rediska_Command
      * @var array|string
      */
     protected $_command;
+    
+    /**
+     * Is writed
+     * 
+     * @var $_isWrited string
+     */
+    protected $_isWrited = false;
 
     /**
      * Constructor
@@ -37,7 +44,7 @@ class Rediska_Command
      * @param Rediska_Connection $connection Connection
      * @param array|string       $command    Command
      */
-    public function __construct($connection, $command)
+    public function __construct(Rediska_Connection $connection, $command)
     {
         if (is_array($command)) {
             $command = self::transformMultiBulkCommand($command);
@@ -48,14 +55,45 @@ class Rediska_Command
     }
 
     /**
+     * Write command to connection
+     * 
+     * @return boolean
+     */
+    public function write()
+    {
+        $result = $this->_connection->write($this->_command);
+        $this->_isWrited = true;
+
+        return $result;
+    }
+
+    /**
+     * Read response from connection
+     * 
+     * @return array|string
+     */
+    public function read()
+    {
+        if (!$this->_isWrited) {
+            throw new Rediska_Connection_Exec_Exception('You must write command before read');
+        }
+
+        $response = self::readResponseFromConnection($this->_connection);
+
+        $this->_isWrited = false;
+
+        return $response;
+    }
+
+    /**
      * Execute command
      * 
-     * @return mixin
+     * @return array|string
      */
     public function execute()
     {
-        $this->_connection->write($this->_command);
-        return self::readResponseFromConnection($this->_connection);
+        $this->write();
+        return $this->read();
     }
 
     /**
@@ -66,9 +104,9 @@ class Rediska_Command
      */
     public static function transformMultiBulkCommand(array $command)
     {
-        $commandString = '*' . count($command) . Rediska::EOL;
+        $commandString = self::REPLY_MULTY_BULK . count($command) . Rediska::EOL;
         foreach($command as $argument) {
-            $commandString .= '$' . strlen($argument) . Rediska::EOL . $argument . Rediska::EOL;
+            $commandString .= self::REPLY_BULK . strlen($argument) . Rediska::EOL . $argument . Rediska::EOL;
         }
         return $commandString;
     }
@@ -105,7 +143,7 @@ class Rediska_Command
                 }
 
                 if ((string)$number != $data) {
-                    throw new Rediska_Command_Exception("Can't convert data ':$data' to integer");
+                    throw new Rediska_Connection_Exec_Exception("Can't convert data ':$data' to integer");
                 }
 
                 return $number;
@@ -116,7 +154,7 @@ class Rediska_Command
                     $length = (integer)$data;
         
                     if ((string)$length != $data) {
-                        throw new Rediska_Command_Exception("Can't convert bulk reply header '$$data' to integer");
+                        throw new Rediska_Connection_Exec_Exception("Can't convert bulk reply header '$$data' to integer");
                     }
 
                     return $connection->read($length);
@@ -125,7 +163,7 @@ class Rediska_Command
                 $count = (integer)$data;
 
                 if ((string)$count != $data) {
-                    throw new Rediska_Command_Exception("Can't convert multi-response header '$data' to integer");
+                    throw new Rediska_Connection_Exec_Exception("Can't convert multi-response header '$data' to integer");
                 }
 
                 $replies = array();
@@ -135,7 +173,7 @@ class Rediska_Command
 
                 return $replies;          
             default:
-                throw new Rediska_Command_Exception("Invalid reply type: '$type'");
+                throw new Rediska_Connection_Exec_Exception("Invalid reply type: '$type'");
         }
     }
 }

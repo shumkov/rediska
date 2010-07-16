@@ -18,10 +18,10 @@ class Rediska_Command_Set extends Rediska_Command_Abstract
 {
     protected $_multiple = false;
 
-    protected function _create($nameOrData, $valueOrOverwrite = null, $overwrite = true)
+    public function create($nameOrData, $valueOrOverwrite = null, $overwrite = true)
     {
         if (is_array($nameOrData)) {
-            $this->_checkVersion('1.1');
+            $this->_throwExceptionIfNotSupported('1.1');
 
             $this->_multiple = true;
             $data = $nameOrData;
@@ -43,15 +43,17 @@ class Rediska_Command_Set extends Rediska_Command_Abstract
                 $keysByConnections[$connectionAlias][$key] = $value;
             }
 
+            $commands = array();
             foreach($keysByConnections as $connectionAlias => $data) {
                 $command = array($overwrite ? 'MSET' : 'MSETNX');
                 foreach($data as $key => $value) {
                     $command[] = $this->_rediska->getOption('namespace') . $key;
                     $command[] = $this->_rediska->getSerializer()->serialize($value);
                 }
-
-                $this->_addCommandByConnection($connections[$connectionAlias], $command);
+                $commands[] = new Rediska_Connection_Exec($connections[$connectionAlias], $command);
             }
+
+            return $commands;
         } else {
             $name = $nameOrData;
             $value = $valueOrOverwrite;
@@ -67,11 +69,11 @@ class Rediska_Command_Set extends Rediska_Command_Abstract
             }
             $command .= " {$this->_rediska->getOption('namespace')}$name " . strlen($value) . Rediska::EOL . $value;
     
-            $this->_addCommandByConnection($connection, $command);
+            return new Rediska_Connection_Exec($connection, $command);
         }
     }
 
-    protected function _parseResponses($responses)
+    public function parseResponses($responses)
     {
         if ($this->_multiple) {
             if (!empty($responses)) {
