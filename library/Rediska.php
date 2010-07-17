@@ -136,6 +136,10 @@ class Rediska extends Rediska_Options
         'shutdown'              => 'Rediska_Command_Shutdown',
         'rewriteappendonlyfile' => 'Rediska_Command_RewriteAppendOnlyFile',
         'slaveof'               => 'Rediska_Command_SlaveOf',
+        
+        // Publish/Subscribe
+        'subscribe'             => 'Rediska_Command_Subscribe',
+        'unsubscribe'           => 'Rediska_Command_Unsubscribe',
     );
 
     /**

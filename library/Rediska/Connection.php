@@ -44,6 +44,7 @@ class Rediska_Connection extends Rediska_Options
 	   'persistent' => false,
 	   'password'   => null,
 	   'timeout'    => null,
+           'readtimeout' => null,
 	   'alias'      => null,
 	   'db'         => self::DEFAULT_DB,
 	);
@@ -79,6 +80,10 @@ class Rediska_Connection extends Rediska_Options
 
 	            throw new Rediska_Connection_Exception($msg);
 	        }
+                
+                if ($this->_options['readtimeout']) {
+                    stream_set_timeout($this->_socket, (int)$this->_options['readtimeout']);
+                }
 
 	        if ($this->getPassword() != '') {
 	            $auth = new Rediska_Command($this, "AUTH {$this->getPassword()}");
@@ -204,6 +209,11 @@ class Rediska_Connection extends Rediska_Options
 
     	$string = @fgets($this->_socket);
 
+        $info = stream_get_meta_data($this->_socket);
+        if ($info['timed_out']) {
+            throw new Rediska_Connection_TimeoutException("Connection read timed out.");
+        }
+
         if ($string === false) {
             $this->disconnect();
             throw new Rediska_Connection_Exception("Can't read from socket.");
@@ -289,6 +299,11 @@ class Rediska_Connection extends Rediska_Options
     protected function _readAndThrowException($length)
     {
         $data = @stream_get_contents($this->_socket, $length);
+
+        $info = stream_get_meta_data($this->_socket);
+        if ($info['timed_out']) {
+            throw new Rediska_Connection_TimeoutException("Connection read timed out.");
+        }
 
         if ($data === false) {
             $this->disconnect();
