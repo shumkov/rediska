@@ -15,6 +15,8 @@
  */
 class Rediska_Command_PopFromListBlocking extends Rediska_Command_Abstract
 {
+    protected $_version = '1.3.1';
+
     public function create($name) 
     {
     	$connection = $this->_rediska->getConnectionByKeyName($name);

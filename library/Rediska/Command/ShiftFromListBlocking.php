@@ -14,7 +14,9 @@
  */
 class Rediska_Command_ShiftFromList extends Rediska_Command_Abstract
 {
-    public function create($name) 
+    protected $_version = '1.3.1';
+
+    public function create($name)
     {
         $connection = $this->_rediska->getConnectionByKeyName($name);
 
