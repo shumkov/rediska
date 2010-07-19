@@ -49,11 +49,11 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
     static protected $_argumentNames = array();
 
     /**
-     * Commands
+     * Execs
      * 
      * @var array
      */
-    protected $_commands = array();
+    protected $_execs = array();
     
     /**
      * Atomic flag for pipelines
@@ -92,7 +92,11 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
 
 		$arguments = $this->_validateArguments($arguments);
 
-		$this->_commands = (array)call_user_func_array(array($this, 'create'), $arguments);
+		$this->_execs = call_user_func_array(array($this, 'create'), $arguments);
+
+		if (!is_array($this->_execs)) {
+		    $this->_execs = array($this->_execs);
+		}
     }
 
     /**
@@ -102,8 +106,8 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
      */
     public function write()
     {
-        foreach($this->_commands as $command) {
-        	$command->write();
+        foreach($this->_execs as $exec) {
+        	$exec->write();
         }
 
         $this->_isWrited = true;
@@ -120,8 +124,8 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
     {
         $responses = array();
 
-        foreach ($this->_commands as $command) {
-            $responses[] = $command->read();
+        foreach ($this->_execs as $exec) {
+            $responses[] = $exec->read();
         }
 
         if ($responses[0] === self::QUEUED) {
