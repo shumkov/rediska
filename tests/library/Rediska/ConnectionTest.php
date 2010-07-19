@@ -4,41 +4,41 @@ class Rediska_ConnectionTest extends Rediska_TestCase
 {
     public function testConnect()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Write me!');
     }
     
     public function testDisconnect()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Write me!');
     }
     
     public function testIsConnected()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Write me!');
     }
     
     public function testWrite()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Write me!');
     }
     
     public function testRead()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Write me!');
     }
     
     public function testReadLine()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Write me!');
     }
     
     public function testGetTimeout()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Write me!');
     }
     
     public function testGetAlias()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Write me!');
     }
 }

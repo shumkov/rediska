@@ -4,27 +4,27 @@ class Rediska_OptionsTest extends Rediska_TestCase
 {
     public function testConstruct()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Write me!');
     }
     
     public function testApplyDefaultOptions()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Write me!');
     }
     
     public function testSetOptions()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Write me!');
     }
     
     public function testGetOptions()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Write me!');
     }
     
     public function testSetOption()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Write me!');
     }
 }
 /*

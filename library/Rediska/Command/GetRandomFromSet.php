@@ -15,7 +15,7 @@
  */
 class Rediska_Command_GetRandomFromSet extends Rediska_Command_Abstract
 {
-    protected function _create($name, $pop = false)
+    public function create($name, $pop = false)
     {
         $connection = $this->_rediska->getConnectionByKeyName($name);
 
@@ -27,11 +27,11 @@ class Rediska_Command_GetRandomFromSet extends Rediska_Command_Abstract
 
         $command .= " {$this->_rediska->getOption('namespace')}$name";
 
-        $this->_addCommandByConnection($connection, $command);
+        return new Rediska_Connection_Exec($connection, $command);
     }
 
-    protected function _parseResponses($responses)
+    public function parseResponse($response)
     {
-        return $this->_rediska->getSerializer()->unserialize($responses[0]);
+        return $this->_rediska->getSerializer()->unserialize($response);
     }
 }

@@ -15,15 +15,18 @@ class Rediska_Command_Quit extends Rediska_Command_Abstract
 {
     protected $_affectedConnections = array();
     
-    protected function _create() 
+    public function create() 
     {
     	$command = 'QUIT';
 
     	$this->_affectedConnections = $this->_rediska->getConnections();
 
+    	$commands = array();
         foreach($this->_affectedConnections as $connection) {
-        	$this->_addCommandByConnection($connection, $command);
+        	$commands[] = new Rediska_Connection_Exec($connection, $command);
         }
+
+        return $commands;
     }
 
 	public function write()
