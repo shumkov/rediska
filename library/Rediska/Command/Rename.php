@@ -17,7 +17,7 @@
  */
 class Rediska_Command_Rename extends Rediska_Command_Abstract
 {
-    protected function _create($oldName, $newName, $overwrite = true) 
+    public function create($oldName, $newName, $overwrite = true) 
     {
         $oldNameConnection = $this->_rediska->getConnectionByKeyName($oldName);
         $newNameConnection = $this->_rediska->getConnectionByKeyName($newName);
@@ -34,11 +34,11 @@ class Rediska_Command_Rename extends Rediska_Command_Abstract
 
             $command = "GET {$this->_rediska->getOption('namespace')}$oldName";
         }
-
-        $this->_addCommandByConnection($oldNameConnection, $command);
+        
+        return new Rediska_Connection_Exec($oldNameConnection, $command);
     }
 
-    protected function _parseResponses($responses)
+    public function parseResponses($responses)
     {
         if (!$this->isAtomic()) {
             $oldValue = $this->_rediska->unserialize($responses[0]);

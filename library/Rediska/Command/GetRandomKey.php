@@ -13,29 +13,27 @@
  */
 class Rediska_Command_GetRandomKey extends Rediska_Command_Abstract
 {
-    protected function _create()
+    public function create()
     {
         $connections = $this->_rediska->getConnections();
         $index = rand(0, count($connections) - 1);
         $connection = $connections[$index];
 
         $command = "RANDOMKEY";
-        
-        $this->_addCommandByConnection($connection, $command);
+
+        return new Rediska_Connection_Exec($connection, $command);
     }
 
-    protected function _parseResponses($responses)
+    public function parseResponse($response)
     {
-        $reply = $responses[0];
-
-        if ($reply == '') {
+        if ($response == '') {
             return null;
         } else {
-            if (strpos($reply, $this->_rediska->getOption('namespace')) === 0) {
-                $reply = substr($reply, strlen($this->_rediska->getOption('namespace')));
+            if (strpos($response, $this->_rediska->getOption('namespace')) === 0) {
+                $response = substr($response, strlen($this->_rediska->getOption('namespace')));
             }
 
-            return $reply;
+            return $response;
         }
     }
 }

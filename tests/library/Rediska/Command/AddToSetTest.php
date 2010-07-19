@@ -7,7 +7,7 @@ class Rediska_Command_AddToSetTest extends Rediska_TestCase
         $value = $this->rediska->addToSet('test', 'aaa');
         $this->assertTrue($value);
     }
-    
+
     public function testAddMembers()
     {
     	$this->rediska->addToSet('test', 'aaa');

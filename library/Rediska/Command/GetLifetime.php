@@ -14,23 +14,20 @@
  */
 class Rediska_Command_GetLifetime extends Rediska_Command_Abstract
 {
-    protected function _create($name)
+    public function create($name)
     {
         $connection = $this->_rediska->getConnectionByKeyName($name);
-
         $command = "TTL {$this->_rediska->getOption('namespace')}$name";
 
-        $this->_addCommandByConnection($connection, $command);
+        return new Rediska_Connection_Exec($connection, $command);
     }
 
-    protected function _parseResponses($responses)
+    public function parseResponse($response)
     {
-        $reply = $responses[0];
-
-        if ($reply == -1) {
-            $reply = null;
+        if ($response == -1) {
+            $response = null;
         }
 
-        return $reply;
+        return $response;
     }
 }

@@ -17,19 +17,19 @@ class Rediska_Command_DeleteFromSortedSet extends Rediska_Command_Abstract
 {
     protected $_version = '1.1';
     
-    protected function _create($name, $value)
+    public function create($name, $value)
     {
         $connection = $this->_rediska->getConnectionByKeyName($name);
 
         $value = $this->_rediska->getSerializer()->serialize($value);
         
         $command = array('ZREM', "{$this->_rediska->getOption('namespace')}$name", $value);
-
-        $this->_addCommandByConnection($connection, $command);
+        
+        return new Rediska_Connection_Exec($connection, $command);
     }
 
-    protected function _parseResponses($responses)
+    public function parseResponse($response)
     {
-        return (boolean)$responses[0];
+        return (boolean)$response;
     }
 }

@@ -16,7 +16,7 @@
  */
 class Rediska_Command_GetFromList extends Rediska_Command_Abstract
 {
-    protected function _create($name, $index)
+    public function create($name, $index)
     {
         if (!is_integer($index)) {
             throw new Rediska_Command_Exception("Index must be integer");
@@ -25,12 +25,12 @@ class Rediska_Command_GetFromList extends Rediska_Command_Abstract
         $connection = $this->_rediska->getConnectionByKeyName($name);
 
         $command = "LINDEX {$this->_rediska->getOption('namespace')}$name $index";
-
-        $this->_addCommandByConnection($connection, $command);
+        
+        return new Rediska_Connection_Exec($connection, $command);
     }
 
-    protected function _parseResponses($responses)
+    public function parseResponse($response)
     {
-        return $this->_rediska->getSerializer()->unserialize($responses[0]);
+        return $this->_rediska->getSerializer()->unserialize($response);
     }
 }

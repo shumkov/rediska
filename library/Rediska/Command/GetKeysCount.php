@@ -13,15 +13,18 @@
  */
 class Rediska_Command_GetKeysCount extends Rediska_Command_Abstract
 {
-    protected function _create()
+    public function create()
     {
+        $commands = array();
         $command = 'DBSIZE';
         foreach($this->_rediska->getConnections() as $connection) {
-            $this->_addCommandByConnection($connection, $command);
+            $commands[] = new Rediska_Connection_Exec($connection, $command);
         }
+
+        return $commands;
     }
 
-    protected function _parseResponses($responses)
+    public function parseResponses($responses)
     {
         $count = 0;
         foreach($responses as $response) {

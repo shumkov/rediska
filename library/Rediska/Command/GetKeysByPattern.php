@@ -19,19 +19,22 @@
  */
 class Rediska_Command_GetKeysByPattern extends Rediska_Command_Abstract
 {
-    protected function _create($pattern) 
+    public function create($pattern) 
     {
         if ($pattern == '') {
             throw new Rediska_Command_Exception("Pattern can't be empty");
         }
 
+        $commands = array();
         $command = "KEYS {$this->_rediska->getOption('namespace')}$pattern";
         foreach($this->_rediska->getConnections() as $connection) {
-            $this->_addCommandByConnection($connection, $command);
+            $commands[] = new Rediska_Connection_Exec($connection, $command);
         }
+
+        return $commands;
     }
 
-    protected function _parseResponses($responses)
+    public function parseResponses($responses)
     {
         $keys = array();
         foreach($responses as $response) {

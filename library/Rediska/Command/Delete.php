@@ -14,7 +14,7 @@
  */
 class Rediska_Command_Delete extends Rediska_Command_Abstract
 {
-    protected function _create($nameOrNames)
+    public function create($nameOrNames)
     {
         if (is_array($nameOrNames)) {
         	$names = $nameOrNames;
@@ -35,14 +35,17 @@ class Rediska_Command_Delete extends Rediska_Command_Abstract
                 $keysByConnections[$connectionAlias][] = $name;
             }
 
+            $commands = array();
             foreach($keysByConnections as $connectionAlias => $keys) {
                 $command = "DEL ";
                 foreach($keys as $key) {
                     $command .= " {$this->_rediska->getOption('namespace')}$key";
                 }
-
-                $this->_addCommandByConnection($connections[$connectionAlias], $command);
+                
+                $commands[] = new Rediska_Connection_Exec($connections[$connectionAlias], $command);
             }
+
+            return $commands;
         } else {
             $name = $nameOrNames;
 
@@ -50,11 +53,11 @@ class Rediska_Command_Delete extends Rediska_Command_Abstract
 
             $command = "DEL {$this->_rediska->getOption('namespace')}$name";
 
-            $this->_addCommandByConnection($connection, $command);
+            return new Rediska_Connection_Exec($connection, $command);
         }
     }
 
-    protected function _parseResponses($responses)
+    public function parseResponses($responses)
     {
         $count = 0;
         foreach($responses as $response) {

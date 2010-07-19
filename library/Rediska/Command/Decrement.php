@@ -16,7 +16,7 @@
  */
 class Rediska_Command_Decrement extends Rediska_Command_Abstract
 {
-    protected function _create($name, $amount = 1) 
+    public function create($name, $amount = 1) 
     {
         if (!is_integer($amount) || $amount <= 0) {
             throw new Rediska_Command_Exception("Amount must be positive integer");
@@ -29,12 +29,7 @@ class Rediska_Command_Decrement extends Rediska_Command_Abstract
         } else {
             $command = "DECRBY {$this->_rediska->getOption('namespace')}$name $amount";
         }
-
-        $this->_addCommandByConnection($connection, $command);
-    }
-
-    protected function _parseResponses($responses)
-    {
-        return $responses[0];
+        
+        return new Rediska_Connection_Exec($connection, $command);
     }
 }

@@ -32,7 +32,7 @@ class Rediska_Command_Sort extends Rediska_Command_Abstract
         'store'  => null, 
     );
 
-    protected function _create($name, $options = array())
+    public function create($name, $options = array())
     {
         $connection = $this->_rediska->getConnectionByKeyName($name);
 
@@ -89,8 +89,8 @@ class Rediska_Command_Sort extends Rediska_Command_Abstract
         } else {
             $command .= ' ' . $options;
         }
-
-        $this->_addCommandByConnection($connection, $command);
+        
+        return new Rediska_Connection_Exec($connection, $command);
     }
 
     protected function _addNamespaceToGetIfNeeded($pattern)
@@ -98,7 +98,7 @@ class Rediska_Command_Sort extends Rediska_Command_Abstract
         if ($pattern != '#') {
             $pattern = $this->_rediska->getOption('namespace') . $pattern;
         } else {
-            $this->_checkVersion('1.1');
+            $this->_throwExceptionIfNotSupported('1.1');
         }
 
         return $pattern;
@@ -112,9 +112,9 @@ class Rediska_Command_Sort extends Rediska_Command_Abstract
         }
     }
 
-    protected function _parseResponses($responses)
+    public function parseResponse($response)
     {
-        $values = $responses[0];
+        $values = $response;
 
         foreach($values as &$value) {
             $value = $this->_rediska->getSerializer()->unserialize($value);
