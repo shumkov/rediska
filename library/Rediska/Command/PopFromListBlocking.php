@@ -13,9 +13,9 @@
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_Command_PopFromList extends Rediska_Command_Abstract
+class Rediska_Command_PopFromListBlocking extends Rediska_Command_Abstract
 {
-    public function create($name, $pushToName = null) 
+    public function create($name) 
     {
     	$connection = $this->_rediska->getConnectionByKeyName($name);
 
