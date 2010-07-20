@@ -145,12 +145,12 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
     /**
      * Return and remove the first element of the List and block if list empty or not exists
      * 
-     * @param $timeout
+     * @param $timeout Blocking timeout
      * @return mixin
      */
     public function shiftBlocking($timeout = 0)
     {
-        $result = $this->_getRediskaOn()->shiftFromBlocking($this->_name, $timeout);
+        $result = $this->_getRediskaOn()->shiftFromListBlocking($this->_name, $timeout);
 
         if ($result && !is_null($this->_expire)) {
             $this->expire($this->_expire, $this->_isExpireTimestamp);
@@ -183,12 +183,12 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
     /**
      * Return and remove the last element of the List and block if list empty or not exists
      * 
-     * @param $timeout
+     * @param $timeout Blocking timeout
      * @return mixin
      */
     public function popBlocking($timeout = 0)
     {
-        $result = $this->_getRediskaOn()->popFromBlocking($this->_name, $timeout);
+        $result = $this->_getRediskaOn()->popFromListBlocking($this->_name, $timeout);
 
         if ($result && !is_null($this->_expire)) {
             $this->expire($this->_expire, $this->_isExpireTimestamp);

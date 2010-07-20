@@ -3,8 +3,8 @@
 /**
  * Return and remove the first element of the List at key and block if list is empty or not exists
  * 
- * @param string $name       Key name
- * @param string $pushToName Push value to another key
+ * @param string $nameOrNames Key name or array of names
+ * @param string $timeout     Blocking timeout in seconds. Timeout disabled for default.
  * @return mixin
  * 
  * @author Ivan Shumkov
@@ -60,7 +60,7 @@ class Rediska_Command_ShiftFromListBlocking extends Rediska_Command_Abstract
 
     public function parseResponse($response)
     {
-        if (!is_array($this->nameOrNames)) {
+        if (!is_array($this->nameOrNames) && !empty($response)) {
             $result = $this->_rediska->getSerializer()->unserialize($response[1]);
         } else {
             $result = Rediska_Command_Response_ListNameAndValue::factory($this->_rediska, $response);
