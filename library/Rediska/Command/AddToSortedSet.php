@@ -18,7 +18,7 @@ class Rediska_Command_AddToSortedSet extends Rediska_Command_Abstract
 {
     protected $_version = '1.1';
 
-    protected function _create($name, $value, $score)
+    public function create($name, $value, $score)
     {
     	$connection = $this->_rediska->getConnectionByKeyName($name);
 
@@ -26,11 +26,11 @@ class Rediska_Command_AddToSortedSet extends Rediska_Command_Abstract
 
         $command = array('ZADD', "{$this->_rediska->getOption('namespace')}$name", $score, $value);
 
-        $this->_addCommandByConnection($connection, $command);
+        return new Rediska_Connection_Exec($connection, $command);
     }
 
-    protected function _parseResponses($responses)
+    public function parseResponse($response)
     {
-        return (boolean)$responses[0];
+        return (boolean)$response;
     }
 }

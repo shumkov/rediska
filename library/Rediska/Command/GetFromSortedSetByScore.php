@@ -22,7 +22,7 @@ class Rediska_Command_GetFromSortedSetByScore extends Rediska_Command_Abstract
 {
     protected $_version = '1.1';
 
-    protected function _create($name, $min, $max, $withScores = false, $limit = null, $offset = null)
+    public function create($name, $min, $max, $withScores = false, $limit = null, $offset = null)
     {
         if (!is_null($limit) && !is_integer($limit)) {
             throw new Rediska_Command_Exception("Limit must be integer");
@@ -46,17 +46,17 @@ class Rediska_Command_GetFromSortedSetByScore extends Rediska_Command_Abstract
         }
         
         if ($withScores) {
-            $this->_checkVersion('1.3.4');
+            $this->_throwExceptionIfNotSupported('1.3.4');
 
             $command[] = 'WITHSCORES';
         }
 
-        $this->_addCommandByConnection($connection, $command);
+        return new Rediska_Connection_Exec($connection, $command);
     }
 
-    protected function _parseResponses($responses)
+    public function parseResponse($response)
     {
-        $values = $responses[0];
+        $values = $response;
 
         if ($this->withScores) {
             $values = Rediska_Command_Response_ValueAndScore::combine($this->_rediska, $values);

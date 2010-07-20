@@ -15,7 +15,7 @@ abstract class Rediska_Command_CompareSortedSets extends Rediska_Command_Abstrac
     const MAX = 'max';
     const MIN = 'min';
 
-    protected $_version = '1.3.5';
+    protected $_version = '1.3.12';
 
     protected $_command;
 
@@ -23,7 +23,7 @@ abstract class Rediska_Command_CompareSortedSets extends Rediska_Command_Abstrac
 	protected $_names   = array();
 	protected $_weights = array();
 
-    protected function _create(array $names, $storeName, $aggregation = self::SUM)
+    public function create(array $names, $storeName, $aggregation = self::SUM)
     {
         if (empty($names)) {
             throw new Rediska_Command_Exception('You must specify sorted sets');
@@ -60,7 +60,7 @@ abstract class Rediska_Command_CompareSortedSets extends Rediska_Command_Abstrac
 
             if ($storeConnection->getAlias() == $connection->getAlias()) {
                 $command = array($this->_command, "{$this->_rediska->getOption('namespace')}$storeName", count($names));
-                
+
                 foreach($names as $name) {
                     $command[] = "{$this->_rediska->getOption('namespace')}$name";
                 }
@@ -75,7 +75,7 @@ abstract class Rediska_Command_CompareSortedSets extends Rediska_Command_Abstrac
                     $command[] = strtoupper($aggregation);
                 }
 
-                return $this->_addCommandByConnection($connection, $command);
+                return new Rediska_Connection_Exec($connection, $command);
             }
         }
 
@@ -87,18 +87,21 @@ abstract class Rediska_Command_CompareSortedSets extends Rediska_Command_Abstrac
         }
 
         $this->setAtomic(false);
+        $commands = array();
         foreach($namesByConnections as $connectionAlias => $keys) {
             foreach($keys as $key) {
                 $this->_names[] = $key;
                 $command = array("ZRANGE", "{$this->_rediska->getOption('namespace')}$key", 0, -1, 'WITHSCORES');
-                $this->_addCommandByConnection($connections[$connectionAlias], $command);
+                $commands[] = new Rediska_Connection_Exec($connections[$connectionAlias], $command);
             }
         }
+
+        return $commands;
     }
     
     abstract protected function _compareSets($sets);
 
-    protected function _parseResponses($responses)
+    public function parseResponses($responses)
     {
         if ($this->isAtomic()) {
     	   return $responses[0];

@@ -17,7 +17,7 @@
  */
 class Rediska_Command_Expire extends Rediska_Command_Abstract
 {
-    protected function _create($name, $secondsOrTimestamp, $isTimestamp = false)
+    public function create($name, $secondsOrTimestamp, $isTimestamp = false)
     {
         if (!is_integer($secondsOrTimestamp) || $secondsOrTimestamp <= 0) {
             throw new Rediska_Command_Exception(($isTimestamp ? 'Time' : 'Seconds') . ' must be positive integer');
@@ -26,7 +26,7 @@ class Rediska_Command_Expire extends Rediska_Command_Abstract
         $connection = $this->_rediska->getConnectionByKeyName($name);
 
         if ($isTimestamp) {
-            $this->_checkVersion('1.1');
+            $this->_throwExceptionIfNotSupported('1.1');
             $command = 'EXPIREAT';
         } else {
             $command = 'EXPIRE';
@@ -34,11 +34,11 @@ class Rediska_Command_Expire extends Rediska_Command_Abstract
 
         $command = "$command {$this->_rediska->getOption('namespace')}$name $secondsOrTimestamp";
 
-        $this->_addCommandByConnection($connection, $command);
+        return new Rediska_Connection_Exec($connection, $command);
     }
 
-    protected function _parseResponse($responses)
+    public function parseResponse($response)
     {
-        return (boolean)$responses[0];
+        return (boolean)$response;
     }
 }

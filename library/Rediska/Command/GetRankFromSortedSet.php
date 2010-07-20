@@ -18,21 +18,16 @@ class Rediska_Command_GetRankFromSortedSet extends Rediska_Command_Abstract
 {
     protected $_version = '1.3.4';
 
-    protected function _create($name, $value, $revert = false)
+    public function create($name, $value, $revert = false)
     {
         $connection = $this->_rediska->getConnectionByKeyName($name);
-        
+
         $value = $this->_rediska->getSerializer()->serialize($value);
 
         $command = array($revert ? 'ZREVRANK' : 'ZRANK',
                          "{$this->_rediska->getOption('namespace')}$name",
                          $value);
 
-        $this->_addCommandByConnection($connection, $command);
-    }
-
-    protected function _parseResponses($responses)
-    {
-        return $responses[0];
+        return new Rediska_Connection_Exec($connection, $command);
     }
 }

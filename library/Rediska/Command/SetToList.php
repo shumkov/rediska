@@ -17,7 +17,7 @@
  */
 class Rediska_Command_SetToList extends Rediska_Command_Abstract
 {
-    protected function _create($name, $index, $value) 
+    public function create($name, $index, $value) 
     {
         if (!is_integer($index)) {
             throw new Rediska_Command_Exception("Index must be integer");
@@ -29,11 +29,11 @@ class Rediska_Command_SetToList extends Rediska_Command_Abstract
 
         $command = "LSET {$this->_rediska->getOption('namespace')}$name $index " . strlen($value) . Rediska::EOL . $value;
 
-        $this->_addCommandByConnection($connection, $command);
+        return new Rediska_Connection_Exec($connection, $command);
     }
 
-    protected function _parseResponses($responses)
+    public function parseResponse($response)
     {
-        return (boolean)$responses[0];
+        return (boolean)$response;
     }
 }

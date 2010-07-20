@@ -14,17 +14,12 @@
  */
 class Rediska_Command_GetSetLength extends Rediska_Command_Abstract
 {
-    protected function _create($name)
+    public function create($name)
     {
         $connection = $this->_rediska->getConnectionByKeyName($name);
 
         $command = "SCARD {$this->_rediska->getOption('namespace')}$name";
 
-        $this->_addCommandByConnection($connection, $command);
-    }
-
-    protected function _parseResponses($responses)
-    {
-        return $responses[0];
+        return new Rediska_Connection_Exec($connection, $command);
     }
 }

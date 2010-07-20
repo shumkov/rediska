@@ -13,16 +13,19 @@
  */
 class Rediska_Command_RewriteAppendOnlyFile extends Rediska_Command_Abstract
 {
-    protected function _create() 
+    public function create() 
     {
         $command = "BGREWRITEAOF";
 
+        $commands = array();
         foreach($this->_rediska->getConnections() as $connection) {
-            $this->_addCommandByConnection($connection, $command);
+            $commands[] = new Rediska_Connection_Exec($connection, $command);
         }
+
+        return $commands;
     }
 
-    protected function _parseResponses($responses)
+    public function parseResponse($response)
     {
         return true;
     }

@@ -16,7 +16,7 @@
  */
 class Rediska_Command_MoveToDb extends Rediska_Command_Abstract
 {
-    protected function _create($name, $dbIndex) 
+    public function create($name, $dbIndex) 
     {
     	if (!is_integer($dbIndex) || $dbIndex < 0) {
             throw new Rediska_Command_Exception("Index must be zero or positive integer");
@@ -25,12 +25,12 @@ class Rediska_Command_MoveToDb extends Rediska_Command_Abstract
         $connection = $this->_rediska->getConnectionByKeyName($name);
 
         $command = "MOVE {$this->_rediska->getOption('namespace')}$name $dbIndex";
-
-        $this->_addCommandByConnection($connection, $command);
+        
+        return new Rediska_Connection_Exec($connection, $command);
     }
 
-    protected function _parseResponses($responses)
+    public function parseResponse($response)
     {
-        return (boolean)$responses[0];
+        return (boolean)$response;
     }
 }
