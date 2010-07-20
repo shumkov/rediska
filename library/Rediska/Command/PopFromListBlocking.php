@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Return and remove the last element of the List at key 
+ * Return and remove the last element of the List at key and block if list is empty or not exists
  * 
  * @param string $name       Key name
  * @param string $pushToName Push value to another key
@@ -17,39 +17,55 @@ class Rediska_Command_PopFromListBlocking extends Rediska_Command_Abstract
 {
     protected $_version = '1.3.1';
 
-    public function create($name) 
+    public function create($nameOrNames, $timeout = 0) 
     {
-    	$connection = $this->_rediska->getConnectionByKeyName($name);
-
-        if (is_null($pushToName)) {
-            $command = "RPOP {$this->_rediska->getOption('namespace')}$name";
+        if (!is_array($nameOrNames)) {
+            $names = array($nameOrNames);
+        } elseif (!empty($nameOrNames)) {
+            $names = $nameOrNames;
         } else {
-            $toConnection = $this->_rediska->getConnectionByKeyName($pushToName);
-
-            if ($connection->getAlias() == $toConnection->getAlias()) {
-                $this->_throwExceptionIfNotSupported('1.1');
-
-            	$command = array('RPOPLPUSH',
-            	                 "{$this->_rediska->getOption('namespace')}$name",
-            	                 "{$this->_rediska->getOption('namespace')}$pushToName");
-            } else {
-            	$this->setAtomic(false);
-
-                $command = "RPOP {$this->_rediska->getOption('namespace')}$name";
-            }
+            throw new Rediska_Command_Exception('Not present keys for pop');
         }
 
-        return new Rediska_Connection_Exec($connection, $command);
+        $connections = array();
+        $namesByConnections = array();
+        foreach ($names as $name) {
+            $connection = $this->_rediska->getConnectionByKeyName($name);
+            $connectionAlias = $connection->getAlias();
+            if (!array_key_exists($connectionAlias, $connections)) {
+                $connections[$connectionAlias] = $connection;
+                $namesByConnections[$connectionAlias] = array();
+            }
+            $namesByConnections[$connectionAlias][] = $name;
+        }
+
+        // TODO: Implement for many connections
+        if (count($namesByConnections) > 1) {
+            throw new Rediska_Command_Exception("Blocking pop until worked only with one connection. Try to use Rediska#on() method for specify it.");
+        }
+
+        $execs = array();
+        foreach($namesByConnections as $connectionAlias => $names) {
+            $command = array('BRPOP');
+            foreach($names as $name) {
+                $command[] = "{$this->_rediska->getOption('namespace')}$name";
+            }
+            $command[] = $timeout;
+
+            $execs[] = new Rediska_Connection_Exec($connections[$connectionAlias], $command);
+        }
+
+        return $execs;
     }
 
-    public function parseResponses($responses)
+    public function parseResponse($response)
     {
-        if (!$this->isAtomic()) {
-            $value = $this->_rediska->getSerializer()->unserialize($responses[0]);
-
-            return $this->_rediska->prependToList($this->pushToName, $value);
+        if (!is_array($this->nameOrNames)) {
+            $result = $this->_rediska->getSerializer()->unserialize($response[1]);
         } else {
-            return $this->_rediska->getSerializer()->unserialize($responses[0]);
+            $result = Rediska_Command_Response_ListNameAndValue::factory($this->_rediska, $response);
         }
+
+        return $result;
     }
 }

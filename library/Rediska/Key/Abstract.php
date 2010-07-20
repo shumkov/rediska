@@ -266,7 +266,9 @@ abstract class Rediska_Key_Abstract
     }
 
     /**
-     *  Get rediska and set specified conndection
+     *  Get rediska and set specified connection
+     *  
+     *  @return Rediska
      */
     protected function _getRediskaOn()
     {

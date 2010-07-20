@@ -88,16 +88,17 @@ class Rediska extends Rediska_Options
         'decrement' => 'Rediska_Command_Decrement',
 
         // Lists
-        'appendtolist'   => 'Rediska_Command_AppendToList',
-        'prependtolist'  => 'Rediska_Command_PrependToList',
-        'getlistlength'  => 'Rediska_Command_GetListLength',
-        'getlist'        => 'Rediska_Command_GetList',
-        'truncatelist'   => 'Rediska_Command_TruncateList',
-        'getfromlist'    => 'Rediska_Command_GetFromList',
-        'settolist'      => 'Rediska_Command_SetToList',
-        'deletefromlist' => 'Rediska_Command_DeleteFromList',
-        'shiftfromlist'  => 'Rediska_Command_ShiftFromList',
-        'popfromlist'    => 'Rediska_Command_PopFromList',
+        'appendtolist'        => 'Rediska_Command_AppendToList',
+        'prependtolist'       => 'Rediska_Command_PrependToList',
+        'getlistlength'       => 'Rediska_Command_GetListLength',
+        'getlist'             => 'Rediska_Command_GetList',
+        'truncatelist'        => 'Rediska_Command_TruncateList',
+        'getfromlist'         => 'Rediska_Command_GetFromList',
+        'settolist'           => 'Rediska_Command_SetToList',
+        'deletefromlist'      => 'Rediska_Command_DeleteFromList',
+        'shiftfromlist'       => 'Rediska_Command_ShiftFromList',
+        'popfromlist'         => 'Rediska_Command_PopFromList',
+        'popfromlistblocking' => 'Rediska_Command_PopFromListBlocking',
 
         // Sets
         'addtoset'         => 'Rediska_Command_AddToSet',
