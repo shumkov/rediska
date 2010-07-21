@@ -22,8 +22,7 @@ class Rediska_PubSub_Connection extends Rediska_Connection
      */
     public static function createFromConnection(Rediska_Connection $connection)
     {
-        $newConnection = new self($connection->_options);
-        return $newConnection;
+        return new self($connection->getOptions());
     }
 
     /**

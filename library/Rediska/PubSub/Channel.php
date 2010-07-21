@@ -1,52 +1,32 @@
 <?php
 
+// Require Rediska
+if (!class_exists('Rediska')) {
+    require_once dirname(__FILE__) . '/../../Rediska.php';
+}
+
 /**
  * This object is for managing PubSub functionality
  *
- * @author Yuriy Bogdanov
+ * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_PubSub_Context implements Iterator
+class Rediska_PubSub_Channel extends Rediska_Options implements Iterator
 {
     const SUBSCRIBE     = 'subscribe';
     const UNSUBSCRIBE   = 'unsubscribe';
     const MESSAGE       = 'message';
 
     /**
-     *
-     * @var Rediska_PubSub_Context
-     */
-    static protected $_instance;
-
-    /**
-     *
-     * @return Rediska_PubSub_Context
-     */
-    static public function getInstance()
-    {
-        if (is_null(self::$_instance)) {
-            self::$_instance = new self();
-        }
-        return self::$_instance;
-    }
-
-    /////
-
-    /**
+     * Rediska instance
      *
      * @var Rediska
      */
     protected $_rediska;
 
-    /**
-     *
-     * @var Rediska_PubSub_Command
-     */
-    protected $_command;
-    
     /**
      * The pool of subscription connections
      *
@@ -81,16 +61,83 @@ class Rediska_PubSub_Context implements Iterator
      * @var array
      */
     protected $_buffer = array();
+    
+    
+    
+    
+    protected $_channels = array();
 
     
     /**
      * Constructor.
      * 
      */
-    public function __construct($timeout = null)
+    public function __construct($channelOrChannels, $timeout = null)
     {
+        if (!is_array($channelOrChannels)) {
+            $this->_channels = array($channelOrChannels);
+        } else {
+            $this->_channels = $channelOrChannels;
+        }
+
         if (!is_null($timeout)) {
             $this->setTimeout($timeout);
+        }
+        
+        $this->_setupRediskaDefaultInstance();
+        
+        $this->_throwIfNotSupported();
+        
+        
+    }
+    
+    /**
+     * Set Rediska instance
+     * 
+     * @param Rediska $rediska
+     * @return Rediska_Key_Abstract
+     */
+    public function setRediska(Rediska $rediska)
+    {
+        $this->_rediska = $rediska;
+        
+        return $this;
+    }
+
+    /**
+     * Get Rediska instance
+     * 
+     * @return Rediska
+     */
+    public function getRediska()
+    {
+        if (!$this->_rediska instanceof Rediska) {
+            throw new Rediska_PubSub_Exception('Rediska instance not found for PubSub channel');
+        }
+
+        return $this->_rediska;
+    }
+    
+    /**
+     * Setup Rediska instance
+     */
+    protected function _setupRediskaDefaultInstance()
+    {
+        $this->_rediska = Rediska::getDefaultInstance();
+        if (!$this->_rediska) {
+            $this->_rediska = new Rediska();
+        }
+    }
+    
+    /**
+     * Throw if PubSub not supported by Redis
+     */
+    protected function _throwIfNotSupported()
+    {
+        $version = '1.3.8';
+        $redisVersion = $this->getRediska()->getOption('redisVersion');
+        if (version_compare($version, $this->getRediska()->getOption('redisVersion')) == 1) {
+            throw new Rediska_PubSub_Exception("Transaction requires {$version}+ version of Redis server. Current version is {$redisVersion}. To change it specify 'redisVersion' option.");
         }
     }
 

@@ -2,9 +2,8 @@
 
 /**
  * Rediska connection timeout exception
- * (throws only on read timeout, not when connect)
  * 
- * @author Yuriy Bogdanov
+ * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
  * @link http://rediska.geometria-lab.net

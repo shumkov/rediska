@@ -138,10 +138,10 @@ class Rediska extends Rediska_Options
         'shutdown'              => 'Rediska_Command_Shutdown',
         'rewriteappendonlyfile' => 'Rediska_Command_RewriteAppendOnlyFile',
         'slaveof'               => 'Rediska_Command_SlaveOf',
-        
+
         // Publish/Subscribe
-        'subscribe'             => 'Rediska_Command_Subscribe',
-        'unsubscribe'           => 'Rediska_Command_Unsubscribe',
+        'publish'       => 'Rediska_Command_Publish',
+        'unsubscribe'   => 'Rediska_Command_Unsubscribe',
     );
 
     /**
@@ -422,6 +422,18 @@ class Rediska extends Rediska_Options
         }
 
         return new Rediska_Transaction($this, $this->_specifiedConnection, $connection);
+    }
+    
+    public function subscribe()
+    {
+        // Check Redis version
+        $version = '1.3.8';
+        $redisVersion = $this->getOption('redisVersion');
+        if (version_compare($version, $this->getOption('redisVersion')) == 1) {
+            throw new Rediska_Transaction_Exception("Transaction requires {$version}+ version of Redis server. Current version is {$redisVersion}. To change it specify 'redisVersion' option.");
+        }
+
+        return new Rediska_PubSub_Channel();
     }
 
     /**
