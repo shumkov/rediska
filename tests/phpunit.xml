@@ -44,7 +44,9 @@
         <file>./library/Rediska/Command/SetToListTest.php</file>
         <file>./library/Rediska/Command/DeleteFromListTest.php</file>
         <file>./library/Rediska/Command/ShiftFromListTest.php</file>
+		<file>./library/Rediska/Command/ShiftFromListBlockingTest.php</file>
         <file>./library/Rediska/Command/PopFromListTest.php</file>
+		<file>./library/Rediska/Command/PopFromListBlockingTest.php</file>
     </testsuite>
 
     <testsuite name="SetCommands">
