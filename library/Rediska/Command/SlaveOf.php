@@ -15,7 +15,7 @@
  */
 class Rediska_Command_SlaveOf extends Rediska_Command_Abstract
 {
-    protected function _create($aliasOrConnection)
+    public function create($aliasOrConnection)
     {
         if ($aliasOrConnection === false) {
             $host = 'no';
@@ -33,13 +33,15 @@ class Rediska_Command_SlaveOf extends Rediska_Command_Abstract
         }
 
         $command = "SLAVEOF $host $port";
-
+        $commands = array();
         foreach($this->_rediska->getConnections() as $connection) {
-            $this->_addCommandByConnection($connection, $command);
+            $commands[] = new Rediska_Connection_Exec($connection, $command);
         }
+        
+        return $commands;
     }
 
-    protected function _parseResponses($responses)
+    public function parseResponses($responses)
     {
         return true;
     }

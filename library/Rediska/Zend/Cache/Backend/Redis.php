@@ -81,9 +81,18 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
     public function load($id, $doNotTestCacheValidity = false)
     {
         $tmp = $this->_rediska->get($id);
-        if (is_array($tmp)) {
+
+        if (is_array($id)) {
+            foreach ($id as $k) {
+                if (isset($tmp[$k])) {
+                    $tmp[$k] = $tmp[$k][0];
+                }
+            }
+            return $tmp;
+        } else if (is_array($tmp)) {
             return $tmp[0];
         }
+
         return false;
     }
     

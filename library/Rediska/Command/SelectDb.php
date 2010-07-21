@@ -15,7 +15,7 @@
  */
 class Rediska_Command_SelectDb extends Rediska_Command_Abstract
 {
-    protected function _create($index) 
+    public function create($index) 
     {
     	if (!is_integer($index) || $index < 0) {
             throw new Rediska_Command_Exception("Index must be zero or positive integer");
@@ -23,12 +23,15 @@ class Rediska_Command_SelectDb extends Rediska_Command_Abstract
 
         $command = "SELECT $index";
 
+        $commands = array();
         foreach($this->_rediska->getConnections() as $connection) {
-            $this->_addCommandByConnection($connection, $command);
+            $commands[] = new Rediska_Connection_Exec($connection, $command);
         }
+
+        return $commands;
     }
 
-    protected function _parseResponses($responses)
+    public function parseResponses($responses)
     {
         return true;
     }

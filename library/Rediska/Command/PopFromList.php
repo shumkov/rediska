@@ -15,17 +15,17 @@
  */
 class Rediska_Command_PopFromList extends Rediska_Command_Abstract
 {
-    protected function _create($name, $pushToName = null) 
+    public function create($name, $pushToName = null) 
     {
     	$connection = $this->_rediska->getConnectionByKeyName($name);
-    	
+
         if (is_null($pushToName)) {
             $command = "RPOP {$this->_rediska->getOption('namespace')}$name";
         } else {
             $toConnection = $this->_rediska->getConnectionByKeyName($pushToName);
 
             if ($connection->getAlias() == $toConnection->getAlias()) {
-                $this->_checkVersion('1.1');
+                $this->_throwExceptionIfNotSupported('1.1');
 
             	$command = array('RPOPLPUSH',
             	                 "{$this->_rediska->getOption('namespace')}$name",
@@ -37,10 +37,10 @@ class Rediska_Command_PopFromList extends Rediska_Command_Abstract
             }
         }
 
-        $this->_addCommandByConnection($connection, $command);
+        return new Rediska_Connection_Exec($connection, $command);
     }
 
-    protected function _parseResponses($responses)
+    public function parseResponses($responses)
     {
         if (!$this->isAtomic()) {
             $value = $this->_rediska->getSerializer()->unserialize($responses[0]);
