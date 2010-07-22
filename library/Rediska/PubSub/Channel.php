@@ -14,7 +14,7 @@ if (!class_exists('Rediska')) {
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_PubSub_Channel extends Rediska_Options implements Iterator
+class Rediska_PubSub_Channel implements Iterator
 {
     const SUBSCRIBE     = 'subscribe';
     const UNSUBSCRIBE   = 'unsubscribe';
@@ -28,24 +28,81 @@ class Rediska_PubSub_Channel extends Rediska_Options implements Iterator
     protected $_rediska;
 
     /**
-     * The pool of subscription connections
-     *
-     * @see Rediska_PubSub_Connection
+     * Subscriptions
+     * 
      * @var array
      */
-    protected $_connections = array();
+    protected $_subscribed = false;
 
     /**
-     *
-     * @var Rediska_PubSub_ConnectionIterator
+     * Subscriptions
+     * 
+     * @var array
      */
-    protected $_connectionIterator;
+    protected $_subscriptions = array();
 
     /**
+     * The pool of subscription connections
+     * 
+     * @var Rediska_PubSub_Connections
+     */
+    protected $_connections;
+
+    /**
+     * Message buffer
      *
-     * @var int
+     * @var array
+     */
+    protected static $_messages = array();
+
+    /**
+     * Timeout
+     * 
+     * @var mixin
      */
     protected $_timeout;
+
+    /**
+     * Server alias or connection object
+     * 
+     * @var string|Rediska_Connection
+     */
+    protected $_serverAlias;
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    /**
+     * Current channel
+     *
+     * @var string
+     */
+    protected $_currentChannel;
+
+    /**
+     * Current message
+     *
+     * @var string
+     */
+    protected $_currentMessage;
+
+    /**
+     * Flag determines if the cursor is valid
+     *
+     * @var bool
+     */
+    protected $_iteratorValid = false;
+    
+    
+
+
 
     /**
      * The unix timestamp when this iterator was created
@@ -55,98 +112,109 @@ class Rediska_PubSub_Channel extends Rediska_Options implements Iterator
      */
     protected $_timeStart;
 
-    /**
-     * Message buffer
-     *
-     * @var array
-     */
-    protected $_buffer = array();
     
-    
-    
-    
-    protected $_channels = array();
 
-    
     /**
-     * Constructor.
+     * Constructor
      * 
+     * @var string|array              $nameOrNames Channel name or array of names
+     * @var mixin                     $timeout     Timeout
+     * @var string|Rediska_Connection $serverAlias Server alias or connection object
      */
-    public function __construct($channelOrChannels, $timeout = null)
+    public function __construct($nameOrNames, $timeout = null, $serverAlias = null)
+    {
+        $this->_setupRediskaDefaultInstance();
+        $this->_throwIfNotSupported();
+
+        $this->subscribe($nameOrNames);
+
+        $this->_serverAlias = $serverAlias;
+        $this->_timeout     = $timeout;
+
+        $this->_connections = new Rediska_PubSub_Connections($this);
+    }
+
+    /**
+     * Subscribe to channel or channels
+     *
+     * @param string|array $channelOrChannels Channel name or names
+     */
+    public function subscribe($channelOrChannels)
     {
         if (!is_array($channelOrChannels)) {
-            $this->_channels = array($channelOrChannels);
+            $channels = array($channelOrChannels);
         } else {
-            $this->_channels = $channelOrChannels;
+            $channels = $channelOrChannels;
         }
 
-        if (!is_null($timeout)) {
-            $this->setTimeout($timeout);
+        // Check if already subscribed
+        foreach($channels as $channel) {
+            if (in_array($channel, $this->_subscriptions)) {
+                throw new Rediska_PubSub_Exception("You already subscribed to $channel");
+            }
         }
-        
-        $this->_setupRediskaDefaultInstance();
-        
-        $this->_throwIfNotSupported();
-        
-        
-    }
+
+        if (!$this->_subscribed) {
+            // Add subscriptions for init
+            $this->_subscriptions += $channels;
+        } else {
+            // Subscribe now!
+            $channelsByConnections = array();
+            foreach($channels as $channel) {
+                $connection = $this->_connections->getConnectionByChannelName($channel);
+ 
+                $connectionAlias = $connection->getAlias();
+                if (!array_key_exists($connectionAlias, $channelsByConnections)) {
+                    $channelsByConnections[$connectionAlias] = array();
+                }
+                $channelsByConnections[$connectionAlias][] = $channel;
+            }
+
+            foreach($channelsByConnections as $connectionAlias => $channles) {
+                $command = array(self::SUBSCRIBE);
+                foreach($channles as $channel) {
+                    $command[] = $this->getRediska()->getOption('namespace') . $channel;
+                }
+                $connection = $this->_connections->getConnectionByAlias($connectionAlias);
+                $subscribe = new Rediska_Connection_Exec($connection, $command);
+                $subscribe->write();
+            }
+
+            // Here we just ensure that all subscriptions succeed
+            $left = count($channels);
+
+            while ($left > 0) {
+
+                $responses = array();
     
-    /**
-     * Set Rediska instance
-     * 
-     * @param Rediska $rediska
-     * @return Rediska_Key_Abstract
-     */
-    public function setRediska(Rediska $rediska)
-    {
-        $this->_rediska = $rediska;
+                foreach ($command->getCommandsByConnections() as $commandByConnection) {
+                    list($connection) = $commandByConnection;
+                    // Do not request to this connection if there are no pending channels
+                    if (!$connection->hasPendingChannels()) {
+                        continue;
+                    }
+                    $responses[] = $this->_readFromConnection($connection);
+                }
+
+                foreach ($responses as $response) {
+                    if ($response['type'] == self::SUBSCRIBE) {
+                        $left--;
+                    }
+                }
+            }
+    
+            // Clear commands list
+            $command->reset();
+            
+            
+            
+            
+            
+            
+            
+        }
         
-        return $this;
-    }
-
-    /**
-     * Get Rediska instance
-     * 
-     * @return Rediska
-     */
-    public function getRediska()
-    {
-        if (!$this->_rediska instanceof Rediska) {
-            throw new Rediska_PubSub_Exception('Rediska instance not found for PubSub channel');
-        }
-
-        return $this->_rediska;
-    }
-    
-    /**
-     * Setup Rediska instance
-     */
-    protected function _setupRediskaDefaultInstance()
-    {
-        $this->_rediska = Rediska::getDefaultInstance();
-        if (!$this->_rediska) {
-            $this->_rediska = new Rediska();
-        }
-    }
-    
-    /**
-     * Throw if PubSub not supported by Redis
-     */
-    protected function _throwIfNotSupported()
-    {
-        $version = '1.3.8';
-        $redisVersion = $this->getRediska()->getOption('redisVersion');
-        if (version_compare($version, $this->getRediska()->getOption('redisVersion')) == 1) {
-            throw new Rediska_PubSub_Exception("Transaction requires {$version}+ version of Redis server. Current version is {$redisVersion}. To change it specify 'redisVersion' option.");
-        }
-    }
-
-    /**
-     *
-     * @param string|array $keys
-     */
-    public function subscribe($channels)
-    {
+        
         // Handle the list of channels
         if (is_array($channels)) {
             $count = count($channels);
@@ -155,43 +223,108 @@ class Rediska_PubSub_Channel extends Rediska_Options implements Iterator
         // Handle single channel subscription
         else {
             $count = 1;
-            $this->_bulkCommand(self::SUBSCRIBE, array($channels));
+            
         }
 
-        // Here we just ensure that all subscriptions succeed
         
+    }
+    
+    
+    /**
+     * Connection response parser & handler
+     *
+     * @param array $responses
+     * @return array
+     */
+    protected function _getResponse($response)
+    {
+        $channel = $response[1];
+
+        if ($this->getRediska()->getOption('namespace') !== '' && strpos($channel, $this->getRediska()->getOption('namespace')) === 0) {
+            $channel = substr($channel, strlen($this->getRediska()->getOption('namespace')));
+        }
+
+        switch ($response[0]) {
+            case self::SUBSCRIBE:
+                return new Rediska_PubSub_Response_Subscribe($channel);
+
+            case self::UNSUBSCRIBE:
+                return new Rediska_PubSub_Response_Unsubscribe($channel);
+
+            case self::MESSAGE:
+                $message = new Rediska_PubSub_Response_Message($channel, $response[2]);
+
+                $this->_messages[] = $message;
+
+                return $message;
+
+            default:
+                throw new Rediska_PubSub_Response_Exception('Unknown reponse type: ' . $response[0]);
+        }
+    }
+    
+    
+    
+    
+    
+    
+/**
+     *
+     * @param string $type SUBSCRIBE or UNSUBSCRIBE
+     * @param array $channels
+     */
+    protected function _($type, array $channels)
+    {
+        // Clear the list of pending channels for all connections
+        // just in case..
+        foreach ($this->_connections as $connection) {
+            $connection->clearPendingChannels();
+        }
+
         $command = $this->getCommand();
-        $left = $count;
-        
-        while ($left > 0) {
 
-            $responses = array();
-
-            foreach ($command->getCommandsByConnections() as $commandByConnection) {
-                list($connection) = $commandByConnection;
-                // Do not request to this connection if there are no pending channels
-                if (!$connection->hasPendingChannels()) {
-                    continue;
-                }
-                $responses[] = $this->_readFromConnection($connection);
+        // Group channels by different connections
+        $connections = array();
+        foreach ($channels as $channel) {
+            $connection = $this->getConnectionByKeyName($channel);
+            $connectionAlias = $connection->getAlias();
+            if (!array_key_exists($connectionAlias, $connections)) {
+                $connections[$connectionAlias] = $connection;
             }
-
-            foreach ($responses as $response) {
-                if ($response['type'] == self::SUBSCRIBE) {
-                    $left--;
-                }
-            }
+            $connection->addPending($channel);
         }
 
-        // Clear commands list
-        $command->reset();
+        // Add command for each connection "(UN)SUBSCRIBE key1 key2 keyN"
+        $rediska = $this->getRediska();
+        foreach($connections as $connection) {
+            $commandStr = $type;
+            foreach($connection->getPendingChannels() as $channel) {
+                $commandStr .= ' ' . $rediska->getOption('namespace') . $channel;
+            }
+            $command->addCommandByConnection($connection, $commandStr);
+        }
+
+        $command->write();
+    }
+    
+    
+    
+
+    public function hasSubscriptions()
+    {
+        return !empty($this->_subscriptions);
+    }
+
+    public function getSubscriptions()
+    {
+        return $this->_subscriptions;
     }
 
     /**
      *
      * @param string|array[optional] $keys
      */
-    public function unsubscribe($channels = null)
+    public function removeSubscription($channels = null)
     {
         // Handle bulk unsubscription
         if (is_array($channels)) {
@@ -244,6 +377,46 @@ class Rediska_PubSub_Channel extends Rediska_Options implements Iterator
 
         return $result;
     }
+    
+    public function clearSubscriptions()
+    {
+        
+    }
+    
+    
+    /**
+     * Set Rediska instance
+     * 
+     * @param Rediska $rediska
+     * @return Rediska_Key_Abstract
+     */
+    public function setRediska(Rediska $rediska)
+    {
+        $this->_rediska = $rediska;
+        
+        return $this;
+    }
+
+    /**
+     * Get Rediska instance
+     * 
+     * @return Rediska
+     */
+    public function getRediska()
+    {
+        if (!$this->_rediska instanceof Rediska) {
+            throw new Rediska_PubSub_Exception('Rediska instance not found for PubSub channel');
+        }
+
+        return $this->_rediska;
+    }
+
+    public function getServerAlias()
+    {
+        return $this->_serverAlias;
+    }
+
+
 
     /**
      * Gets a single message from any subscribed connection
@@ -347,29 +520,6 @@ class Rediska_PubSub_Channel extends Rediska_Options implements Iterator
     }
 
     /**
-     * Sets rediska instance
-     *
-     * @param Rediska $rediska
-     */
-    public function setRediska(Rediska $rediska)
-    {
-        $this->_rediska = $rediska;
-    }
-
-    /**
-     * Gets rediska instance
-     *
-     * @return Rediska
-     */
-    public function getRediska()
-    {
-        if (is_null($this->_rediska)) {
-            $this->_rediska = Rediska::getDefaultInstance();
-        }
-        return $this->_rediska;
-    }
-
-    /**
      * Sets connection iterator
      *
      * @param Iterator $iterator
@@ -393,27 +543,6 @@ class Rediska_PubSub_Channel extends Rediska_Options implements Iterator
     }
 
     /**
-     *
-     * @param Rediska_PubSub_Command $command 
-     */
-    public function setCommand(Rediska_PubSub_Command $command)
-    {
-        $this->_command = $command;
-    }
-
-    /**
-     *
-     * @return Rediska_PubSub_Command
-     */
-    public function getCommand()
-    {
-        if (is_null($this->_command)) {
-            $this->_command = new Rediska_PubSub_Command($this->getRediska(), 'pubsub', array());
-        }
-        return $this->_command;
-    }
-
-    /**
      * This function does a single read from Rediska_PubSub_Connection
      * Then parse it and evaluate
      *
@@ -426,134 +555,29 @@ class Rediska_PubSub_Channel extends Rediska_Options implements Iterator
         return $parsed[0];
     }
 
-    /**
-     *
-     * @param string $type SUBSCRIBE or UNSUBSCRIBE
-     * @param array $channels
-     */
-    protected function _bulkCommand($type, array $channels)
-    {
-        // Clear the list of pending channels for all connections
-        // just in case..
-        foreach ($this->_connections as $connection) {
-            $connection->clearPendingChannels();
-        }
+    
 
-        $command = $this->getCommand();
-
-        // Group channels by different connections
-        $connections = array();
-        foreach ($channels as $channel) {
-            $connection = $this->getConnectionByKeyName($channel);
-            $connectionAlias = $connection->getAlias();
-            if (!array_key_exists($connectionAlias, $connections)) {
-                $connections[$connectionAlias] = $connection;
-            }
-            $connection->addPending($channel);
-        }
-
-        // Add command for each connection "(UN)SUBSCRIBE key1 key2 keyN"
-        $rediska = $this->getRediska();
-        foreach($connections as $connection) {
-            $commandStr = $type;
-            foreach($connection->getPendingChannels() as $channel) {
-                $commandStr .= ' ' . $rediska->getOption('namespace') . $channel;
-            }
-            $command->addCommandByConnection($connection, $commandStr);
-        }
-
-        $command->write();
-    }
-
-    /**
-     * Connection response parser & handler
-     *
-     * @param array $responses
-     * @return array
-     */
-    protected function _parseResponses($responses)
-    {
-        $results = array();
-
-        foreach ($responses as $response) {
-
-            $result = null;
-            
-            switch ($response[0]) {
-
-                case self::SUBSCRIBE:
-
-                    $result = array(
-                        'type' => $response[0],
-                        'channel' => $response[1],
-                        'numChannels' => $response[2],
-                    );
-
-                    $connection = $this->getConnectionByKeyName($result['channel']);
-                    $connection->subscribe($result['channel']);
-                    
-                    break;
-
-                case self::UNSUBSCRIBE:
-                    
-                    $result = array(
-                        'type' => $response[0],
-                        'channel' => $response[1],
-                        'numChannels' => $response[2],
-                    );
-
-                    $connection = $this->getConnectionByKeyName($result['channel']);
-                    $connection->unsubscribe($result['channel']);
-
-                    break;
-
-                case self::MESSAGE:
-
-                    $result = array(
-                        'type' => $response[0],
-                        'channel' => $response[1],
-                        'message' => $response[2],
-                    );
-
-                    // Add received message to a buffer
-                    array_push($this->_buffer, array($result['channel'], $result['message']));
-
-                    break;
-
-                default:
-                    throw new Rediska_Command_Exception('Unknown message type: ' . $response[0]);
-            }
-
-            $results[] = $result;
-        }
-
-        return $results;
-    }
+    
 
 
     ////////// Iterator implementation
 
     
-    /**
-     * Current channel
-     *
-     * @var string
-     */
-    protected $_channel;
+
+    
+    
+    
 
     /**
-     * Current message
+     * Returns false if current context timed out
      *
-     * @var string
+     * @return bool
      */
-    protected $_message;
-
-    /**
-     * Flag determines if the cursor is valid
-     *
-     * @var bool
-     */
-    protected $_valid = false;
+    public function checkTimeout()
+    {
+        return is_null($this->_timeout) || $this->_timeStart + $this->_timeout > time();
+    }
+    
 
     /**
      * Returns current channel
@@ -611,14 +635,27 @@ class Rediska_PubSub_Channel extends Rediska_Options implements Iterator
         // see rewind() and next()
         return $this->_valid;
     }
-
+    
     /**
-     * Returns false if current context timed out
-     *
-     * @return bool
+     * Setup Rediska instance
      */
-    public function checkTimeout()
+    protected function _setupRediskaDefaultInstance()
     {
-        return is_null($this->_timeout) || $this->_timeStart + $this->_timeout > time();
+        $this->_rediska = Rediska::getDefaultInstance();
+        if (!$this->_rediska) {
+            $this->_rediska = new Rediska();
+        }
+    }
+    
+    /**
+     * Throw if PubSub not supported by Redis
+     */
+    protected function _throwIfNotSupported()
+    {
+        $version = '1.3.8';
+        $redisVersion = $this->getRediska()->getOption('redisVersion');
+        if (version_compare($version, $this->getRediska()->getOption('redisVersion')) == 1) {
+            throw new Rediska_PubSub_Exception("Transaction requires {$version}+ version of Redis server. Current version is {$redisVersion}. To change it specify 'redisVersion' option.");
+        }
     }
 }

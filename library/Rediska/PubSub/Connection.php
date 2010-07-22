@@ -11,14 +11,25 @@
  */
 class Rediska_PubSub_Connection extends Rediska_Connection
 {
-    protected $_subscribed = array();
+    /**
+     * Subscribed channels
+     * 
+     * @var array
+     */
+    protected $_subscriptions = array();
+
+    /**
+     * Pending channels
+     * 
+     * @var array
+     */
     protected $_pending = array();
 
     /**
      * Creates new Rediska_PubSub_Connection based on Rediska_Connection
      *
      * @param Rediska_Connection $connection
-     * @return Rediska_Connection_Subscription
+     * @return Rediska_PubSub_Connection
      */
     public static function createFromConnection(Rediska_Connection $connection)
     {
@@ -26,36 +37,34 @@ class Rediska_PubSub_Connection extends Rediska_Connection
     }
 
     /**
-     * Returns the list of subscribed channels
-     *
-     * @return array
-     */
-    public function getSubscribedChannels()
-    {
-        return $this->_subscribed;
-    }
-
-    /**
      * Adds channel to list
-     *
+     * 
+     * @var string $channel
+     * @return Rediska_PubSub_Connection
      */
     public function subscribe($channel)
     {
-        array_push($this->_subscribed, $channel);
+        array_push($this->_subscriptions, $channel);
         $this->removePending($channel);
+        
+        return $this;
     }
 
     /**
      * Removes channel from list
      * 
+     * @var string $channel
+     * @return Rediska_PubSub_Connection;
      */
     public function unsubscribe($channel)
     {
-        $index = array_search($channel, $this->_subscribed);
+        $index = array_search($channel, $this->_subscriptions);
         if ($index !== false) {
-            unset($this->_subscribed[$index]);
+            unset($this->_subscriptions[$index]);
         }
         $this->removePending($channel);
+        
+        return $this;
     }
 
     /**
@@ -65,7 +74,17 @@ class Rediska_PubSub_Connection extends Rediska_Connection
      */
     public function unsubscribeAll()
     {
-        $this->_subscribed = array();
+        $this->_subscriptions = array();
+    }
+    
+    /**
+     * Returns the list of subscribed channels
+     *
+     * @return array
+     */
+    public function getSubscribedChannels()
+    {
+        return $this->_subscriptions;
     }
 
     /**
@@ -75,7 +94,7 @@ class Rediska_PubSub_Connection extends Rediska_Connection
      */
     public function hasSubscriptions()
     {
-        return count($this->_subscribed) > 0;
+        return count($this->_subscriptions) > 0;
     }
 
     /**
@@ -83,7 +102,7 @@ class Rediska_PubSub_Connection extends Rediska_Connection
      *
      * @param string $channel
      */
-    public function addPending($channel)
+    public function addPendingChannel($channel)
     {
         array_push($this->_pending, $channel);
     }
@@ -93,7 +112,7 @@ class Rediska_PubSub_Connection extends Rediska_Connection
      *
      * @param string $channel
      */
-    public function removePending($channel)
+    public function removePendingChannel($channel)
     {
         $index = array_search($channel, $this->_pending);
         if ($index !== false) {

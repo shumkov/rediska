@@ -140,8 +140,7 @@ class Rediska extends Rediska_Options
         'slaveof'               => 'Rediska_Command_SlaveOf',
 
         // Publish/Subscribe
-        'publish'       => 'Rediska_Command_Publish',
-        'unsubscribe'   => 'Rediska_Command_Unsubscribe',
+        'publish' => 'Rediska_Command_Publish',
     );
 
     /**
@@ -423,17 +422,20 @@ class Rediska extends Rediska_Options
 
         return new Rediska_Transaction($this, $this->_specifiedConnection, $connection);
     }
-    
-    public function subscribe()
-    {
-        // Check Redis version
-        $version = '1.3.8';
-        $redisVersion = $this->getOption('redisVersion');
-        if (version_compare($version, $this->getOption('redisVersion')) == 1) {
-            throw new Rediska_Transaction_Exception("Transaction requires {$version}+ version of Redis server. Current version is {$redisVersion}. To change it specify 'redisVersion' option.");
-        }
 
-        return new Rediska_PubSub_Channel();
+    /**
+     * Subscribe to PubSub channel or channels
+     * 
+     * @var string|array $channelOrChannels
+     * @var mixin        $timeout
+     * @return Rediska_PubSub_Channel
+     */
+    public function subscribe($channelOrChannels, $timeout = null)
+    {
+        $channel = new Rediska_PubSub_Channel($channelOrChannels, $timeout, $this->_specifiedConnection->getConnection());
+        $channel->setRediska($this);
+
+        return $channel;
     }
 
     /**
