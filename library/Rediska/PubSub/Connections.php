@@ -20,7 +20,7 @@ class Rediska_PubSub_Connections implements Iterator, Countable
     protected $_channel;
     
     /**
-     * 
+     * Channels by connections
      * 
      * @var array
      */
@@ -32,8 +32,20 @@ class Rediska_PubSub_Connections implements Iterator, Countable
      * @var Rediska_Connection
      */
     protected $_specifiedConnection;
-    
-    protected static $_connections = array();
+
+    /**
+     * Connections
+     *
+     * @var array
+     */
+    protected $_connections = array();
+
+    /**
+     * Pool of connections
+     * 
+     * @var array
+     */
+    static protected $_allConnections = array();
 
     /**
      * Index
@@ -43,7 +55,7 @@ class Rediska_PubSub_Connections implements Iterator, Countable
     protected $_index = 0;
 
     /**
-     * Constructor.
+     * Constructor
      *
      * @param Rediska_PubSub_Channel $channel
      */
@@ -53,14 +65,14 @@ class Rediska_PubSub_Connections implements Iterator, Countable
 
         // Set specified connection
         if (!$channel->getServerAlias() instanceof Rediska_Connection) {
-            $connection = $channel->getServerAlias();
+            $this->_specifiedConnection = $channel->getServerAlias();
         } elseif ($channel->getServerAlias() !== null) {
-            $connection = $channel->getRediska()->getConnectionByAlias($channel->getServerAlias());
+            $this->_specifiedConnection = $channel->getRediska()->getConnectionByAlias($channel->getServerAlias());
         }
     }
 
     /**
-     * Add channel
+     * Get connection by channel name
      * 
      * @param string $name Channel name
      * @return Rediska_Connection
@@ -77,53 +89,66 @@ class Rediska_PubSub_Connections implements Iterator, Countable
             self::$_connections[$connection->getAlias()] = clone $connection;
         }
         $connection = self::$_connections[$connection->getAlias()];
-        
+
         // Add channel to connection
         if (!array_key_exists($connection->getAlias(), $this->_channelsByConnections)) {
             $this->_channelsByConnections[$connection->getAlias()] = array();
+            $this->_connections[] = $connection;
         }
-        $this->_channelsByConnections[$connection->getAlias()][] = $name;
+        if (!in_array($name, $this->_channelsByConnections[$connection->getAlias()])) {
+            $this->_channelsByConnections[$connection->getAlias()][] = $name;
+        }
 
         return $connection;
     }
-
+    
     /**
-     *
-     * @return Rediska_PubSub_Context
+     * Get connection by alias
+     * 
+     * @param string $alias
+     * @return Rediska_Connection
      */
-    public function getContext()
+    public function getConnectionByAlias($alias)
     {
-        return $this->_context;
+        if (!isset(self::$_connections[$alias])) {
+            throw new Rediska_PubSub_Exception("Can't find connection '$alias'");
+        }
+
+        return self::$_connections[$alias];
+    }
+
+    public function removeConnectionByChannelName($name)
+    {
+        
     }
 
     /**
      *
-     * @return Rediska_PubSub_Connection
+     * @return Rediska_Connection
      */
     public function current()
     {
-        $data = $this->_context->getActiveConnections();
-        return $data[$this->_i];
+        return $this->_connections[$this->_index];
     }
 
     /**
      *
-     * @return string
+     * @return integer
      */
     public function key()
     {
-        return $this->_i;
+        return $this->_index;
     }
 
     public function next()
     {
         // Run around
-        $this->_i = ++$this->_i % $this->count();
+        $this->_index = ++$this->_index % $this->count();
     }
 
     public function rewind()
     {
-        $this->_i = 0;
+        $this->_index = 0;
     }
 
     public function valid()
@@ -134,6 +159,6 @@ class Rediska_PubSub_Connections implements Iterator, Countable
 
     public function count()
     {
-        return count($this->_context->getActiveConnections());
+        return count($this->_connections);
     }
 }
