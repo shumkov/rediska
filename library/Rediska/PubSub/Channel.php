@@ -14,7 +14,7 @@ if (!class_exists('Rediska')) {
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_PubSub_Channel implements Iterator
+class Rediska_PubSub_Channel extends Rediska_Options implements Iterator, ArrayAccess
 {
     const SUBSCRIBE     = 'subscribe';
     const UNSUBSCRIBE   = 'unsubscribe';
@@ -54,7 +54,14 @@ class Rediska_PubSub_Channel implements Iterator
      * @var int
      */
     protected $_timeStart;
-    
+
+    /**
+     * Need start time?
+     * 
+     * @var boolean
+     */
+    protected $_needStart = false;
+
     /**
      * Server alias or connection object
      * 
@@ -90,14 +97,13 @@ class Rediska_PubSub_Channel implements Iterator
      * @var int                       $timeout     Timeout in seconds
      * @var string|Rediska_Connection $serverAlias Server alias or connection object
      */
-    public function __construct($nameOrNames, $timeout = null, $serverAlias = null)
+    public function __construct($nameOrNames, array $options = array())
     {
+        $this->setOptions($options);
+
         $this->_setupRediskaDefaultInstance();
         $this->_throwIfNotSupported();
 
-        $this->setTimeout($timeout);
-
-        $this->_serverAlias = $serverAlias;
         $this->_connections = new Rediska_PubSub_Connections($this);
 
         $this->subscribe($nameOrNames);
@@ -117,57 +123,7 @@ class Rediska_PubSub_Channel implements Iterator
             $channels = $channelOrChannels;
         }
 
-        // Group channels by connections
-        $channelsByConnections = array();
-        foreach($channels as $channel) {
-            if (in_array($channel, $this->_subscriptions)) {
-                throw new Rediska_PubSub_Exception("You already subscribed to $channel");
-            }
-
-            $this->_subscriptions[] = $channel;
-
-            if (!$this->_connections->hasChannel($channel)) {
-                $connection = $this->_connections->addChannel($channel);
-
-                $connectionAlias = $connection->getAlias();
-                if (!array_key_exists($connectionAlias, $channelsByConnections)) {
-                    $channelsByConnections[$connectionAlias] = array();
-                }
-                $channelsByConnections[$connectionAlias][] = $channel;
-            }
-        }
-
-        // Write commands to connections
-        foreach($channelsByConnections as $connectionAlias => $channles) {
-            $command = array(self::SUBSCRIBE);
-            foreach($channles as $channel) {
-                $command[] = $this->getRediska()->getOption('namespace') . $channel;
-            }
-            $connection = $this->_connections->getConnectionByAlias($connectionAlias);
-            $subscribe = new Rediska_Connection_Exec($connection, $command);
-            $subscribe->write();
-        }
-
-        // Get subscribe responses from connections
-        while (!empty($channelsByConnections)) {
-            foreach ($channelsByConnections as $connectionAlias => $channels) {
-                $connection = $this->_connections->getConnectionByAlias($connectionAlias);
-
-                foreach($channels as $channel) {
-                    $response = $this->_getResponseFromConnection($connection);
-
-                    if ($response instanceof Rediska_PubSub_Response_Subscribe) {
-                        $channel = $response->getChannel();
-                        $key = array_search($channel, $channelsByConnections[$connectionAlias]);
-                        unset($channelsByConnections[$connectionAlias][$key]);
-
-                        if (empty($channelsByConnections[$connectionAlias])) {
-                            unset($channelsByConnections[$connectionAlias]);
-                        }
-                    }
-                }
-            }
-        }
+        $this->_execCommand(self::SUBSCRIBE, $channels);
 
         return $this;
     }
@@ -188,60 +144,20 @@ class Rediska_PubSub_Channel implements Iterator
         } else {
             $channels = $channelOrChannels;
         }
-        
-        // Group channels by connections
-        $channelsByConnections = array();
-        foreach($channels as $channel) {
-            if (!in_array($channel, $this->_subscriptions)) {
-                throw new Rediska_PubSub_Exception("You not subscribed to $channel");
-            }
 
-            if ($this->_connections->hasChannel($channel)) {
-                $this->_connections->removeChannel($channel);
-
-                $connection = $this->_connections->getConnectionByChannelName($channel);                
-
-                $connectionAlias = $connection->getAlias();
-                if (!array_key_exists($connectionAlias, $channelsByConnections)) {
-                    $channelsByConnections[$connectionAlias] = array();
-                }
-                $channelsByConnections[$connectionAlias][] = $channel;
-            }
-        }
-
-        // Write commands to connections
-        foreach($channelsByConnections as $connectionAlias => $channles) {
-            $command = array(self::UNSUBSCRIBE);
-            foreach($channles as $channel) {
-                $command[] = $this->getRediska()->getOption('namespace') . $channel;
-            }
-            $connection = $this->_connections->getConnectionByAlias($connectionAlias);
-            $subscribe = new Rediska_Connection_Exec($connection, $command);
-            $subscribe->write();
-        }
-
-        // Get unsubscribe responses from connections
-        while (!empty($channelsByConnections)) {
-            foreach ($channelsByConnections as $connectionAlias => $channels) {
-                $connection = $this->_connections->getConnectionByAlias($connectionAlias);
-
-                foreach($channels as $channel) {
-                    $response = $this->_getResponseFromConnection($connection);
-
-                    if ($response instanceof Rediska_PubSub_Response_Unsubscribe) {
-                        $channel = $response->getChannel();
-
-                        $key = array_search($channel, $channelsByConnections[$connectionAlias]);
-                        unset($channelsByConnections[$connectionAlias][$key]);
-                        if (empty($channelsByConnections[$connectionAlias])) {
-                            unset($channelsByConnections[$connectionAlias]);
-                        }
-                    }
-                }
-            }
-        }
+        $this->_execCommand(self::UNSUBSCRIBE, $channels);
 
         return $this;
+    }
+
+    /**
+     * Publish a message to channel
+     * 
+     * @param $message
+     */
+    public function publish($message)
+    {
+        return $this->_rediska->publish($this->_subscriptions, $message);
     }
 
     /**
@@ -291,8 +207,7 @@ class Rediska_PubSub_Channel implements Iterator
         }
 
         // Start timer if not started from iterator
-        if ($this->_timeout && !$this->_timeStart) {
-            $timeStartedFromThis = true;
+        if ($this->_timeout && $this->_needStart) {
             $this->_timeStart = time();
         }
 
@@ -305,7 +220,7 @@ class Rediska_PubSub_Channel implements Iterator
 
                     if (!$timeLeft) {
                         // Reset timeStart if time started from this method
-                        if (isset($timeStartedFromThis)) {
+                        if ($this->_needStart) {
                             $this->_timeStart = 0;
                         }
                         
@@ -319,7 +234,7 @@ class Rediska_PubSub_Channel implements Iterator
                     $response = $this->_getResponseFromConnection($connection);
 
                     // Reset timeStart if time started from this method 
-                    if (isset($timeStartedFromThis)) {
+                    if ($this->_needStart) {
                         $this->_timeStart = 0;
                     }
 
@@ -330,7 +245,7 @@ class Rediska_PubSub_Channel implements Iterator
                     }
 
                     // Reset timeStart if time started from this method
-                    if (isset($timeStartedFromThis)) {
+                    if ($this->_needStart) {
                         $this->_timeStart = 0;
                     }
 
@@ -361,7 +276,20 @@ class Rediska_PubSub_Channel implements Iterator
     {
         return $this->_timeout;
     }
-    
+
+    /**
+     * Set server alias
+     * 
+     * @param $serverAlias
+     * @return Rediska_PubSub_Channel
+     */
+    public function setServerAlias($serverAlias)
+    {
+        $this->_serverAlias = $serverAlias;
+        
+        return $this;
+    }
+
     /**
      * Get server alias
      * 
@@ -371,7 +299,7 @@ class Rediska_PubSub_Channel implements Iterator
     {
         return $this->_serverAlias;
     }
-    
+
     /**
      * Set Rediska instance
      * 
@@ -415,7 +343,9 @@ class Rediska_PubSub_Channel implements Iterator
 
     public function valid()
     {
+        $this->_needStart = true;
         $message = $this->getMessage();
+        $this->_needStart = false;
 
         if ($message) {
             $this->_currentChannel = $message->getChannel();
@@ -423,6 +353,8 @@ class Rediska_PubSub_Channel implements Iterator
 
             return true;
         } else {
+            $this->_timeStart = 0;
+
             return false;
         }
     }
@@ -435,6 +367,118 @@ class Rediska_PubSub_Channel implements Iterator
     public function current()
     {
         return $this->_currentMessage;
+    }
+    
+    /* ArrayAccess implementation */
+
+    public function offsetSet($offset, $value)
+    {
+        if (!is_null($offset)) {
+            throw new Rediska_PubSub_Exception('Offset is not allowed in Rediska_PubSub_Channel');
+        }
+
+        $this->publish($value);
+
+        return $value;
+    }
+
+    public function offsetExists($value)
+    {
+        throw new Rediska_PubSub_Exception('Offset is not allowed in Rediska_PubSub_Channel');
+    }
+
+    public function offsetUnset($value)
+    {
+        throw new Rediska_PubSub_Exception('Offset is not allowed in Rediska_PubSub_Channel');
+    }
+
+    public function offsetGet($value)
+    {
+        throw new Rediska_PubSub_Exception('Offset is not allowed in Rediska_PubSub_Channel');
+    }
+
+    /**
+     * Execute subscribe or unsubscribe command
+     * 
+     * @param string $command
+     * @param array $channels
+     */
+    protected function _execCommand($command, $channels)
+    {
+        // Group channels by connections
+        $channelsByConnections = array();
+        foreach($channels as $channel) {
+            $hasSubscription = in_array($channel, $this->_subscriptions);
+
+            if ($command == self::SUBSCRIBE && $hasSubscription) {
+                throw new Rediska_PubSub_Exception("You already subscribed to $channel");
+            }
+
+            if ($command == self::UNSUBSCRIBE && !$hasSubscription) {
+                throw new Rediska_PubSub_Exception("You not subscribed to $channel");
+            }
+
+            $hasChannel = $this->_connections->hasChannel($channel);
+
+            if (($command == self::SUBSCRIBE && !$hasChannel) || ($command == self::UNSUBSCRIBE && $hasChannel)) {
+                switch ($command) {
+                    case self::SUBSCRIBE:
+                        $connection = $this->_connections->addChannel($channel);
+                        break;
+                    case self::UNSUBSCRIBE:
+                        $connection = $this->_connections->removeChannel($channel);
+                        break;
+                }
+
+                $connectionAlias = $connection->getAlias();
+                if (!array_key_exists($connectionAlias, $channelsByConnections)) {
+                    $channelsByConnections[$connectionAlias] = array();
+                }
+                $channelsByConnections[$connectionAlias][] = $channel;
+            }
+        }
+
+        // Write commands to connections
+        foreach($channelsByConnections as $connectionAlias => $channels) {
+            $execCommand = array($command);
+            foreach($channels as $channel) {
+                $execCommand[] = $this->getRediska()->getOption('namespace') . $channel;
+            }
+            $connection = $this->_connections->getConnectionByAlias($connectionAlias);
+            $exec = new Rediska_Connection_Exec($connection, $execCommand);
+            $exec->write();
+        }
+
+        // Get responses from connections
+        while (!empty($channelsByConnections)) {
+            foreach ($channelsByConnections as $connectionAlias => $channels) {
+                $connection = $this->_connections->getConnectionByAlias($connectionAlias);
+
+                foreach($channels as $channel) {
+                    $response = $this->_getResponseFromConnection($connection);
+                    $channel = $response->getChannel();
+
+                    if (($command == self::SUBSCRIBE && $response instanceof Rediska_PubSub_Response_Subscribe)
+                     || ($command == self::UNSUBSCRIBE && $response instanceof Rediska_PubSub_Response_Unsubscribe)) {
+                        $key = array_search($channel, $channelsByConnections[$connectionAlias]);
+
+                        unset($channelsByConnections[$connectionAlias][$key]);
+
+                        if (empty($channelsByConnections[$connectionAlias])) {
+                            unset($channelsByConnections[$connectionAlias]);
+                        }
+                    } else if ($response instanceof Rediska_PubSub_Response_Message) {
+                        $key = "{$connection->getAlias()}-{$channel}";
+
+                        if (!isset(self::$_messages[$key])) {
+                            self::$_messages[$key] = array();
+                        }
+
+                        self::$_messages[$key][] = $response;
+                    }
+                }
+            }
+        }
     }
     
     /**
@@ -459,17 +503,7 @@ class Rediska_PubSub_Channel implements Iterator
                 return new Rediska_PubSub_Response_Unsubscribe($channel);
 
             case self::MESSAGE:
-                $message = new Rediska_PubSub_Response_Message($channel, $body);
-
-                $key = "{$connection->getAlias()}-{$channel}";
-
-                if (!isset(self::$_messages[$key])) {
-                    self::$_messages[$key] = array();
-                }
-
-                self::$_messages[$key][] = $message;
-
-                return $message;
+                return new Rediska_PubSub_Response_Message($channel, $body);
 
             default:
                 throw new Rediska_PubSub_Response_Exception('Unknown reponse type: ' . $type);
@@ -481,9 +515,11 @@ class Rediska_PubSub_Channel implements Iterator
      */
     protected function _setupRediskaDefaultInstance()
     {
-        $this->_rediska = Rediska::getDefaultInstance();
         if (!$this->_rediska) {
-            $this->_rediska = new Rediska();
+            $this->_rediska = Rediska::getDefaultInstance();
+            if (!$this->_rediska) {
+                $this->_rediska = new Rediska();
+            }
         }
     }
 

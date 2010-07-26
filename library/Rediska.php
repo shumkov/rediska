@@ -432,10 +432,11 @@ class Rediska extends Rediska_Options
      */
     public function subscribe($channelOrChannels, $timeout = null)
     {
-        $channel = new Rediska_PubSub_Channel($channelOrChannels, $timeout, $this->_specifiedConnection->getConnection());
-        $channel->setRediska($this);
-
-        return $channel;
+        return new Rediska_PubSub_Channel($channelOrChannels, array(
+            'rediska'       => $this,
+            'timeout'       => $timeout,
+            'serverAlias'   => $this->_specifiedConnection->getConnection()
+        ));
     }
 
     /**

@@ -202,6 +202,7 @@ class Rediska_Connection extends Rediska_Options
      * Read line from connection stream
      * 
      * @throws Rediska_Connection_Exception
+     * @throws Rediska_Connection_TimeoutException
      * @return string
      */
     public function readLine()

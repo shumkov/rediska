@@ -48,13 +48,6 @@ class Rediska_PubSub_Connections implements IteratorAggregate, Countable
     static protected $_allConnections = array();
 
     /**
-     * Index
-     *
-     * @var int
-     */
-    protected $_index = 0;
-
-    /**
      * Constructor
      *
      * @param Rediska_PubSub_Channel $channel
@@ -110,7 +103,7 @@ class Rediska_PubSub_Connections implements IteratorAggregate, Countable
      * Remove channel
      * 
      * @param string $channel
-     * @return Rediska_PubSub_Connections
+     * @return Rediska_Connection
      */
     public function removeChannel($channel)
     {
@@ -126,11 +119,9 @@ class Rediska_PubSub_Connections implements IteratorAggregate, Countable
             foreach($this->_channelsByConnections as $connectionAlias => $channels) {
                 $this->_connections[] = $this->getConnectionByAlias($connectionAlias);
             }
-
-            $this->rewind();
         }
 
-        return $this;
+        return $connection;
     }
 
     /**
@@ -147,10 +138,10 @@ class Rediska_PubSub_Connections implements IteratorAggregate, Countable
         } else {
             $connection = $this->_channel->getRediska()->getConnectionByKeyName($name);
         }
-        if (!array_key_exists($connection->getAlias(), self::$_connections)) {
-            self::$_connections[$connection->getAlias()] = clone $connection;
+        if (!array_key_exists($connection->getAlias(), self::$_allConnections)) {
+            self::$_allConnections[$connection->getAlias()] = clone $connection;
         }
-        $connection = self::$_connections[$connection->getAlias()];
+        $connection = self::$_allConnections[$connection->getAlias()];
         
         return $connection;
     }
@@ -163,11 +154,11 @@ class Rediska_PubSub_Connections implements IteratorAggregate, Countable
      */
     public function getConnectionByAlias($alias)
     {
-        if (!isset(self::$_connections[$alias])) {
+        if (!isset(self::$_allConnections[$alias])) {
             throw new Rediska_PubSub_Exception("Can't find connection '$alias'");
         }
 
-        return self::$_connections[$alias];
+        return self::$_allConnections[$alias];
     }
 
     /**
