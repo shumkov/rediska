@@ -14,7 +14,7 @@
  */
 class Rediska_Command_FlushDb extends Rediska_Command_Abstract
 {
-    protected function _create($all = false) 
+    public function create($all = false) 
     {
         if ($all) {
             $command = "FLUSHALL";
@@ -22,12 +22,15 @@ class Rediska_Command_FlushDb extends Rediska_Command_Abstract
             $command = "FLUSHDB";
         }
 
+        $commands = array();
         foreach($this->_rediska->getConnections() as $connection) {
-            $this->_addCommandByConnection($connection, $command);
+            $commands[] = new Rediska_Connection_Exec($connection, $command);
         }
+        
+        return $commands;
     }
 
-    protected function _parseResponses($responses)
+    public function parseResponse($response)
     {
         return true;
     }

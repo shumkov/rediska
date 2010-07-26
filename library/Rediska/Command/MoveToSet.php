@@ -18,7 +18,7 @@ class Rediska_Command_MoveToSet extends Rediska_Command_Abstract
 {
 	protected $_multi = false;
 
-    protected function _create($fromName, $toName, $value)
+    public function create($fromName, $toName, $value)
     {    	
         $fromNameConnection = $this->_rediska->getConnectionByKeyName($fromName);
         $toNameConnection = $this->_rediska->getConnectionByKeyName($toName);
@@ -32,10 +32,10 @@ class Rediska_Command_MoveToSet extends Rediska_Command_Abstract
             $command = "SISMEMBER {$this->_rediska->getOption('namespace')}$fromName " . strlen($value) . Rediska::EOL . $value;
         }
 
-        $this->_addCommandByConnection($fromNameConnection, $command);
+        return new Rediska_Connection_Exec($fromNameConnection, $command);
     }
 
-    protected function _parseResponses($responses)
+    public function parseResponses($responses)
     {
         if (!$this->isAtomic()) {
         	if ($responses[0]) {

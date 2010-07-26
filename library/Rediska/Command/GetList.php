@@ -18,7 +18,7 @@
  */
 class Rediska_Command_GetList extends Rediska_Command_Abstract
 {
-    protected function _create($name, $start = 0, $end = -1)
+    public function create($name, $start = 0, $end = -1)
     {
         if (!is_integer($start)) {
             throw new Rediska_Command_Exception("Start must be integer");
@@ -30,13 +30,13 @@ class Rediska_Command_GetList extends Rediska_Command_Abstract
         $connection = $this->_rediska->getConnectionByKeyName($name);
 
         $command = "LRANGE {$this->_rediska->getOption('namespace')}$name $start $end";
-
-        $this->_addCommandByConnection($connection, $command);
+        
+        return new Rediska_Connection_Exec($connection, $command);
     }
 
-    protected function _parseResponses($responses)
+    public function parseResponse($response)
     {
-        $values = $responses[0];
+        $values = $response;
 
         foreach($values as &$value) {
             $value = $this->_rediska->getSerializer()->unserialize($value);

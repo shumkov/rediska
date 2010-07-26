@@ -17,7 +17,7 @@
  */
 class Rediska_Command_TruncateList extends Rediska_Command_Abstract
 {
-    protected function _create($name, $start, $end)
+    public function create($name, $start, $end)
     {
         if (!is_integer($start)) {
             throw new Rediska_Command_Exception("Start must be integer");
@@ -29,12 +29,12 @@ class Rediska_Command_TruncateList extends Rediska_Command_Abstract
         $connection = $this->_rediska->getConnectionByKeyName($name);
 
         $command = "LTRIM {$this->_rediska->getOption('namespace')}$name $start $end";
-
-        $this->_addCommandByConnection($connection, $command);
+        
+        return new Rediska_Connection_Exec($connection, $command);
     }
 
-    protected function _parseResponses($responses)
+    public function parseResponse($response)
     {
-        return (boolean)$responses[0];
+        return (boolean)$response;
     }
 }

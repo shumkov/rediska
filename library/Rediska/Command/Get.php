@@ -18,7 +18,7 @@ class Rediska_Command_Get extends Rediska_Command_Abstract
     protected $_keys = array();
     protected $_keysByConnections = array();
 
-    protected function _create($nameOrNames)
+    public function create($nameOrNames)
     {
         if (is_array($nameOrNames)) {
             $this->_multi = true;
@@ -43,27 +43,29 @@ class Rediska_Command_Get extends Rediska_Command_Abstract
             }
 
             $result = array();
+            $commands = array();
             foreach($keysByConnections as $connectionAlias => $keys) {
                 $command = "MGET ";
                 foreach($keys as $key) {
                     $command .= " {$this->_rediska->getOption('namespace')}$key";
                     $this->_keysByConnections[] = $key;
                 }
-
-                $this->_addCommandByConnection($connections[$connectionAlias], $command);
+                $commands[] = new Rediska_Connection_Exec($connections[$connectionAlias], $command);
             }
+
+            return $commands;
         } else {
             $name = $nameOrNames;
 
             $connection = $this->_rediska->getConnectionByKeyName($name);
 
             $command = "GET {$this->_rediska->getOption('namespace')}$name";
-            
-            $this->_addCommandByConnection($connection, $command);
+
+            return new Rediska_Connection_Exec($connection, $command);
         }
     }
 
-    protected function _parseResponses($responses)
+    public function parseResponses($responses)
     {
         if ($this->_multi) {
             $result = array();

@@ -141,17 +141,56 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
 
         return $result;
     }
+    
+    /**
+     * Return and remove the first element of the List and block if list empty or not exists
+     * 
+     * @param $timeout Blocking timeout
+     * @return mixin
+     */
+    public function shiftBlocking($timeout = 0)
+    {
+        $result = $this->_getRediskaOn()->shiftFromListBlocking($this->_name, $timeout);
+
+        if ($result && !is_null($this->_expire)) {
+            $this->expire($this->_expire, $this->_isExpireTimestamp);
+        }
+
+        return $result;
+    }
 
     /**
      * Return and remove the last element of the List
      * 
+     * @param string|Rediska_Key_List $pushTo After pop, push value to another list
      * @return mixin
      */
-    public function pop()
+    public function pop($pushTo = null)
     {
-    	$result = $this->_getRediskaOn()->popFromList($this->_name);
+        if ($pushTo instanceof Rediska_Key_List) {
+            $pushTo = $pushTo->getName();
+        }
+
+    	$result = $this->_getRediskaOn()->popFromList($this->_name, $pushTo);
 
     	if ($result && !is_null($this->_expire)) {
+            $this->expire($this->_expire, $this->_isExpireTimestamp);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Return and remove the last element of the List and block if list empty or not exists
+     * 
+     * @param $timeout Blocking timeout
+     * @return mixin
+     */
+    public function popBlocking($timeout = 0)
+    {
+        $result = $this->_getRediskaOn()->popFromListBlocking($this->_name, $timeout);
+
+        if ($result && !is_null($this->_expire)) {
             $this->expire($this->_expire, $this->_isExpireTimestamp);
         }
 

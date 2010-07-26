@@ -17,7 +17,7 @@
  */
 class Rediska_Command_DeleteFromList extends Rediska_Command_Abstract
 {
-    protected function _create($name, $value, $count = 0)
+    public function create($name, $value, $count = 0)
     {        
         if (!is_integer($count)) {
             throw new Rediska_Command_Exception("Count must be integer");
@@ -28,12 +28,7 @@ class Rediska_Command_DeleteFromList extends Rediska_Command_Abstract
         $value = $this->_rediska->getSerializer()->serialize($value);
 
         $command = "LREM {$this->_rediska->getOption('namespace')}$name $count " . strlen($value) . Rediska::EOL . $value;
-
-        $this->_addCommandByConnection($connection, $command);
-    }
-
-    protected function _parseResponses($responses)
-    {
-        return $responses[0];
+        
+        return new Rediska_Connection_Exec($connection, $command);
     }
 }

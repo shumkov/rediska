@@ -81,7 +81,7 @@ class Rediska_Connection extends Rediska_Options
 	        }
 
 	        if ($this->getPassword() != '') {
-	            $auth = new Rediska_Command($this, "AUTH {$this->getPassword()}");
+	            $auth = new Rediska_Connection_Exec($this, "AUTH {$this->getPassword()}");
 	            try {
 	               $auth->execute();
 	            } catch (Rediska_Command_Exception $e) {
@@ -90,7 +90,7 @@ class Rediska_Connection extends Rediska_Options
 	        }
 
 	        if ($this->_options['db'] !== self::DEFAULT_DB) {
-	            $selectDb = new Rediska_Command($this, "SELECT {$this->_options['db']}");
+	            $selectDb = new Rediska_Connection_Exec($this, "SELECT {$this->_options['db']}");
                 try {
                    $selectDb->execute();
                 } catch (Rediska_Command_Exception $e) {
