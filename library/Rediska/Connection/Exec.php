@@ -95,6 +95,26 @@ class Rediska_Connection_Exec
         $this->write();
         return $this->read();
     }
+    
+    /**
+     * Get connection
+     * 
+     * @return Rediska_Connection
+     */
+    public function getConnection()
+    {
+        return $this->_connection;
+    }
+    
+    /**
+     * Get command
+     * 
+     * @return string
+     */
+    public function getCommand()
+    {
+        return $this->_command;
+    }
 
     /**
      * Transfrom Multi Bulk command to string

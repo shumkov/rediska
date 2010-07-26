@@ -10,7 +10,7 @@
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_PubSub_Connections implements Iterator, Countable
+class Rediska_PubSub_Connections implements IteratorAggregate, Countable
 {
     /**
      * PubSub channel 
@@ -70,6 +70,68 @@ class Rediska_PubSub_Connections implements Iterator, Countable
             $this->_specifiedConnection = $channel->getRediska()->getConnectionByAlias($channel->getServerAlias());
         }
     }
+    
+    /**
+     * Add channel
+     * 
+     * @param string $channel
+     * @return Rediska_Connection
+     */
+    public function addChannel($channel)
+    {
+        $connection = $this->getConnectionByChannelName($channel);
+
+        if (!array_key_exists($connection->getAlias(), $this->_channelsByConnections)) {
+            $this->_channelsByConnections[$connection->getAlias()] = array();
+            $this->_connections[] = $connection;
+        }
+        if (!in_array($channel, $this->_channelsByConnections[$connection->getAlias()])) {
+            $this->_channelsByConnections[$connection->getAlias()][] = $channel;
+        }
+
+        return $connection;
+    }
+
+    /**
+     * Has channel?
+     * 
+     * @param string $channel
+     * @return boolean
+     */
+    public function hasChannel($channel)
+    {
+        $connection = $this->getConnectionByChannelName($channel);
+
+        return isset($this->_channelsByConnections[$connection->getAlias()])
+            && in_array($channel, $this->_channelsByConnections[$connection->getAlias()]);
+    }
+
+    /**
+     * Remove channel
+     * 
+     * @param string $channel
+     * @return Rediska_PubSub_Connections
+     */
+    public function removeChannel($channel)
+    {
+        $connection = $this->getConnectionByChannelName($channel);
+
+        $key = array_search($channel, $this->_channelsByConnections[$connection->getAlias()]);
+        unset($this->_channelsByConnections[$connection->getAlias()][$key]);
+
+        if (empty($this->_channelsByConnections[$connection->getAlias()])) {
+            unset($this->_channelsByConnections[$connection->getAlias()]);
+
+            $this->_connections = array();
+            foreach($this->_channelsByConnections as $connectionAlias => $channels) {
+                $this->_connections[] = $this->getConnectionByAlias($connectionAlias);
+            }
+
+            $this->rewind();
+        }
+
+        return $this;
+    }
 
     /**
      * Get connection by channel name
@@ -89,19 +151,10 @@ class Rediska_PubSub_Connections implements Iterator, Countable
             self::$_connections[$connection->getAlias()] = clone $connection;
         }
         $connection = self::$_connections[$connection->getAlias()];
-
-        // Add channel to connection
-        if (!array_key_exists($connection->getAlias(), $this->_channelsByConnections)) {
-            $this->_channelsByConnections[$connection->getAlias()] = array();
-            $this->_connections[] = $connection;
-        }
-        if (!in_array($name, $this->_channelsByConnections[$connection->getAlias()])) {
-            $this->_channelsByConnections[$connection->getAlias()][] = $name;
-        }
-
+        
         return $connection;
     }
-    
+
     /**
      * Get connection by alias
      * 
@@ -117,45 +170,29 @@ class Rediska_PubSub_Connections implements Iterator, Countable
         return self::$_connections[$alias];
     }
 
-    public function removeConnectionByChannelName($name)
-    {
-        
-    }
-
     /**
-     *
-     * @return Rediska_Connection
+     * Get channels by connection
+     * 
+     * @param $connection
+     * @return array
      */
-    public function current()
+    public function getChannelsByConnection(Rediska_Connection $connection)
     {
-        return $this->_connections[$this->_index];
+        if (!isset($this->_channelsByConnections[$connection->getAlias()])) {
+            throw new Rediska_PubSub_Exception("Channels by this connection not present");
+        }
+
+        return $this->_channelsByConnections[$connection->getAlias()];
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function key()
+    /* IteratorAggregate implementation */
+
+    public function getIterator()
     {
-        return $this->_index;
+        return new ArrayObject($this->_connections);
     }
 
-    public function next()
-    {
-        // Run around
-        $this->_index = ++$this->_index % $this->count();
-    }
-
-    public function rewind()
-    {
-        $this->_index = 0;
-    }
-
-    public function valid()
-    {
-        // Valid until there are some active connections
-        return $this->count() > 0;
-    }
+    /* Countable implementation */
 
     public function count()
     {
