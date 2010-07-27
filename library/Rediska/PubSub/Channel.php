@@ -60,7 +60,7 @@ class Rediska_PubSub_Channel extends Rediska_Options implements Iterator, ArrayA
      * 
      * @var boolean
      */
-    protected $_needStart = false;
+    protected $_needStart = true;
 
     /**
      * Server alias or connection object
@@ -218,7 +218,7 @@ class Rediska_PubSub_Channel extends Rediska_Options implements Iterator, ArrayA
                 if ($this->_timeout) {
                     $timeLeft = ($this->_timeStart + $this->_timeout) - time();
 
-                    if (!$timeLeft) {
+                    if ($timeLeft <= 0) {
                         // Reset timeStart if time started from this method
                         if ($this->_needStart) {
                             $this->_timeStart = 0;
@@ -343,9 +343,9 @@ class Rediska_PubSub_Channel extends Rediska_Options implements Iterator, ArrayA
 
     public function valid()
     {
-        $this->_needStart = true;
-        $message = $this->getMessage();
         $this->_needStart = false;
+        $message = $this->getMessage();
+        $this->_needStart = true;
 
         if ($message) {
             $this->_currentChannel = $message->getChannel();
@@ -353,6 +353,9 @@ class Rediska_PubSub_Channel extends Rediska_Options implements Iterator, ArrayA
 
             return true;
         } else {
+            $this->_currentChannel = null;
+            $this->_currentMessage = null;
+            
             $this->_timeStart = 0;
 
             return false;
@@ -410,8 +413,12 @@ class Rediska_PubSub_Channel extends Rediska_Options implements Iterator, ArrayA
         foreach($channels as $channel) {
             $hasSubscription = in_array($channel, $this->_subscriptions);
 
-            if ($command == self::SUBSCRIBE && $hasSubscription) {
-                throw new Rediska_PubSub_Exception("You already subscribed to $channel");
+            if ($command == self::SUBSCRIBE) {
+                if ($hasSubscription) {
+                    throw new Rediska_PubSub_Exception("You already subscribed to $channel");
+                } else {
+                    $this->_subscriptions[] = $channel;
+                }
             }
 
             if ($command == self::UNSUBSCRIBE && !$hasSubscription) {
