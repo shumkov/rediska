@@ -11,8 +11,6 @@
  */
 class Rediska_Serializer_Adapter_PhpSerialize implements Rediska_Serializer_Adapter_Interface
 {
-    const SERIALIZED_FALSE = 'b:0;';
-
 	/**
 	 * Serialize value
 	 *
@@ -37,12 +35,22 @@ class Rediska_Serializer_Adapter_PhpSerialize implements Rediska_Serializer_Adap
 	 */
 	public function unserialize($value)
 	{
+		set_error_handler(array($this, '_throwCantUnserializeException'));
+
         $unserializedValue = @unserialize($value);
 
-        if ($unserializedValue === false && $value != self::SERIALIZED_FALSE) {
-            throw new Rediska_Serializer_Adapter_Exception("Can't unserialize string");
-        }
+		restore_error_handler();
 
         return $unserializedValue;
+	}
+	
+	/**
+	 * Throw can't unserialize exception
+	 *
+	 * @throws Rediska_Serializer_Exception
+	 */
+	protected function _throwCantUnserializeException()
+	{
+		throw new Rediska_Serializer_Adapter_Exception("Can't unserialize string");
 	}
 }
