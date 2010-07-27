@@ -116,6 +116,24 @@ class Rediska_Key_ListTest extends Rediska_TestCase
         $value = $this->rediska->getFromList('test', 0);
         $this->assertEquals(456, $value);
     }
+    
+    public function testShiftBlocking()
+    {
+        $this->rediska->appendToList('test', 123);
+        $this->rediska->appendToList('test', 456);
+        
+        $value = $this->list->shiftBlocking();
+        $this->assertEquals(123, $value);
+        
+        $value = $this->rediska->getFromList('test', 0);
+        $this->assertEquals(456, $value);
+
+		$value = $this->list->shiftBlocking();
+        $this->assertEquals(456, $value);
+
+		$value = $this->list->shiftBlocking(1);
+        $this->assertNull($value);
+    }
 
     public function testPop()
     {
@@ -126,6 +144,24 @@ class Rediska_Key_ListTest extends Rediska_TestCase
         $this->assertEquals(456, $value);
         
         $value = $this->rediska->getFromList('test', 1);
+        $this->assertNull($value);
+    }
+
+    public function testPopBlocking()
+    {
+        $this->rediska->appendToList('test', 123);
+        $this->rediska->appendToList('test', 456);
+        
+        $value = $this->list->popBlocking();
+        $this->assertEquals(456, $value);
+        
+        $value = $this->rediska->getFromList('test', 1);
+        $this->assertNull($value);
+
+		$value = $this->list->popBlocking();
+        $this->assertEquals(123, $value);
+
+		$value = $this->list->popBlocking(1);
         $this->assertNull($value);
     }
 

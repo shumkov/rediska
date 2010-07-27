@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Rediska connection timeout exception
+ * Rediska PubSub exception
  * 
  * @author Ivan Shumkov
  * @package Rediska
@@ -9,7 +9,7 @@
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_Connection_TimeoutException extends Rediska_Connection_Exception
+class Rediska_PubSub_Exception extends Rediska_Exception
 {
-	
+    
 }

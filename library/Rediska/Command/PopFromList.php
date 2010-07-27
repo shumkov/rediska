@@ -18,7 +18,7 @@ class Rediska_Command_PopFromList extends Rediska_Command_Abstract
     public function create($name, $pushToName = null) 
     {
     	$connection = $this->_rediska->getConnectionByKeyName($name);
-    	
+
         if (is_null($pushToName)) {
             $command = "RPOP {$this->_rediska->getOption('namespace')}$name";
         } else {

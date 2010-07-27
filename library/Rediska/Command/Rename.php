@@ -41,7 +41,7 @@ class Rediska_Command_Rename extends Rediska_Command_Abstract
     public function parseResponses($responses)
     {
         if (!$this->isAtomic()) {
-            $oldValue = $this->_rediska->unserialize($responses[0]);
+            $oldValue = $this->_rediska->getSerializer()->unserialize($responses[0]);
             if (!is_null($oldValue)) {
                 $reply = $this->_rediska->set($this->newName, $oldValue, $this->overwrite);
 

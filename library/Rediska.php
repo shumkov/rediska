@@ -88,16 +88,18 @@ class Rediska extends Rediska_Options
         'decrement' => 'Rediska_Command_Decrement',
 
         // Lists
-        'appendtolist'   => 'Rediska_Command_AppendToList',
-        'prependtolist'  => 'Rediska_Command_PrependToList',
-        'getlistlength'  => 'Rediska_Command_GetListLength',
-        'getlist'        => 'Rediska_Command_GetList',
-        'truncatelist'   => 'Rediska_Command_TruncateList',
-        'getfromlist'    => 'Rediska_Command_GetFromList',
-        'settolist'      => 'Rediska_Command_SetToList',
-        'deletefromlist' => 'Rediska_Command_DeleteFromList',
-        'shiftfromlist'  => 'Rediska_Command_ShiftFromList',
-        'popfromlist'    => 'Rediska_Command_PopFromList',
+        'appendtolist'          => 'Rediska_Command_AppendToList',
+        'prependtolist'         => 'Rediska_Command_PrependToList',
+        'getlistlength'         => 'Rediska_Command_GetListLength',
+        'getlist'               => 'Rediska_Command_GetList',
+        'truncatelist'          => 'Rediska_Command_TruncateList',
+        'getfromlist'           => 'Rediska_Command_GetFromList',
+        'settolist'             => 'Rediska_Command_SetToList',
+        'deletefromlist'        => 'Rediska_Command_DeleteFromList',
+        'shiftfromlist'         => 'Rediska_Command_ShiftFromList',
+        'shiftfromlistblocking' => 'Rediska_Command_ShiftFromListBlocking',
+        'popfromlist'           => 'Rediska_Command_PopFromList',
+        'popfromlistblocking'   => 'Rediska_Command_PopFromListBlocking',
 
         // Sets
         'addtoset'         => 'Rediska_Command_AddToSet',
@@ -136,10 +138,9 @@ class Rediska extends Rediska_Options
         'shutdown'              => 'Rediska_Command_Shutdown',
         'rewriteappendonlyfile' => 'Rediska_Command_RewriteAppendOnlyFile',
         'slaveof'               => 'Rediska_Command_SlaveOf',
-        
+
         // Publish/Subscribe
-        'subscribe'             => 'Rediska_Command_Subscribe',
-        'unsubscribe'           => 'Rediska_Command_Unsubscribe',
+        'publish' => 'Rediska_Command_Publish',
     );
 
     /**
@@ -420,6 +421,22 @@ class Rediska extends Rediska_Options
         }
 
         return new Rediska_Transaction($this, $this->_specifiedConnection, $connection);
+    }
+
+    /**
+     * Subscribe to PubSub channel or channels
+     * 
+     * @var string|array $channelOrChannels
+     * @var mixin        $timeout
+     * @return Rediska_PubSub_Channel
+     */
+    public function subscribe($channelOrChannels, $timeout = null)
+    {
+        return new Rediska_PubSub_Channel($channelOrChannels, array(
+            'rediska'       => $this,
+            'timeout'       => $timeout,
+            'serverAlias'   => $this->_specifiedConnection->getConnection()
+        ));
     }
 
     /**
