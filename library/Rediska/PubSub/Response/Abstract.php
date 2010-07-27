@@ -11,6 +11,7 @@ abstract class Rediska_PubSub_Response_Abstract
 
     public function __construct(Rediska_Connection $connection, $channel)
     {
+        $this->_connection = $connection;
         $this->_channel = $channel;
     }
 

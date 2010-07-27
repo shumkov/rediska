@@ -218,19 +218,25 @@ class Rediska_Connection extends Rediska_Options
             throw new Rediska_Connection_Exception("Can't read without connection to Redis server. Do connect or write first.");
         }
 
-        $string = @fgets($this->_socket);
+        $reply = @fgets($this->_socket);
 
         $info = stream_get_meta_data($this->_socket);
         if ($info['timed_out']) {
             throw new Rediska_Connection_TimeoutException("Connection read timed out.");
         }
 
-        if ($string === false && ($this->_setBlocking || (!$this->_setBlocking && $info['eof']))) {
-            $this->disconnect();
-            throw new Rediska_Connection_Exception("Can't read from socket.");
+        if ($reply === false) {
+            if ($this->_options['blockingmode'] || (!$this->_options['blockingmode'] && $info['eof'])) {
+                $this->disconnect();
+                throw new Rediska_Connection_Exception("Can't read from socket.");
+            }
+
+            $reply = null;
+        } else {
+            $reply = trim($reply);
         }
 
-        return $string !== false ? trim($string) : null;
+        return $reply;
     }
 
     /**
