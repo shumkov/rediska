@@ -33,7 +33,7 @@ class Rediska_Command_Publish extends Rediska_Command_Abstract
             $command[] = $this->_rediska->getOption('namespace') . $channel;
             $command[] = $this->_rediska->getSerializer()->serialize($message);
 
-            $execs = new Rediska_Connection_Exec($connection, $command);
+            $execs[] = new Rediska_Connection_Exec($connection, $command);
         }
 
         return $execs;

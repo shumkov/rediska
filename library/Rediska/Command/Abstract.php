@@ -128,7 +128,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
             $responses[] = $exec->read();
         }
 
-        if ($responses[0] === self::QUEUED) {
+        if (isset($responses[0]) && $responses[0] === self::QUEUED) {
             $this->_isQueued = true;
 
             return true;
