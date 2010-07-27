@@ -239,6 +239,8 @@ class Rediska_PubSub_Channel extends Rediska_Options implements Iterator, ArrayA
                     $response = $this->_getResponseFromConnection($connection);
 
                     if ($response === null) {
+						// Sleep before next connection check
+						usleep(10000); // 0.01 sec
                         continue;
                     }
 
