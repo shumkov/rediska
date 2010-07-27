@@ -1,10 +1,10 @@
 <?php
 
 /**
- * This iterator is used by Rediska_PubSub_Context
+ * This iterator is used by Rediska_PubSub_Channel
  * to repeatedly iterate through available connections
  *
- * @author Yuriy Bogdanov
+ * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
  * @link http://rediska.geometria-lab.net

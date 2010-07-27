@@ -19,11 +19,7 @@ class Rediska_Serializer_Adapter_PhpSerialize implements Rediska_Serializer_Adap
 	 */
 	public function serialize($value)
 	{
-            if (is_numeric($value) || is_string($value)) {
-                return (string)$value;
-            } else {
-                return serialize($value);
-            }
+        return serialize($value);
 	}
 
 	/**

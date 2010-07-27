@@ -6,7 +6,7 @@ if (!class_exists('Rediska')) {
 }
 
 /**
- * This object is for managing PubSub functionality
+ * Rediska PubSub channel
  *
  * @author Ivan Shumkov
  * @package Rediska
@@ -154,6 +154,7 @@ class Rediska_PubSub_Channel extends Rediska_Options implements Iterator, ArrayA
      * Publish a message to channel
      * 
      * @param $message
+     * @return int
      */
     public function publish($message)
     {
@@ -505,7 +506,12 @@ class Rediska_PubSub_Channel extends Rediska_Options implements Iterator, ArrayA
             }
         }
     }
-    
+
+    /**
+     * Add message response to buffer
+     * 
+     * @param Rediska_PubSub_Response_Message $message
+     */
     protected function _addMessageToBuffer(Rediska_PubSub_Response_Message $message)
     {
         $key = "{$message->getConnection()->getAlias()}-{$message->getChannel()}";
@@ -515,8 +521,6 @@ class Rediska_PubSub_Channel extends Rediska_Options implements Iterator, ArrayA
         }
 
         self::$_messages[$key][] = $message;
-
-        return true;
     }
     
     /**
