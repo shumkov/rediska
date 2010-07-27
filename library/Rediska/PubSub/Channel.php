@@ -216,7 +216,7 @@ class Rediska_PubSub_Channel extends Rediska_Options implements Iterator, ArrayA
             /* @var $connection Rediska_Connection */
             foreach($this->_connections as $connection) {
                 if ($this->_timeout) {
-                    $timeLeft = time() - ($this->_timeStart + $this->_timeout);
+                    $timeLeft = ($this->_timeStart + $this->_timeout) - time();
 
                     if (!$timeLeft) {
                         // Reset timeStart if time started from this method
