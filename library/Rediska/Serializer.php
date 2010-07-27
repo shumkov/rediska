@@ -74,11 +74,7 @@ class Rediska_Serializer
      */
     public function serialize($value)
     {
-        if (is_numeric($value) || is_string($value)) {
-            return (string)$value;
-        } else {
-            return $this->_adapter->serialize($value);
-        }
+        return $this->_adapter->serialize($value);
     }
 
     /**
