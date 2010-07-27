@@ -138,6 +138,9 @@ class Rediska extends Rediska_Options
         'shutdown'              => 'Rediska_Command_Shutdown',
         'rewriteappendonlyfile' => 'Rediska_Command_RewriteAppendOnlyFile',
         'slaveof'               => 'Rediska_Command_SlaveOf',
+
+        // Publish/Subscribe
+        'publish' => 'Rediska_Command_Publish',
     );
 
     /**
@@ -418,6 +421,22 @@ class Rediska extends Rediska_Options
         }
 
         return new Rediska_Transaction($this, $this->_specifiedConnection, $connection);
+    }
+
+    /**
+     * Subscribe to PubSub channel or channels
+     * 
+     * @var string|array $channelOrChannels
+     * @var mixin        $timeout
+     * @return Rediska_PubSub_Channel
+     */
+    public function subscribe($channelOrChannels, $timeout = null)
+    {
+        return new Rediska_PubSub_Channel($channelOrChannels, array(
+            'rediska'       => $this,
+            'timeout'       => $timeout,
+            'serverAlias'   => $this->_specifiedConnection->getConnection()
+        ));
     }
 
     /**

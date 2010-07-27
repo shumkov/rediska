@@ -39,7 +39,7 @@ class Rediska_Connection_Specified
      */
     public function __call($name, $args)
     {
-        if (in_array(strtolower($name), array('pipeline', 'transaction'))) {
+        if (in_array(strtolower($name), array('pipeline', 'transaction', 'subscribe'))) {
             return call_user_func_array(array($this->_rediska, $name), $args);
         } else {
             $command = $this->_rediska->getCommand($name, $args);
