@@ -141,6 +141,10 @@ class Rediska_Connection_Exec
     {
         $reply = $connection->readLine();
 
+        if ($reply === null) {
+            return $reply;
+        }
+
         $type = substr($reply, 0, 1);
         $data = substr($reply, 1);
 

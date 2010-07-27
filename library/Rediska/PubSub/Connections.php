@@ -140,9 +140,10 @@ class Rediska_PubSub_Connections implements IteratorAggregate, Countable
         }
         if (!array_key_exists($connection->getAlias(), self::$_allConnections)) {
             self::$_allConnections[$connection->getAlias()] = clone $connection;
+            self::$_allConnections[$connection->getAlias()]->setBlockingMode(false);
         }
         $connection = self::$_allConnections[$connection->getAlias()];
-        
+
         return $connection;
     }
 

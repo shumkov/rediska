@@ -26,28 +26,30 @@ class Rediska_Connection extends Rediska_Options
     /**
      * Options
      * 
-     * host        - Redis server host. For default 127.0.0.1
-     * port        - Redis server port. For default 6379
-     * db          - Redis server DB index. For default 0
-     * weight      - Weight of Redis server for key distribution. For default 1
-     * persistent  - Persistent connection to Redis server. For default false
-     * password    - Redis server password. Optional
-     * timeout     - Connection timeout for Redis server. Optional
-     * readTimeout - Read timeout for Redis server
-     * alias       - Redis server alias for operate keys on specified server. For default [host]:[port]
+     * host         - Redis server host. For default 127.0.0.1
+     * port         - Redis server port. For default 6379
+     * db           - Redis server DB index. For default 0
+     * alias        - Redis server alias for operate keys on specified server. For default [host]:[port]
+     * weight       - Weight of Redis server for key distribution. For default 1
+     * password     - Redis server password. Optional
+     * persistent   - Persistent connection to Redis server. For default false
+     * timeout      - Connection timeout for Redis server. Optional
+     * readTimeout  - Read timeout for Redis server
+     * blockingMode - Blocking/non-blocking mode for reads
      * 
      * @var array
      */
     protected $_options = array(
-        'host'        => self::DEFAULT_HOST,
-        'port'        => self::DEFAULT_PORT,
-        'weight'      => self::DEFAULT_WEIGHT,
-        'persistent'  => false,
-        'password'    => null,
-        'timeout'     => null,
-        'readTimeout' => null,
-        'alias'       => null,
-        'db'          => self::DEFAULT_DB,
+        'host'         => self::DEFAULT_HOST,
+        'port'         => self::DEFAULT_PORT,
+        'db'           => self::DEFAULT_DB,
+        'alias'        => null,
+        'weight'       => self::DEFAULT_WEIGHT,
+        'password'     => null,
+        'persistent'   => false,
+        'timeout'      => null,
+        'readTimeout'  => null,
+        'blockingmode' => true,
     );
 
     /**
@@ -84,6 +86,11 @@ class Rediska_Connection extends Rediska_Options
             // Set read timeout
             if ($this->_options['readtimeout'] != null) {
                 $this->setReadTimeout($this->_options['readtimeout']);
+            }
+
+            // Set blocking mode
+            if ($this->_options['blockingmode'] == false) {
+                $this->setBlockingMode($this->_options['blockingmode']);
             }
 
             // Send password
@@ -218,12 +225,12 @@ class Rediska_Connection extends Rediska_Options
             throw new Rediska_Connection_TimeoutException("Connection read timed out.");
         }
 
-        if ($string === false) {
+        if ($string === false && ($this->_setBlocking || (!$this->_setBlocking && $info['eof']))) {
             $this->disconnect();
             throw new Rediska_Connection_Exception("Can't read from socket.");
         }
 
-        return trim($string);
+        return $string !== false ? trim($string) : null;
     }
 
     /**
@@ -241,6 +248,23 @@ class Rediska_Connection extends Rediska_Options
             $microseconds = ($this->_options['readtimeout'] - $seconds) * 1000000;
 
             stream_set_timeout($this->_socket, $seconds, $microseconds);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set blocking/non-blocking mode for reads
+     * 
+     * @param $flag
+     * @return Rediska_Connection
+     */
+    public function setBlockingMode($flag = true)
+    {
+        $this->_options['blockingmode'] = $flag;
+
+        if ($this->isConnected()) {
+            stream_set_blocking($this->_socket, $this->_options['blockingmode']);
         }
 
         return $this;

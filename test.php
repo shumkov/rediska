@@ -6,20 +6,19 @@ require_once 'library/Rediska.php';
 
 $rediska = new Rediska(array(
     'servers' => array(
-        array('port' => 6380)
+        array('port' => 6380),
+        array('port' => 6381)
     ),
     'redisVersion' => '1.3.12'
 ));
 
-$channel1 = $rediska->subscribe('test', 10);
-$channel2 = $rediska->subscribe('test2', 10);
+$test = $rediska->subscribe('test', 10);
+$test2 = $rediska->subscribe('test2', 10);
 
-while(true) {
-    foreach($channel1 as $message) {
-         print "channel1: $message\n";
+while (true) {
+    foreach($test as $channel => $message) {
+         print "$channel: $message\n";
+         $test->unsubscribe($channel);
     }
-    
-    foreach($channel2 as $message) {
-        print "channel2: $message\n";
-    }
+    print "done\n";
 }
