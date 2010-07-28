@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Return all the members of the Set value at key
+ * Get hash values
  * 
- * @param string $name Key name
- * @return array
+ * @param string  $name Key name
+ * @return mixin
  * 
  * @author Ivan Shumkov
  * @package Rediska
@@ -12,13 +12,16 @@
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_Command_GetSet extends Rediska_Command_Abstract
-{
+class Rediska_Command_GetHashValues extends Rediska_Command_Abstract
+{ 
+    protected $_version = '1.3.10';
+
+    protected $_fields = array();
+
     public function create($name)
     {
         $connection = $this->_rediska->getConnectionByKeyName($name);
-
-        $command = "SMEMBERS {$this->_rediska->getOption('namespace')}$name";
+        $command = array('HVALS', $this->_rediska->getOption('namespace') . $name);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

@@ -51,9 +51,7 @@ class Rediska_Command_GetSortedSet extends Rediska_Command_Abstract
         if ($this->withScores) {
         	$values = Rediska_Command_Response_ValueAndScore::combine($this->_rediska, $values);
         } else {
-            foreach($values as &$value) {
-        	   $value = $this->_rediska->getSerializer()->unserialize($value);
-            }
+            $values = array_map(array($this->_rediska->getSerializer(), 'unserialize'), $values);
         }
 
         return $values;

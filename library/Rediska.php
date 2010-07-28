@@ -126,6 +126,17 @@ class Rediska extends Rediska_Options
         'getrankfromsortedset'       => 'Rediska_Command_GetRankFromSortedSet',
         'unionsortedsets'            => 'Rediska_Command_UnionSortedSets',
         'intersectsortedsets'        => 'Rediska_Command_IntersectSortedSets',
+    
+        // Hashes
+        'settohash'        => 'Rediska_Command_SetToHash',
+        'getfromhash'      => 'Rediska_Command_GetFromHash',
+        'incrementinhash'  => 'Rediska_Command_IncrementInHash',
+        'existsinhash'     => 'Rediska_Command_ExistsInHash',
+        'deletefromhash'   => 'Rediska_Command_DeleteFromHash',
+        'gethashlength'    => 'Rediska_Command_GetHashLength',
+        'gethash'          => 'Rediska_Command_GetHash',
+        'gethashfields'    => 'Rediska_Command_GetHashFields',
+        'gethashvalues'    => 'Rediska_Command_GetHashValues',
 
         // Sorting
         'sort' => 'Rediska_Command_Sort',

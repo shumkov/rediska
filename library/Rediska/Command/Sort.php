@@ -114,12 +114,6 @@ class Rediska_Command_Sort extends Rediska_Command_Abstract
 
     public function parseResponse($response)
     {
-        $values = $response;
-
-        foreach($values as &$value) {
-            $value = $this->_rediska->getSerializer()->unserialize($value);
-        }
-
-        return $values;
+        return array_map(array($this->_rediska->getSerializer(), 'unserialize'), $response);
     }
 }

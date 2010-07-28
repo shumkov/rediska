@@ -1,10 +1,11 @@
 <?php
 
 /**
- * Return all the members of the Set value at key
+ * Delete field from hash
  * 
- * @param string $name Key name
- * @return array
+ * @param string $name  Key name
+ * @param mixin  $field Field
+ * @return boolean
  * 
  * @author Ivan Shumkov
  * @package Rediska
@@ -12,19 +13,21 @@
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_Command_GetSet extends Rediska_Command_Abstract
+class Rediska_Command_DeleteFromHash extends Rediska_Command_Abstract
 {
-    public function create($name)
+    protected $_version = '1.3.10';
+
+    public function create($name, $field)
     {
         $connection = $this->_rediska->getConnectionByKeyName($name);
 
-        $command = "SMEMBERS {$this->_rediska->getOption('namespace')}$name";
+        $command = array('HDEL', "{$this->_rediska->getOption('namespace')}$name", $field);
 
         return new Rediska_Connection_Exec($connection, $command);
     }
 
     public function parseResponse($response)
     {
-        return array_map(array($this->_rediska->getSerializer(), 'unserialize'), $response);
+        return (boolean)$response;
     }
 }

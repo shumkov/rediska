@@ -30,18 +30,12 @@ class Rediska_Command_GetList extends Rediska_Command_Abstract
         $connection = $this->_rediska->getConnectionByKeyName($name);
 
         $command = "LRANGE {$this->_rediska->getOption('namespace')}$name $start $end";
-        
+
         return new Rediska_Connection_Exec($connection, $command);
     }
 
     public function parseResponse($response)
     {
-        $values = $response;
-
-        foreach($values as &$value) {
-            $value = $this->_rediska->getSerializer()->unserialize($value);
-        }
-
-        return $values;
+        return array_map(array($this->_rediska->getSerializer(), 'unserialize'), $response);
     }
 }
