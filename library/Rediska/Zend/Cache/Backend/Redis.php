@@ -68,7 +68,13 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
     	if (isset($options['namespace'])) {
             Zend_Cache::throwException('Namespace must definded in front end options (cache_id_prefix)');
         }
-        $this->_rediska = new Rediska($options);
+
+		$defaultInstance = Rediska::getDefaultInstance();
+		if (empty($options) && $defaultInstance) {
+			$this->_rediska = $defaultInstance;
+		} else {
+			$this->_rediska = new Rediska($options);
+		}
     }
 
     /**
