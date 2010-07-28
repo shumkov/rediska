@@ -72,7 +72,7 @@ class Rediska_Serializer_Adapter_Json extends Rediska_Options implements Rediska
 		$serializedValue = json_encode($value);
 
 	    if (json_last_error() != JSON_ERROR_NONE) {
-            throw new Rediska_Serializer_Exception("Can't serialize value");
+            throw new Rediska_Serializer_Adapter_Exception("Can't serialize value");
         }
 
 		return $serializedValue;
@@ -89,7 +89,7 @@ class Rediska_Serializer_Adapter_Json extends Rediska_Options implements Rediska
 		$value = json_decode($value);
 
 		if (json_last_error() != JSON_ERROR_NONE) {
-			throw new Rediska_Serializer_Exception("Can't unserialize value");
+			throw new Rediska_Serializer_Adapter_Exception("Can't unserialize value");
 		}
 
 		return $value;
