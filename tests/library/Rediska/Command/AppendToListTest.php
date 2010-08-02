@@ -5,7 +5,7 @@ class Rediska_Command_AppendToListTest extends Rediska_TestCase
     public function testReturnTrue()
     {
         $reply = $this->rediska->appendToList('test', 'aaa');
-        $this->assertTrue($reply);
+        $this->assertEquals(1, $reply);
     }
     
     public function testAppended()

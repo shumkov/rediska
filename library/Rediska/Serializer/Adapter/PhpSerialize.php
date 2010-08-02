@@ -39,13 +39,13 @@ class Rediska_Serializer_Adapter_PhpSerialize implements Rediska_Serializer_Adap
 
         return $unserializedValue;
     }
-    
+
     /**
      * Throw can't unserialize exception
      *
      * @throws Rediska_Serializer_Exception
      */
-    public function throwCantUnserializeException($a, $b)
+    public function throwCantUnserializeException()
     {
         throw new Rediska_Serializer_Adapter_Exception("Can't unserialize string");
     }

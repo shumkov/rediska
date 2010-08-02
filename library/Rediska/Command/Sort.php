@@ -28,8 +28,8 @@ class Rediska_Command_Sort extends Rediska_Command_Abstract
         'offset' => null,
         'alpha'  => false,
         'by'     => null,
-        'get'    => null,   
-        'store'  => null, 
+        'get'    => null,
+        'store'  => null,
     );
 
     public function create($name, $options = array())
