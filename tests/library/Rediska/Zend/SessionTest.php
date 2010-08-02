@@ -21,30 +21,30 @@ class Rediska_Zend_SessionTest extends Rediska_TestCase
 
     public function testRead()
     {
-    	$this->rediska->set('s_123', 'aaa');
-    	
-    	$value = $this->saveHandler->read('123');
-    	$this->assertEquals('aaa', $value);
+        $this->rediska->set('s_123', 'aaa');
+        
+        $value = $this->saveHandler->read('123');
+        $this->assertEquals('aaa', $value);
     }
 
     public function testWrite()
     {
-    	$reply = $this->saveHandler->write('123', 'aaa');
-    	$this->assertTrue($reply);
+        $reply = $this->saveHandler->write('123', 'aaa');
+        $this->assertTrue($reply);
 
-    	$value = $this->rediska->get('s_123');
-    	$this->assertEquals('aaa', $value);
+        $value = $this->rediska->get('s_123');
+        $this->assertEquals('aaa', $value);
 
-    	$values = $this->rediska->getSet('s_sessions');
-    	$this->assertEquals(array('123'), $values);
+        $values = $this->rediska->getSet('s_sessions');
+        $this->assertEquals(array('123'), $values);
     }
 
     public function testDestroy()
     {
-    	$this->rediska->set('s_123', 'aaa');
-    	$this->rediska->addToSet('s_sessions', '123');
+        $this->rediska->set('s_123', 'aaa');
+        $this->rediska->addToSet('s_sessions', '123');
 
-    	$reply = $this->saveHandler->destroy('123');
+        $reply = $this->saveHandler->destroy('123');
         $this->assertTrue($reply);
 
         $values = $this->rediska->getSet('s_sessions');

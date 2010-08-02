@@ -21,8 +21,8 @@ class Rediska_Command_UnionSetsTest extends Rediska_TestCase
 
     public function testUnionAndSave()
     {
-    	$keys = $this->_createThreeSets();
-    	
+        $keys = $this->_createThreeSets();
+        
         $reply = $this->rediska->unionSets($keys, 'new-set');
         $this->assertTrue($reply);
         

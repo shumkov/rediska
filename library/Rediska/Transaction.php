@@ -89,7 +89,7 @@ class Rediska_Transaction
     }
 
     /**
-     * Execute pipelined commands
+     * Execute transaction
      * 
      * @return array
      */
@@ -116,6 +116,16 @@ class Rediska_Transaction
         }
 
         return $results;
+    }
+
+    /**
+     * Magic method for execute
+     *
+     * @return array
+     */
+    public function __invoke()
+    {
+        return $this->execute();
     }
 
     /**
@@ -158,7 +168,7 @@ class Rediska_Transaction
         $command = $this->_rediska->getCommand($name, $args);
 
         if (!$command->isAtomic()) {
-        	throw new Rediska_Exception("Command '$name' doesn't work properly (not atomic) in pipeline on multiple servers");
+            throw new Rediska_Exception("Command '$name' doesn't work properly (not atomic) in pipeline on multiple servers");
         }
         
         $command->execute();

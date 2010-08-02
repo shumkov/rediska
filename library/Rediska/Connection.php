@@ -368,6 +368,18 @@ class Rediska_Connection extends Rediska_Options
     }
 
     /**
+     * Magic method for execute command in connection
+     *
+     * @return string
+     */
+    public function __invoke($command)
+    {
+        $exec = new Rediska_Connection_Exec($this, $command);
+
+        return $exec->execute();
+    }
+
+    /**
      * Return alias to strings
      */
     public function __toString()
@@ -380,7 +392,9 @@ class Rediska_Connection extends Rediska_Options
      */
     public function __destruct()
     {
-        $this->disconnect();
+        if (!$this->_options['persistent']) {
+            $this->disconnect();
+        }
     }
 
     /**

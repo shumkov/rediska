@@ -11,7 +11,7 @@ class Rediska_Command_ExistsTest extends Rediska_TestCase
     
     public function testNotExists()
     {
-    	$reply = $this->rediska->exists('a');
+        $reply = $this->rediska->exists('a');
         $this->assertFalse($reply);
     }
 }

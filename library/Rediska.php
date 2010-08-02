@@ -1,9 +1,9 @@
 <?php
 
 if (!defined('REDISKA_PATH')) {
-	define('REDISKA_PATH', dirname(__FILE__));
-	require_once REDISKA_PATH . '/Rediska/Options.php';
-	require_once REDISKA_PATH . '/Rediska/Connection.php';
+    define('REDISKA_PATH', dirname(__FILE__));
+    require_once REDISKA_PATH . '/Rediska/Options.php';
+    require_once REDISKA_PATH . '/Rediska/Connection.php';
 }
 
 /**
@@ -105,7 +105,7 @@ class Rediska extends Rediska_Options
         'addtoset'         => 'Rediska_Command_AddToSet',
         'deletefromset'    => 'Rediska_Command_DeleteFromSet',
         'getrandomfromset' => 'Rediska_Command_GetRandomFromSet',
-    	'getsetlength'     => 'Rediska_Command_GetSetLength',
+        'getsetlength'     => 'Rediska_Command_GetSetLength',
         'existsinset'      => 'Rediska_Command_ExistsInSet',
         'intersectsets'    => 'Rediska_Command_IntersectSets',
         'unionsets'        => 'Rediska_Command_UnionSets',
@@ -241,7 +241,7 @@ class Rediska extends Rediska_Options
      */
     public static function getDefaultInstance()
     {
-    	return self::$_defaultInstance;
+        return self::$_defaultInstance;
     }
 
     /**
@@ -251,7 +251,7 @@ class Rediska extends Rediska_Options
      */
     public static function setDefaultInstace(Rediska $instance)
     {
-    	self::$_defaultInstance = $instance;
+        self::$_defaultInstance = $instance;
     }
 
     /**
@@ -299,21 +299,21 @@ class Rediska extends Rediska_Options
             $connectionString = $options['alias'];
         }
 
-    	if (array_key_exists($connectionString, $this->_connections)) {
-    		throw new Rediska_Exception("Server '$connectionString' already added.");
-    	}
+        if (array_key_exists($connectionString, $this->_connections)) {
+            throw new Rediska_Exception("Server '$connectionString' already added.");
+        }
 
-    	$options['host'] = $host;
-    	$options['port'] = $port;
+        $options['host'] = $host;
+        $options['port'] = $port;
 
-    	$this->_connections[$connectionString] = new Rediska_Connection($options);
+        $this->_connections[$connectionString] = new Rediska_Connection($options);
 
-    	if ($this->_keyDistributor) {
+        if ($this->_keyDistributor) {
             $this->_keyDistributor->addConnection(
                 $connectionString,
                 isset($options['weight']) ? $options['weight'] : Rediska_Connection::DEFAULT_WEIGHT
             );
-    	}
+        }
 
         return $this;
     }

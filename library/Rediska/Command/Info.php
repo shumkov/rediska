@@ -13,16 +13,16 @@
  */
 class Rediska_Command_Info extends Rediska_Command_Abstract
 {
-	protected $_connections = array();
+    protected $_connections = array();
 
     public function create() 
     {
-    	$command = 'INFO';
+        $command = 'INFO';
         $info = array();
         $commands = array();
         foreach($this->_rediska->getConnections() as $connection) {
-        	$this->_connections[] = $connection->getAlias();
-        	$commands[] = new Rediska_Connection_Exec($connection, $command);
+            $this->_connections[] = $connection->getAlias();
+            $commands[] = new Rediska_Connection_Exec($connection, $command);
         }
 
         return $commands;
@@ -30,11 +30,11 @@ class Rediska_Command_Info extends Rediska_Command_Abstract
 
     public function parseResponses($responses)
     {
-    	$info = array();
-    	$count = 0;
-    	foreach($this->_connections as $connection) {
-    		$info[$connection] = array();
-    		
+        $info = array();
+        $count = 0;
+        foreach($this->_connections as $connection) {
+            $info[$connection] = array();
+            
             foreach (explode(Rediska::EOL, $responses[$count]) as $param) {
                 if (!$param) {
                     continue;
@@ -55,8 +55,8 @@ class Rediska_Command_Info extends Rediska_Command_Abstract
                 $info[$connection][$name] = $value;
             }
 
-    		$count++;
-    	}
+            $count++;
+        }
 
         if (count($info) == 1) {
             $info = array_values($info);

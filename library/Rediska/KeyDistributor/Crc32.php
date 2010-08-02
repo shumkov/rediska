@@ -17,12 +17,12 @@ class Rediska_KeyDistributor_Crc32 implements Rediska_KeyDistributor_Interface
 
     protected $_connectionPositionCount = 0;
 
-	/**
+    /**
      * (non-PHPdoc)
      * @see Rediska_KeyDistributor_Interface#addConnection
      */
-	public function addConnection($connectionString, $weight = Rediska_Connection::DEFAULT_WEIGHT)
-	{
+    public function addConnection($connectionString, $weight = Rediska_Connection::DEFAULT_WEIGHT)
+    {
         if (in_array($connectionString, $this->_connections)) {
             throw new Rediska_KeyDistributor_Exception("Connection '$connectionString' already exists.");
         }
@@ -37,9 +37,9 @@ class Rediska_KeyDistributor_Crc32 implements Rediska_KeyDistributor_Interface
         }
 
         return $this;
-	}
+    }
 
-	/**
+    /**
      * (non-PHPdoc)
      * @see Rediska_KeyDistributor_Interface#removeConnection
      */
@@ -57,12 +57,12 @@ class Rediska_KeyDistributor_Crc32 implements Rediska_KeyDistributor_Interface
         $connectionPositions = $this->_connectionPositions;
         $this->_connectionPositions = array();
         $this->_connectionPositionCount = 0;
-    	foreach($connectionPositions as $connection) {
-    		if ($connection != $connectionString) {
-    			$this->_connectionPositions[] = $connection;
-    			$this->_connectionPositionCount++;
-    		}
-    	}
+        foreach($connectionPositions as $connection) {
+            if ($connection != $connectionString) {
+                $this->_connectionPositions[] = $connection;
+                $this->_connectionPositionCount++;
+            }
+        }
 
         return $this;
     }
@@ -71,18 +71,18 @@ class Rediska_KeyDistributor_Crc32 implements Rediska_KeyDistributor_Interface
      * (non-PHPdoc)
      * @see Rediska_KeyDistributor_Interface#getConnectionByKeyName
      */
-	public function getConnectionByKeyName($name)
-	{
-	    if (empty($this->_connections)) {
+    public function getConnectionByKeyName($name)
+    {
+        if (empty($this->_connections)) {
             throw new Rediska_KeyDistributor_Exception("No connection exists.");
         }
 
-		if ($this->_connectionCount == 1) {
-			return $this->_connections[0];
-		}
+        if ($this->_connectionCount == 1) {
+            return $this->_connections[0];
+        }
 
-		$index = abs(crc32($name) % $this->_connectionPositionCount);
+        $index = abs(crc32($name) % $this->_connectionPositionCount);
 
-		return $this->_connectionPositions[$index];
-	}
+        return $this->_connectionPositions[$index];
+    }
 }

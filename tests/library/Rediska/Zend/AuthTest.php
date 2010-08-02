@@ -4,15 +4,15 @@ require_once 'Zend/Auth.php';
 
 class Rediska_Zend_AuthTest extends Rediska_TestCase
 {
-	/**
-	 * @var Zend_Auth
-	 */
-	protected $auth;
+    /**
+     * @var Zend_Auth
+     */
+    protected $auth;
 
-	/**
+    /**
      * @var Rediska_Zend_Auth_Adapter_Redis
-	 */
-	protected $adapter;
+     */
+    protected $adapter;
 
     protected function setUp()
     {
@@ -30,7 +30,7 @@ class Rediska_Zend_AuthTest extends Rediska_TestCase
         $this->adapter = new Rediska_Zend_Auth_Adapter_Redis();
     }
 
-	public function testIdentityNotFound()
+    public function testIdentityNotFound()
     {
         $this->adapter->setIdentity('test2')->setCredential('aaa');
 

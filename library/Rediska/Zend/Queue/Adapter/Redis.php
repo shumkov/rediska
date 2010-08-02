@@ -21,28 +21,28 @@ require_once 'Zend/Queue/Adapter/AdapterAbstract.php';
  */
 class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstract
 {
-	const KEY_PREFIX = 'Zend_Queue_';
+    const KEY_PREFIX = 'Zend_Queue_';
 
-	/**
-	 * Rediska instance
-	 *
-	 * @var Rediska
-	 */
-	protected $_rediska;
+    /**
+     * Rediska instance
+     *
+     * @var Rediska
+     */
+    protected $_rediska;
 
-	/**
-	 * Queues set
-	 *
-	 * @var Rediska_Key_Set
-	 */
-	protected $_queues;
+    /**
+     * Queues set
+     *
+     * @var Rediska_Key_Set
+     */
+    protected $_queues;
 
-	/**
-	 * Queue Lists array
-	 *
-	 * @var array
-	 */
-	protected $_queueObjects;
+    /**
+     * Queue Lists array
+     *
+     * @var array
+     */
+    protected $_queueObjects;
 
     /**
      * Constructor
@@ -57,9 +57,9 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
 
         $defaultInstance = Rediska::getDefaultInstance();
         if (empty($this->_options['driverOptions']) && $defaultInstance) {
-        	$this->_rediska = $defaultInstance;
+            $this->_rediska = $defaultInstance;
         } else {
-        	$this->_rediska = new Rediska($this->_options['driverOptions']);
+            $this->_rediska = new Rediska($this->_options['driverOptions']);
         }
 
         $this->_queues = new Rediska_Key_Set($this->_getKeyName('queues'));
@@ -78,11 +78,11 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
      */
     public function isExists($name)
     {
-    	if (isset($this->_queueObjects[$name])) {
-    		return true;
-    	} else {
-    		return $this->_queues->exists($name);
-    	}
+        if (isset($this->_queueObjects[$name])) {
+            return true;
+        } else {
+            return $this->_queues->exists($name);
+        }
     }
 
     /**
@@ -116,11 +116,11 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
     public function delete($name)
     {
         if ($this->_queues->remove($name)) {
-        	if (isset($this->_queueObjects[$name])) {
-        		unset($this->_queueObjects[$name]);
-        	}
+            if (isset($this->_queueObjects[$name])) {
+                unset($this->_queueObjects[$name]);
+            }
 
-        	return $this->_rediska->delete($this->_getKeyName("queue_$name"));
+            return $this->_rediska->delete($this->_getKeyName("queue_$name"));
         }
     }
 
@@ -139,7 +139,7 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
 
     protected function _getKeyName($name)
     {
-    	return self::KEY_PREFIX . $name;
+        return self::KEY_PREFIX . $name;
     }
 
     /**
@@ -189,18 +189,18 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
         $queueName = $queue->getName();
 
         if (!$this->isExists($queueName)) {
-        	require_once 'Zend/Queue/Exception.php';
+            require_once 'Zend/Queue/Exception.php';
             throw new Zend_Queue_Exception('Queue does not exist:' . $queueName);
         }
 
         if (!isset($this->_queueObjects[$queueName])) {
-        	$this->_queueObjects[$queueName] = new Rediska_Key_List($this->_getKeyName("queue_$queueName"));
+            $this->_queueObjects[$queueName] = new Rediska_Key_List($this->_getKeyName("queue_$queueName"));
         }
 
         $result = $this->_queueObjects[$queueName]->prepend($message);
 
         if ($result === false) {
-        	require_once 'Zend/Queue/Exception.php';
+            require_once 'Zend/Queue/Exception.php';
             throw new Zend_Queue_Exception('Failed to insert message into queue:' . $queueName);
         }
 
@@ -247,10 +247,10 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
 
         $messages = array();
         for ($i = 0; $i < $maxMessages; $i++) {
-        	$message = $this->_queueObjects[$queueName]->pop();
-        	if (!is_null($message)) {
+            $message = $this->_queueObjects[$queueName]->pop();
+            if (!is_null($message)) {
                 $messages[] = array('body' => $message);
-        	}
+            }
         }
 
         $options = array(
@@ -278,7 +278,7 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
      */
     public function deleteMessage(Zend_Queue_Message $message)
     {
-    	$queueName = $this->_queue->getName();
+        $queueName = $this->_queue->getName();
 
         if (!isset($this->_queueObjects[$queueName])) {
             $this->_queueObjects[$queueName] = new Rediska_Key_List($this->_getKeyName("queue_$queueName"));

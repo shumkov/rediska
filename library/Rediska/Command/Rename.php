@@ -30,7 +30,7 @@ class Rediska_Command_Rename extends Rediska_Command_Abstract
             }
             $command .= " {$this->_rediska->getOption('namespace')}$oldName {$this->_rediska->getOption('namespace')}$newName";
         } else {
-        	$this->setAtomic(false);
+            $this->setAtomic(false);
 
             $command = "GET {$this->_rediska->getOption('namespace')}$oldName";
         }

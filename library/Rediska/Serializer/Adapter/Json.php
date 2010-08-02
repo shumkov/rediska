@@ -11,8 +11,8 @@
  */
 class Rediska_Serializer_Adapter_Json extends Rediska_Options implements Rediska_Serializer_Adapter_Interface
 {
-	const DECODE_TYPE_ARRAY = true;
-	const DECODE_TYPE_OBJECT = false;
+    const DECODE_TYPE_ARRAY = true;
+    const DECODE_TYPE_OBJECT = false;
 
     /**
      * Options
@@ -32,66 +32,66 @@ class Rediska_Serializer_Adapter_Json extends Rediska_Options implements Rediska
      * decodeDepth          - Depth of returned objects. 512 by default.
      * decodeBigintAsString - Convert bigint to strings in returned objects.
      */
-	protected $_options = array(
-	    'encodeasobject'       => false,
+    protected $_options = array(
+        'encodeasobject'       => false,
         'encodehexquote'       => false,
         'encodehextag'         => false,
         'encodehexamp'         => false,
         'encodehexapos'        => false,
-    	'decodetype'    	   => self::DECODE_TYPE_ARRAY,
-    	'decodedepth'   	   => 512,
-    	'decodebigintasstring' => false,
-	);
+        'decodetype'           => self::DECODE_TYPE_ARRAY,
+        'decodedepth'          => 512,
+        'decodebigintasstring' => false,
+    );
 
-	/**
-	 * Serialize value
-	 *
-	 * @param mixin $value
-	 * @return string
-	 */
-	public function serialize($value)
-	{
-	    $options = 0;
+    /**
+     * Serialize value
+     *
+     * @param mixin $value
+     * @return string
+     */
+    public function serialize($value)
+    {
+        $options = 0;
 
-	    if ($this->_options['encodeasobject']) {
-	        $options = $options | JSON_FORCE_OBJECT;
-	    }
-	    if ($this->_options['encodehexquote']) {
+        if ($this->_options['encodeasobject']) {
+            $options = $options | JSON_FORCE_OBJECT;
+        }
+        if ($this->_options['encodehexquote']) {
             $options = $options | JSON_HEX_QUOT;
         }
-	    if ($this->_options['encodehextag']) {
+        if ($this->_options['encodehextag']) {
             $options = $options | JSON_HEX_TAG;
         }
-	    if ($this->_options['encodehexamp']) {
+        if ($this->_options['encodehexamp']) {
             $options = $options | JSON_HEX_AMP;
         }
         if ($this->_options['encodehexapos']) {
             $options = $options | JSON_HEX_APOS;
         }
 
-		$serializedValue = json_encode($value);
+        $serializedValue = json_encode($value);
 
-	    if (json_last_error() != JSON_ERROR_NONE) {
+        if (json_last_error() != JSON_ERROR_NONE) {
             throw new Rediska_Serializer_Adapter_Exception("Can't serialize value");
         }
 
-		return $serializedValue;
-	}
+        return $serializedValue;
+    }
 
-	/**
-	 * Unserialize value
-	 *
-	 * @param mixin $value
-	 * @return string
-	 */
-	public function unserialize($value)
-	{
-		$value = json_decode($value);
+    /**
+     * Unserialize value
+     *
+     * @param mixin $value
+     * @return string
+     */
+    public function unserialize($value)
+    {
+        $value = json_decode($value);
 
-		if (json_last_error() != JSON_ERROR_NONE) {
-			throw new Rediska_Serializer_Adapter_Exception("Can't unserialize value");
-		}
+        if (json_last_error() != JSON_ERROR_NONE) {
+            throw new Rediska_Serializer_Adapter_Exception("Can't unserialize value");
+        }
 
-		return $value;
-	}
+        return $value;
+    }
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * Get hash fields and values
  * 

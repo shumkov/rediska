@@ -81,6 +81,23 @@ class Rediska_Pipeline
         return $results;
     }
 
+    /**
+     * Magic method for execute
+     *
+     * @return array
+     */
+    public function __invoke()
+    {
+        return $this->execute();
+    }
+
+    /**
+     * Magic method for call a Rediska command
+     *
+     * @param string $name
+     * @param array $args
+     * @return Rediska_Pipeline
+     */
     public function __call($name, $args)
     {
         if (strtolower($name) == 'on' && isset($args[0])) {
@@ -96,8 +113,8 @@ class Rediska_Pipeline
         }
 
         if ($this->_oneTimeConnection) {
-        	$connection = $this->_oneTimeConnection;
-        	$this->_oneTimeConnection = null;
+            $connection = $this->_oneTimeConnection;
+            $this->_oneTimeConnection = null;
         } else {
             $connection = $this->_defaultConnection;
         }
@@ -105,13 +122,13 @@ class Rediska_Pipeline
         if ($connection !== null) {
             $this->_specifiedConnection->setConnection($connection);
         } else {
-        	$this->_specifiedConnection->resetConnection();
+            $this->_specifiedConnection->resetConnection();
         }
  
         $command = $this->_rediska->getCommand($name, $args);
 
         if (!$command->isAtomic()) {
-        	throw new Rediska_Exception("Command '$name' doesn't work properly (not atomic) in pipeline on multiple servers");
+            throw new Rediska_Exception("Command '$name' doesn't work properly (not atomic) in pipeline on multiple servers");
         }
 
         $this->_commands[] = $command;

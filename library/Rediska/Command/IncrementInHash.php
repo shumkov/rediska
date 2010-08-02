@@ -20,7 +20,7 @@ class Rediska_Command_IncrementInHash extends Rediska_Command_Abstract
 
     public function create($name, $field, $amount = 1)
     {
-    	$connection = $this->_rediska->getConnectionByKeyName($name);
+        $connection = $this->_rediska->getConnectionByKeyName($name);
 
         $command = array('HINCRBY', "{$this->_rediska->getOption('namespace')}$name", $field, $amount);
 

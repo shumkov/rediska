@@ -11,5 +11,5 @@
  */
 class Rediska_Command_Exception extends Rediska_Exception
 {
-	
+    
 }

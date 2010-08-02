@@ -95,7 +95,17 @@ class Rediska_Connection_Exec
         $this->write();
         return $this->read();
     }
-    
+
+    /**
+     * Magic method for execute
+     *
+     * @return array|string
+     */
+    public function __invoke()
+    {
+        return $this->execute();
+    }
+
     /**
      * Get connection
      * 

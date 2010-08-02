@@ -2,12 +2,12 @@
 
 class Rediska_Command_GetListTest extends Rediska_TestCase
 {
-	public function testNotPresentListReturnEmptyArray()
-	{
-		$reply = $this->rediska->getList('test');
+    public function testNotPresentListReturnEmptyArray()
+    {
+        $reply = $this->rediska->getList('test');
         $this->assertEquals(array(), $reply);
-	}
-	
+    }
+    
     public function testGetList()
     {
         $this->_appendThreeMembers();
@@ -18,7 +18,7 @@ class Rediska_Command_GetListTest extends Rediska_TestCase
     
     public function testGetListWithLimit()
     {
-    	$this->_appendThreeMembers();
+        $this->_appendThreeMembers();
 
         $reply = $this->rediska->getList('test', 0, 1);
         $this->assertEquals(array('aaa', 'bbb'), $reply);
@@ -26,21 +26,21 @@ class Rediska_Command_GetListTest extends Rediska_TestCase
     
     public function testGetListWithLimitAndOffset()
     {
-    	$this->_appendThreeMembers();
-    	
-    	$reply = $this->rediska->getList('test', 1);
+        $this->_appendThreeMembers();
+        
+        $reply = $this->rediska->getList('test', 1);
         $this->assertEquals(array('bbb', 'ccc'), $reply);
     }
     
     public function testGetListWithSortIsDepricated()
     {
-    	$this->setExpectedException('Rediska_Command_Exception');
+        $this->setExpectedException('Rediska_Command_Exception');
         $this->rediska->getList('test', 'limit 0 3 desc');
     }
 
     protected function _appendThreeMembers()
     {
-    	$this->rediska->appendToList('test', 'aaa');
+        $this->rediska->appendToList('test', 'aaa');
         $this->rediska->appendToList('test', 'bbb');
         $this->rediska->appendToList('test', 'ccc');
     }

@@ -32,7 +32,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
     const TAGS_UNSUPPORTED_BY_CLEAN_OF_REDIS_BACKEND = 'Rediska_Zend_Cache_Backend_Redis::clean() : tags are unsupported by the Redis backend';
     const TAGS_UNSUPPORTED_BY_SAVE_OF_REDIS_BACKEND =  'Rediska_Zend_Cache_Backend_Redis::save() : tags are unsupported by the Redis backend';
 
-	/**
+    /**
      * Rediska instance
      * 
      * @var Rediska
@@ -63,18 +63,18 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     public function __construct(array $options = array())
     {
-    	parent::__construct($options);
+        parent::__construct($options);
 
-    	if (isset($options['namespace'])) {
+        if (isset($options['namespace'])) {
             Zend_Cache::throwException('Namespace must definded in front end options (cache_id_prefix)');
         }
 
-		$defaultInstance = Rediska::getDefaultInstance();
-		if (empty($options) && $defaultInstance) {
-			$this->_rediska = $defaultInstance;
-		} else {
-			$this->_rediska = new Rediska($options);
-		}
+        $defaultInstance = Rediska::getDefaultInstance();
+        if (empty($options) && $defaultInstance) {
+            $this->_rediska = $defaultInstance;
+        } else {
+            $this->_rediska = new Rediska($options);
+        }
     }
 
     /**

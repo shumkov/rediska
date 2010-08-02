@@ -20,7 +20,7 @@ class Rediska_Command_AddToSortedSet extends Rediska_Command_Abstract
 
     public function create($name, $value, $score)
     {
-    	$connection = $this->_rediska->getConnectionByKeyName($name);
+        $connection = $this->_rediska->getConnectionByKeyName($name);
 
         $value = $this->_rediska->getSerializer()->serialize($value);
 

@@ -2,32 +2,32 @@
 
 class UserController extends Zend_Controller_Action
 {
-	/**
-	 * Signup
-	 */
+    /**
+     * Signup
+     */
     public function signupAction()
     {
-    	$form = new Form_User;
-    	
-    	if ($this->getRequest()->isPost() && $form->isValid($this->getRequest()->getPost())) {
-    		
-    		$userData = $form->getValues();
-    		$userData['id'] = User::fetchNextId();
-    		
-    		// save user
-    		$user = new User($userData['id']);
-    		$user->setValue($userData);
-    		
-    		$users = new Users();
-    		$users->add($userData['id']);
-    		
-    		// save login to id link
-    		User::setLoginToIdLink($userData['login'], $userData['id']);
-    		
-    		$this->_redirect('/user/login');
-    	}
-    	
-    	$this->view->form = $form;
+        $form = new Form_User;
+        
+        if ($this->getRequest()->isPost() && $form->isValid($this->getRequest()->getPost())) {
+            
+            $userData = $form->getValues();
+            $userData['id'] = User::fetchNextId();
+            
+            // save user
+            $user = new User($userData['id']);
+            $user->setValue($userData);
+            
+            $users = new Users();
+            $users->add($userData['id']);
+            
+            // save login to id link
+            User::setLoginToIdLink($userData['login'], $userData['id']);
+            
+            $this->_redirect('/user/login');
+        }
+        
+        $this->view->form = $form;
     }
     
     /**
@@ -35,7 +35,7 @@ class UserController extends Zend_Controller_Action
      */
     public function loginAction()
     {
-    	$form = new Form_UserLogin;
+        $form = new Form_UserLogin;
         
         if ($this->getRequest()->isPost() && $form->isValid($this->getRequest()->getPost())) {
             $auth = Zend_Auth::getInstance();
@@ -75,15 +75,15 @@ class UserController extends Zend_Controller_Action
      */
     public function followersAction()
     {
-    	$userId = $this->_getParam('userId');
-    	
-    	$user = new User($userId);
-    	$this->view->user = $user->getValue();
-    	
-    	$followers = new Followers($userId);
-    	
-    	$this->view->users = User::getMultiple($followers->toArray());
-    	$this->_setUsersIFollow();
+        $userId = $this->_getParam('userId');
+        
+        $user = new User($userId);
+        $this->view->user = $user->getValue();
+        
+        $followers = new Followers($userId);
+        
+        $this->view->users = User::getMultiple($followers->toArray());
+        $this->_setUsersIFollow();
     }
     
     /**
@@ -104,22 +104,22 @@ class UserController extends Zend_Controller_Action
      */
     public function followAction()
     {
-    	$auth = Zend_Auth::getInstance();
-    	if (!$auth->hasIdentity()) {
+        $auth = Zend_Auth::getInstance();
+        if (!$auth->hasIdentity()) {
             throw new Zend_Auth_Exception("You're not authorized to see this page");
-    	}
-    	
-    	$userId = $this->_getParam('userId');
-    	$follower = $auth->getStorage()->read();
-    	
-    	if ($userId != $follower['id']) {
-	    	$followers = new Followers($userId);
-	    	$followers[] = $follower['id'];
-	    	
-	    	$following = new Following($follower['id']);
-	    	$following[] = $userId;
-    	}
-    	$this->_redirect('/user/followers/userId/' . $userId);
+        }
+        
+        $userId = $this->_getParam('userId');
+        $follower = $auth->getStorage()->read();
+        
+        if ($userId != $follower['id']) {
+            $followers = new Followers($userId);
+            $followers[] = $follower['id'];
+            
+            $following = new Following($follower['id']);
+            $following[] = $userId;
+        }
+        $this->_redirect('/user/followers/userId/' . $userId);
     }
     
     /**
@@ -147,8 +147,8 @@ class UserController extends Zend_Controller_Action
     
     public function logoutAction()
     {
-    	Zend_Session::destroy();
-    	$this->_redirect('/user/login');
+        Zend_Session::destroy();
+        $this->_redirect('/user/login');
     }
     
     public function indexAction()
@@ -167,7 +167,7 @@ class UserController extends Zend_Controller_Action
     
     protected function _setUsersIFollow()
     {
-    	$auth = Zend_Auth::getInstance();
+        $auth = Zend_Auth::getInstance();
         if (!$auth->hasIdentity()) {
             throw new Zend_Auth_Exception("You're not authorized to see this page");
         }

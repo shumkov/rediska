@@ -11,9 +11,9 @@
  */
 abstract class Rediska_Command_CompareSets extends Rediska_Command_Abstract
 {
-	protected $_storeConnection;
+    protected $_storeConnection;
 
-	protected $_command;
+    protected $_command;
     protected $_storeCommand;
 
     public function create(array $names, $storeName = null) 
@@ -35,20 +35,20 @@ abstract class Rediska_Command_CompareSets extends Rediska_Command_Abstract
         }
 
         if (count($connections) == 1) {
-        	$connectionValues = array_values($connections);
+            $connectionValues = array_values($connections);
             $connection = $connectionValues[0];
 
             if (!is_null($storeName)) {
                 $storeConnection = $this->_rediska->getConnectionByKeyName($storeName);
                 if ($storeConnection->getAlias() == $connection->getAlias()) {
-                	$command = "{$this->_storeCommand} {$this->_rediska->getOption('namespace')}$storeName";
+                    $command = "{$this->_storeCommand} {$this->_rediska->getOption('namespace')}$storeName";
                 } else {
-                	$this->setAtomic(false);
-                	$this->_storeConnection = $storeConnection;
-                	$command = $this->_command;
+                    $this->setAtomic(false);
+                    $this->_storeConnection = $storeConnection;
+                    $command = $this->_command;
                 }
             } else {
-            	$command = $this->_command;
+                $command = $this->_command;
             }
 
             $connectionKeys = array_keys($connections);
@@ -78,24 +78,24 @@ abstract class Rediska_Command_CompareSets extends Rediska_Command_Abstract
 
     public function parseResponses($responses)
     {
-		if (!$this->isAtomic()) {
-    		if ($this->_storeConnection) {
+        if (!$this->isAtomic()) {
+            if ($this->_storeConnection) {
                 $values = $responses[0];
-    		} else {
-    			$values = array_values($this->_compareSets($responses));
-    		}
+            } else {
+                $values = array_values($this->_compareSets($responses));
+            }
 
-    		$unserializedValues = array_map(array($this->_rediska->getSerializer(), 'unserialize'), $values);
+            $unserializedValues = array_map(array($this->_rediska->getSerializer(), 'unserialize'), $values);
 
-    		if (is_null($this->storeName)) {
-    			return $unserializedValues;
-    		} else {
-    			$this->_rediska->delete($this->storeName);
+            if (is_null($this->storeName)) {
+                return $unserializedValues;
+            } else {
+                $this->_rediska->delete($this->storeName);
                 foreach($unserializedValues as $value) {
                     $this->_rediska->addToSet($this->storeName, $value);
                 }
                 return true;
-    		}
+            }
         } else {
             $reply = $responses[0];
             if (is_null($this->storeName)) {

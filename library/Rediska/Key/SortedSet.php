@@ -27,7 +27,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
     {
         $result = $this->_getRediskaOn()->addToSortedSet($this->_name, $value, $score);
 
-        if ($result && !is_null($this->_expire)) {
+        if (!is_null($this->_expire) && $result) {
             $this->expire($this->_expire, $this->_isExpireTimestamp);
         }
 
@@ -44,7 +44,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
     {
         $result = $this->_getRediskaOn()->deleteFromSortedSet($this->_name, $value);
 
-        if ($result && !is_null($this->_expire)) {
+        if (!is_null($this->_expire) && $result) {
             $this->expire($this->_expire, $this->_isExpireTimestamp);
         }
 
@@ -96,7 +96,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
      */
     public function getScore($value)
     {
-    	return $this->_getRediskaOn()->getScoreFromSortedSet($this->_name, $value);
+        return $this->_getRediskaOn()->getScoreFromSortedSet($this->_name, $value);
     }
     
     /**

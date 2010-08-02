@@ -2,13 +2,13 @@
 
 class Rediska_Command_GetFromHashTest extends Rediska_TestCase
 { 
-    public function testExistsNotExists()
+    public function testGetNotExists()
     {
         $reply = $this->rediska->getFromHash('test', 'a');
         $this->assertEquals(null, $reply);
     }
 
-    public function testExists()
+    public function testGet()
     {
         $data = array('a' => array(1, 5), 'b' => 2, 3 => 'c');
 
@@ -19,5 +19,8 @@ class Rediska_Command_GetFromHashTest extends Rediska_TestCase
 
         $reply = $this->rediska->getFromHash('test', 3);
         $this->assertEquals('c', $reply);
+
+        $reply = $this->rediska->getFromHash('test', array('a', 'b', 3));
+        $this->assertEquals($data, $reply);
     }
 }

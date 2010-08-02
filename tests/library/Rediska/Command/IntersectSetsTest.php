@@ -2,7 +2,7 @@
 
 class Rediska_Command_IntersectSetsTest extends Rediska_TestCase
 {
-	public function testIntersect()
+    public function testIntersect()
     {      
         $keys = $this->_createThreeSets();
 
@@ -21,7 +21,7 @@ class Rediska_Command_IntersectSetsTest extends Rediska_TestCase
 
     public function testIntersetAndSave()
     {
-    	$keys = $this->_createThreeSets();
+        $keys = $this->_createThreeSets();
 
         $reply = $this->rediska->intersectSets($keys, 'new-set');
         $this->assertTrue($reply);
@@ -41,7 +41,7 @@ class Rediska_Command_IntersectSetsTest extends Rediska_TestCase
 
     protected function _intersectViaPhp()
     {
-    	$myIntersection = array_intersect($this->_sets['set1'], $this->_sets['set2'], $this->_sets['set2']);
+        $myIntersection = array_intersect($this->_sets['set1'], $this->_sets['set2'], $this->_sets['set2']);
         sort($myIntersection);
 
         return $myIntersection;

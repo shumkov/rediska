@@ -11,5 +11,5 @@
  */
 class Rediska_KeyDistributor_Exception extends Rediska_Exception
 {
-	
+    
 }

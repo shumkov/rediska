@@ -114,12 +114,12 @@ $maintainers = array(
         'email' => 'maximiv@gmail.com',
         'role'  => 'lead',
     ),
-	array(
-    	'name'  => 'Ryan Grenz',
-    	'user'  => 'ryangrenz',
-    	'email' => 'info@ryangrenz.com',
-    	'role'  => 'developer',
-	),
+    array(
+        'name'  => 'Ryan Grenz',
+        'user'  => 'ryangrenz',
+        'email' => 'info@ryangrenz.com',
+        'role'  => 'developer',
+    ),
     array(
         'name'  => 'Till Klampaeckel',
         'user'  => 'till',

@@ -25,17 +25,17 @@ class Rediska_Command_GetFromHash extends Rediska_Command_Abstract
             $this->_fields = array_values($fieldOrFields);
 
             if (empty($this->_fields)) {
-            	throw new Rediska_Command_Exception('Not present fields');
+                throw new Rediska_Command_Exception('Not present fields');
             }
-            
-            $command = array('HMGET', $this->_rediska->getOption('namespace') . $name) + $this->_fields;
+
+            $command = array_merge(array('HMGET', $this->_rediska->getOption('namespace') . $name), $this->_fields);
         } else {
             $field = $fieldOrFields;
             $command = array('HGET', $this->_rediska->getOption('namespace') . $name, $field);
         }
 
         $connection = $this->_rediska->getConnectionByKeyName($name);
-        
+
         return new Rediska_Connection_Exec($connection, $command);
     }
 

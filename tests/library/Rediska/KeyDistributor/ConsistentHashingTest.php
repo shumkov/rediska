@@ -2,10 +2,10 @@
 
 class Rediska_KeyDistributor_ConsistentHashingTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Rediska_KeyDistributor_ConsistentHashing
-	 */
-	private $keyDistributor;
+    /**
+     * @var Rediska_KeyDistributor_ConsistentHashing
+     */
+    private $keyDistributor;
 
     protected function setUp()
     {
@@ -19,11 +19,11 @@ class Rediska_KeyDistributor_ConsistentHashingTest extends PHPUnit_Framework_Tes
 
     public function testAddConnection()
     {
-    	$return = $this->keyDistributor->addConnection('127.0.0.1:6379');
-    	$this->assertEquals($this->keyDistributor, $return);
+        $return = $this->keyDistributor->addConnection('127.0.0.1:6379');
+        $this->assertEquals($this->keyDistributor, $return);
 
-    	$connection = $this->keyDistributor->getConnectionByKeyName('test');
-    	$this->assertEquals('127.0.0.1:6379', $connection);
+        $connection = $this->keyDistributor->getConnectionByKeyName('test');
+        $this->assertEquals('127.0.0.1:6379', $connection);
     }
 
     /**
@@ -31,14 +31,14 @@ class Rediska_KeyDistributor_ConsistentHashingTest extends PHPUnit_Framework_Tes
      */
     public function testAddDuplicateConnection()
     {
-    	$this->keyDistributor->addConnection('127.0.0.1:6379');
-    	$this->keyDistributor->addConnection('127.0.0.1:6379');
+        $this->keyDistributor->addConnection('127.0.0.1:6379');
+        $this->keyDistributor->addConnection('127.0.0.1:6379');
     }
 
     public function testRemoveConnection()
     {
-    	$this->keyDistributor->addConnection('127.0.0.1:6379');
-    	$return = $this->keyDistributor->removeConnection('127.0.0.1:6379');
+        $this->keyDistributor->addConnection('127.0.0.1:6379');
+        $return = $this->keyDistributor->removeConnection('127.0.0.1:6379');
         $this->assertEquals($this->keyDistributor, $return);
         $this->setExpectedException('Rediska_KeyDistributor_Exception');
         $this->keyDistributor->getConnectionByKeyName('test');
@@ -54,10 +54,10 @@ class Rediska_KeyDistributor_ConsistentHashingTest extends PHPUnit_Framework_Tes
 
     public function testGetConnectionByKeyName()
     {
-    	$this->keyDistributor->addConnection('127.0.0.1:6379');
-    	$this->keyDistributor->addConnection('127.0.0.1:6380');
-    	$this->keyDistributor->addConnection('127.0.0.1:6381');
-    	$this->keyDistributor->addConnection('127.0.0.1:6382');
+        $this->keyDistributor->addConnection('127.0.0.1:6379');
+        $this->keyDistributor->addConnection('127.0.0.1:6380');
+        $this->keyDistributor->addConnection('127.0.0.1:6381');
+        $this->keyDistributor->addConnection('127.0.0.1:6382');
 
         $connections = array();
         for ($index = 0; $index < 5; $index++) {

@@ -18,7 +18,7 @@ class Rediska_Command_DeleteFromSetTest extends Rediska_TestCase
  
     public function testMemberIsDeletedFromSet()
     {
-    	$this->rediska->addToSet('test', 'aaa');
+        $this->rediska->addToSet('test', 'aaa');
         $this->rediska->addToSet('test', 'bbb');
 
         $this->rediska->deleteFromSet('test', 'bbb');

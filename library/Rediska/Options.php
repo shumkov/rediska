@@ -11,22 +11,22 @@
  */
 abstract class Rediska_Options
 {
-	protected $_options = array();
+    protected $_options = array();
 
-	public function __construct(array $options = array()) 
+    public function __construct(array $options = array()) 
     {
-		$options = $this->applyDefaultOptions($options);
+        $options = $this->applyDefaultOptions($options);
 
         $this->setOptions($options);
     }
 
-	public function applyDefaultOptions($options)
-	{
-		$options = array_change_key_case($options, CASE_LOWER);
+    public function applyDefaultOptions($options)
+    {
+        $options = array_change_key_case($options, CASE_LOWER);
         $options = array_merge($this->_options, $options);
 
-		return $options;
-	}
+        return $options;
+    }
 
     /**
      * Set options array
@@ -47,15 +47,15 @@ abstract class Rediska_Options
         return $this;
     }
 
-	/**
-	 * Get associative array of options
-	 *
-	 * @return array
-	 */
-	public function getOptions()
-	{
-		return $this->_options;
-	}
+    /**
+     * Get associative array of options
+     *
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->_options;
+    }
 
     /**
      * Set option
@@ -67,7 +67,7 @@ abstract class Rediska_Options
      */
     public function setOption($name, $value)
     {
-    	$lowerName = strtolower($name);
+        $lowerName = strtolower($name);
 
         if (!array_key_exists($lowerName, $this->_options)) {
             throw new Rediska_Exception("Unknown option '$name'");
@@ -87,7 +87,7 @@ abstract class Rediska_Options
      */
     public function getOption($name)
     {
-    	$lowerName = strtolower($name);
+        $lowerName = strtolower($name);
 
         if (!array_key_exists($lowerName, $this->_options)) {
             throw new Rediska_Exception("Unknown option '$name'");
@@ -95,5 +95,5 @@ abstract class Rediska_Options
 
         return $this->_options[$lowerName];
     }
-	
+    
 }

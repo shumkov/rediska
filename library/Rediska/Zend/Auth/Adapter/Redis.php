@@ -35,60 +35,38 @@ require_once 'Zend/Config.php';
  */
 class Rediska_Zend_Auth_Adapter_Redis implements Zend_Auth_Adapter_Interface
 {
-	/**
-	 * Rediska instance
-	 * 
-	 * @var Rediska
-	 */
-	protected $_rediska;
+    /**
+     * Rediska instance
+     * 
+     * @var Rediska
+     */
+    protected $_rediska;
 
-	/**
-	 * User identity
-	 * 
-	 * @var string
-	 */
-	protected $_identity;
+    /**
+     * User identity
+     * 
+     * @var string
+     */
+    protected $_identity;
 
-	/**
-	 * User credential
-	 * 
-	 * @var string
-	 */
-	protected $_credential;
+    /**
+     * User credential
+     * 
+     * @var string
+     */
+    protected $_credential;
 
-	/**
-	 * User data
-	 * 
-	 * @var array|object
-	 */
-	protected $_userData;
+    /**
+     * User data
+     * 
+     * @var array|object
+     */
+    protected $_userData;
 
-	/**
-	 * Configuration
-	 * 
-	 * userIdKey               - Redis key where you store relation between login and id. * replaced to identity (login)
-	 * userDataKey             - Redis key where you store user data
-	 * credentialAttributeName - Name of credential (password) attribute in user data
-	 * userDataIsArray         - Set true if you store user data in associative array
-	 * identity                - User identity (login) for authorization
-	 * credential              - User credintial (password) for authorization
-	 * rediska                 - Rediska instance
-	 * 
-	 * @var array
-	 */
-	protected $_options = array(
-        'useridkey'               => 'user_ids:*',
-	    'userdatakey'             => 'users:*',
-	    'credentialattributename' => 'password',
-	    'userdataisarray'         => false,
-	);
-
-	/**
-	 * Construct Redis Zend_Auth adapter
-	 * 
-	 * @param array|Zend_Config $options Options
-	 * 
-	 * userIdKey               - Redis key where you store relation between login and id. * replaced to identity (login)
+    /**
+     * Configuration
+     * 
+     * userIdKey               - Redis key where you store relation between login and id. * replaced to identity (login)
      * userDataKey             - Redis key where you store user data
      * credentialAttributeName - Name of credential (password) attribute in user data
      * userDataIsArray         - Set true if you store user data in associative array
@@ -96,12 +74,34 @@ class Rediska_Zend_Auth_Adapter_Redis implements Zend_Auth_Adapter_Interface
      * credential              - User credintial (password) for authorization
      * rediska                 - Rediska instance
      * 
-	 */
+     * @var array
+     */
+    protected $_options = array(
+        'useridkey'               => 'user_ids:*',
+        'userdatakey'             => 'users:*',
+        'credentialattributename' => 'password',
+        'userdataisarray'         => false,
+    );
+
+    /**
+     * Construct Redis Zend_Auth adapter
+     * 
+     * @param array|Zend_Config $options Options
+     * 
+     * userIdKey               - Redis key where you store relation between login and id. * replaced to identity (login)
+     * userDataKey             - Redis key where you store user data
+     * credentialAttributeName - Name of credential (password) attribute in user data
+     * userDataIsArray         - Set true if you store user data in associative array
+     * identity                - User identity (login) for authorization
+     * credential              - User credintial (password) for authorization
+     * rediska                 - Rediska instance
+     * 
+     */
     public function __construct($options = array())
     {
-    	if ($options instanceof Zend_Config) {
-    		$options = $options->toArray();
-    	}
+        if ($options instanceof Zend_Config) {
+            $options = $options->toArray();
+        }
 
         $options = array_change_key_case($options, CASE_LOWER);
         $options = array_merge($this->_options, $options);
@@ -204,9 +204,9 @@ class Rediska_Zend_Auth_Adapter_Redis implements Zend_Auth_Adapter_Interface
      */
     public function setIdentity($identity)
     {
-    	$this->_identity = $identity;
-    	
-    	return $this;
+        $this->_identity = $identity;
+        
+        return $this;
     }
 
     /**
@@ -216,7 +216,7 @@ class Rediska_Zend_Auth_Adapter_Redis implements Zend_Auth_Adapter_Interface
      */
     public function getIdentity()
     {
-    	return $this->_identity;
+        return $this->_identity;
     }
     
     /**
@@ -249,7 +249,7 @@ class Rediska_Zend_Auth_Adapter_Redis implements Zend_Auth_Adapter_Interface
      */
     public function getResultUserData()
     {
-    	return $this->_userData;
+        return $this->_userData;
     }
 
     /**
@@ -258,48 +258,48 @@ class Rediska_Zend_Auth_Adapter_Redis implements Zend_Auth_Adapter_Interface
      */
     public function authenticate()
     {
-    	$identity = $this->getIdentity();
+        $identity = $this->getIdentity();
 
-    	$userIdKey = str_replace('*', $identity, $this->getOption('userIdKey'));
+        $userIdKey = str_replace('*', $identity, $this->getOption('userIdKey'));
 
-    	$userId = $this->getRediska()->get($userIdKey);
+        $userId = $this->getRediska()->get($userIdKey);
 
-    	if (is_null($userId)) {
-    		$code    = Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND;
-    		$message = 'User with the supplied identity could not be found.';
-    	} else {
-    		$userDataKey = str_replace('*', $userId, $this->getOption('userDataKey'));
+        if (is_null($userId)) {
+            $code    = Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND;
+            $message = 'User with the supplied identity could not be found.';
+        } else {
+            $userDataKey = str_replace('*', $userId, $this->getOption('userDataKey'));
 
             $userData = $this->getRediska()->get($userDataKey);
 
             if (is_null($userData)) {
-            	throw new Zend_Auth_Adapter_Exception("User data key '$userDataKey' not found");
+                throw new Zend_Auth_Adapter_Exception("User data key '$userDataKey' not found");
             }
 
             $credentialAttributeName = $this->getOption('credentialattributename');
             if ($this->getOption('userDataIsArray')) {
-            	if (!array_key_exists($credentialAttributeName, $userData)) {
-            		throw new Zend_Auth_Adapter_Exception("Credential key with name '$credentialAttributeName' not found in user data");
-            	}
-            	$credential = $userData[$credentialAttributeName];
+                if (!array_key_exists($credentialAttributeName, $userData)) {
+                    throw new Zend_Auth_Adapter_Exception("Credential key with name '$credentialAttributeName' not found in user data");
+                }
+                $credential = $userData[$credentialAttributeName];
             } else {
-            	if (!isset($userData->$credentialAttributeName)) {
-            		throw new Zend_Auth_Adapter_Exception("Credential attribute with name '$credentialAttributeName' not found in user data");
-            	}
-            	$credential = $userData->$credentialAttributeName;
+                if (!isset($userData->$credentialAttributeName)) {
+                    throw new Zend_Auth_Adapter_Exception("Credential attribute with name '$credentialAttributeName' not found in user data");
+                }
+                $credential = $userData->$credentialAttributeName;
             }
 
             if ($this->getCredential() == $credential) {
-            	$code     = Zend_Auth_Result::SUCCESS;
-            	$message  = 'Authentication successful.';
-            	$this->_userData = $userData;
+                $code     = Zend_Auth_Result::SUCCESS;
+                $message  = 'Authentication successful.';
+                $this->_userData = $userData;
             } else {
-            	$code     = Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID;
+                $code     = Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID;
                 $message  = 'Supplied credential is invalid.';
             }
-    	}
+        }
 
-    	return new Zend_Auth_Result($code, $identity, array($message));
+        return new Zend_Auth_Result($code, $identity, array($message));
     }
 
     /**
@@ -307,11 +307,11 @@ class Rediska_Zend_Auth_Adapter_Redis implements Zend_Auth_Adapter_Interface
      */
     protected function _setupRediskaDefaultInstance()
     {
-    	if (is_null($this->_rediska)) {
+        if (is_null($this->_rediska)) {
             $this->_rediska = Rediska::getDefaultInstance();
             if (is_null($this->_rediska)) {
                 $this->_rediska = new Rediska();
             }
-    	}
+        }
     }
 }

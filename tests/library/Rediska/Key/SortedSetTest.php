@@ -2,7 +2,7 @@
 
 class Rediska_Key_SortedSetTest extends Rediska_TestCase
 {
-	/**
+    /**
      * @var Rediska_Key_Set
      */
     private $set;
@@ -15,28 +15,28 @@ class Rediska_Key_SortedSetTest extends Rediska_TestCase
 
     public function testAdd()
     {
-    	$reply = $this->set->add(123, 1);
-    	$this->assertTrue($reply);
+        $reply = $this->set->add(123, 1);
+        $this->assertTrue($reply);
 
-    	$values = $this->rediska->getSortedSet('test');
-    	$this->assertTrue(!empty($values));
-    	$this->assertEquals(123, $values[0]);
-    	
-    	$this->set[2] = 456;
-    	
-    	$values = $this->rediska->getSortedSet('test');
+        $values = $this->rediska->getSortedSet('test');
+        $this->assertTrue(!empty($values));
+        $this->assertEquals(123, $values[0]);
+        
+        $this->set[2] = 456;
+        
+        $values = $this->rediska->getSortedSet('test');
         $this->assertTrue(!empty($values));
         $this->assertEquals(456, $values[1]);
     }
 
     public function testRemove()
     {
-    	$this->rediska->addToSortedSet('test', 123, 1);
+        $this->rediska->addToSortedSet('test', 123, 1);
 
-    	$reply = $this->set->remove(123);
-    	$this->assertTrue($reply);
+        $reply = $this->set->remove(123);
+        $this->assertTrue($reply);
 
-    	$values = $this->rediska->getSortedSet('test');
+        $values = $this->rediska->getSortedSet('test');
         $this->assertTrue(empty($values));
 
         $this->rediska->addToSortedSet('test', 123, 1);
@@ -49,11 +49,11 @@ class Rediska_Key_SortedSetTest extends Rediska_TestCase
 
     public function testCount()
     {
-    	$this->rediska->addToSortedSet('test', 123, 1);
-    	$this->rediska->addToSortedSet('test', 456, 2);
+        $this->rediska->addToSortedSet('test', 123, 1);
+        $this->rediska->addToSortedSet('test', 456, 2);
 
-    	$this->assertEquals(2, $this->set->count());
-    	$this->assertEquals(2, count($this->set));
+        $this->assertEquals(2, $this->set->count());
+        $this->assertEquals(2, count($this->set));
     }
 
     public function testGetByScore()
@@ -206,10 +206,10 @@ class Rediska_Key_SortedSetTest extends Rediska_TestCase
 
     public function testToArray()
     {
-    	$values = $this->set->toArray();
-    	$this->assertEquals(array(), $values);
+        $values = $this->set->toArray();
+        $this->assertEquals(array(), $values);
 
-    	$this->rediska->addToSortedSet('test', 123, 1);
+        $this->rediska->addToSortedSet('test', 123, 1);
 
         $values = $this->set->toArray();
         $this->assertEquals(array(123), $values);
@@ -217,7 +217,7 @@ class Rediska_Key_SortedSetTest extends Rediska_TestCase
 
     public function testFromArray()
     {
-    	$reply = $this->set->fromArray(array(3 => 123));
+        $reply = $this->set->fromArray(array(3 => 123));
         $this->assertTrue($reply);
 
         $values = $this->rediska->getSortedSet('test');
@@ -243,10 +243,10 @@ class Rediska_Key_SortedSetTest extends Rediska_TestCase
 
     public function testOffsetSet()
     {
-    	$this->set[1] = 123;
-    	$this->set[2] = 456;
+        $this->set[1] = 123;
+        $this->set[2] = 456;
 
-    	$values = $this->rediska->getSortedSet('test');
+        $values = $this->rediska->getSortedSet('test');
         $this->assertTrue(!empty($values));
         $this->assertEquals(123, $values[0]);
         $this->assertEquals(456, $values[1]);

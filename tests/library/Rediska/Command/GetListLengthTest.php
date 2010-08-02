@@ -2,12 +2,12 @@
 
 class Rediska_Command_GetListLengthTest extends Rediska_TestCase
 {
-	public function testEmptyListReturnZero()
-	{
-		$reply = $this->rediska->getListLength('test');
+    public function testEmptyListReturnZero()
+    {
+        $reply = $this->rediska->getListLength('test');
         $this->assertEquals(0, $reply);
-	}
-	
+    }
+    
     public function testGetListLength()
     {
         $this->rediska->appendToList('test', 'aaa');

@@ -2,7 +2,7 @@
 
 class Rediska_Key_ListTest extends Rediska_TestCase
 {
-	/**
+    /**
      * @var Rediska_Key_List
      */
     private $list;
@@ -15,19 +15,19 @@ class Rediska_Key_ListTest extends Rediska_TestCase
     
     public function testAppend()
     {
-    	$reply = $this->list->append(123);
-    	$this->assertTrue($reply);
-    	$reply = $this->list->append(456);
-    	$this->assertTrue($reply);
+        $reply = $this->list->append(123);
+        $this->assertTrue($reply);
+        $reply = $this->list->append(456);
+        $this->assertTrue($reply);
 
-    	$values = $this->rediska->getFromList('test', 1);
-    	$this->assertEquals(456, $values);
+        $values = $this->rediska->getFromList('test', 1);
+        $this->assertEquals(456, $values);
     }
     
     public function testPrepend()
     {
-    	$reply = $this->list->prepend(123);
-    	$this->assertTrue($reply);
+        $reply = $this->list->prepend(123);
+        $this->assertTrue($reply);
         $reply = $this->list->prepend(456);
         $this->assertTrue($reply);
 
@@ -37,8 +37,8 @@ class Rediska_Key_ListTest extends Rediska_TestCase
     
     public function testCount()
     {
-    	$this->rediska->appendToList('test', 123);
-    	$this->rediska->appendToList('test', 456);
+        $this->rediska->appendToList('test', 123);
+        $this->rediska->appendToList('test', 456);
 
         $this->assertEquals(2, $this->list->count());
         $this->assertEquals(2, count($this->list));
@@ -46,7 +46,7 @@ class Rediska_Key_ListTest extends Rediska_TestCase
     
     public function testToArray()
     {
-    	$this->rediska->appendToList('test', 123);
+        $this->rediska->appendToList('test', 123);
         $this->rediska->appendToList('test', 456);
 
         $values = $this->list->toArray();
@@ -55,16 +55,16 @@ class Rediska_Key_ListTest extends Rediska_TestCase
     
     public function testFromArray()
     {
-    	$reply = $this->list->fromArray(array(123, 456));
-    	$this->assertTrue($reply);
+        $reply = $this->list->fromArray(array(123, 456));
+        $this->assertTrue($reply);
 
-    	$values = $this->rediska->getList('test');
+        $values = $this->rediska->getList('test');
         $this->assertEquals(array(123, 456), $values);
     }
 
     public function testTruncate()
     {
-    	$this->rediska->appendToList('test', 123);
+        $this->rediska->appendToList('test', 123);
         $this->rediska->appendToList('test', 456);
 
         $reply = $this->list->truncate(0, 0);
@@ -76,15 +76,15 @@ class Rediska_Key_ListTest extends Rediska_TestCase
     
     public function testGet()
     {
-    	$this->rediska->appendToList('test', 123);
-    	
-    	$value = $this->list->get(0);
-    	$this->assertEquals(123, $value);
+        $this->rediska->appendToList('test', 123);
+
+        $value = $this->list->get(0);
+        $this->assertEquals(123, $value);
     }
 
     public function testSet()
     {
-    	$this->rediska->appendToList('test', 123);
+        $this->rediska->appendToList('test', 123);
 
         $reply = $this->list->set(0, 456);
         $this->assertTrue($reply);
@@ -95,19 +95,19 @@ class Rediska_Key_ListTest extends Rediska_TestCase
 
     public function testRemove()
     {
-    	$this->rediska->appendToList('test', 123);
-    	$this->rediska->appendToList('test', 456);
+        $this->rediska->appendToList('test', 123);
+        $this->rediska->appendToList('test', 456);
 
-    	$reply = $this->list->remove(123);
-    	$this->assertEquals(1, $reply);
+        $reply = $this->list->remove(123);
+        $this->assertEquals(1, $reply);
 
-    	$value = $this->rediska->getFromList('test', 0);
+        $value = $this->rediska->getFromList('test', 0);
         $this->assertEquals(456, $value);
     }
 
     public function testShift()
     {
-    	$this->rediska->appendToList('test', 123);
+        $this->rediska->appendToList('test', 123);
         $this->rediska->appendToList('test', 456);
         
         $value = $this->list->shift();
@@ -128,10 +128,10 @@ class Rediska_Key_ListTest extends Rediska_TestCase
         $value = $this->rediska->getFromList('test', 0);
         $this->assertEquals(456, $value);
 
-		$value = $this->list->shiftBlocking();
+        $value = $this->list->shiftBlocking();
         $this->assertEquals(456, $value);
 
-		$value = $this->list->shiftBlocking(1);
+        $value = $this->list->shiftBlocking(1);
         $this->assertNull($value);
     }
 
@@ -158,10 +158,10 @@ class Rediska_Key_ListTest extends Rediska_TestCase
         $value = $this->rediska->getFromList('test', 1);
         $this->assertNull($value);
 
-		$value = $this->list->popBlocking();
+        $value = $this->list->popBlocking();
         $this->assertEquals(123, $value);
 
-		$value = $this->list->popBlocking(1);
+        $value = $this->list->popBlocking(1);
         $this->assertNull($value);
     }
 
@@ -180,29 +180,29 @@ class Rediska_Key_ListTest extends Rediska_TestCase
 
     public function testIteration()
     {
-    	$values = array(123, 456, 789);
-    	
-    	foreach($values as $value) {
-    		$this->rediska->appendToList('test', $value);
-    	}
+        $values = array(123, 456, 789);
 
-    	$count = 0;
-    	foreach($this->list as $value) {
-    		$this->assertTrue(in_array($value, $values));
-    		$count++;
-    	}
-    	$this->assertEquals(3, $count);
+        foreach($values as $value) {
+            $this->rediska->appendToList('test', $value);
+        }
+
+        $count = 0;
+        foreach($this->list as $value) {
+            $this->assertTrue(in_array($value, $values));
+            $count++;
+        }
+        $this->assertEquals(3, $count);
     }
 
     public function testOffsetSet()
     {
-    	$this->list[] = 123;
-    	$this->list[] = 456;
+        $this->list[] = 123;
+        $this->list[] = 456;
 
-    	$value = $this->rediska->getFromList('test', 0);
-    	$this->assertEquals(123, $value);
+        $value = $this->rediska->getFromList('test', 0);
+        $this->assertEquals(123, $value);
 
-    	$value = $this->rediska->getFromList('test', 1);
+        $value = $this->rediska->getFromList('test', 1);
         $this->assertEquals(456, $value);
 
         $this->list[1] = 789;
@@ -213,18 +213,18 @@ class Rediska_Key_ListTest extends Rediska_TestCase
 
     public function testOffsetExists()
     {
-    	$reply = isset($this->list[0]);
-    	$this->assertFalse($reply);
+        $reply = isset($this->list[0]);
+        $this->assertFalse($reply);
 
-    	$this->rediska->appendToList('test', 123);
+        $this->rediska->appendToList('test', 123);
 
-    	$reply = isset($this->list[0]);
+        $reply = isset($this->list[0]);
         $this->assertTrue($reply);
     }
 
     public function testOffsetGet()
     {
-    	$this->rediska->appendToList('test', 123);
+        $this->rediska->appendToList('test', 123);
 
         $value = $this->list[0];
         $this->assertEquals(123, $value);

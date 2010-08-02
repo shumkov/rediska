@@ -2,12 +2,12 @@
 
 class Rediska_Command_PrependToListTest extends Rediska_TestCase
 {
-	public function testReturnTrue()
-	{
-		$reply = $this->rediska->prependToList('test', 'aaa');
+    public function testReturnTrue()
+    {
+        $reply = $this->rediska->prependToList('test', 'aaa');
         $this->assertTrue($reply);
-	}
-	
+    }
+    
     public function testPrepended()
     {
         $this->rediska->prependToList('test', 'aaa');

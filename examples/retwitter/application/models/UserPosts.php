@@ -9,6 +9,6 @@ class UserPosts extends Rediska_Key_Set
     
     public function addPost($postId)
     {
-    	$this->add($postId);
+        $this->add($postId);
     }
 }

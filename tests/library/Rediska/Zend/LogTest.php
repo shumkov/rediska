@@ -18,10 +18,10 @@ class Rediska_Zend_LogTest extends Rediska_TestCase
 
     public function testWrite()
     {
-    	$this->log->err('123');
-    	$this->log->info('123');
+        $this->log->err('123');
+        $this->log->info('123');
 
-    	$count = $this->rediska->getListLength('log');
-    	$this->assertEquals(2, $count);
+        $count = $this->rediska->getListLength('log');
+        $this->assertEquals(2, $count);
     }
 }

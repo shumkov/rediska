@@ -17,42 +17,42 @@ class Rediska_Zend_QueueTest extends Rediska_TestCase
 
     public function testCreateQueue()
     {
-    	$queue = $this->queue->createQueue('test');
-    	$values = $this->rediska->getSet('Zend_Queue_queues');
-    	$this->assertEquals(array('test'), $values);
+        $queue = $this->queue->createQueue('test');
+        $values = $this->rediska->getSet('Zend_Queue_queues');
+        $this->assertEquals(array('test'), $values);
     }
 
     public function testDeleteQueue()
     {
-    	$queue = $this->queue->createQueue('test');
-    	$this->queue->createQueue('test2');
+        $queue = $this->queue->createQueue('test');
+        $this->queue->createQueue('test2');
 
-    	$queue->deleteQueue();
+        $queue->deleteQueue();
 
-    	$values = $this->rediska->getSet('Zend_Queue_queues');
+        $values = $this->rediska->getSet('Zend_Queue_queues');
         $this->assertEquals(array('test2'), $values);
     }
 
     public function testSend()
     {
-    	$queue = $this->queue->createQueue('test');
-    	$reply = $queue->send(array(1, 2, 3));
-    	$this->assertType($queue->getMessageClass(), $reply);
+        $queue = $this->queue->createQueue('test');
+        $reply = $queue->send(array(1, 2, 3));
+        $this->assertType($queue->getMessageClass(), $reply);
 
-    	$values = $this->rediska->getList('Zend_Queue_queue_test');
-    	$this->assertEquals(array(array(1, 2, 3)), $values);
+        $values = $this->rediska->getList('Zend_Queue_queue_test');
+        $this->assertEquals(array(array(1, 2, 3)), $values);
     }
 
     public function testCount()
     {
-    	$queue = $this->queue->createQueue('test');
+        $queue = $this->queue->createQueue('test');
         $queue->send(array(1, 2, 3));
         $this->assertEquals(1, $queue->count());
     }
 
     public function testReceive()
     {
-    	$queue = $this->queue->createQueue('test');
+        $queue = $this->queue->createQueue('test');
         $queue->send(array(1, 2, 3));
 
         $messages = $queue->receive();

@@ -2,7 +2,7 @@
 
 class Rediska_KeyTest extends Rediska_TestCase
 {
-	/**
+    /**
      * @var Rediska_Key
      */
     private $key;
@@ -15,16 +15,16 @@ class Rediska_KeyTest extends Rediska_TestCase
 
     public function testSetValue()
     {
-    	$reply = $this->key->setValue(123);
-    	$this->assertTrue($reply);
-    	
-    	$value = $this->key->getRediska()->get($this->key->getName());
-    	$this->assertEquals(123, $value);
+        $reply = $this->key->setValue(123);
+        $this->assertTrue($reply);
+        
+        $value = $this->key->getRediska()->get($this->key->getName());
+        $this->assertEquals(123, $value);
     }
 
     public function testGetValue()
     {
-    	$this->key->getRediska()->set($this->key->getName(), 123);
+        $this->key->getRediska()->set($this->key->getName(), 123);
 
         $value = $this->key->getValue();
         $this->assertEquals(123, $value);
@@ -34,18 +34,18 @@ class Rediska_KeyTest extends Rediska_TestCase
 
     public function testIncrement()
     {
-    	$this->key->getRediska()->set($this->key->getName(), 123);
+        $this->key->getRediska()->set($this->key->getName(), 123);
 
-    	$reply = $this->key->increment(2);
-    	$this->assertEquals(125, $reply);
+        $reply = $this->key->increment(2);
+        $this->assertEquals(125, $reply);
 
-    	$reply = $this->key->getRediska()->get($this->key->getName());
-    	$this->assertEquals(125, $reply);
+        $reply = $this->key->getRediska()->get($this->key->getName());
+        $this->assertEquals(125, $reply);
     }
 
     public function testDecrement()
     {
-    	$this->key->getRediska()->set($this->key->getName(), 123);
+        $this->key->getRediska()->set($this->key->getName(), 123);
 
         $reply = $this->key->decrement(2);
         $this->assertEquals(121, $reply);
@@ -56,22 +56,22 @@ class Rediska_KeyTest extends Rediska_TestCase
 
     public function testGetOrSetValue()
     {
-    	$provider = new BasicKeyDataProvider();
+        $provider = new BasicKeyDataProvider();
 
-    	$value = $this->key->getOrSetValue($provider)->data;
-    	$this->assertEquals(123, $value);
-    	
-    	$reply = $this->key->isExists();
+        $value = $this->key->getOrSetValue($provider)->data;
+        $this->assertEquals(123, $value);
+        
+        $reply = $this->key->isExists();
         $this->assertTrue($reply);
         
         $this->assertEquals(123, $this->key->getValue());
-    	
-    	$value = $this->key->getOrSetValue($provider)->getOtherDataForTest();
+        
+        $value = $this->key->getOrSetValue($provider)->getOtherDataForTest();
         $this->assertEquals(123, $value);
 
-    	$this->key->delete();
+        $this->key->delete();
 
-    	$value = $this->key->getOrSetValue($provider)->getData();
+        $value = $this->key->getOrSetValue($provider)->getData();
         $this->assertEquals(123, $value);
         
         $reply = $this->key->isExists();
@@ -79,8 +79,8 @@ class Rediska_KeyTest extends Rediska_TestCase
         
         $this->assertEquals(123, $this->key->getValue());
 
-    	$getOrSetValueObject = $this->key->getOrSetValue($provider);
-    	$this->assertEquals(123, "{$getOrSetValueObject}");
+        $getOrSetValueObject = $this->key->getOrSetValue($provider);
+        $this->assertEquals(123, "{$getOrSetValueObject}");
     }
 }
 

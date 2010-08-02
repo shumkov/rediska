@@ -11,5 +11,5 @@
  */
 class Rediska_Connection_TimeoutException extends Rediska_Connection_Exception
 {
-	
+    
 }
