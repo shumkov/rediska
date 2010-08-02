@@ -249,7 +249,6 @@ class Rediska_Key_Hash extends Rediska_Key_Abstract implements IteratorAggregate
         return new ArrayObject($this->toArray());
     }
 
-
     /**
      * Throw if PubSub not supported by Redis
      */
