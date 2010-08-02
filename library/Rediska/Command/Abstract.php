@@ -90,13 +90,13 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
 
         $this->_throwExceptionIfNotSupported();
 
-		$arguments = $this->_validateArguments($arguments);
+        $this->_validateArguments($arguments);
 
-		$this->_execs = call_user_func_array(array($this, 'create'), $arguments);
+        $this->_execs = call_user_func_array(array($this, 'create'), $arguments);
 
-		if (!is_array($this->_execs)) {
-		    $this->_execs = array($this->_execs);
-		}
+        if (!is_array($this->_execs)) {
+            $this->_execs = array($this->_execs);
+        }
     }
 
     /**
@@ -107,7 +107,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
     public function write()
     {
         foreach($this->_execs as $exec) {
-        	$exec->write();
+            $exec->write();
         }
 
         $this->_isWrited = true;
@@ -138,12 +138,33 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
         }
     }
 
+    /**
+     * Execute a command
+     *
+     * @return mixin
+     */
     public function execute()
     {
         $this->write();
         return $this->read();
     }
 
+    /**
+     * Magic method for execute
+     *
+     * @return mixin
+     */
+    public function __invoke()
+    {
+        return $this->execute();
+    }
+
+    /**
+     * Parse responses
+     *
+     * @param array $responses
+     * @return mixin
+     */
     public function parseResponses($responses)
     {
         foreach($responses as &$response) {
@@ -155,6 +176,12 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
         }
     }
 
+    /**
+     * Parse response
+     *
+     * @param string|array $response
+     * @return mixin
+     */
     public function parseResponse($response)
     {
         return $response;
@@ -167,7 +194,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
      */
     public function isAtomic()
     {
-    	return $this->_atomic;
+        return $this->_atomic;
     }
 
     /**
@@ -178,62 +205,93 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
      */
     public function setAtomic($flag = true)
     {
-    	$this->_atomic = $flag;
+        $this->_atomic = $flag;
 
-    	return $this;
+        return $this;
     }
 
-	public function getName()
-	{
-		return $this->_name;
-	}
+    /**
+     * Get command name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->_name;
+    }
 
+    /**
+     * Is command queued in transaction
+     *
+     * @return boolean
+     */
     public function isQueued()
     {
         return $this->_isQueued;
     }
 
+    /**
+     * Magic method for get command argument
+     *
+     * @param string $name
+     * @return mixin
+     */
     public function __get($name)
     {
-    	if (array_key_exists($name, $this->_arguments)) {
-    		return $this->_arguments[$name];
-    	} else {
-    		throw new Rediska_Command_Exception("Argument '$name' not present for command '$this->_name'");
-    	}
+        if (array_key_exists($name, $this->_arguments)) {
+            return $this->_arguments[$name];
+        } else {
+            throw new Rediska_Command_Exception("Argument '$name' not present for command '$this->_name'");
+        }
     }
 
+    /**
+     * Magic method for test if has command argument
+     *
+     * @param string $name
+     * @return boolean
+     */
     public function __isset($name)
     {
-    	return isset($this->_arguments[$name]);
+        return isset($this->_arguments[$name]);
     }
 
-	protected function _validateArguments($arguments)
-	{
-		$className = get_class($this);
+    /**
+     * Validate command arguments
+     *
+     * @param array $arguments
+     * @return array
+     */
+    protected function _validateArguments($arguments)
+    {
+        $className = get_class($this);
         if (!isset(self::$_argumentNames[$className])) {
-    		$reflection = new ReflectionMethod($this, 'create');
-    		self::$_argumentNames[$className] = array();
-    		foreach($reflection->getParameters() as $parameter) {
-    			self::$_argumentNames[$className][] = $parameter;
-    		}
-    	}
+            $reflection = new ReflectionMethod($this, 'create');
+            self::$_argumentNames[$className] = array();
+            foreach($reflection->getParameters() as $parameter) {
+                self::$_argumentNames[$className][] = $parameter;
+            }
+        }
 
-    	$count = 0;
-    	foreach(self::$_argumentNames[$className] as $parameter) {
-    		if (array_key_exists($count, $arguments)) {
-    			$value = $arguments[$count];
-    		} else if ($parameter->isOptional()) {
-    			$value = $parameter->getDefaultValue();
-    		} else {
-    			throw new Rediska_Command_Exception("Argument '{$parameter->getName()}' not present for command '$this->_name'");
-    		}
-    		$this->_arguments[$parameter->getName()] = $value;
-    		$count++;
-    	}
+        $count = 0;
+        foreach(self::$_argumentNames[$className] as $parameter) {
+            if (array_key_exists($count, $arguments)) {
+                $value = $arguments[$count];
+            } else if ($parameter->isOptional()) {
+                $value = $parameter->getDefaultValue();
+            } else {
+                throw new Rediska_Command_Exception("Argument '{$parameter->getName()}' not present for command '$this->_name'");
+            }
+            $this->_arguments[$parameter->getName()] = $value;
+            $count++;
+        }
+    }
 
-		return $arguments;
-	}
-
+    /**
+     * Throw exception if command not supported by this version of Redis
+     *
+     * @param string $version
+     */
     protected function _throwExceptionIfNotSupported($version = null)
     {
         if (null === $version) {

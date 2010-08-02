@@ -17,11 +17,11 @@ class Rediska_Command_Delete extends Rediska_Command_Abstract
     public function create($nameOrNames)
     {
         if (is_array($nameOrNames)) {
-        	$names = $nameOrNames;
+            $names = $nameOrNames;
 
-        	if (empty($names)) {
-        	   throw new Rediska_Command_Exception('Not present keys for delete');
-        	}
+            if (empty($names)) {
+               throw new Rediska_Command_Exception('Not present keys for delete');
+            }
 
             $connections = array();
             $keysByConnections = array();

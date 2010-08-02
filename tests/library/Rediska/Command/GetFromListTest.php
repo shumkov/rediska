@@ -3,12 +3,12 @@
 
 class Rediska_Command_GetFromListTest extends Rediska_TestCase
 {
-	public function testNotMemberReturnNull()
-	{
-		$reply = $this->rediska->getFromList('test', 0);
+    public function testNotMemberReturnNull()
+    {
+        $reply = $this->rediska->getFromList('test', 0);
         $this->assertNull($reply);
-	}
-	
+    }
+    
     public function testGetFromList()
     {
         $this->rediska->appendToList('test', 'aaa');

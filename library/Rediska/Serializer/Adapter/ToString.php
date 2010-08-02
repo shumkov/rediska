@@ -11,25 +11,25 @@
  */
 class Rediska_Serializer_Adapter_ToString implements Rediska_Serializer_Adapter_Interface
 {
-	/**
-	 * Serialize value
-	 *
-	 * @param mixin $value
-	 * @return string
-	 */
-	public function serialize($value)
-	{
-		return (string)$value;
-	}
+    /**
+     * Serialize value
+     *
+     * @param mixin $value
+     * @return string
+     */
+    public function serialize($value)
+    {
+        return (string)$value;
+    }
 
-	/**
-	 * Unserialize value
-	 *
-	 * @param string $value
-	 * @return string
-	 */
-	public function unserialize($value)
-	{
-		return $value;
-	}
+    /**
+     * Unserialize value
+     *
+     * @param string $value
+     * @return string
+     */
+    public function unserialize($value)
+    {
+        return $value;
+    }
 }

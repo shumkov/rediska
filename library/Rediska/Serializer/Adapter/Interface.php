@@ -11,19 +11,19 @@
  */
 interface Rediska_Serializer_Adapter_Interface
 {
-	/**
-	 * Serialize value
-	 *
-	 * @param mixin $value
-	 * @return string
-	 */
-	public function serialize($value);
-	
-	/**
-	 * Unserialize value
-	 *
-	 * @param string $value
-	 * @return mixin
-	 */
-	public function unserialize($value);
+    /**
+     * Serialize value
+     *
+     * @param mixin $value
+     * @return string
+     */
+    public function serialize($value);
+    
+    /**
+     * Unserialize value
+     *
+     * @param string $value
+     * @return mixin
+     */
+    public function unserialize($value);
 }

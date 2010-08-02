@@ -3,11 +3,11 @@
 
 class Rediska_Command_GetRandomKeyTest extends Rediska_TestCase
 {
-	public function testNoKeysReturnNull()
-	{
+    public function testNoKeysReturnNull()
+    {
         $reply = $this->rediska->getRandomKey();
         $this->assertNull($reply);
-	}
+    }
 
     public function testGetRandomKey()
     {

@@ -2,20 +2,20 @@
 
 class Rediska_Key_AbstractTest extends Rediska_TestCase
 {
-	/**
+    /**
      * @var Rediska_Key
      */
     private $key;
 
     protected function setUp()
     {
-    	parent::setUp();
+        parent::setUp();
         $this->key = new Rediska_Key('test');
     }
 
     public function testDefaultRediskaInstance()
     {
-    	$this->assertType('Rediska', $this->key->getRediska());
+        $this->assertType('Rediska', $this->key->getRediska());
     }
 
     public function testSetExpireOnConstruct()
@@ -54,31 +54,31 @@ class Rediska_Key_AbstractTest extends Rediska_TestCase
 
     public function testDelete()
     {
-    	$this->key->getRediska()->set($this->key->getName(), 1);
-    	
-    	$reply = $this->key->getRediska()->exists($this->key->getName());
+        $this->key->getRediska()->set($this->key->getName(), 1);
+        
+        $reply = $this->key->getRediska()->exists($this->key->getName());
         $this->assertTrue($reply);
 
-    	$this->key->delete();
-    	
-    	$reply = $this->key->getRediska()->exists($this->key->getName());
-    	$this->assertFalse($reply);
+        $this->key->delete();
+        
+        $reply = $this->key->getRediska()->exists($this->key->getName());
+        $this->assertFalse($reply);
     }
 
     public function testIsExists()
     {
-    	$reply = $this->key->isExists();
-    	$this->assertFalse($reply);
-    	
-    	$this->key->getRediska()->set($this->key->getName(), 1);
-    	
-    	$reply = $this->key->isExists();
+        $reply = $this->key->isExists();
+        $this->assertFalse($reply);
+        
+        $this->key->getRediska()->set($this->key->getName(), 1);
+        
+        $reply = $this->key->isExists();
         $this->assertTrue($reply);
     }
 
     public function testGetType()
     {
-    	$reply = $this->key->getType();
+        $reply = $this->key->getType();
         $this->assertEquals('none', $reply);
 
         $this->key->getRediska()->set($this->key->getName(), 1);
@@ -89,12 +89,12 @@ class Rediska_Key_AbstractTest extends Rediska_TestCase
 
     public function testRename()
     {
-    	$reply = $this->key->rename('test2');
-    	$this->assertFalse($reply);
+        $reply = $this->key->rename('test2');
+        $this->assertFalse($reply);
 
-    	$this->key->getRediska()->set($this->key->getName(), 1);
+        $this->key->getRediska()->set($this->key->getName(), 1);
 
-    	$reply = $this->key->rename('test2');
+        $reply = $this->key->rename('test2');
         $this->assertTrue($reply);
 
         $this->assertEquals('test2', $this->key->getName());
@@ -102,14 +102,14 @@ class Rediska_Key_AbstractTest extends Rediska_TestCase
 
     public function testExpire()
     {
-    	$this->key->getRediska()->set($this->key->getName(), 1);
+        $this->key->getRediska()->set($this->key->getName(), 1);
 
-    	$this->key->expire(1);
+        $this->key->expire(1);
 
-    	sleep(2);
+        sleep(2);
 
-    	$reply = $this->key->getRediska()->get($this->key->getName());
-    	$this->assertNull($reply);
+        $reply = $this->key->getRediska()->get($this->key->getName());
+        $this->assertNull($reply);
     }
     
     public function testExpireByTimestamp()
@@ -126,11 +126,11 @@ class Rediska_Key_AbstractTest extends Rediska_TestCase
 
     public function testGetLifetime()
     {
-    	$this->key->getRediska()->set($this->key->getName(), 1);
-    	$this->key->getRediska()->expire($this->key->getName(), 50);
+        $this->key->getRediska()->set($this->key->getName(), 1);
+        $this->key->getRediska()->expire($this->key->getName(), 50);
 
-    	$reply = $this->key->getLifetime();
-    	$this->assertGreaterThan(45, $reply);
+        $reply = $this->key->getLifetime();
+        $this->assertGreaterThan(45, $reply);
     }
     
     public function testSetExpire()

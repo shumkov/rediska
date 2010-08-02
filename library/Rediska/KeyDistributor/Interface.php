@@ -11,13 +11,13 @@
  */
 interface Rediska_KeyDistributor_Interface
 {
-	/**
-	 * Add connection
-	 * 
-	 * @param string $connectionString Connection string: '127.0.0.1:6379'
-	 * @param integer $weight Connection weight
-	 * @return $this
-	 */
+    /**
+     * Add connection
+     * 
+     * @param string $connectionString Connection string: '127.0.0.1:6379'
+     * @param integer $weight Connection weight
+     * @return $this
+     */
     public function addConnection($connectionString, $weight = Rediska_Connection::DEFAULT_WEIGHT);
 
     /**

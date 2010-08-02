@@ -2,13 +2,13 @@
 
 class Rediska_Command_GetKeysByPatternTest extends Rediska_TestCase
 {
-	public function testNotMatchedKeysReturnEmptyArray()
-	{
-		$reply = $this->rediska->getKeysByPattern('h*llo');
+    public function testNotMatchedKeysReturnEmptyArray()
+    {
+        $reply = $this->rediska->getKeysByPattern('h*llo');
         $this->assertEquals(array(), $reply);
-	}
-	
-	public function testNotMatchedKeysReturnEmptyArrayWithManyConnections()
+    }
+    
+    public function testNotMatchedKeysReturnEmptyArrayWithManyConnections()
     {
         $this->_addSecondServerOrSkipTest();
 

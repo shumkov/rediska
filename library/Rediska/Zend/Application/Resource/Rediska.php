@@ -29,10 +29,10 @@ class Rediska_Zend_Application_Resource_Rediska extends Zend_Application_Resourc
         $options = $this->getOptions();
 
         if (isset($options['registry_key'])) {
-        	$key = $options['registry_key'];
-        	unset($options['registry_key']);
+            $key = $options['registry_key'];
+            unset($options['registry_key']);
         } else {
-        	$key = self::DEFAULT_REGISTRY_KEY;
+            $key = self::DEFAULT_REGISTRY_KEY;
         }
 
         $rediska = new Rediska($options);

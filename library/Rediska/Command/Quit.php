@@ -17,31 +17,31 @@ class Rediska_Command_Quit extends Rediska_Command_Abstract
     
     public function create() 
     {
-    	$command = 'QUIT';
+        $command = 'QUIT';
 
-    	$this->_affectedConnections = $this->_rediska->getConnections();
+        $this->_affectedConnections = $this->_rediska->getConnections();
 
-    	$commands = array();
+        $commands = array();
         foreach($this->_affectedConnections as $connection) {
-        	$commands[] = new Rediska_Connection_Exec($connection, $command);
+            $commands[] = new Rediska_Connection_Exec($connection, $command);
         }
 
         return $commands;
     }
 
-	public function write()
-	{
-		parent::write();
+    public function write()
+    {
+        parent::write();
 
-		foreach($this->_affectedConnections as $connection) {
+        foreach($this->_affectedConnections as $connection) {
             $connection->disconnect();
         }
 
-		return true;
-	}
+        return true;
+    }
 
-	public function read()
-	{
-		return true;
-	}
+    public function read()
+    {
+        return true;
+    }
 }

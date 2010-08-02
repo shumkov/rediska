@@ -11,7 +11,7 @@
  */
 abstract class Rediska_Command_CompareSortedSets extends Rediska_Command_Abstract
 {
-	const SUM = 'sum';
+    const SUM = 'sum';
     const MAX = 'max';
     const MIN = 'min';
 
@@ -19,9 +19,9 @@ abstract class Rediska_Command_CompareSortedSets extends Rediska_Command_Abstrac
 
     protected $_command;
 
-	protected $_storeConnection;
-	protected $_names   = array();
-	protected $_weights = array();
+    protected $_storeConnection;
+    protected $_names   = array();
+    protected $_weights = array();
 
     public function create(array $names, $storeName, $aggregation = self::SUM)
     {
@@ -104,7 +104,7 @@ abstract class Rediska_Command_CompareSortedSets extends Rediska_Command_Abstrac
     public function parseResponses($responses)
     {
         if ($this->isAtomic()) {
-    	   return $responses[0];
+           return $responses[0];
         } else {
             $sets = array();
             $valuesWithScores = array();

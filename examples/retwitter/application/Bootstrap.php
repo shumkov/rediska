@@ -4,7 +4,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
     protected function _initAutoload()
     {
-    	$loader = $this->getApplication()->getAutoloader();
+        $loader = $this->getApplication()->getAutoloader();
 
         $loader->setFallbackAutoloader(true);
         $loader->suppressNotFoundWarnings(false);

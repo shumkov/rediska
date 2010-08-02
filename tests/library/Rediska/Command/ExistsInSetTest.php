@@ -2,19 +2,19 @@
 
 class Rediska_Command_ExistsInSetTest extends Rediska_TestCase
 {
-	public function testNotExistsInNotExistsSetReturnFalse()
-	{
-		$reply = $this->rediska->existsInSet('test', 'xxx');
+    public function testNotExistsInNotExistsSetReturnFalse()
+    {
+        $reply = $this->rediska->existsInSet('test', 'xxx');
         $this->assertFalse($reply);
-	}
+    }
 
-	public function testNotExistsReturnFalse()
-	{
-		$this->rediska->addToSet('test', 'aaa');
+    public function testNotExistsReturnFalse()
+    {
+        $this->rediska->addToSet('test', 'aaa');
 
-		$reply = $this->rediska->existsInSet('test', 'xxx');
+        $reply = $this->rediska->existsInSet('test', 'xxx');
         $this->assertFalse($reply);
-	}
+    }
 
     public function testExistsInSetReturnTrue()
     {

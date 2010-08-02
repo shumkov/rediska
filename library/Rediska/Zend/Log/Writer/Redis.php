@@ -36,9 +36,9 @@ class Rediska_Zend_Log_Writer_Redis extends Zend_Log_Writer_Abstract
      */
     public function __construct($keyName, $options = array())
     {
-    	if ($options instanceof Zend_Config) {
-    		$options = $options->toArray();
-    	}
+        if ($options instanceof Zend_Config) {
+            $options = $options->toArray();
+        }
 
         $defaultInstance = Rediska::getDefaultInstance();
         if (empty($options) && $defaultInstance) {
@@ -82,7 +82,7 @@ class Rediska_Zend_Log_Writer_Redis extends Zend_Log_Writer_Abstract
         $config = self::_parseConfig($config);
         
         if (!isset($config['keyName'])) {
-        	throw new Zend_Log_Exception('keyName not present');
+            throw new Zend_Log_Exception('keyName not present');
         }
 
         if (!isset($config['options'])) {
@@ -100,6 +100,6 @@ class Rediska_Zend_Log_Writer_Redis extends Zend_Log_Writer_Abstract
      */
     protected function _write($event)
     {
-    	$this->_list[] = $event;
+        $this->_list[] = $event;
     }
 }

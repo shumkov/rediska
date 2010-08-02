@@ -28,6 +28,6 @@ class Rediska_Command_AppendToList extends Rediska_Command_Abstract
 
     public function parseResponse($response)
     {
-        return (boolean)$response;
+        return $response;
     }
 }

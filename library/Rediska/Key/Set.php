@@ -26,7 +26,7 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
     {
         $result = $this->_getRediskaOn()->addToSet($this->_name, $value);
 
-        if ($result && !is_null($this->_expire)) {
+        if (!is_null($this->_expire) && $result) {
             $this->expire($this->_expire, $this->_isExpireTimestamp);
         }
 
@@ -43,8 +43,8 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
     {
         $result = $this->_getRediskaOn()->deleteFromSet($this->_name, $value);
 
-        if ($result && !is_null($this->_expire)) {
-        	$this->expire($this->_expire, $this->_isExpireTimestamp);
+        if (!is_null($this->_expire) && $result) {
+            $this->expire($this->_expire, $this->_isExpireTimestamp);
         }
 
         return $result;
@@ -59,11 +59,11 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
      */
     public function move($set, $value)
     {
-    	if ($set instanceof Rediska_Key_Set) {
-    		$set = $set->getName();
-    	}
+        if ($set instanceof Rediska_Key_Set) {
+            $set = $set->getName();
+        }
 
-    	return $this->_getRediskaOn()->moveToSet($this->_name, $set, $value);
+        return $this->_getRediskaOn()->moveToSet($this->_name, $set, $value);
     }
     
     /**
@@ -96,9 +96,9 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
      */
     public function intersect($setOrSets, $storeKeyName = null)
     {
-    	$sets = $this->_prepareSetsForCompare($setOrSets);
-    	
-    	return $this->_getRediskaOn()->intersectSets($sets, $storeKeyName);
+        $sets = $this->_prepareSetsForCompare($setOrSets);
+
+        return $this->_getRediskaOn()->intersectSets($sets, $storeKeyName);
     }
     
     /**
@@ -169,7 +169,7 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
         }
 
         if (!is_null($this->_expire)) {
-        	$pipeline->expire($this->_name, $this->_expire, $this->_isExpireTimestamp);
+            $pipeline->expire($this->_name, $this->_expire, $this->_isExpireTimestamp);
         }
 
         $pipeline->execute();

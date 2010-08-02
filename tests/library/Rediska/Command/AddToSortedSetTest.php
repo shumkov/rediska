@@ -2,12 +2,12 @@
 
 class Rediska_Command_AddToSortedSetTest extends Rediska_TestCase
 {
-	public function testReturnTrue()
-	{
-		$value = $this->rediska->addToSortedSet('test', 'aaa', 1);
+    public function testReturnTrue()
+    {
+        $value = $this->rediska->addToSortedSet('test', 'aaa', 1);
         $this->assertTrue($value);
-	}
-	
+    }
+    
     public function testAddToSortedSet()
     {
         $this->rediska->addToSortedSet('test', 'aaa', 1);

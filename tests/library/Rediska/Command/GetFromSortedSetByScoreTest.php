@@ -48,10 +48,10 @@ class Rediska_Command_GetFromSortedSetByScoreTest extends Rediska_TestCase
         $this->assertEquals($values[2]->value, 3);
     }
 
-	protected function _addThreeMembers()
-	{
-		$this->rediska->addToSortedSet('test', 1, 1);
+    protected function _addThreeMembers()
+    {
+        $this->rediska->addToSortedSet('test', 1, 1);
         $this->rediska->addToSortedSet('test', 2, 2);
         $this->rediska->addToSortedSet('test', 3, 3);
-	}
+    }
 }

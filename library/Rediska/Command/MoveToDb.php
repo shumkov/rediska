@@ -18,7 +18,7 @@ class Rediska_Command_MoveToDb extends Rediska_Command_Abstract
 {
     public function create($name, $dbIndex) 
     {
-    	if (!is_integer($dbIndex) || $dbIndex < 0) {
+        if (!is_integer($dbIndex) || $dbIndex < 0) {
             throw new Rediska_Command_Exception("Index must be zero or positive integer");
         }
 

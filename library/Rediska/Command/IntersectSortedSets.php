@@ -16,8 +16,8 @@
  */
 class Rediska_Command_IntersectSortedSets extends Rediska_Command_CompareSortedSets
 {
-	protected $_command = 'ZINTERSTORE';
-	
+    protected $_command = 'ZINTERSTORE';
+    
     protected function _compareSets($sets)
     {
         return call_user_func_array('array_intersect', array_values($sets));

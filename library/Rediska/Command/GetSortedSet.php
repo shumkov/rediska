@@ -38,7 +38,7 @@ class Rediska_Command_GetSortedSet extends Rediska_Command_Abstract
                          $end);
 
         if ($withScores) {
-        	$command[] = 'WITHSCORES';
+            $command[] = 'WITHSCORES';
         }
 
         return new Rediska_Connection_Exec($connection, $command);
@@ -49,11 +49,9 @@ class Rediska_Command_GetSortedSet extends Rediska_Command_Abstract
         $values = $response;
 
         if ($this->withScores) {
-        	$values = Rediska_Command_Response_ValueAndScore::combine($this->_rediska, $values);
+            $values = Rediska_Command_Response_ValueAndScore::combine($this->_rediska, $values);
         } else {
-            foreach($values as &$value) {
-        	   $value = $this->_rediska->getSerializer()->unserialize($value);
-            }
+            $values = array_map(array($this->_rediska->getSerializer(), 'unserialize'), $values);
         }
 
         return $values;

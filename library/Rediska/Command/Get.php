@@ -25,7 +25,7 @@ class Rediska_Command_Get extends Rediska_Command_Abstract
             $names = $nameOrNames;
 
             if (empty($names)) {
-            	throw new Rediska_Command_Exception('Not present keys for get');
+                throw new Rediska_Command_Exception('Not present keys for get');
             }
 
             $sortedResult = array();

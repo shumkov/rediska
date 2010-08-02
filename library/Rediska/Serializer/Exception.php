@@ -11,5 +11,5 @@
  */
 class Rediska_Serializer_Exception extends Rediska_Exception
 {
-	
+    
 }

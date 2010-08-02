@@ -2,11 +2,11 @@
 
 class Rediska_Command_GetSortedSetTest extends Rediska_TestCase
 {
-	public function testEmptySetReturnEmptySet()
-	{
-		$values = $this->rediska->getSortedSet('test');
-		$this->assertEquals(array(), $values);
-	}
+    public function testEmptySetReturnEmptySet()
+    {
+        $values = $this->rediska->getSortedSet('test');
+        $this->assertEquals(array(), $values);
+    }
 
     public function testGetSortedSet()
     {
@@ -21,15 +21,15 @@ class Rediska_Command_GetSortedSetTest extends Rediska_TestCase
 
     public function testGetSortedSetWithLimit()
     {
-    	$this->_addThreeMembers();
+        $this->_addThreeMembers();
 
-    	$values = $this->rediska->getSortedSet('test', false, 0, 1);
+        $values = $this->rediska->getSortedSet('test', false, 0, 1);
         $this->assertEquals(array(1, 2), $values);
     }
 
     public function testGetSortedSetWithScores()
     {
-    	$this->_addThreeMembers();
+        $this->_addThreeMembers();
 
         $values = $this->rediska->getSortedSet('test', true);
 

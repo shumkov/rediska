@@ -67,14 +67,14 @@ class Rediska_Zend_Session_SaveHandler_Redis implements Zend_Session_SaveHandler
      */
     public function __construct($options = array())
     {
-    	if ($options instanceof Zend_Config) {
-    		$options = $options->toArray();
-    	}
+        if ($options instanceof Zend_Config) {
+            $options = $options->toArray();
+        }
 
-    	// Set default lifetime
-    	$this->_options['lifetime'] = (integer)ini_get('session.gc_maxlifetime');
+        // Set default lifetime
+        $this->_options['lifetime'] = (integer)ini_get('session.gc_maxlifetime');
 
-    	// Get Rediska instance
+        // Get Rediska instance
         $defaultInstance = Rediska::getDefaultInstance();
         if ($defaultInstance && !isset($options['rediskaOptions'])) {
             $this->_rediska = $defaultInstance;
@@ -83,7 +83,7 @@ class Rediska_Zend_Session_SaveHandler_Redis implements Zend_Session_SaveHandler
             unset($options['rediskaOptions']);
         }
 
-    	$this->setOptions($options);
+        $this->setOptions($options);
 
         Rediska_Zend_Session_Set::setSaveHandler($this);
 
@@ -142,7 +142,7 @@ class Rediska_Zend_Session_SaveHandler_Redis implements Zend_Session_SaveHandler
      */
     public function write($id, $data)
     {
-    	$this->_set[] = $id;
+        $this->_set[] = $id;
 
         $reply = $this->_rediska->set($this->_getKeyName($id), $data);
 
@@ -176,24 +176,24 @@ class Rediska_Zend_Session_SaveHandler_Redis implements Zend_Session_SaveHandler
      */
     public function gc($maxlifetime)
     {
-    	$sessions = $this->_set->toArray();
+        $sessions = $this->_set->toArray();
 
-    	if (!empty($sessions)) {
-        	foreach($sessions as &$session) {
-        		$session = $this->_getKeyName($session);
-        	}
+        if (!empty($sessions)) {
+            foreach($sessions as &$session) {
+                $session = $this->_getKeyName($session);
+            }
     
-        	// TODO: May by use TTL? Need benchmark.
-        	$lifeSession = $this->_rediska->get($sessions);
-        	foreach($sessions as $session) {
-        		if (!isset($lifeSession[$session])) {
-        			$sessionWithoutPrefix = substr($session, strlen($this->_options['keyprefix']));
-        			$this->_set->remove($sessionWithoutPrefix);
-        		}
-        	}
-    	}
+            // TODO: May by use TTL? Need benchmark.
+            $lifeSession = $this->_rediska->get($sessions);
+            foreach($sessions as $session) {
+                if (!isset($lifeSession[$session])) {
+                    $sessionWithoutPrefix = substr($session, strlen($this->_options['keyprefix']));
+                    $this->_set->remove($sessionWithoutPrefix);
+                }
+            }
+        }
 
-    	return true;
+        return true;
     }
 
     /**
@@ -225,7 +225,7 @@ class Rediska_Zend_Session_SaveHandler_Redis implements Zend_Session_SaveHandler
      */
     public function setOption($name, $value)
     {
-    	$lowerName = strtolower($name);
+        $lowerName = strtolower($name);
 
         if (!array_key_exists($lowerName, $this->_options)) {
             throw new Zend_Session_SaveHandler_Exception("Unknown option '$name'");
@@ -244,8 +244,8 @@ class Rediska_Zend_Session_SaveHandler_Redis implements Zend_Session_SaveHandler
      */
     public function getOption($name)
     {
-    	$lowerName = strtolower($name);
-    	
+        $lowerName = strtolower($name);
+        
         if (!array_key_exists($lowerName, $this->_options)) {
             throw new Zend_Session_SaveHandler_Exception("Unknown option '$name'");
         }

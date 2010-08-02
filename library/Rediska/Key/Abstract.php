@@ -11,34 +11,34 @@
  */
 abstract class Rediska_Key_Abstract
 {
-	/**
-	 * Key name
-	 * 
-	 * @var string
-	 */
-	protected $_name;
+    /**
+     * Key name
+     *
+     * @var string
+     */
+    protected $_name;
 
-	/**
-	 * Rediska instance
-	 * 
-	 * @var Rediska
-	 */
-	protected $_rediska;
-	
-	/**
+    /**
+     * Rediska instance
+     *
+     * @var Rediska
+     */
+    protected $_rediska;
+
+    /**
      * Seconds to expire
      * 
      * @var integer
      */
     protected $_expire;
-    
+
     /**
      * Expire is timestamp
      * 
      * @var boolean
      */
     protected $_isExpireTimestamp = false;
-    
+
     /**
      * Server alias or connection object
      * 
@@ -46,139 +46,139 @@ abstract class Rediska_Key_Abstract
      */
     protected $_serverAlias;
 
-	/**
-	 * Construct key
-	 * 
-	 * @param string                    $name        Key name
-	 * @param integer                   $expire      Expire time in seconds
-	 * @param string|Rediska_Connection $serverAlias Server alias or Rediska_Connection object where key is placed
-	 */
-	public function __construct($name, $expire = null, $serverAlias = null)
-	{
-		$this->_name        = $name;
-		$this->_expire      = $expire;
-		$this->_serverAlias = $serverAlias;
+    /**
+     * Construct key
+     *
+     * @param string                    $name        Key name
+     * @param integer                   $expire      Expire time in seconds
+     * @param string|Rediska_Connection $serverAlias Server alias or Rediska_Connection object where key is placed
+     */
+    public function __construct($name, $expire = null, $serverAlias = null)
+    {
+        $this->_name        = $name;
+        $this->_expire      = $expire;
+        $this->_serverAlias = $serverAlias;
 
-		$this->_setupRediskaDefaultInstance();
-	}
+        $this->_setupRediskaDefaultInstance();
+    }
 
-	/**
-	 * Delete key
-	 * 
-	 * @return boolean
-	 */
-	public function delete()
-	{
-		return $this->_getRediskaOn()->delete($this->_name);
-	}
+    /**
+     * Delete key
+     *
+     * @return boolean
+     */
+    public function delete()
+    {
+        return $this->_getRediskaOn()->delete($this->_name);
+    }
 
-	/**
+    /**
      * Exists in db
      * 
      * @return boolean
      */
-	public function isExists()
-	{
-		return $this->_getRediskaOn()->exists($this->_name);
-	}
+    public function isExists()
+    {
+        return $this->_getRediskaOn()->exists($this->_name);
+    }
 
-	/**
-	 * Get key type
-	 * 
-	 * @see Rediska#getType
-	 * @return string
-	 */
-	public function getType()
-	{
-		return $this->_getRediskaOn()->getType($this->_name);
-	}
+    /**
+     * Get key type
+     *
+     * @see Rediska#getType
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->_getRediskaOn()->getType($this->_name);
+    }
 
-	/**
-	 * Rename key
-	 * 
-	 * @param string  $newName
-	 * @param boolean $overwrite
-	 * @return boolean
-	 */
-	public function rename($newName, $overwrite = true)
-	{
-		try {
+    /**
+     * Rename key
+     *
+     * @param string  $newName
+     * @param boolean $overwrite
+     * @return boolean
+     */
+    public function rename($newName, $overwrite = true)
+    {
+        try {
             $this->_getRediskaOn()->rename($this->_name, $newName, $overwrite);
-		} catch (Rediska_Exception $e) {
-			return false;
-		}
+        } catch (Rediska_Exception $e) {
+            return false;
+        }
 
-		$this->_name = $newName;
+        $this->_name = $newName;
 
         if (!is_null($this->_expire)) {
             $this->expire($this->_expire, $this->_isExpireTimestamp);
         }
 
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * Expire key
-	 * 
-	 * @param integer $secondsOrTimestamp Time in seconds or timestamp
-	 * @param boolean $isTimestamp        Time is timestamp? Default is false.
-	 * @return boolean
-	 */
-	public function expire($secondsOrTimestamp, $isTimestamp = false)
-	{
-		return $this->_getRediskaOn()->expire($this->_name, $secondsOrTimestamp, $isTimestamp);
-	}
+    /**
+     * Expire key
+     *
+     * @param integer $secondsOrTimestamp Time in seconds or timestamp
+     * @param boolean $isTimestamp        Time is timestamp? Default is false.
+     * @return boolean
+     */
+    public function expire($secondsOrTimestamp, $isTimestamp = false)
+    {
+        return $this->_getRediskaOn()->expire($this->_name, $secondsOrTimestamp, $isTimestamp);
+    }
 
-	/**
-	 * Get key lifetime
-	 * 
-	 * @return integer
-	 */
-	public function getLifetime()
-	{
-		return $this->_getRediskaOn()->getLifetime($this->_name);
-	}
+    /**
+     * Get key lifetime
+     *
+     * @return integer
+     */
+    public function getLifetime()
+    {
+        return $this->_getRediskaOn()->getLifetime($this->_name);
+    }
 
-	/**
-	 * Move key to other Db
-	 * 
-	 * @see Rediska#moveToDb
-	 * @param integer $dbIndex
-	 * @return boolean
-	 */
-	public function moveToDb($dbIndex)
-	{
-		$result = $this->_getRediskaOn()->moveToDb($this->_name, $dbIndex);
+    /**
+     * Move key to other Db
+     *
+     * @see Rediska#moveToDb
+     * @param integer $dbIndex
+     * @return boolean
+     */
+    public function moveToDb($dbIndex)
+    {
+        $result = $this->_getRediskaOn()->moveToDb($this->_name, $dbIndex);
 
-        if ($result && !is_null($this->_expire)) {
+        if (!is_null($this->_expire) && $result) {
             $this->expire($this->_expire, $this->_isExpireTimestamp);
         }
 
         return $result;
-	}
+    }
 
-	/**
+    /**
      * Get key name
      * 
      * @return string
      */
-	public function getName()
-	{
-		return $this->_name;
-	}
+    public function getName()
+    {
+        return $this->_name;
+    }
 
-	/**
+    /**
      * Set key name
      * 
      * @param string $name
      * @return Rediska_Key_Abstract
      */
-	public function setName($name)
-	{
-		$this->_name = $name;
+    public function setName($name)
+    {
+        $this->_name = $name;
 
-		return $this;
-	}
+        return $this;
+    }
 
     /**
      * Set expire time
@@ -223,9 +223,9 @@ abstract class Rediska_Key_Abstract
      */
     public function setServerAlias($serverAlias)
     {
-    	$this->_serverAlias = $serverAlias;
-    	
-    	return $this;
+        $this->_serverAlias = $serverAlias;
+
+        return $this;
     }
 
     /**
@@ -235,7 +235,7 @@ abstract class Rediska_Key_Abstract
      */
     public function getServerAlias()
     {
-    	return $this->_serverAlias;
+        return $this->_serverAlias;
     }
     
     /**
@@ -272,18 +272,18 @@ abstract class Rediska_Key_Abstract
      */
     protected function _getRediskaOn()
     {
-    	$rediska = $this->getRediska();
+        $rediska = $this->getRediska();
 
-    	if (!is_null($this->_serverAlias)) {
-    		$rediska = $rediska->on($this->_serverAlias);
-    	}
+        if (!is_null($this->_serverAlias)) {
+            $rediska = $rediska->on($this->_serverAlias);
+        }
 
-    	return $rediska;
+        return $rediska;
     }
 
-	/**
-	 * Setup Rediska instance
-	 */
+    /**
+     * Setup Rediska instance
+     */
     protected function _setupRediskaDefaultInstance()
     {
         $this->_rediska = Rediska::getDefaultInstance();

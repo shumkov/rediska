@@ -21,8 +21,8 @@ class Rediska_Command_DiffSetsTest extends Rediska_TestCase
     
     public function testDiffAndSave()
     {
-    	$keys = $this->_createThreeSets();
-    	
+        $keys = $this->_createThreeSets();
+        
         $reply = $this->rediska->diffSets($keys, 'new-set');
         $this->assertTrue($reply);
 

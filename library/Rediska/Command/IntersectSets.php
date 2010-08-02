@@ -15,11 +15,11 @@
  */
 class Rediska_Command_IntersectSets extends Rediska_Command_CompareSets
 {
-	protected $_command = 'SINTER';
+    protected $_command = 'SINTER';
     protected $_storeCommand = 'SINTERSTORE';
 
     protected function _compareSets($sets)
     {
-    	return call_user_func_array('array_intersect', $sets);
+        return call_user_func_array('array_intersect', $sets);
     }
 }

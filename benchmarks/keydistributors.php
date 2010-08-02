@@ -42,7 +42,7 @@ $consistentHashing->addConnection('127.0.0.1:6380');
 $consistentHashing->addConnection('127.0.0.1:6381');
 
 for ($i = 0; $i <= 1000; $i++) {
-	$consistentHashing->getConnectionByKeyName('key_' . $i);
+    $consistentHashing->getConnectionByKeyName('key_' . $i);
 }
 
 $elapsedTime = microtime(true) - $startTime;

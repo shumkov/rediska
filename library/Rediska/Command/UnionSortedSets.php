@@ -16,7 +16,7 @@
  */
 class Rediska_Command_UnionSortedSets extends Rediska_Command_CompareSortedSets
 {
-	protected $_command = 'ZUNIONSTORE';
+    protected $_command = 'ZUNIONSTORE';
 
     protected function _compareSets($sets)
     {

@@ -11,42 +11,44 @@
  */
 class Rediska_Serializer_Adapter_PhpSerialize implements Rediska_Serializer_Adapter_Interface
 {
-	/**
-	 * Serialize value
-	 *
-	 * @param mixin $value
-	 * @return string
-	 */
-	public function serialize($value)
-	{
+    /**
+     * Serialize value
+     *
+     * @param mixin $value
+     * @return string
+     */
+    public function serialize($value)
+    {
         return serialize($value);
-	}
+    }
 
-	/**
-	 * Unserialize value
-	 *
-	 * @throws Rediska_Serializer_Exception
-	 * @param string $value
-	 * @return mixin
-	 */
-	public function unserialize($value)
-	{
-		set_error_handler(array($this, 'throwCantUnserializeException'));
+    /**
+     * Unserialize value
+     *
+     * @throws Rediska_Serializer_Exception
+     * @param string $value
+     * @return mixin
+     */
+    public function unserialize($value)
+    {
+        set_error_handler(array($this, 'throwCantUnserializeException'));
 
         $unserializedValue = @unserialize($value);
 
-		restore_error_handler();
+        restore_error_handler();
 
         return $unserializedValue;
-	}
-	
-	/**
-	 * Throw can't unserialize exception
-	 *
-	 * @throws Rediska_Serializer_Exception
-	 */
-	public function throwCantUnserializeException()
-	{
-		throw new Rediska_Serializer_Adapter_Exception("Can't unserialize string");
-	}
+    }
+
+    /**
+     * Throw can't unserialize exception
+     *
+     * @throws Rediska_Serializer_Exception
+     */
+    public function throwCantUnserializeException()
+    {
+        restore_error_handler();
+
+        throw new Rediska_Serializer_Adapter_Exception("Can't unserialize string");
+    }
 }
