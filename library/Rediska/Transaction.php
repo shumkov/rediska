@@ -57,6 +57,8 @@ class Rediska_Transaction
         $this->_rediska             = $rediska;
         $this->_specifiedConnection = $specifiedConnection;
         $this->_connection          = clone $connection;
+
+        $this->_throwIfNotSupported();
     }
 
     /**
@@ -182,5 +184,17 @@ class Rediska_Transaction
         $this->_specifiedConnection->resetConnection();
 
         return $this;
+    }
+
+    /**
+     * Throw if transaction not supported by Redis
+     */
+    protected function _throwIfNotSupported()
+    {
+        $version = '1.3.8';
+        $redisVersion = $this->getRediska()->getOption('redisVersion');
+        if (version_compare($version, $this->getRediska()->getOption('redisVersion')) == 1) {
+            throw new Rediska_Transaction_Exception("Transaction requires {$version}+ version of Redis server. Current version is {$redisVersion}. To change it specify 'redisVersion' option.");
+        }
     }
 }
