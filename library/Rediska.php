@@ -66,7 +66,10 @@ class Rediska extends Rediska_Options
      * @var array
      */
     protected static $_commands = array(
-        // Basic
+        // Connection handling
+        'quit' => 'Rediska_Command_Quit',
+
+        // Commands operating on all value types
         'exists'           => 'Rediska_Command_Exists',
         'delete'           => 'Rediska_Command_Delete',
         'gettype'          => 'Rediska_Command_GetType',
@@ -80,14 +83,17 @@ class Rediska extends Rediska_Options
         'movetodb'         => 'Rediska_Command_MoveToDb',
         'flushdb'          => 'Rediska_Command_FlushDb',
 
-        // Single value
-        'set'       => 'Rediska_Command_Set',
-        'setandget' => 'Rediska_Command_SetAndGet',
-        'get'       => 'Rediska_Command_Get',
-        'increment' => 'Rediska_Command_Increment',
-        'decrement' => 'Rediska_Command_Decrement',
+        // Commands operating on string values
+        'set'          => 'Rediska_Command_Set',
+        'setandget'    => 'Rediska_Command_SetAndGet',
+        'get'          => 'Rediska_Command_Get',
+        'setandexpire' => 'Rediska_Command_SetAndExpire',
+        'increment'    => 'Rediska_Command_Increment',
+        'decrement'    => 'Rediska_Command_Decrement',
+        'substring'    => 'Rediska_Command_Substring',
+        'append'       => 'Rediska_Command_Append',
 
-        // Lists
+        // Commands operating on lists
         'appendtolist'          => 'Rediska_Command_AppendToList',
         'prependtolist'         => 'Rediska_Command_PrependToList',
         'getlistlength'         => 'Rediska_Command_GetListLength',
@@ -101,7 +107,7 @@ class Rediska extends Rediska_Options
         'popfromlist'           => 'Rediska_Command_PopFromList',
         'popfromlistblocking'   => 'Rediska_Command_PopFromListBlocking',
 
-        // Sets
+        // Commands operating on sets
         'addtoset'         => 'Rediska_Command_AddToSet',
         'deletefromset'    => 'Rediska_Command_DeleteFromSet',
         'getrandomfromset' => 'Rediska_Command_GetRandomFromSet',
@@ -113,7 +119,7 @@ class Rediska extends Rediska_Options
         'getset'           => 'Rediska_Command_GetSet',
         'movetoset'        => 'Rediska_Command_MoveToSet',
 
-        // Sorted sets
+        // Commands operating on sorted sets
         'addtosortedset'             => 'Rediska_Command_AddToSortedSet',
         'deletefromsortedset'        => 'Rediska_Command_DeleteFromSortedSet',
         'getsortedset'               => 'Rediska_Command_GetSortedSet',
@@ -126,8 +132,8 @@ class Rediska extends Rediska_Options
         'getrankfromsortedset'       => 'Rediska_Command_GetRankFromSortedSet',
         'unionsortedsets'            => 'Rediska_Command_UnionSortedSets',
         'intersectsortedsets'        => 'Rediska_Command_IntersectSortedSets',
-    
-        // Hashes
+
+        // Commands operating on hashes
         'settohash'        => 'Rediska_Command_SetToHash',
         'getfromhash'      => 'Rediska_Command_GetFromHash',
         'incrementinhash'  => 'Rediska_Command_IncrementInHash',
@@ -137,21 +143,22 @@ class Rediska extends Rediska_Options
         'gethash'          => 'Rediska_Command_GetHash',
         'gethashfields'    => 'Rediska_Command_GetHashFields',
         'gethashvalues'    => 'Rediska_Command_GetHashValues',
-
+        
         // Sorting
         'sort' => 'Rediska_Command_Sort',
 
-        // Controls
-        'save'                  => 'Rediska_Command_Save',
-        'getlastsavetime'       => 'Rediska_Command_GetLastSaveTime',
-        'info'                  => 'Rediska_Command_Info',
-        'quit'                  => 'Rediska_Command_Quit',
-        'shutdown'              => 'Rediska_Command_Shutdown',
-        'rewriteappendonlyfile' => 'Rediska_Command_RewriteAppendOnlyFile',
-        'slaveof'               => 'Rediska_Command_SlaveOf',
-
         // Publish/Subscribe
         'publish' => 'Rediska_Command_Publish',
+
+        // Persistence control commands
+        'save'                  => 'Rediska_Command_Save',
+        'getlastsavetime'       => 'Rediska_Command_GetLastSaveTime',
+        'shutdown'              => 'Rediska_Command_Shutdown',
+        'rewriteappendonlyfile' => 'Rediska_Command_RewriteAppendOnlyFile',
+
+        // Remote server control commands
+        'info'    => 'Rediska_Command_Info',
+        'slaveof' => 'Rediska_Command_SlaveOf'
     );
 
     /**
@@ -408,14 +415,6 @@ class Rediska extends Rediska_Options
      */
     public function transaction($aliasOrConnection = null)
     {
-        // Check Redis version
-        $version = '1.3.8';
-        $redisVersion = $this->getOption('redisVersion');
-        if (version_compare($version, $this->getOption('redisVersion')) == 1) {
-            throw new Rediska_Transaction_Exception("Transaction requires {$version}+ version of Redis server. Current version is {$redisVersion}. To change it specify 'redisVersion' option.");
-        }
-
-        // Get connection
         if ($aliasOrConnection instanceof Rediska_Connection) {
             $connection = $aliasOrConnection;
         } elseif ($aliasOrConnection !== null) {
@@ -448,6 +447,47 @@ class Rediska extends Rediska_Options
             'timeout'       => $timeout,
             'serverAlias'   => $this->_specifiedConnection->getConnection()
         ));
+    }
+
+    /**
+     * Monitor commands
+     *
+     * @param integer[optional] $timeout Timeout
+     * @return Rediska_Monitor
+     */
+    public function monitor($timeout = null)
+    {
+        return new Rediska_Monitor(array(
+            'rediska'       => $this,
+            'timeout'       => $timeout,
+            'serverAlias'   => $this->_specifiedConnection->getConnection()
+        ));
+    }
+
+    /**
+     * Get Redis server configuration
+     *
+     * @param $aliasOrConnection Server alias or Rediska_Connection object
+     * @return Rediska_Config
+     */
+    public function config($aliasOrConnection = null)
+    {
+        if ($aliasOrConnection instanceof Rediska_Connection) {
+            $connection = $aliasOrConnection;
+        } elseif ($aliasOrConnection !== null) {
+            $connection = $this->getConnectionByAlias($aliasOrConnection);
+        } elseif ($this->_specifiedConnection->getConnection()) {
+            $connection = $this->_specifiedConnection->getConnection();
+        } else {
+            $connections = $this->getConnections();
+            if (count($connections) == 1) {
+                $connection = $connections[0];
+            } else {
+                throw new Rediska_Transaction_Exception('You must specify connection by $aliasOrConnection argument!');
+            }
+        }
+
+        return new Rediska_Config($this, $connection);
     }
 
     /**

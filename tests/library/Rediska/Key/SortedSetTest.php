@@ -135,7 +135,7 @@ class Rediska_Key_SortedSetTest extends Rediska_TestCase
         $this->assertEquals(4, $values[0]->score);
         $this->rediska->delete('result');
         
-        $count = $this->set->intersect(new Rediska_Key_Set('test2'), 'result', 'max');
+        $count = $this->set->intersect(new Rediska_Key_SortedSet('test2'), 'result', 'max');
         $this->assertEquals(1, $count);
         $values = $this->rediska->getSortedSet('result', true);
         $this->assertEquals(123, $values[0]->value);
@@ -170,7 +170,7 @@ class Rediska_Key_SortedSetTest extends Rediska_TestCase
         $this->assertEquals(4, $values[1]->score);
         $this->rediska->delete('result');
 
-        $count = $this->set->union(new Rediska_Key_Set('test2'), 'result', 'max');
+        $count = $this->set->union(new Rediska_Key_SortedSet('test2'), 'result', 'max');
         $this->assertEquals(3, $count);
         $values = $this->rediska->getSortedSet('result', true);
         $this->assertEquals(123, $values[1]->value);

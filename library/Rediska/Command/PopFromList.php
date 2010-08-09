@@ -40,14 +40,16 @@ class Rediska_Command_PopFromList extends Rediska_Command_Abstract
         return new Rediska_Connection_Exec($connection, $command);
     }
 
-    public function parseResponses($responses)
+    public function parseResponse($response)
     {
         if (!$this->isAtomic()) {
-            $value = $this->_rediska->getSerializer()->unserialize($responses[0]);
+            $value = $this->_rediska->getSerializer()->unserialize($response);
 
-            return $this->_rediska->prependToList($this->pushToName, $value);
+            $this->_rediska->prependToList($this->pushToName, $value);
+
+            return $value;
         } else {
-            return $this->_rediska->getSerializer()->unserialize($responses[0]);
+            return $this->_rediska->getSerializer()->unserialize($response);
         }
     }
 }

@@ -137,9 +137,9 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
     /**
      * Store to key union between the sorted sets
      * 
-     * @param string|array  $setOrSets    Sorted set key name or object, or array of its
-     * @param string        $storeKeyName Result sorted set key name
-     * @param string        $aggregation  Aggregation method: SUM (for default), MIN, MAX.
+     * @param string|Rediska_Key_SortedSet|array  $setOrSets    Sorted set key name or object, or array of its
+     * @param string                              $storeKeyName Result sorted set key name
+     * @param string                              $aggregation  Aggregation method: SUM (for default), MIN, MAX.
      * @return integer
      */
     public function union($setOrSets, $storeKeyName, $aggregation = 'sum')
@@ -152,9 +152,9 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
     /**
      * Store to key intersection between sorted sets
      * 
-     * @param string|array  $setOrSets    Sorted set key name or object, or array of its
-     * @param string        $storeKeyName Result sorted set key name
-     * @param string        $aggregation  Aggregation method: SUM (for default), MIN, MAX.
+     * @param string|Rediska_Key_SortedSet|array  $setOrSets    Sorted set key name or object, or array of its
+     * @param string                              $storeKeyName Result sorted set key name
+     * @param string                              $aggregation  Aggregation method: SUM (for default), MIN, MAX.
      * @return integer
      */
     public function intersect($setOrSets, $storeKeyName, $aggregation = 'sum')
@@ -284,7 +284,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
             }
         } else {
             foreach($sets as &$set) {
-                if ($set instanceof Rediska_Key_Set) {
+                if ($set instanceof Rediska_Key_SortedSet) {
                     $set = $set->getName();
                 }
             }
