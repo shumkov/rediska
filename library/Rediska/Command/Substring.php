@@ -16,12 +16,8 @@
  */
 class Rediska_Command_Substring extends Rediska_Command_Abstract
 {
-    public function create($name, $start, $end = null)
+    public function create($name, $start, $end = -1)
     {
-        if ($end === null) {
-            $end = -1;
-        }
-
         $command = array('SUBSTR', $this->_rediska->getOption('namespace') . $name, $start, $end);
 
         $connection = $this->_rediska->getConnectionByKeyName($name);
