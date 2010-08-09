@@ -16,9 +16,9 @@ class Rediska_Key_ListTest extends Rediska_TestCase
     public function testAppend()
     {
         $reply = $this->list->append(123);
-        $this->assertTrue($reply);
+        $this->assertEquals(1, $reply);
         $reply = $this->list->append(456);
-        $this->assertTrue($reply);
+        $this->assertEquals(2, $reply);
 
         $values = $this->rediska->getFromList('test', 1);
         $this->assertEquals(456, $values);
@@ -27,9 +27,9 @@ class Rediska_Key_ListTest extends Rediska_TestCase
     public function testPrepend()
     {
         $reply = $this->list->prepend(123);
-        $this->assertTrue($reply);
+        $this->assertEquals(1, $reply);
         $reply = $this->list->prepend(456);
-        $this->assertTrue($reply);
+        $this->assertEquals(2, $reply);
 
         $values = $this->rediska->getFromList('test', 1);
         $this->assertEquals(123, $values);

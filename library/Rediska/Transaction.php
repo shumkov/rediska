@@ -192,8 +192,8 @@ class Rediska_Transaction
     protected function _throwIfNotSupported()
     {
         $version = '1.3.8';
-        $redisVersion = $this->getRediska()->getOption('redisVersion');
-        if (version_compare($version, $this->getRediska()->getOption('redisVersion')) == 1) {
+        $redisVersion = $this->_rediska->getOption('redisVersion');
+        if (version_compare($version, $this->_rediska->getOption('redisVersion')) == 1) {
             throw new Rediska_Transaction_Exception("Transaction requires {$version}+ version of Redis server. Current version is {$redisVersion}. To change it specify 'redisVersion' option.");
         }
     }

@@ -157,8 +157,7 @@ class Rediska extends Rediska_Options
 
         // Remote server control commands
         'info'    => 'Rediska_Command_Info',
-        'slaveof' => 'Rediska_Command_SlaveOf',
-        'config'  => 'Rediska_Command_Config'
+        'slaveof' => 'Rediska_Command_SlaveOf'
     );
 
     /**
@@ -450,12 +449,27 @@ class Rediska extends Rediska_Options
     }
 
     /**
+     * Monitor commands
+     *
+     * @param integer[optional] $timeout Timeout
+     * @return Rediska_Monitor
+     */
+    public function monitor($timeout = null)
+    {
+        return new Rediska_Monitor(array(
+            'rediska'       => $this,
+            'timeout'       => $timeout,
+            'serverAlias'   => $this->_specifiedConnection->getConnection()
+        ));
+    }
+
+    /**
      * Get Redis server configuration
      *
      * @param $aliasOrConnection Server alias or Rediska_Connection object
      * @return Rediska_Config
      */
-    public function сonfig($aliasOrConnection = null)
+    public function config($aliasOrConnection = null)
     {
         if ($aliasOrConnection instanceof Rediska_Connection) {
             $connection = $aliasOrConnection;
@@ -473,16 +487,6 @@ class Rediska extends Rediska_Options
         }
 
         return new Rediska_Config($this, $connection);
-    }
-
-    /**
-     * Monitor commands
-     *
-     * @return Rediska_Monitor
-     */
-    public function monitor()
-    {
-        return new Rediska_Monitor($this, $this->_specifiedConnection);
     }
 
     /**
