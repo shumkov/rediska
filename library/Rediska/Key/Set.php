@@ -86,12 +86,12 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
     {
         return $this->_getRediskaOn()->existsInSet($this->_name, $value);
     }
-    
+
     /**
      * Return the intersection between the Sets
      * 
-     * @param string|array $setOrSets    Set key name or object, or array of its
-     * @param string|null  $storeKeyName Store intersection to set with key name
+     * @param string|Rediska_Key_Set|array $setOrSets    Set key name or object, or array of its
+     * @param string|null                  $storeKeyName Store intersection to set with key name
      * @return array|boolean
      */
     public function intersect($setOrSets, $storeKeyName = null)
@@ -104,8 +104,8 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
     /**
      * Return the union between the Sets
      * 
-     * @param string|array $setOrSets    Set key name or object, or array of its
-     * @param string|null  $storeKeyName Store union to set with key name
+     * @param string|Rediska_Key_Set|array $setOrSets    Set key name or object, or array of its
+     * @param string|null                  $storeKeyName Store union to set with key name
      * @return array|boolean
      */
     public function union($setOrSets, $storeKeyName = null)

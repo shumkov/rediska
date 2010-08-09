@@ -84,13 +84,14 @@ class Rediska extends Rediska_Options
         'flushdb'          => 'Rediska_Command_FlushDb',
 
         // Commands operating on string values
-        'set'       => 'Rediska_Command_Set',
-        'setandget' => 'Rediska_Command_SetAndGet',
-        'get'       => 'Rediska_Command_Get',
-        'increment' => 'Rediska_Command_Increment',
-        'decrement' => 'Rediska_Command_Decrement',
-        'substring' => 'Rediska_Command_Substring',
-        'append'    => 'Rediska_Command_Append',
+        'set'          => 'Rediska_Command_Set',
+        'setandget'    => 'Rediska_Command_SetAndGet',
+        'get'          => 'Rediska_Command_Get',
+        'setandexpire' => 'Rediska_Command_SetAndExpire',
+        'increment'    => 'Rediska_Command_Increment',
+        'decrement'    => 'Rediska_Command_Decrement',
+        'substring'    => 'Rediska_Command_Substring',
+        'append'       => 'Rediska_Command_Append',
 
         // Commands operating on lists
         'appendtolist'          => 'Rediska_Command_AppendToList',
