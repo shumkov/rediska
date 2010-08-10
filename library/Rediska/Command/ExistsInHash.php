@@ -22,7 +22,7 @@ class Rediska_Command_ExistsInHash extends Rediska_Command_Abstract
      * Create command
      *
      * @param string $key   Key name
-     * @param mixin  $field Field
+     * @param mixed  $field Field
      * @return Rediska_Connection_Exec
      */
     public function create($key, $field)

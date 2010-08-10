@@ -19,7 +19,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
     /**
      * Append value to the end of List
      *
-     * @param mixin $value Value
+     * @param mixed $value Value
      * @return boolean
      */
     public function append($value)
@@ -36,7 +36,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
     /**
      * Append value to the head of List
      *
-     * @param mixin $value Value
+     * @param mixed $value Value
      * @return boolean
      */
     public function prepend($value)
@@ -82,7 +82,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
      * Return element of List by index
      * 
      * @param integer $index Index
-     * @return mixin
+     * @return mixed
      */
     public function get($index)
     {
@@ -92,7 +92,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
     /**
      * Set a new value as the element at index position of the List
      * 
-     * @param mixin $value Value
+     * @param mixed $value Value
      * @param integer $index Index
      * @return boolean
      */
@@ -129,7 +129,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
     /**
      * Return and remove the first element of the List
      * 
-     * @return mixin
+     * @return mixed
      */
     public function shift()
     {
@@ -146,7 +146,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
      * Return and remove the first element of the List and block if list empty or not exists
      * 
      * @param $timeout Blocking timeout
-     * @return mixin
+     * @return mixed
      */
     public function shiftBlocking($timeout = 0)
     {
@@ -163,7 +163,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
      * Return and remove the last element of the List
      * 
      * @param string|Rediska_Key_List $pushTo After pop, push value to another list
-     * @return mixin
+     * @return mixed
      */
     public function pop($pushTo = null)
     {
@@ -184,7 +184,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
      * Return and remove the last element of the List and block if list empty or not exists
      * 
      * @param $timeout Blocking timeout
-     * @return mixin
+     * @return mixed
      */
     public function popBlocking($timeout = 0)
     {

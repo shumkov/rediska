@@ -51,7 +51,7 @@ class Rediska_Command_GetFromHash extends Rediska_Command_Abstract
      * Parse response
      *
      * @param array|string $response
-     * @return mixin
+     * @return mixed
      */
     public function parseResponse($response)
     {

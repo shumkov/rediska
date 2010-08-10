@@ -19,7 +19,7 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
     /**
      * Add the specified member to the Set
      * 
-     * @param mixin $value Value
+     * @param mixed $value Value
      * @return boolean
      */
     public function add($value)
@@ -36,7 +36,7 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
     /**
      * Remove the specified member from the Set
      * 
-     * @param mixin $value Value
+     * @param mixed $value Value
      * @return boolean
      */
     public function remove($value)
@@ -54,7 +54,7 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
      * Move the specified member from one Set to another atomically
      * 
      * @param string|Rediska_Key_Set $set   Set key name or object
-     * @param mixin                  $value Value
+     * @param mixed                  $value Value
      * @return boolean
      */
     public function move($set, $value)
@@ -79,7 +79,7 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
     /**
      * Test if the specified value is a member of the Set
      * 
-     * @prarm mixin  $value Value
+     * @prarm mixed  $value Value
      * @return boolean
      */
     public function exists($value)

@@ -36,7 +36,7 @@ class Rediska_Key extends Rediska_Key_Abstract
     /**
      * Get key value
      * 
-     * @return mixin
+     * @return mixed
      */
     public function getValue()
     {

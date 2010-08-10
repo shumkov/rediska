@@ -22,7 +22,7 @@ class Rediska_Command_SetAndExpire extends Rediska_Command_Abstract
      * Create command
      *
      * @param string  $key   Key name
-     * @param mixin   $value Value
+     * @param mixed   $value Value
      * @param integer $time  Expire time
      * @return Rediska_Connection_Exec
      */

@@ -21,7 +21,7 @@ class Rediska_Serializer
     /**
      * Constuctor
      * 
-     * @param mixin $adapter Adapter
+     * @param mixed $adapter Adapter
      */
     public function __construct($adapter)
     {
@@ -69,7 +69,7 @@ class Rediska_Serializer
     /**
      * Serialize value
      * 
-     * @param mixin $value Value for serialize
+     * @param mixed $value Value for serialize
      * @return string
      */
     public function serialize($value)
@@ -85,7 +85,7 @@ class Rediska_Serializer
      * Unserailize value
      * 
      * @param string $value Serialized value
-     * @return mixin
+     * @return mixed
      */
     public function unserialize($value)
     {

@@ -17,7 +17,7 @@ class Rediska_Command_Set extends Rediska_Command_Abstract
      * Create command
      *
      * @param string|array $keyOrData                  Key name or array with key => value.
-     * @param mixin        $valueOrOverwrite[optional] Value or overwrite property for array of values. For default true.
+     * @param mixed        $valueOrOverwrite[optional] Value or overwrite property for array of values. For default true.
      * @param boolean      $overwrite[optional]        Overwrite for single value (if false don't set and return false if key already exist). For default true.
      * @return Rediska_Connection_Exec
      */

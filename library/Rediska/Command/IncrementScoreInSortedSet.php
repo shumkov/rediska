@@ -22,7 +22,7 @@ class Rediska_Command_IncrementScoreInSortedSet extends Rediska_Command_Abstract
      * Create command
      *
      * @param string        $key   Key name
-     * @param mixin         $value Member
+     * @param mixed         $value Member
      * @param integer|float $score Score to increment
      * @return Rediska_Connection_Exec
      */

@@ -15,7 +15,7 @@ class Rediska_Command_SetToList extends Rediska_Command_Abstract
      * Create command
      *
      * @param string  $key   Key name
-     * @param mixin   $value Value
+     * @param mixed   $value Value
      * @param integer $index Index
      * @return Rediska_Connection_Exec
      */

@@ -22,7 +22,7 @@ class Rediska_Command_IncrementInHash extends Rediska_Command_Abstract
      * Create command
      *
      * @param string $key              Key name
-     * @param mixin  $field            Field
+     * @param mixed  $field            Field
      * @param number $amount[optional] Increment amount. One for default
      * @return Rediska_Connection_Exec
      */

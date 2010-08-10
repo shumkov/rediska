@@ -71,7 +71,7 @@ class Rediska_Command_PopFromListBlocking extends Rediska_Command_Abstract
      * Parse response
      * 
      * @param string|array $response
-     * @return mixin
+     * @return mixed
      */
     public function parseResponse($response)
     {

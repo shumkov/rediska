@@ -35,7 +35,7 @@ class Rediska_Connection_Specified
      * 
      * @param $name
      * @param $args
-     * @return mixin
+     * @return mixed
      */
     public function __call($name, $args)
     {

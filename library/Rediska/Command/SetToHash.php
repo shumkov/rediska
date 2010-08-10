@@ -23,7 +23,7 @@ class Rediska_Command_SetToHash extends Rediska_Command_Abstract
      *
      * @param string        $key          Key name
      * @param array|string  $fieldOrData  Field or array of many fields and values: field => value
-     * @param mixin         $value        Value for single field
+     * @param mixed         $value        Value for single field
      * @param boolean       $overwrite    Overwrite for single field (if false don't set and return false if key already exist). For default true.
      * @return Rediska_Connection_Exec
      */

@@ -15,7 +15,7 @@ class Rediska_Command_AddToSet extends Rediska_Command_Abstract
      * Create command
      *
      * @param string $key    Key name
-     * @param mixin  $member Member
+     * @param mixed  $member Member
      * @return Rediska_Connection_Exec
      */
     public function create($key, $member)

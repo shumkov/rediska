@@ -15,7 +15,7 @@ class Rediska_Command_AppendToList extends Rediska_Command_Abstract
      * Create command
      *
      * @param string $key     Key name
-     * @param mixin  $value   Element value
+     * @param mixed  $value   Element value
      * @return Rediska_Connection_Exec
      */
     public function create($key, $value)

@@ -22,7 +22,7 @@ class Rediska_Command_AddToSortedSet extends Rediska_Command_Abstract
      * Create command
      *
      * @param string $key    Key name
-     * @param mixin  $member Member
+     * @param mixed  $member Member
      * @param number $score  Score of member
      * @return Rediska_Connection_Exec
      */

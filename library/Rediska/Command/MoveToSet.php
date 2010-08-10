@@ -18,7 +18,7 @@ class Rediska_Command_MoveToSet extends Rediska_Command_Abstract
      *
      * @param string $fromKey From key name
      * @param string $toKey   To key name
-     * @param mixin  $member  Member
+     * @param mixed  $member  Member
      * @return Rediska_Connection_Exec
      */
     public function create($fromKey, $toKey, $member)

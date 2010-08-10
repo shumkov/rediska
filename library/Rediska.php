@@ -437,7 +437,7 @@ class Rediska extends Rediska_Options
      * Subscribe to PubSub channel or channels
      * 
      * @var string|array $channelOrChannels
-     * @var mixin        $timeout
+     * @var mixed        $timeout
      * @return Rediska_PubSub_Channel
      */
     public function subscribe($channelOrChannels, $timeout = null)
@@ -563,7 +563,7 @@ class Rediska extends Rediska_Options
      * 
      * @param string $name Command name
      * @param array $args  Command arguments
-     * @return mixin
+     * @return mixed
      */
     public function __call($name, $args)
     {
@@ -636,7 +636,7 @@ class Rediska extends Rediska_Options
     /**
      * Set Rediska serializer adapter
      * 
-     * @param mixin $serializer
+     * @param mixed $serializer
      * @return Rediska
      */
     public function setSerializerAdapter($adapter)

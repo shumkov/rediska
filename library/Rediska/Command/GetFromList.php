@@ -35,7 +35,7 @@ class Rediska_Command_GetFromList extends Rediska_Command_Abstract
      * Parse response
      *
      * @param string $response
-     * @return mixin
+     * @return mixed
      */
     public function parseResponse($response)
     {

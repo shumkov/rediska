@@ -83,7 +83,7 @@ abstract class Rediska_Options
      * 
      * @throws Rediska_Exception 
      * @param string $name Name of option
-     * @return mixin
+     * @return mixed
      */
     public function getOption($name)
     {

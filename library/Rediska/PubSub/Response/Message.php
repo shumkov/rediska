@@ -14,7 +14,7 @@ class Rediska_PubSub_Response_Message extends Rediska_PubSub_Response_Abstract
     /**
      * Message
      * 
-     * @var mixin
+     * @var mixed
      */
     protected $_message;
 
@@ -23,7 +23,7 @@ class Rediska_PubSub_Response_Message extends Rediska_PubSub_Response_Abstract
      * 
      * @param Rediska_Connection $connection
      * @param string             $channel
-     * @param mixin              $message
+     * @param mixed              $message
      */
     public function __construct(Rediska_Connection $connection, $channel, $message)
     {
@@ -35,7 +35,7 @@ class Rediska_PubSub_Response_Message extends Rediska_PubSub_Response_Abstract
     /**
      * Get message
      * 
-     * @return mixin
+     * @return mixed
      */
     public function getMessage()
     {

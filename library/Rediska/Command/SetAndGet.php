@@ -15,7 +15,7 @@ class Rediska_Command_SetAndGet extends Rediska_Command_Abstract
      * Create command
      *
      * @param string $key   Key name
-     * @param mixin  $value Value
+     * @param mixed  $value Value
      * @return Rediska_Connection_Exec
      */
     public function create($key, $value)
@@ -33,7 +33,7 @@ class Rediska_Command_SetAndGet extends Rediska_Command_Abstract
      * Parse response
      *
      * @param string $response
-     * @return mixin
+     * @return mixed
      */
     public function parseResponse($response)
     {

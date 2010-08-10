@@ -15,7 +15,7 @@ class Rediska_Command_Publish extends Rediska_Command_Abstract
      * Create command
      *
      * @param array|string $channelOrChannels Channel or array of channels
-     * @param mixin        $message           Message
+     * @param mixed        $message           Message
      * @return Rediska_Connection_Exec
      */
     public function create($channelOrChannels, $message)

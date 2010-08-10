@@ -22,7 +22,7 @@ class Rediska_Command_GetScoreFromSortedSet extends Rediska_Command_Abstract
      * Create command
      *
      * @param string $key    Key name
-     * @param mixin  $member Member value
+     * @param mixed  $member Member value
      * @return Rediska_Connection_Exec
      */
     public function create($key, $member)

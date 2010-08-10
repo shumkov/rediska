@@ -34,7 +34,7 @@ class Rediska_Key_Hash extends Rediska_Key_Abstract implements IteratorAggregate
      * Set value to a hash field or fields
      *
      * @param array|string  $fieldOrData  Field or array of many fields and values: field => value
-     * @param mixin         $value        Value for single field
+     * @param mixed         $value        Value for single field
      * @param boolean       $overwrite    Overwrite for single field (if false don't set and return false if key already exist). For default true.
      * @return boolean
      */
@@ -53,7 +53,7 @@ class Rediska_Key_Hash extends Rediska_Key_Abstract implements IteratorAggregate
      * Magic for set a field
      *
      * @param string $field
-     * @param mixin  $value
+     * @param mixed  $value
      * @return boolean
      */
     public function  __set($field, $value)
@@ -67,7 +67,7 @@ class Rediska_Key_Hash extends Rediska_Key_Abstract implements IteratorAggregate
      * Array magic for set a field
      *
      * @param string $field
-     * @param mixin $value
+     * @param mixed $value
      * @return boolean
      */
     public function offsetSet($field, $value)
@@ -86,7 +86,7 @@ class Rediska_Key_Hash extends Rediska_Key_Abstract implements IteratorAggregate
      *
      * @param string       $name          Key name
      * @param string|array $fieldOrFields Field or fields
-     * @return mixin
+     * @return mixed
      */
     public function get($fieldOrFields)
     {
@@ -97,7 +97,7 @@ class Rediska_Key_Hash extends Rediska_Key_Abstract implements IteratorAggregate
      * Magic for get a field
      *
      * @param string $field
-     * @return mixin
+     * @return mixed
      */
     public function  __get($field)
     {
@@ -108,7 +108,7 @@ class Rediska_Key_Hash extends Rediska_Key_Abstract implements IteratorAggregate
      * Array magic for get a field
      *
      * @param string $name
-     * @return mixin
+     * @return mixed
      */
     public function offsetGet($field)
     {
@@ -118,7 +118,7 @@ class Rediska_Key_Hash extends Rediska_Key_Abstract implements IteratorAggregate
     /**
      * Increment field value in hash
      *
-     * @param mixin  $field            Field
+     * @param mixed  $field            Field
      * @param number $amount[optional] Increment amount. Default: 1
      * @return integer
      */
@@ -136,7 +136,7 @@ class Rediska_Key_Hash extends Rediska_Key_Abstract implements IteratorAggregate
     /**
      * Test if field is present in hash
      *
-     * @prarm mixin  $field Field
+     * @prarm mixed  $field Field
      * @return boolean
      */
     public function exists($field)
@@ -169,7 +169,7 @@ class Rediska_Key_Hash extends Rediska_Key_Abstract implements IteratorAggregate
     /**
      * Remove field from hash
      *
-     * @param mixin  $field Field
+     * @param mixed  $field Field
      * @return boolean
      */
     public function remove($field)

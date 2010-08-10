@@ -71,7 +71,7 @@ class Rediska_Command_Get extends Rediska_Command_Abstract
      * Parse responses
      *
      * @param array $responses
-     * @return mixin
+     * @return mixed
      */
     public function parseResponses($responses)
     {
