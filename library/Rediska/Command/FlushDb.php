@@ -3,9 +3,6 @@
 /**
  * Remove all the keys of the currently selected DB
  * 
- * @param boolean $all Remove from all Db
- * @return boolean
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -14,6 +11,12 @@
  */
 class Rediska_Command_FlushDb extends Rediska_Command_Abstract
 {
+    /**
+     * Create command
+     *
+     * @param boolean[optional] $all Remove from all Db. For default is false.
+     * @return Rediska_Connection_Exec
+     */
     public function create($all = false) 
     {
         if ($all) {
@@ -30,6 +33,12 @@ class Rediska_Command_FlushDb extends Rediska_Command_Abstract
         return $commands;
     }
 
+    /**
+     * Parse response
+     *
+     * @param string $response
+     * @return boolean
+     */
     public function parseResponse($response)
     {
         return true;

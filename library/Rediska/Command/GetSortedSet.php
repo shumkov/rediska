@@ -3,14 +3,6 @@
 /**
  * Get all the members of the Sorted Set value at key
  * 
- * @throws Rediska_Command_Exception
- * @param string  $name        Key name
- * @param integer $withScores  Return values with scores
- * @param integer $start       Start index
- * @param integer $end         End index
- * @param boolean $revert      Revert elements (not used in sorting)
- * @return array
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -19,9 +11,24 @@
  */
 class Rediska_Command_GetSortedSet extends Rediska_Command_Abstract
 {
+    /**
+     * Supported version
+     *
+     * @var string
+     */
     protected $_version = '1.1';
 
-    public function create($name, $withScores = false, $start = 0, $end = -1, $revert = false)
+    /**
+     * Create command
+     *
+     * @param string  $key                  Key name
+     * @param integer $withScores[optional] Return values with scores. For default is false.
+     * @param integer $start[optional]      Start index. For default is begin of set.
+     * @param integer $end[optional]        End index. For default is end of set.
+     * @param boolean $revert[optional]     Revert elements (not used in sorting). For default is false
+     * @return Rediska_Connection_Exec
+     */
+    public function create($key, $withScores = false, $start = 0, $end = -1, $revert = false)
     {
         if (!is_integer($start)) {
             throw new Rediska_Command_Exception("Start must be integer");
@@ -30,10 +37,10 @@ class Rediska_Command_GetSortedSet extends Rediska_Command_Abstract
             throw new Rediska_Command_Exception("End must be integer");
         }
 
-        $connection = $this->_rediska->getConnectionByKeyName($name);
+        $connection = $this->_rediska->getConnectionByKeyName($key);
 
         $command = array($revert ? 'ZREVRANGE' : 'ZRANGE',
-                         "{$this->_rediska->getOption('namespace')}$name",
+                         "{$this->_rediska->getOption('namespace')}$key",
                          $start,
                          $end);
 
@@ -44,6 +51,12 @@ class Rediska_Command_GetSortedSet extends Rediska_Command_Abstract
         return new Rediska_Connection_Exec($connection, $command);
     }
 
+    /**
+     * Parse response
+     *
+     * @param array $response
+     * @return array
+     */
     public function parseResponse($response)
     {
         $values = $response;

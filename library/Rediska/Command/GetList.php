@@ -5,9 +5,7 @@
  * Get List by key
  * 
  * @throws Rediska_Command_Exception
- * @param string  $name  Key name
- * @param integer $start Start index
- * @param integer $end   End index
+
  * @return array
  * 
  * @author Ivan Shumkov
@@ -18,7 +16,15 @@
  */
 class Rediska_Command_GetList extends Rediska_Command_Abstract
 {
-    public function create($name, $start = 0, $end = -1)
+    /**
+     * Create command
+     *
+     * @param string  $key             Key name
+     * @param integer $start[optional] Start index. For default is begin of list
+     * @param integer $end[optional]   End index. For default is end of list
+     * @return Rediska_Connection_Exec
+     */
+    public function create($key, $start = 0, $end = -1)
     {
         if (!is_integer($start)) {
             throw new Rediska_Command_Exception("Start must be integer");
@@ -27,13 +33,19 @@ class Rediska_Command_GetList extends Rediska_Command_Abstract
             throw new Rediska_Command_Exception("End must be integer");
         }
 
-        $connection = $this->_rediska->getConnectionByKeyName($name);
+        $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        $command = "LRANGE {$this->_rediska->getOption('namespace')}$name $start $end";
+        $command = "LRANGE {$this->_rediska->getOption('namespace')}$key $start $end";
 
         return new Rediska_Connection_Exec($connection, $command);
     }
 
+    /**
+     * Parse responses
+     *
+     * @param array $response
+     * @return array
+     */
     public function parseResponse($response)
     {
         return array_map(array($this->_rediska->getSerializer(), 'unserialize'), $response);

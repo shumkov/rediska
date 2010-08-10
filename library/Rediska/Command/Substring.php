@@ -3,11 +3,6 @@
 /**
  * Return a subset of the string from offset start to offset end (both offsets are inclusive)
  * 
- * @param $name          Key name
- * @paran $start         Start
- * @param $end[optional] End. If end is omitted, the substring starting from $start until the end of the string will be returned.
- * @return string
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -16,15 +11,19 @@
  */
 class Rediska_Command_Substring extends Rediska_Command_Abstract
 {
-    public function create($name, $start, $end = null)
+    /**
+     * Create command
+     *
+     * @param string            $key   Key name
+     * @param integer           $start Start
+     * @param integer[optional] $end   End. If end is omitted, the substring starting from $start until the end of the string will be returned. For default end of string
+     * @return Rediska_Connection_Exec
+     */
+    public function create($key, $start, $end = -1)
     {
-        if ($end === null) {
-            $end = -1;
-        }
+        $command = array('SUBSTR', $this->_rediska->getOption('namespace') . $key, $start, $end);
 
-        $command = array('SUBSTR', $this->_rediska->getOption('namespace') . $name, $start, $end);
-
-        $connection = $this->_rediska->getConnectionByKeyName($name);
+        $connection = $this->_rediska->getConnectionByKeyName($key);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

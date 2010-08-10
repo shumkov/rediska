@@ -3,8 +3,6 @@
 /**
  * Provide information and statistics about the server
  * 
- * @return array
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -15,6 +13,11 @@ class Rediska_Command_Info extends Rediska_Command_Abstract
 {
     protected $_connections = array();
 
+    /**
+     * Create
+     *
+     * @return array
+     */
     public function create() 
     {
         $command = 'INFO';
@@ -28,6 +31,12 @@ class Rediska_Command_Info extends Rediska_Command_Abstract
         return $commands;
     }
 
+    /**
+     * Parse response
+     * 
+     * @param array $responses
+     * @return array
+     */
     public function parseResponses($responses)
     {
         $info = array();

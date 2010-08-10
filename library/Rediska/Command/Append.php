@@ -3,10 +3,6 @@
 /**
  * Append value to a end of string key
  * 
- * @param $name   Key name
- * @param $value  Value
- * @return string
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -15,11 +11,18 @@
  */
 class Rediska_Command_Append extends Rediska_Command_Abstract
 {
-    public function create($name, $value)
+    /**
+     * Create command
+     *
+     * @param $key    Key name
+     * @param $value  Value
+     * @return Rediska_Connection_Exec
+     */
+    public function create($key, $value)
     {
-        $command = array('APPEND', $this->_rediska->getOption('namespace') . $name, $this->_rediska->getSerializer()->serialize($value));
+        $command = array('APPEND', $this->_rediska->getOption('namespace') . $key, $this->_rediska->getSerializer()->serialize($value));
 
-        $connection = $this->_rediska->getConnectionByKeyName($name);
+        $connection = $this->_rediska->getConnectionByKeyName($key);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

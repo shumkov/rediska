@@ -159,7 +159,7 @@ class Rediska_Transaction
      */
     public function __call($name, $args)
     {
-        if (in_array(strtolower($name), array('on', 'pipeline'))) {
+        if (in_array(strtolower($name), array('on', 'pipeline', 'monitor', 'config', 'subscribe'))) {
             throw new Rediska_Transaction_Exception("You can't use '$name' in transaction");
         }
 

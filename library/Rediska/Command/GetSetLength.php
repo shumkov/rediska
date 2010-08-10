@@ -3,9 +3,6 @@
 /**
  * Return the number of elements (the cardinality) of the Set at key
  * 
- * @param string $name Key name
- * @return integer
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -14,11 +11,17 @@
  */
 class Rediska_Command_GetSetLength extends Rediska_Command_Abstract
 {
-    public function create($name)
+    /**
+     * Create command
+     *
+     * @param string $key Key name
+     * @return Rediska_Connection_Exec
+     */
+    public function create($key)
     {
-        $connection = $this->_rediska->getConnectionByKeyName($name);
+        $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        $command = "SCARD {$this->_rediska->getOption('namespace')}$name";
+        $command = "SCARD {$this->_rediska->getOption('namespace')}$key";
 
         return new Rediska_Connection_Exec($connection, $command);
     }

@@ -3,12 +3,6 @@
 /**
  * Get hash fields and values
  * 
- * @throws Rediska_Command_Exception
- * @param string  $name  Key name
- * @param integer $start Start index
- * @param integer $end   End index
- * @return array
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -17,17 +11,34 @@
  */
 class Rediska_Command_GetHash extends Rediska_Command_Abstract
 {
+    /**
+     * Supported version
+     *
+     * @var string
+     */
     protected $_version = '1.3.10';
 
-    public function create($name)
+    /**
+     * Create command
+     *
+     * @param string $key Key name
+     * @return Rediska_Connection_Exec
+     */
+    public function create($key)
     {
-        $connection = $this->_rediska->getConnectionByKeyName($name);
+        $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        $command = array('HGETALL', $this->_rediska->getOption('namespace') . $name);
+        $command = array('HGETALL', $this->_rediska->getOption('namespace') . $key);
 
         return new Rediska_Connection_Exec($connection, $command);
     }
 
+    /**
+     * Parse response
+     *
+     * @param array $response
+     * @return array
+     */
     public function parseResponse($response)
     {
         $isField = true;

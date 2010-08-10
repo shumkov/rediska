@@ -2,8 +2,6 @@
 
 /**
  * Return the UNIX time stamp of the last successfully saving of the dataset on disk
- *
- * @return array|integer
  * 
  * @author Ivan Shumkov
  * @package Rediska
@@ -14,7 +12,12 @@
 class Rediska_Command_GetLastSaveTime extends Rediska_Command_Abstract
 {
     protected $_connections = array();
-    
+
+    /**
+     * Create command
+     *
+     * @return Rediska_Connection_Exec
+     */
     public function create() 
     {
         $command = "LASTSAVE";
@@ -27,6 +30,12 @@ class Rediska_Command_GetLastSaveTime extends Rediska_Command_Abstract
         return $commands;
     }
 
+    /**
+     * Parse response
+     *
+     * @param array $responses
+     * @return integer|array
+     */
     public function parseResponses($responses)
     {
         $timestamps = array();

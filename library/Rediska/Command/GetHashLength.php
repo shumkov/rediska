@@ -3,9 +3,6 @@
 /**
  * Return the number of fields in hash
  * 
- * @param string $name Key name
- * @return integer
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -14,13 +11,24 @@
  */
 class Rediska_Command_GetHashLength extends Rediska_Command_Abstract
 {
+    /**
+     * Supported version
+     *
+     * @var string
+     */
     protected $_version = '1.3.10';
 
-    public function create($name) 
+    /**
+     * Create command
+     *
+     * @param string $key Key name
+     * @return Rediska_Connection_Exec
+     */
+    public function create($key) 
     {
-        $connection = $this->_rediska->getConnectionByKeyName($name);
+        $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        $command = array('HLEN', $this->_rediska->getOption('namespace') . $name);
+        $command = array('HLEN', $this->_rediska->getOption('namespace') . $key);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

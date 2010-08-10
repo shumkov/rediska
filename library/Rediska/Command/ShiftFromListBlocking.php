@@ -3,10 +3,6 @@
 /**
  * Return and remove the first element of the List at key and block if list is empty or not exists
  * 
- * @param string $nameOrNames Key name or array of names
- * @param string $timeout     Blocking timeout in seconds. Timeout disabled for default.
- * @return mixin
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -15,40 +11,52 @@
  */
 class Rediska_Command_ShiftFromListBlocking extends Rediska_Command_Abstract
 {
+    /**
+     * Supported version
+     *
+     * @var string
+     */
     protected $_version = '1.3.1';
 
-    public function create($nameOrNames, $timeout = 0) 
+    /**
+     * Create command
+     *
+     * @param string $keyOrKeys   Key name or array of names
+     * @param string $timeout     Blocking timeout in seconds. Timeout disabled for default.
+     * @return Rediska_Connection_Exec
+     */
+    public function create($keyOrKeys, $timeout = 0)
     {
-        if (!is_array($nameOrNames)) {
-            $names = array($nameOrNames);
-        } elseif (!empty($nameOrNames)) {
-            $names = $nameOrNames;
+        if (!is_array($keyOrKeys)) {
+            $keys = array($keyOrKeys);
+        } elseif (!empty($keyOrKeys)) {
+            $keys = $keyOrKeys;
         } else {
             throw new Rediska_Command_Exception('Not present keys for shift');
         }
 
         $connections = array();
-        $namesByConnections = array();
-        foreach ($names as $name) {
-            $connection = $this->_rediska->getConnectionByKeyName($name);
+        $keysByConnections = array();
+        foreach ($keys as $key) {
+            $connection = $this->_rediska->getConnectionByKeyName($key);
             $connectionAlias = $connection->getAlias();
             if (!array_key_exists($connectionAlias, $connections)) {
                 $connections[$connectionAlias] = $connection;
-                $namesByConnections[$connectionAlias] = array();
+                $keysByConnections[$connectionAlias] = array();
             }
-            $namesByConnections[$connectionAlias][] = $name;
+            $keysByConnections[$connectionAlias][] = $key;
         }
 
         // TODO: Implement for many connections
-        if (count($namesByConnections) > 1) {
+        if (count($keysByConnections) > 1) {
             throw new Rediska_Command_Exception("Blocking shift until worked only with one connection. Try to use Rediska#on() method for specify it.");
         }
 
         $execs = array();
-        foreach($namesByConnections as $connectionAlias => $names) {
+        foreach($keysByConnections as $connectionAlias => $keys) {
             $command = array('BLPOP');
-            foreach($names as $name) {
-                $command[] = "{$this->_rediska->getOption('namespace')}$name";
+            foreach($keys as $key) {
+                $command[] = $this->_rediska->getOption('namespace') . $key;
             }
             $command[] = $timeout;
 
@@ -58,9 +66,15 @@ class Rediska_Command_ShiftFromListBlocking extends Rediska_Command_Abstract
         return $execs;
     }
 
+    /**
+     * Parse response
+     *
+     * @param array|string $response
+     * @return mixin
+     */
     public function parseResponse($response)
     {
-        if (!is_array($this->nameOrNames) && !empty($response)) {
+        if (!is_array($this->keyOrKeys) && !empty($response)) {
             $result = $this->_rediska->getSerializer()->unserialize($response[1]);
         } else {
             $result = Rediska_Command_Response_ListNameAndValue::factory($this->_rediska, $response);

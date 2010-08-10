@@ -3,8 +3,6 @@
 /**
  * Get the number of keys
  * 
- * @return integer
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -13,6 +11,11 @@
  */
 class Rediska_Command_GetKeysCount extends Rediska_Command_Abstract
 {
+    /**
+     * Create command
+     *
+     * @return Rediska_Connection_Exec
+     */
     public function create()
     {
         $commands = array();
@@ -24,12 +27,14 @@ class Rediska_Command_GetKeysCount extends Rediska_Command_Abstract
         return $commands;
     }
 
+    /**
+     * Parse response
+     *
+     * @param array $responses
+     * @return integer
+     */
     public function parseResponses($responses)
     {
-        $count = 0;
-        foreach($responses as $response) {
-            $count += $response;
-        }
-        return $count;
+        return array_sum($responses);
     }
 }

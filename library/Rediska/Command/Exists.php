@@ -3,9 +3,6 @@
 /**
  * Test if a key exists
  * 
- * @param string $name Key name
- * @return boolean
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -14,15 +11,27 @@
  */
 class Rediska_Command_Exists extends Rediska_Command_Abstract
 {
-    public function create($name) 
+    /**
+     * Create command
+     *
+     * @param string $key Key name
+     * @return Rediska_Connection_Exec
+     */
+    public function create($key)
     {
-        $connection = $this->_rediska->getConnectionByKeyName($name);
+        $connection = $this->_rediska->getConnectionByKeyName($key);
         
-        $command = "EXISTS {$this->_rediska->getOption('namespace')}$name";
+        $command = "EXISTS {$this->_rediska->getOption('namespace')}$key";
         
         return new Rediska_Connection_Exec($connection, $command);
     }
 
+    /**
+     * Parse response
+     *
+     * @param integer $response
+     * @return boolean
+     */
     public function parseResponse($response)
     {
         return (boolean)$response;

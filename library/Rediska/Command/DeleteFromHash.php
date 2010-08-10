@@ -3,8 +3,7 @@
 /**
  * Delete field from hash
  * 
- * @param string $name  Key name
- * @param mixin  $field Field
+
  * @return boolean
  * 
  * @author Ivan Shumkov
@@ -15,17 +14,35 @@
  */
 class Rediska_Command_DeleteFromHash extends Rediska_Command_Abstract
 {
+    /**
+     * Supported version
+     *
+     * @var string
+     */
     protected $_version = '1.3.10';
 
-    public function create($name, $field)
+    /**
+     * Create command
+     *
+     * @param string $key   Key name
+     * @param mixin  $field Field
+     * @return Rediska_Connection_Exec
+     */
+    public function create($key, $field)
     {
-        $connection = $this->_rediska->getConnectionByKeyName($name);
+        $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        $command = array('HDEL', "{$this->_rediska->getOption('namespace')}$name", $field);
+        $command = array('HDEL', "{$this->_rediska->getOption('namespace')}$key", $field);
 
         return new Rediska_Connection_Exec($connection, $command);
     }
 
+    /**
+     * Parse response
+     *
+     * @param string $response
+     * @return boolean
+     */
     public function parseResponse($response)
     {
         return (boolean)$response;

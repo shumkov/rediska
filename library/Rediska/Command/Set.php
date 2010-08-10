@@ -3,11 +3,6 @@
 /**
  * Set value to a key or muliple values to multiple keys
  * 
- * @param string|array $nameOrData       Key name or array with key => value.
- * @param mixed        $valueOrOverwrite Value or overwrite property for array of values. For default true.
- * @param boolean      $overwrite        Overwrite for single value (if false don't set and return false if key already exist). For default true.
- * @return boolean
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -18,13 +13,21 @@ class Rediska_Command_Set extends Rediska_Command_Abstract
 {
     protected $_multiple = false;
 
-    public function create($nameOrData, $valueOrOverwrite = null, $overwrite = true)
+    /**
+     * Create command
+     *
+     * @param string|array $keyOrData                  Key name or array with key => value.
+     * @param mixin        $valueOrOverwrite[optional] Value or overwrite property for array of values. For default true.
+     * @param boolean      $overwrite[optional]        Overwrite for single value (if false don't set and return false if key already exist). For default true.
+     * @return Rediska_Connection_Exec
+     */
+    public function create($keyOrData, $valueOrOverwrite = null, $overwrite = true)
     {
-        if (is_array($nameOrData)) {
+        if (is_array($keyOrData)) {
             $this->_throwExceptionIfNotSupported('1.1');
 
             $this->_multiple = true;
-            $data = $nameOrData;
+            $data = $keyOrData;
             $overwrite = ($valueOrOverwrite === null || $valueOrOverwrite);
 
             if (empty($data)) {
@@ -55,24 +58,31 @@ class Rediska_Command_Set extends Rediska_Command_Abstract
 
             return $commands;
         } else {
-            $name = $nameOrData;
+            $key   = $keyOrData;
             $value = $valueOrOverwrite;
 
-            $connection = $this->_rediska->getConnectionByKeyName($name);
+            $connection = $this->_rediska->getConnectionByKeyName($key);
 
             $value = $this->_rediska->getSerializer()->serialize($value);
-    
+
+            $command = '';
             if ($overwrite) {
                 $command = 'SET';
             } else {
                 $command = 'SETNX';
             }
-            $command .= " {$this->_rediska->getOption('namespace')}$name " . strlen($value) . Rediska::EOL . $value;
+            $command .= " {$this->_rediska->getOption('namespace')}$key " . strlen($value) . Rediska::EOL . $value;
     
             return new Rediska_Connection_Exec($connection, $command);
         }
     }
 
+    /**
+     * Parse responses
+     *
+     * @param array $responses
+     * @return boolean
+     */
     public function parseResponses($responses)
     {
         if ($this->_multiple) {

@@ -14,9 +14,9 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
     const QUEUED = 'QUEUED';
 
     /**
-     * Command version
-     * 
-     * @var $_version string
+     * Supported version
+     *
+     * @var string
      */
     protected $_version = '1.0';
 

@@ -3,9 +3,6 @@
 /**
  * Return the length of the List value at key
  * 
- * @param string $name
- * @return integer
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -14,11 +11,17 @@
  */
 class Rediska_Command_GetListLength extends Rediska_Command_Abstract
 {
-    public function create($name) 
+    /**
+     * Create command
+     *
+     * @param string $key Key name
+     * @return Rediska_Connection_Exec
+     */
+    public function create($key)
     {
-        $connection = $this->_rediska->getConnectionByKeyName($name);
+        $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        $command = "LLEN {$this->_rediska->getOption('namespace')}$name";
+        $command = "LLEN {$this->_rediska->getOption('namespace')}$key";
 
         return new Rediska_Connection_Exec($connection, $command);
     }

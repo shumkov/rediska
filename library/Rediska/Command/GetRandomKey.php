@@ -3,8 +3,6 @@
 /**
  * Return a random key from the key space
  * 
- * @return null|string
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -13,6 +11,11 @@
  */
 class Rediska_Command_GetRandomKey extends Rediska_Command_Abstract
 {
+    /**
+     * Create command
+     *
+     * @return Rediska_Connection_Exec
+     */
     public function create()
     {
         $connections = $this->_rediska->getConnections();
@@ -24,6 +27,12 @@ class Rediska_Command_GetRandomKey extends Rediska_Command_Abstract
         return new Rediska_Connection_Exec($connection, $command);
     }
 
+    /**
+     * Parse response
+     *
+     * @param string $response
+     * @return string|null
+     */
     public function parseResponse($response)
     {
         if ($response == '') {

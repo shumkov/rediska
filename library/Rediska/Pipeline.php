@@ -106,10 +106,14 @@ class Rediska_Pipeline
 
             return $this;
         }
-        
-        // TODO: Add transaction
-        if (strtolower($name) == 'transaction') {
-            throw new Rediska_Exception('Transation in pipeline not implemented yet.');
+
+        // TODO: Implement transaction and config
+        if (in_array(strtolower($name), array('transaction', 'config'))) {
+            throw new Rediska_Exception("$name in pipeline not implemented yet.");
+        }
+
+        if (in_array(strtolower($name), array('monitor', 'subscribe'))) {
+            throw new Rediska_Transaction_Exception("You can't use '$name' in pipeline");
         }
 
         if ($this->_oneTimeConnection) {

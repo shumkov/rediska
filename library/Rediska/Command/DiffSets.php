@@ -3,10 +3,6 @@
 /**
  * Return the difference between the Set stored at key1 and all the Sets key2, ..., keyN
  * 
- * @param array       $names     Array of key names
- * @param string|null $storeName Store union to set with key name
- * @return array|boolean
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@

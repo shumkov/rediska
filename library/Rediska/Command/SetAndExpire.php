@@ -3,11 +3,6 @@
 /**
  * Set + Expire atomic command
  * 
- * @param string|array $name       Key name
- * @param mixed        $value      Value
- * @param boolean      $time     Expire
- * @return boolean
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -16,12 +11,29 @@
  */
 class Rediska_Command_SetAndExpire extends Rediska_Command_Abstract
 {
-    public function create($name, $value, $time)
-    {
-        $connection = $this->_rediska->getConnectionByKeyName($name);
-        $value = $this->_rediska->getSerializer()->serialize($value);
-        $name = $this->_rediska->getOption('namespace') . $name;
+    /**
+     * Supported version
+     *
+     * @var string
+     */
+    protected $_version = '2.0';
 
-        return new Rediska_Connection_Exec($connection, array('SETEX', $name, $time, $value));
+    /**
+     * Create command
+     *
+     * @param string  $key   Key name
+     * @param mixin   $value Value
+     * @param integer $time  Expire time
+     * @return Rediska_Connection_Exec
+     */
+    public function create($key, $value, $time)
+    {
+        $connection = $this->_rediska->getConnectionByKeyName($key);
+
+        $command = array('SETEX',
+                         $this->_rediska->getOption('namespace') . $key,
+                         $time, $this->_rediska->getSerializer()->serialize($value));
+
+        return new Rediska_Connection_Exec($connection, $command);
     }
 }

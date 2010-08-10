@@ -530,6 +530,16 @@ class Rediska extends Rediska_Options
     }
 
     /**
+     * Get commands
+     *
+     * @return array
+     */
+    public static function getCommands()
+    {
+        return self::$_commands;
+    }
+
+    /**
      * Get Rediska Command instance
      * 
      * @throws Rediska_Exception

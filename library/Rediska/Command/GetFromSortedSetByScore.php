@@ -3,15 +3,6 @@
 /**
  * Get members from sorted set by min and max score
  * 
- * @throws Rediska_Command_Exception
- * @param string  $name       Key name
- * @param number  $min        Min score
- * @param number  $max        Max score
- * @param boolean $withScores Get with scores
- * @param integer $limit      Limit
- * @param integer $offset     Offset
- * @return array
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -20,9 +11,25 @@
  */
 class Rediska_Command_GetFromSortedSetByScore extends Rediska_Command_Abstract
 {
+    /**
+     * Supported version
+     *
+     * @var string
+     */
     protected $_version = '1.1';
 
-    public function create($name, $min, $max, $withScores = false, $limit = null, $offset = null)
+    /**
+     * Create command
+     *
+     * @param string            $key        Key name
+     * @param number            $min        Min score
+     * @param number            $max        Max score
+     * @param boolean[optional] $withScores Get with scores. For default is false
+     * @param integer[optional] $limit      Limit. For default is no limit
+     * @param integer[optional] $offset     Offset. For default is no offset
+     * @return Rediska_Connection_Exec
+     */
+    public function create($key, $min, $max, $withScores = false, $limit = null, $offset = null)
     {
         if (!is_null($limit) && !is_integer($limit)) {
             throw new Rediska_Command_Exception("Limit must be integer");
@@ -32,9 +39,9 @@ class Rediska_Command_GetFromSortedSetByScore extends Rediska_Command_Abstract
             throw new Rediska_Command_Exception("Offset must be integer");
         }
 
-        $connection = $this->_rediska->getConnectionByKeyName($name);
+        $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        $command = array('ZRANGEBYSCORE', "{$this->_rediska->getOption('namespace')}$name", $min, $max);
+        $command = array('ZRANGEBYSCORE', $this->_rediska->getOption('namespace') . $key, $min, $max);
 
         if (!is_null($limit)) {
             if (is_null($offset)) {
@@ -54,6 +61,12 @@ class Rediska_Command_GetFromSortedSetByScore extends Rediska_Command_Abstract
         return new Rediska_Connection_Exec($connection, $command);
     }
 
+    /**
+     * Parse response
+     *
+     * @param array $response
+     * @return array
+     */
     public function parseResponse($response)
     {
         $values = $response;

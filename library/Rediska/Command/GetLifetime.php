@@ -3,9 +3,6 @@
 /**
  * Get key lifetime
  * 
- * @param string $name
- * @return integer
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -14,14 +11,26 @@
  */
 class Rediska_Command_GetLifetime extends Rediska_Command_Abstract
 {
-    public function create($name)
+    /**
+     * Create command
+     *
+     * @param string $key Key name
+     * @return Rediska_Connection_Exec
+     */
+    public function create($key)
     {
-        $connection = $this->_rediska->getConnectionByKeyName($name);
-        $command = "TTL {$this->_rediska->getOption('namespace')}$name";
+        $connection = $this->_rediska->getConnectionByKeyName($key);
+        $command = "TTL {$this->_rediska->getOption('namespace')}$key";
 
         return new Rediska_Connection_Exec($connection, $command);
     }
 
+    /**
+     * Parse response
+     *
+     * @param string $response
+     * @return string|null
+     */
     public function parseResponse($response)
     {
         if ($response == -1) {

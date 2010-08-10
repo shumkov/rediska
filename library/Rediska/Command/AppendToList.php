@@ -3,10 +3,6 @@
 /**
  * Append value to the end of List
  * 
- * @param string $name  Key name
- * @param mixin  $value Value
- * @return boolean
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -15,19 +11,21 @@
  */
 class Rediska_Command_AppendToList extends Rediska_Command_Abstract
 {
-    public function create($name, $value)
+    /**
+     * Create command
+     *
+     * @param string $key     Key name
+     * @param mixin  $value   Element value
+     * @return Rediska_Connection_Exec
+     */
+    public function create($key, $value)
     {
-        $connection = $this->_rediska->getConnectionByKeyName($name);
+        $connection = $this->_rediska->getConnectionByKeyName($key);
 
         $value = $this->_rediska->getSerializer()->serialize($value);
 
-        $command = "RPUSH {$this->_rediska->getOption('namespace')}$name " . strlen($value) . Rediska::EOL . $value;
+        $command = "RPUSH {$this->_rediska->getOption('namespace')}$key " . strlen($value) . Rediska::EOL . $value;
 
         return new Rediska_Connection_Exec($connection, $command);
-    }
-
-    public function parseResponse($response)
-    {
-        return $response;
     }
 }

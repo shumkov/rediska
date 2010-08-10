@@ -3,10 +3,6 @@
 /**
  * Return the union between the Sets stored at key1, key2, ..., keyN
  * 
- * @param array       $names     Array of key names
- * @param string|null $storeName Store union to set with key name
- * @return array|boolean
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
