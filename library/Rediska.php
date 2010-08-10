@@ -15,6 +15,79 @@ if (!defined('REDISKA_PATH')) {
  * @version @package_version@
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
+ *
+ * @method mixed quit() quit() Ask the server to silently close the connection.
+ * @method boolean exists() exists(string $key) Test if a key exists
+ * @method mixed delete() delete(string|array $keyOrKeys) Delete a key or keys
+ * @method mixed getType() getType(string $key) Get key type
+ * @method mixed getKeysByPattern() getKeysByPattern(string $pattern) Returns all the keys matching the glob-style pattern
+ * @method string|null getRandomKey() getRandomKey() Return a random key from the key space
+ * @method mixed rename() rename(string $oldKey, string $newKey, boolean[optional] $overwrite) Rename the old key in the new one
+ * @method mixed getKeysCount() getKeysCount() Get the number of keys
+ * @method boolean expire() expire(string $key, integer $secondsOrTimestamp, boolean $isTimestamp) Set a time to live in seconds or timestamp on a key
+ * @method string|null getLifetime() getLifetime(string $key) Get key lifetime
+ * @method mixed selectDb() selectDb(integer $index) Select the DB having the specified index
+ * @method boolean moveToDb() moveToDb(string $key, integer $dbIndex) Move the key from the currently selected DB to the DB having as index dbindex
+ * @method boolean flushDb() flushDb(boolean[optional] $all) Remove all the keys of the currently selected DB
+ * @method mixed set() set(string|array $keyOrData, mixed $valueOrOverwrite, boolean $overwrite) Set value to a key or muliple values to multiple keys
+ * @method mixed setAndGet() setAndGet(string $key, mixed $value) Atomic set value and return old
+ * @method mixed get() get(string|array $keyOrKeys) Get value of key or array of values by array of keys
+ * @method mixed setAndExpire() setAndExpire(string $key, mixed $value, integer $time) Set + Expire atomic command
+ * @method mixed increment() increment(string $key, integer[optional] $amount) Increment the number value of key by integer
+ * @method mixed decrement() decrement(string $key, integer[optional] $amount) Decrement the number value of key by integer
+ * @method mixed substring() substring(string $key, integer $start, integer[optional] $end) Return a subset of the string from offset start to offset end (both offsets are inclusive)
+ * @method mixed append() append($key Key, $value Value) Append value to a end of string key
+ * @method mixed appendToList() appendToList(string $key, mixed $value) Append value to the end of List
+ * @method mixed prependToList() prependToList(string $key, mixed $member) Append value to the head of List
+ * @method mixed getListLength() getListLength(string $key) Return the length of the List value at key
+ * @method array getList() getList(string $key, integer $start, integer $end) Get List by key
+ * @method boolean truncateList() truncateList(string $key, integer $start, integer $end) Trim the list at key to the specified range of elements
+ * @method mixed getFromList() getFromList(string $key, integer $index) Return element of List by index at key
+ * @method boolean setToList() setToList(string $key, mixed $value, integer $index) Set a new value as the element at index position of the List at key
+ * @method mixed deleteFromList() deleteFromList($key Key, $value Element, $count[optional] Limit) Delete element from list by member at key
+ * @method mixed shiftFromList() shiftFromList(string $key) Return and remove the first element of the List at key
+ * @method mixed shiftFromListBlocking() shiftFromListBlocking(string $keyOrKeys, string $timeout) Return and remove the first element of the List at key and block if list is empty or not exists
+ * @method mixed popFromList() popFromList(string $name, string[optional] $pushToName) Return and remove the last element of the List at key
+ * @method mixed popFromListBlocking() popFromListBlocking(string|array $keyOrKeys, integer $timeout) Return and remove the last element of the List at key and block if list is empty or not exists
+ * @method boolean addToSet() addToSet(string $key, mixed $member) Add the specified member to the Set value at key
+ * @method boolean deleteFromSet() deleteFromSet(string $key, mixed $member) Remove the specified member from the Set value at key
+ * @method mixed getRandomFromSet() getRandomFromSet(string $key, boolean[optional] $pop) Get random element from the Set value at key
+ * @method mixed getSetLength() getSetLength(string $key) Return the number of elements (the cardinality) of the Set at key
+ * @method boolean existsInSet() existsInSet(string $key) Test if the specified value is a member of the Set at key
+ * @method mixed intersectSets() intersectSets(array $keys, string[optional] $storeKey) Return the intersection between the Sets stored at key1, key2, ..., keyN
+ * @method mixed unionSets() unionSets(array $keys, string[optional] $storeKey) Return the union between the Sets stored at key1, key2, ..., keyN
+ * @method mixed diffSets() diffSets(array $keys, string[optional] $storeKey) Return the difference between the Set stored at key1 and all the Sets key2, ..., keyN
+ * @method array getSet() getSet(string $key) Return all the members of the Set value at key
+ * @method mixed moveToSet() moveToSet(string $fromKey, string $toKey, mixed $member) Move the specified member from one Set to another atomically
+ * @method boolean addToSortedSet() addToSortedSet(string $key, mixed $member, number $score) Add member to sorted set
+ * @method boolean deleteFromSortedSet() deleteFromSortedSet(string $key, mixed $member) Delete the specified member from the sorted set by value
+ * @method array getSortedSet() getSortedSet(string $key, integer $withScores, integer $start, integer $end, boolean $revert) Get all the members of the Sorted Set value at key
+ * @method array getFromSortedSetByScore() getFromSortedSetByScore(string $key, number $min, number $max, boolean[optional] $withScores, integer[optional] $limit, integer[optional] $offset) Get members from sorted set by min and max score
+ * @method mixed getSortedSetLength() getSortedSetLength(string $key) Get length of Sorted Set
+ * @method mixed incrementScoreInSortedSet() incrementScoreInSortedSet(string $key, mixed $value, integer|float $score) Increment score of sorted set element
+ * @method mixed deleteFromSortedSetByScore() deleteFromSortedSetByScore(string $key, numeric $min, numeric $max) Remove all the elements in the sorted set at key with a score between min and max (including elements with score equal to min or max).
+ * @method mixed deleteFromSortedSetByRank() deleteFromSortedSetByRank(string $key, numeric $start, numeric $end) Remove all elements in the sorted set at key with rank between start  and end
+ * @method mixed getScoreFromSortedSet() getScoreFromSortedSet(string $key, mixed $member) Get member score from Sorted Set
+ * @method mixed getRankFromSortedSet() getRankFromSortedSet(string $key, integer $member, boolean $revert) Get rank of member from sorted set
+ * @method mixed unionSortedSets() unionSortedSets(array $keys, string $storeKey, string $aggregation) Store to key union between the sorted sets
+ * @method mixed intersectSortedSets() intersectSortedSets(array $keys, string $storeKey, string $aggregation) Store to key intersection between sorted sets
+ * @method boolean setToHash() setToHash(string $key, array|string $fieldOrData, mixed $value, boolean $overwrite) Set value to a hash field or fields
+ * @method mixed getFromHash() getFromHash(string $key, string|array $fieldOrFields) Get value from hash field or fields
+ * @method mixed incrementInHash() incrementInHash(string $key, mixed $field, number $amount) Increment field value in hash
+ * @method boolean existsInHash() existsInHash(string $key, mixed $field) Test if field is present in hash
+ * @method boolean deleteFromHash() deleteFromHash(string $key, mixed $field) Delete field from hash
+ * @method mixed getHashLength() getHashLength(string $key) Return the number of fields in hash
+ * @method array getHash() getHash(string $key) Get hash fields and values
+ * @method mixed getHashFields() getHashFields(string $key) Get hash fields
+ * @method array getHashValues() getHashValues(string $key) Get hash values
+ * @method array sort() sort(string $key, string|array $value) Get sorted elements contained in the List, Set, or Sorted Set value at key.
+ * @method mixed publish() publish(array|string $channelOrChannels, mixed $message) Publish message to pubsub channel
+ * @method mixed save() save(boolean[optional] $background) Save the DB on disk
+ * @method mixed getLastSaveTime() getLastSaveTime() Return the UNIX time stamp of the last successfully saving of the dataset on disk
+ * @method mixed shutdown() shutdown(boolean $background) Save the DB on disk, then shutdown the server
+ * @method mixed rewriteAppendOnlyFile() rewriteAppendOnlyFile() Rewrite the Append Only File in background when it gets too big
+ * @method mixed info() info() Provide information and statistics about the server
+ * @method mixed slaveOf() slaveOf(string|Rediska_Connection|false $aliasOrConnection) Change the replication settings of a slave on the fly
  */
 class Rediska extends Rediska_Options
 {

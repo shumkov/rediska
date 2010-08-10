@@ -3,6 +3,9 @@
 // Update Rediska method tags:
 // @method int borp() borp(int $int1, int $int2) multiply two integers
 
+define('REDISKA', __DIR__ . '/../library/Rediska.php');
+
+
 function getReturn($classReflection, $method)
 {
     $createReflection = $classReflection->getMethod($method);
@@ -12,18 +15,19 @@ function getReturn($classReflection, $method)
     return $matches[1];
 }
 
-require_once __DIR__ . '/../library/Rediska.php';
+require_once REDISKA;
 $classReflection = new ReflectionClass('Rediska');
 $dockBlock = $classReflection->getDocComment();
 $methodsStart = strpos($dockBlock, '@method');
 if ($methodsStart !== false) {
-    $newDockBlock = substr($dockBlock, 0, $methodsStart - 5);
+    $newDockBlock = substr($dockBlock, 0, $methodsStart - 4);
 } else {
     $newDockBlock = substr($dockBlock, 0, -1);
 }
 
 $newDockBlock .= "\n";
 
+$count = 0;
 foreach(Rediska::getCommands() as $name => $class) {
     // Get name
     $name = lcfirst(substr($class, 16));
@@ -55,7 +59,14 @@ foreach(Rediska::getCommands() as $name => $class) {
     }
 
     $newDockBlock .= " * @method $return $name() $name($params) $description\n";
+
+	$count++;
 }
 
+$newDockBlock .= ' */';
 
-print $newDockBlock;
+$rediska = file_get_contents(REDISKA);
+$newRediska = str_replace($dockBlock, $newDockBlock, $rediska);
+file_put_contents(REDISKA, $newRediska);
+
+print "$count tags added.\n";
