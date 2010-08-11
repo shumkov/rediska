@@ -1,5 +1,8 @@
 <?php
 
+// Require Rediska
+require_once '../Rediska.php';
+
 /**
  * Rediska monitor
  *

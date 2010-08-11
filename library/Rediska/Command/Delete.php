@@ -3,9 +3,6 @@
 /**
  * Delete a key or keys
  * 
- * @param string|array 
- * @return integer
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@

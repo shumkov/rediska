@@ -1,10 +1,8 @@
 <?php
 
-if (!defined('REDISKA_PATH')) {
-    define('REDISKA_PATH', dirname(__FILE__));
-    require_once REDISKA_PATH . '/Rediska/Options.php';
-    require_once REDISKA_PATH . '/Rediska/Connection.php';
-}
+// Register autoloader
+require_once dirname(__FILE__) . '/Rediska/Autoloader.php';
+Rediska_Autoloader::register();
 
 /**
  * Rediska (radish on russian) - PHP client 
@@ -15,79 +13,6 @@ if (!defined('REDISKA_PATH')) {
  * @version @package_version@
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
- *
- * @method mixed quit() quit() Ask the server to silently close the connection.
- * @method boolean exists() exists(string $key) Test if a key exists
- * @method mixed delete() delete(string|array $keyOrKeys) Delete a key or keys
- * @method mixed getType() getType(string $key) Get key type
- * @method mixed getKeysByPattern() getKeysByPattern(string $pattern) Returns all the keys matching the glob-style pattern
- * @method string|null getRandomKey() getRandomKey() Return a random key from the key space
- * @method mixed rename() rename(string $oldKey, string $newKey, boolean[optional] $overwrite) Rename the old key in the new one
- * @method mixed getKeysCount() getKeysCount() Get the number of keys
- * @method boolean expire() expire(string $key, integer $secondsOrTimestamp, boolean $isTimestamp) Set a time to live in seconds or timestamp on a key
- * @method string|null getLifetime() getLifetime(string $key) Get key lifetime
- * @method mixed selectDb() selectDb(integer $index) Select the DB having the specified index
- * @method boolean moveToDb() moveToDb(string $key, integer $dbIndex) Move the key from the currently selected DB to the DB having as index dbindex
- * @method boolean flushDb() flushDb(boolean[optional] $all) Remove all the keys of the currently selected DB
- * @method mixed set() set(string|array $keyOrData, mixed $valueOrOverwrite, boolean $overwrite) Set value to a key or muliple values to multiple keys
- * @method mixed setAndGet() setAndGet(string $key, mixed $value) Atomic set value and return old
- * @method mixed get() get(string|array $keyOrKeys) Get value of key or array of values by array of keys
- * @method mixed setAndExpire() setAndExpire(string $key, mixed $value, integer $time) Set + Expire atomic command
- * @method mixed increment() increment(string $key, integer[optional] $amount) Increment the number value of key by integer
- * @method mixed decrement() decrement(string $key, integer[optional] $amount) Decrement the number value of key by integer
- * @method mixed substring() substring(string $key, integer $start, integer[optional] $end) Return a subset of the string from offset start to offset end (both offsets are inclusive)
- * @method mixed append() append($key Key, $value Value) Append value to a end of string key
- * @method mixed appendToList() appendToList(string $key, mixed $value) Append value to the end of List
- * @method mixed prependToList() prependToList(string $key, mixed $member) Append value to the head of List
- * @method mixed getListLength() getListLength(string $key) Return the length of the List value at key
- * @method array getList() getList(string $key, integer $start, integer $end) Get List by key
- * @method boolean truncateList() truncateList(string $key, integer $start, integer $end) Trim the list at key to the specified range of elements
- * @method mixed getFromList() getFromList(string $key, integer $index) Return element of List by index at key
- * @method boolean setToList() setToList(string $key, mixed $value, integer $index) Set a new value as the element at index position of the List at key
- * @method mixed deleteFromList() deleteFromList($key Key, $value Element, $count[optional] Limit) Delete element from list by member at key
- * @method mixed shiftFromList() shiftFromList(string $key) Return and remove the first element of the List at key
- * @method mixed shiftFromListBlocking() shiftFromListBlocking(string $keyOrKeys, string $timeout) Return and remove the first element of the List at key and block if list is empty or not exists
- * @method mixed popFromList() popFromList(string $name, string[optional] $pushToName) Return and remove the last element of the List at key
- * @method mixed popFromListBlocking() popFromListBlocking(string|array $keyOrKeys, integer $timeout) Return and remove the last element of the List at key and block if list is empty or not exists
- * @method boolean addToSet() addToSet(string $key, mixed $member) Add the specified member to the Set value at key
- * @method boolean deleteFromSet() deleteFromSet(string $key, mixed $member) Remove the specified member from the Set value at key
- * @method mixed getRandomFromSet() getRandomFromSet(string $key, boolean[optional] $pop) Get random element from the Set value at key
- * @method mixed getSetLength() getSetLength(string $key) Return the number of elements (the cardinality) of the Set at key
- * @method boolean existsInSet() existsInSet(string $key) Test if the specified value is a member of the Set at key
- * @method mixed intersectSets() intersectSets(array $keys, string[optional] $storeKey) Return the intersection between the Sets stored at key1, key2, ..., keyN
- * @method mixed unionSets() unionSets(array $keys, string[optional] $storeKey) Return the union between the Sets stored at key1, key2, ..., keyN
- * @method mixed diffSets() diffSets(array $keys, string[optional] $storeKey) Return the difference between the Set stored at key1 and all the Sets key2, ..., keyN
- * @method array getSet() getSet(string $key) Return all the members of the Set value at key
- * @method mixed moveToSet() moveToSet(string $fromKey, string $toKey, mixed $member) Move the specified member from one Set to another atomically
- * @method boolean addToSortedSet() addToSortedSet(string $key, mixed $member, number $score) Add member to sorted set
- * @method boolean deleteFromSortedSet() deleteFromSortedSet(string $key, mixed $member) Delete the specified member from the sorted set by value
- * @method array getSortedSet() getSortedSet(string $key, integer $withScores, integer $start, integer $end, boolean $revert) Get all the members of the Sorted Set value at key
- * @method array getFromSortedSetByScore() getFromSortedSetByScore(string $key, number $min, number $max, boolean[optional] $withScores, integer[optional] $limit, integer[optional] $offset) Get members from sorted set by min and max score
- * @method mixed getSortedSetLength() getSortedSetLength(string $key) Get length of Sorted Set
- * @method mixed incrementScoreInSortedSet() incrementScoreInSortedSet(string $key, mixed $value, integer|float $score) Increment score of sorted set element
- * @method mixed deleteFromSortedSetByScore() deleteFromSortedSetByScore(string $key, numeric $min, numeric $max) Remove all the elements in the sorted set at key with a score between min and max (including elements with score equal to min or max).
- * @method mixed deleteFromSortedSetByRank() deleteFromSortedSetByRank(string $key, numeric $start, numeric $end) Remove all elements in the sorted set at key with rank between start  and end
- * @method mixed getScoreFromSortedSet() getScoreFromSortedSet(string $key, mixed $member) Get member score from Sorted Set
- * @method mixed getRankFromSortedSet() getRankFromSortedSet(string $key, integer $member, boolean $revert) Get rank of member from sorted set
- * @method mixed unionSortedSets() unionSortedSets(array $keys, string $storeKey, string $aggregation) Store to key union between the sorted sets
- * @method mixed intersectSortedSets() intersectSortedSets(array $keys, string $storeKey, string $aggregation) Store to key intersection between sorted sets
- * @method boolean setToHash() setToHash(string $key, array|string $fieldOrData, mixed $value, boolean $overwrite) Set value to a hash field or fields
- * @method mixed getFromHash() getFromHash(string $key, string|array $fieldOrFields) Get value from hash field or fields
- * @method mixed incrementInHash() incrementInHash(string $key, mixed $field, number $amount) Increment field value in hash
- * @method boolean existsInHash() existsInHash(string $key, mixed $field) Test if field is present in hash
- * @method boolean deleteFromHash() deleteFromHash(string $key, mixed $field) Delete field from hash
- * @method mixed getHashLength() getHashLength(string $key) Return the number of fields in hash
- * @method array getHash() getHash(string $key) Get hash fields and values
- * @method mixed getHashFields() getHashFields(string $key) Get hash fields
- * @method array getHashValues() getHashValues(string $key) Get hash values
- * @method array sort() sort(string $key, string|array $value) Get sorted elements contained in the List, Set, or Sorted Set value at key.
- * @method mixed publish() publish(array|string $channelOrChannels, mixed $message) Publish message to pubsub channel
- * @method mixed save() save(boolean[optional] $background) Save the DB on disk
- * @method mixed getLastSaveTime() getLastSaveTime() Return the UNIX time stamp of the last successfully saving of the dataset on disk
- * @method mixed shutdown() shutdown(boolean $background) Save the DB on disk, then shutdown the server
- * @method mixed rewriteAppendOnlyFile() rewriteAppendOnlyFile() Rewrite the Append Only File in background when it gets too big
- * @method mixed info() info() Provide information and statistics about the server
- * @method mixed slaveOf() slaveOf(string|Rediska_Connection|false $aliasOrConnection) Change the replication settings of a slave on the fly
  */
 class Rediska extends Rediska_Options
 {
@@ -113,13 +38,6 @@ class Rediska extends Rediska_Options
     protected static $_defaultInstance;
 
     /**
-     * Is registered Rediska autoload
-     * 
-     * @var boolean
-     */
-    protected static $_autoloadRegistered;
-
-    /**
      * Connections
      * 
      * @var array
@@ -132,107 +50,6 @@ class Rediska extends Rediska_Options
      * @var Rediska_Connection_Specified
      */
     protected $_specifiedConnection;
-
-    /**
-     * Redis commands
-     * 
-     * @var array
-     */
-    protected static $_commands = array(
-        // Connection handling
-        'quit' => 'Rediska_Command_Quit',
-
-        // Commands operating on all value types
-        'exists'           => 'Rediska_Command_Exists',
-        'delete'           => 'Rediska_Command_Delete',
-        'gettype'          => 'Rediska_Command_GetType',
-        'getkeysbypattern' => 'Rediska_Command_GetKeysByPattern',
-        'getrandomkey'     => 'Rediska_Command_GetRandomKey',
-        'rename'           => 'Rediska_Command_Rename',
-        'getkeyscount'     => 'Rediska_Command_GetKeysCount',
-        'expire'           => 'Rediska_Command_Expire',
-        'getlifetime'      => 'Rediska_Command_GetLifetime',
-        'selectdb'         => 'Rediska_Command_SelectDb',
-        'movetodb'         => 'Rediska_Command_MoveToDb',
-        'flushdb'          => 'Rediska_Command_FlushDb',
-
-        // Commands operating on string values
-        'set'          => 'Rediska_Command_Set',
-        'setandget'    => 'Rediska_Command_SetAndGet',
-        'get'          => 'Rediska_Command_Get',
-        'setandexpire' => 'Rediska_Command_SetAndExpire',
-        'increment'    => 'Rediska_Command_Increment',
-        'decrement'    => 'Rediska_Command_Decrement',
-        'substring'    => 'Rediska_Command_Substring',
-        'append'       => 'Rediska_Command_Append',
-
-        // Commands operating on lists
-        'appendtolist'          => 'Rediska_Command_AppendToList',
-        'prependtolist'         => 'Rediska_Command_PrependToList',
-        'getlistlength'         => 'Rediska_Command_GetListLength',
-        'getlist'               => 'Rediska_Command_GetList',
-        'truncatelist'          => 'Rediska_Command_TruncateList',
-        'getfromlist'           => 'Rediska_Command_GetFromList',
-        'settolist'             => 'Rediska_Command_SetToList',
-        'deletefromlist'        => 'Rediska_Command_DeleteFromList',
-        'shiftfromlist'         => 'Rediska_Command_ShiftFromList',
-        'shiftfromlistblocking' => 'Rediska_Command_ShiftFromListBlocking',
-        'popfromlist'           => 'Rediska_Command_PopFromList',
-        'popfromlistblocking'   => 'Rediska_Command_PopFromListBlocking',
-
-        // Commands operating on sets
-        'addtoset'         => 'Rediska_Command_AddToSet',
-        'deletefromset'    => 'Rediska_Command_DeleteFromSet',
-        'getrandomfromset' => 'Rediska_Command_GetRandomFromSet',
-        'getsetlength'     => 'Rediska_Command_GetSetLength',
-        'existsinset'      => 'Rediska_Command_ExistsInSet',
-        'intersectsets'    => 'Rediska_Command_IntersectSets',
-        'unionsets'        => 'Rediska_Command_UnionSets',
-        'diffsets'         => 'Rediska_Command_DiffSets',
-        'getset'           => 'Rediska_Command_GetSet',
-        'movetoset'        => 'Rediska_Command_MoveToSet',
-
-        // Commands operating on sorted sets
-        'addtosortedset'             => 'Rediska_Command_AddToSortedSet',
-        'deletefromsortedset'        => 'Rediska_Command_DeleteFromSortedSet',
-        'getsortedset'               => 'Rediska_Command_GetSortedSet',
-        'getfromsortedsetbyscore'    => 'Rediska_Command_GetFromSortedSetByScore',
-        'getsortedsetlength'         => 'Rediska_Command_GetSortedSetLength',
-        'incrementscoreinsortedset'  => 'Rediska_Command_IncrementScoreInSortedSet',
-        'deletefromsortedsetbyscore' => 'Rediska_Command_DeleteFromSortedSetByScore',
-        'deletefromsortedsetbyrank'  => 'Rediska_Command_DeleteFromSortedSetByRank',
-        'getscorefromsortedset'      => 'Rediska_Command_GetScoreFromSortedSet',
-        'getrankfromsortedset'       => 'Rediska_Command_GetRankFromSortedSet',
-        'unionsortedsets'            => 'Rediska_Command_UnionSortedSets',
-        'intersectsortedsets'        => 'Rediska_Command_IntersectSortedSets',
-
-        // Commands operating on hashes
-        'settohash'        => 'Rediska_Command_SetToHash',
-        'getfromhash'      => 'Rediska_Command_GetFromHash',
-        'incrementinhash'  => 'Rediska_Command_IncrementInHash',
-        'existsinhash'     => 'Rediska_Command_ExistsInHash',
-        'deletefromhash'   => 'Rediska_Command_DeleteFromHash',
-        'gethashlength'    => 'Rediska_Command_GetHashLength',
-        'gethash'          => 'Rediska_Command_GetHash',
-        'gethashfields'    => 'Rediska_Command_GetHashFields',
-        'gethashvalues'    => 'Rediska_Command_GetHashValues',
-        
-        // Sorting
-        'sort' => 'Rediska_Command_Sort',
-
-        // Publish/Subscribe
-        'publish' => 'Rediska_Command_Publish',
-
-        // Persistence control commands
-        'save'                  => 'Rediska_Command_Save',
-        'getlastsavetime'       => 'Rediska_Command_GetLastSaveTime',
-        'shutdown'              => 'Rediska_Command_Shutdown',
-        'rewriteappendonlyfile' => 'Rediska_Command_RewriteAppendOnlyFile',
-
-        // Remote server control commands
-        'info'    => 'Rediska_Command_Info',
-        'slaveof' => 'Rediska_Command_SlaveOf'
-    );
 
     /**
      * Object for distribution keys by servers 
@@ -564,90 +381,6 @@ class Rediska extends Rediska_Options
     }
 
     /**
-     * Add command
-     * 
-     * @param string $name      Command name
-     * @param string $className Name of class
-     */
-    public static function addCommand($name, $className)
-    {
-        if (!class_exists($className)) {
-            throw new Rediska_Exception("Class '$className' not found. You must include before or setup autoload");
-        }
-
-        $classReflection = new ReflectionClass($className);
-        if (!in_array('Rediska_Command_Interface', $classReflection->getInterfaceNames())) {
-            throw new Rediska_Exception("Class '$className' must implement Rediska_Command_Interface interface");
-        }
-
-        $lowerName = strtolower($name);
-        self::$_commands[$lowerName] = $className;
-
-        return true;
-    }
-
-    /**
-     * Remove command
-     * 
-     * @param string $name Command name
-     */
-    public static function removeCommand($name)
-    {
-        $lowerName = strtolower($name);
-        if (!isset(self::$_commands[$lowerName])) {
-            throw new Rediska_Exception("Command '$name' not found");
-        }
-        unset(self::$_commands[$lowerName]);
-
-        return true;
-    }
-
-    /**
-     * Get commands
-     *
-     * @return array
-     */
-    public static function getCommands()
-    {
-        return self::$_commands;
-    }
-
-    /**
-     * Get Rediska Command instance
-     * 
-     * @throws Rediska_Exception
-     * @param string $name      Command name 
-     * @param array  $arguments Command arguments
-     * @return Rediska_Command_Abstract
-     */
-    public function getCommand($name, $arguments)
-    {
-        $lowerName = strtolower($name);
-        if (!isset(self::$_commands[$lowerName])) {
-            throw new Rediska_Exception("Command '$name' not found");
-        }
-
-        // Initailize command
-        return new self::$_commands[$lowerName]($this, $name, $arguments);
-    }
-
-    /**
-     * Call Redis command
-     * 
-     * @param string $name Command name
-     * @param array $args  Command arguments
-     * @return mixed
-     */
-    public function __call($name, $args)
-    {
-        $this->_specifiedConnection->resetConnection();
-
-        $command = $this->getCommand($name, $args);
-
-        return $command->execute();
-    }
-
-    /**
      * Set key distributor.
      * See options description for more information.
      * 
@@ -684,28 +417,6 @@ class Rediska extends Rediska_Options
         return $this;
     }
 
-   /**
-    * Set serializer callback
-    * For example: "unserializer" or array($object, "unserializer")
-    *
-    * @deprecated
-    */
-    public function setSerializer($serializer)
-    {
-        throw new Rediska_Exception("Serializer is deprecated. Use 'serializerAdapter' option to set phpSerializer, json or you personal class which implements Rediska_Serialize_Adapter_Interface");
-    }
-
-   /**
-    * Set unserializer callback
-    * For example: "unserializer" or array($object, "unserializer")
-    *
-    * @deprecated
-    */
-    public function setUnserializer($serializer)
-    {
-        throw new Rediska_Exception("Unserializer is deprecated. Use 'serializerAdapter' option to set phpSerializer, json or you personal class which implements Rediska_Serialize_Adapter_Interface");
-    }
-
     /**
      * Set Rediska serializer adapter
      * 
@@ -734,6 +445,42 @@ class Rediska extends Rediska_Options
         return $this->_serializer;
     }
 
+    /**
+     * Magic method for execute command
+     *
+     * @param string $name Command name
+     * @param array  $args  Command arguments
+     * @return mixed
+     */
+    public function __call($name, $args)
+    {
+        return $this->_executeCommand($name, $args);
+    }
+
+    /**
+     * Execute command
+     *
+     * @param string $name Command name
+     * @param array  $args  Command arguments
+     * @return mixed
+     */
+    protected function _executeCommand($name, $args = array())
+    {
+        $this->_specifiedConnection->resetConnection();
+
+        $command = Rediska_Commands::get($this, $name, $args);
+
+        $response = $command->execute();
+
+        unset($command);
+
+        return $response;
+    }
+
+    /**
+     *  Deprecated
+     */
+
    /**
     * Serialize value
     *
@@ -753,68 +500,681 @@ class Rediska extends Rediska_Options
     {
         throw new Rediska_Exception("Rediska#unserialize(\$value) is deprecated. Use Rediska#getSerializer()->unserialize(\$value)");
     }
-    
+
+       /**
+    * Set serializer callback
+    * For example: "unserializer" or array($object, "unserializer")
+    *
+    * @deprecated
+    */
+    public function setSerializer($serializer)
+    {
+        throw new Rediska_Exception("Serializer is deprecated. Use 'serializerAdapter' option to set phpSerializer, json or you personal class which implements Rediska_Serialize_Adapter_Interface");
+    }
+
+   /**
+    * Set unserializer callback
+    * For example: "unserializer" or array($object, "unserializer")
+    *
+    * @deprecated
+    */
+    public function setUnserializer($serializer)
+    {
+        throw new Rediska_Exception("Unserializer is deprecated. Use 'serializerAdapter' option to set phpSerializer, json or you personal class which implements Rediska_Serialize_Adapter_Interface");
+    }
+
     /**
-     * Register Rediska autoload
-     * 
+     * Generated command methods by 'scripts/add_command_methods.php'
+     */
+
+    /**
+     * Ask the server to silently close the connection.
+     *
+     * @return mixed
+     */
+    public function quit() { $args = func_get_args(); return $this->_executeCommand('quit', $args); }
+
+    /**
+     * Test if a key exists
+     *
+     * @param string $key Key name
      * @return boolean
      */
-    public static function registerAutoload()
-    {
-        if (self::isRegisteredAutoload()) {
-            return false;
-        }
-
-        self::$_autoloadRegistered = spl_autoload_register(array('Rediska', 'autoload'));
-
-        return self::$_autoloadRegistered;
-    }
+    public function exists($key) { $args = func_get_args(); return $this->_executeCommand('exists', $args); }
 
     /**
-     * Unregister Rediska autoload
-     * 
+     * Delete a key or keys
+     *
+     * @param string|array $keyOrKeys Key name or array of key names
+     * @return mixed
+     */
+    public function delete($keyOrKeys) { $args = func_get_args(); return $this->_executeCommand('delete', $args); }
+
+    /**
+     * Get key type
+     *
+     * @param string $key Key name
+     * @return mixed
+     */
+    public function getType($key) { $args = func_get_args(); return $this->_executeCommand('getType', $args); }
+
+    /**
+     * Returns all the keys matching the glob-style pattern
+     * Glob style patterns examples:
+     *   h?llo will match hello hallo hhllo
+     *   h*llo will match hllo heeeello
+     *   h[ae]llo will match hello and hallo, but not hillo
+     *
+     * @param string $pattern Pattern
+     * @return mixed
+     */
+    public function getKeysByPattern($pattern) { $args = func_get_args(); return $this->_executeCommand('getKeysByPattern', $args); }
+
+    /**
+     * Return a random key from the key space
+     *
+     * @return string|null
+     */
+    public function getRandomKey() { $args = func_get_args(); return $this->_executeCommand('getRandomKey', $args); }
+
+    /**
+     * Rename the old key in the new one
+     *
+     * @param string            $oldKey    Old key name
+     * @param string            $newKey    New key name
+     * @param boolean[optional] $overwrite Overwrite the new name key if it already exists. For default is false.
+     * @return mixed
+     */
+    public function rename($oldKey, $newKey, $overwrite = true) { $args = func_get_args(); return $this->_executeCommand('rename', $args); }
+
+    /**
+     * Get the number of keys
+     *
+     * @return mixed
+     */
+    public function getKeysCount() { $args = func_get_args(); return $this->_executeCommand('getKeysCount', $args); }
+
+    /**
+     * Set a time to live in seconds or timestamp on a key
+     *
+     * @param string  $key                   Key name
+     * @param integer $secondsOrTimestamp    Time in seconds or timestamp
+     * @param boolean $isTimestamp[optional] Time is timestamp. For default is false.
      * @return boolean
      */
-    public static function unregisterAutoload()
-    {
-        if (!self::isRegisteredAutoload()) {
-            return false;
-        }
-
-        self::$_autoloadRegistered = !spl_autoload_unregister(array('Rediska', 'autoload'));
-
-        return self::$_autoloadRegistered;
-    }
+    public function expire($key, $secondsOrTimestamp, $isTimestamp = false) { $args = func_get_args(); return $this->_executeCommand('expire', $args); }
 
     /**
-     * Is Rediska autoload registered
-     * 
+     * Get key lifetime
+     *
+     * @param string $key Key name
+     * @return string|null
+     */
+    public function getLifetime($key) { $args = func_get_args(); return $this->_executeCommand('getLifetime', $args); }
+
+    /**
+     * Select the DB having the specified index
+     *
+     * @param integer $index Db index
+     * @return mixed
+     */
+    public function selectDb($index) { $args = func_get_args(); return $this->_executeCommand('selectDb', $args); }
+
+    /**
+     * Move the key from the currently selected DB to the DB having as index dbindex
+     *
+     * @param string  $key     Key name
+     * @param integer $dbIndex Redis DB index
      * @return boolean
      */
-    public static function isRegisteredAutoload()
-    {
-        return self::$_autoloadRegistered;
-    }
+    public function moveToDb($key, $dbIndex) { $args = func_get_args(); return $this->_executeCommand('moveToDb', $args); }
 
     /**
-     * Autoload method
-     * 
-     * @param string $className
+     * Remove all the keys of the currently selected DB
+     *
+     * @param boolean[optional] $all Remove from all Db. For default is false.
+     * @return boolean
      */
-    public static function autoload($className)
-    {
-        if (0 !== strpos($className, 'Rediska')) {
-            return false;
-        }
+    public function flushDb($all = false) { $args = func_get_args(); return $this->_executeCommand('flushDb', $args); }
 
-        $path = dirname(__FILE__) . '/' . str_replace('_', '/', $className) . '.php';
+    /**
+     * Set value to a key or muliple values to multiple keys
+     *
+     * @param string|array $keyOrData                  Key name or array with key => value.
+     * @param mixed        $valueOrOverwrite[optional] Value or overwrite property for array of values. For default true.
+     * @param boolean      $overwrite[optional]        Overwrite for single value (if false don't set and return false if key already exist). For default true.
+     * @return mixed
+     */
+    public function set($keyOrData, $valueOrOverwrite = null, $overwrite = true) { $args = func_get_args(); return $this->_executeCommand('set', $args); }
 
-        if (!file_exists($path)) {
-            return false;
-        }
+    /**
+     * Atomic set value and return old 
+     *
+     * @param string $key   Key name
+     * @param mixed  $value Value
+     * @return mixed
+     */
+    public function setAndGet($key, $value) { $args = func_get_args(); return $this->_executeCommand('setAndGet', $args); }
 
-        require_once $path;
-    }
+    /**
+     * Get value of key or array of values by array of keys
+     *
+     * @param string|array $keyOrKeys Key name or array of names
+     * @return mixed
+     */
+    public function get($keyOrKeys) { $args = func_get_args(); return $this->_executeCommand('get', $args); }
+
+    /**
+     * Set + Expire atomic command
+     *
+     * @param string  $key   Key name
+     * @param mixed   $value Value
+     * @param integer $time  Expire time
+     * @return mixed
+     */
+    public function setAndExpire($key, $value, $time) { $args = func_get_args(); return $this->_executeCommand('setAndExpire', $args); }
+
+    /**
+     * Increment the number value of key by integer
+     *
+     * @param string            $key    Key name
+     * @param integer[optional] $amount Amount to increment. One for default
+     * @return mixed
+     */
+    public function increment($key, $amount = 1) { $args = func_get_args(); return $this->_executeCommand('increment', $args); }
+
+    /**
+     * Decrement the number value of key by integer
+     *
+     * @param string            $key    Key name
+     * @param integer[optional] $amount Amount to decrement. One for default
+     * @return mixed
+     */
+    public function decrement($key, $amount = 1) { $args = func_get_args(); return $this->_executeCommand('decrement', $args); }
+
+    /**
+     * Return a subset of the string from offset start to offset end (both offsets are inclusive)
+     *
+     * @param string            $key   Key name
+     * @param integer           $start Start
+     * @param integer[optional] $end   End. If end is omitted, the substring starting from $start until the end of the string will be returned. For default end of string
+     * @return mixed
+     */
+    public function substring($key, $start, $end = -1) { $args = func_get_args(); return $this->_executeCommand('substring', $args); }
+
+    /**
+     * Append value to a end of string key
+     *
+     * @param $key    Key name
+     * @param $value  Value
+     * @return mixed
+     */
+    public function append($key, $value) { $args = func_get_args(); return $this->_executeCommand('append', $args); }
+
+    /**
+     * Append value to the end of List
+     *
+     * @param string $key     Key name
+     * @param mixed  $value   Element value
+     * @return mixed
+     */
+    public function appendToList($key, $value) { $args = func_get_args(); return $this->_executeCommand('appendToList', $args); }
+
+    /**
+     * Append value to the head of List
+     *
+     * @param string $key    Key name
+     * @param mixed  $member Member
+     * @return mixed
+     */
+    public function prependToList($key, $member) { $args = func_get_args(); return $this->_executeCommand('prependToList', $args); }
+
+    /**
+     * Return the length of the List value at key
+     *
+     * @param string $key Key name
+     * @return mixed
+     */
+    public function getListLength($key) { $args = func_get_args(); return $this->_executeCommand('getListLength', $args); }
+
+    /**
+     * Get List by key
+     *
+     * @param string  $key             Key name
+     * @param integer $start[optional] Start index. For default is begin of list
+     * @param integer $end[optional]   End index. For default is end of list
+     * @return array
+     */
+    public function getList($key, $start = 0, $end = -1) { $args = func_get_args(); return $this->_executeCommand('getList', $args); }
+
+    /**
+     * Trim the list at key to the specified range of elements
+     *
+     * @param string  $key   Key name
+     * @param integer $start Start index
+     * @param integer $end   End index
+     * @return boolean
+     */
+    public function truncateList($key, $start, $end) { $args = func_get_args(); return $this->_executeCommand('truncateList', $args); }
+
+    /**
+     * Return element of List by index at key
+     *
+     * @param string  $key   Key name
+     * @param integer $index Index
+     * @return mixed
+     */
+    public function getFromList($key, $index) { $args = func_get_args(); return $this->_executeCommand('getFromList', $args); }
+
+    /**
+     * Set a new value as the element at index position of the List at key
+     *
+     * @param string  $key   Key name
+     * @param mixed   $value Value
+     * @param integer $index Index
+     * @return boolean
+     */
+    public function setToList($key, $index, $member) { $args = func_get_args(); return $this->_executeCommand('setToList', $args); }
+
+    /**
+     * Delete element from list by member at key
+     *
+     * @param $key             Key name
+     * @param $value           Element value
+     * @param $count[optional] Limit of deleted items. For default no limit.
+     * @return mixed
+     */
+    public function deleteFromList($key, $value, $count = 0) { $args = func_get_args(); return $this->_executeCommand('deleteFromList', $args); }
+
+    /**
+     * Return and remove the first element of the List at key
+     *
+     * @param string $key Key name
+     * @return mixed
+     */
+    public function shiftFromList($key) { $args = func_get_args(); return $this->_executeCommand('shiftFromList', $args); }
+
+    /**
+     * Return and remove the first element of the List at key and block if list is empty or not exists
+     *
+     * @param string $keyOrKeys   Key name or array of names
+     * @param string $timeout     Blocking timeout in seconds. Timeout disabled for default.
+     * @return mixed
+     */
+    public function shiftFromListBlocking($keyOrKeys, $timeout = 0) { $args = func_get_args(); return $this->_executeCommand('shiftFromListBlocking', $args); }
+
+    /**
+     * Return and remove the last element of the List at key 
+     *
+     * @param string           $name       Key name
+     * @param string[optional] $pushToName If not null - push value to another key.
+     * @return mixed
+     */
+    public function popFromList($key, $pushToKey = null) { $args = func_get_args(); return $this->_executeCommand('popFromList', $args); }
+
+    /**
+     * Return and remove the last element of the List at key and block if list is empty or not exists
+     *
+     * @param string|array $keyOrKeys         Key name or array of names
+     * @param integer      $timeout[optional] Timeout. Disable for default.
+     * @return mixed
+     */
+    public function popFromListBlocking($keyOrKeys, $timeout = 0) { $args = func_get_args(); return $this->_executeCommand('popFromListBlocking', $args); }
+
+    /**
+     * Add the specified member to the Set value at key
+     *
+     * @param string $key    Key name
+     * @param mixed  $member Member
+     * @return boolean
+     */
+    public function addToSet($key, $member) { $args = func_get_args(); return $this->_executeCommand('addToSet', $args); }
+
+    /**
+     * Remove the specified member from the Set value at key
+     *
+     * @param string $key    Key name
+     * @param mixed  $member Member
+     * @return boolean
+     */
+    public function deleteFromSet($key, $member) { $args = func_get_args(); return $this->_executeCommand('deleteFromSet', $args); }
+
+    /**
+     * Get random element from the Set value at key
+     *
+     * @param string            $key  Key name
+     * @param boolean[optional] $pop  If true - pop value from the set. For default is false
+     * @return mixed
+     */
+    public function getRandomFromSet($key, $pop = false) { $args = func_get_args(); return $this->_executeCommand('getRandomFromSet', $args); }
+
+    /**
+     * Return the number of elements (the cardinality) of the Set at key
+     *
+     * @param string $key Key name
+     * @return mixed
+     */
+    public function getSetLength($key) { $args = func_get_args(); return $this->_executeCommand('getSetLength', $args); }
+
+    /**
+     * Test if the specified value is a member of the Set at key
+     *
+     * @param string $key    Key value
+     * @prarm mixed  $member Member
+     * @return boolean
+     */
+    public function existsInSet($key, $member) { $args = func_get_args(); return $this->_executeCommand('existsInSet', $args); }
+
+    /**
+     * Return the intersection between the Sets stored at key1, key2, ..., keyN
+     *
+     * @param array            $keys     Array of key names
+     * @param string[optional] $storeKey Store to set with key name
+     * @return mixed
+     */
+    public function intersectSets(array $keys, $storeKey = null) { $args = func_get_args(); return $this->_executeCommand('intersectSets', $args); }
+
+    /**
+     * Return the union between the Sets stored at key1, key2, ..., keyN
+     *
+     * @param array            $keys     Array of key names
+     * @param string[optional] $storeKey Store to set with key name
+     * @return mixed
+     */
+    public function unionSets(array $keys, $storeKey = null) { $args = func_get_args(); return $this->_executeCommand('unionSets', $args); }
+
+    /**
+     * Return the difference between the Set stored at key1 and all the Sets key2, ..., keyN
+     *
+     * @param array            $keys     Array of key names
+     * @param string[optional] $storeKey Store to set with key name
+     * @return mixed
+     */
+    public function diffSets(array $keys, $storeKey = null) { $args = func_get_args(); return $this->_executeCommand('diffSets', $args); }
+
+    /**
+     * Return all the members of the Set value at key
+     *
+     * @param string $key Key name
+     * @return array
+     */
+    public function getSet($key) { $args = func_get_args(); return $this->_executeCommand('getSet', $args); }
+
+    /**
+     * Move the specified member from one Set to another atomically
+     *
+     * @param string $fromKey From key name
+     * @param string $toKey   To key name
+     * @param mixed  $member  Member
+     * @return mixed
+     */
+    public function moveToSet($fromKey, $toKey, $member) { $args = func_get_args(); return $this->_executeCommand('moveToSet', $args); }
+
+    /**
+     * Add member to sorted set
+     *
+     * @param string $key    Key name
+     * @param mixed  $member Member
+     * @param number $score  Score of member
+     * @return boolean
+     */
+    public function addToSortedSet($key, $member, $score) { $args = func_get_args(); return $this->_executeCommand('addToSortedSet', $args); }
+
+    /**
+     * Delete the specified member from the sorted set by value
+     *
+     * @param string $key    Key name
+     * @param mixed  $member Member
+     * @return boolean
+     */
+    public function deleteFromSortedSet($key, $member) { $args = func_get_args(); return $this->_executeCommand('deleteFromSortedSet', $args); }
+
+    /**
+     * Get all the members of the Sorted Set value at key
+     *
+     * @param string  $key                  Key name
+     * @param integer $withScores[optional] Return values with scores. For default is false.
+     * @param integer $start[optional]      Start index. For default is begin of set.
+     * @param integer $end[optional]        End index. For default is end of set.
+     * @param boolean $revert[optional]     Revert elements (not used in sorting). For default is false
+     * @return array
+     */
+    public function getSortedSet($key, $withScores = false, $start = 0, $end = -1, $revert = false) { $args = func_get_args(); return $this->_executeCommand('getSortedSet', $args); }
+
+    /**
+     * Get members from sorted set by min and max score
+     *
+     * @param string            $key        Key name
+     * @param number            $min        Min score
+     * @param number            $max        Max score
+     * @param boolean[optional] $withScores Get with scores. For default is false
+     * @param integer[optional] $limit      Limit. For default is no limit
+     * @param integer[optional] $offset     Offset. For default is no offset
+     * @return array
+     */
+    public function getFromSortedSetByScore($key, $min, $max, $withScores = false, $limit = null, $offset = null) { $args = func_get_args(); return $this->_executeCommand('getFromSortedSetByScore', $args); }
+
+    /**
+     * Get length of Sorted Set
+     *
+     * @param string $key Key name
+     * @return mixed
+     */
+    public function getSortedSetLength($key) { $args = func_get_args(); return $this->_executeCommand('getSortedSetLength', $args); }
+
+    /**
+     * Increment score of sorted set element
+     *
+     * @param string        $key   Key name
+     * @param mixed         $value Member
+     * @param integer|float $score Score to increment
+     * @return mixed
+     */
+    public function incrementScoreInSortedSet($key, $value, $score) { $args = func_get_args(); return $this->_executeCommand('incrementScoreInSortedSet', $args); }
+
+    /**
+     * Remove all the elements in the sorted set at key with a score between min and max (including elements with score equal to min or max).
+     *
+     * @param string  $key   Key name
+     * @param numeric $min   Min value
+     * @param numeric $max   Max value
+     * @return mixed
+     */
+    public function deleteFromSortedSetByScore($key, $min, $max) { $args = func_get_args(); return $this->_executeCommand('deleteFromSortedSetByScore', $args); }
+
+    /**
+     * Remove all elements in the sorted set at key with rank between start  and end
+     *
+     * @param string  $key   Key name
+     * @param numeric $start Start position
+     * @param numeric $end   End position
+     * @return mixed
+     */
+    public function deleteFromSortedSetByRank($key, $start, $end) { $args = func_get_args(); return $this->_executeCommand('deleteFromSortedSetByRank', $args); }
+
+    /**
+     * Get member score from Sorted Set
+     *
+     * @param string $key    Key name
+     * @param mixed  $member Member value
+     * @return mixed
+     */
+    public function getScoreFromSortedSet($key, $member) { $args = func_get_args(); return $this->_executeCommand('getScoreFromSortedSet', $args); }
+
+    /**
+     * Get rank of member from sorted set
+     *
+     * @param string  $key              Key name
+     * @param integer $member           Member value
+     * @param boolean $revert[optional] Revert elements (not used in sorting). For default is false
+     * @return mixed
+     */
+    public function getRankFromSortedSet($key, $member, $revert = false) { $args = func_get_args(); return $this->_executeCommand('getRankFromSortedSet', $args); }
+
+    /**
+     * Store to key union between the sorted sets
+     *
+     * @param array  $keys       Array of key names or associative array with weights
+     * @param string $storeKey   Result sorted set key name
+     * @param string $aggregation Aggregation method: SUM (for default), MIN, MAX.
+     * @return mixed
+     */
+    public function unionSortedSets(array $keys, $storeKey, $aggregation = Rediska_Command_UnionSortedSets::SUM) { $args = func_get_args(); return $this->_executeCommand('unionSortedSets', $args); }
+
+    /**
+     * Store to key intersection between sorted sets
+     *
+     * @param array  $keys       Array of key names or associative array with weights
+     * @param string $storeKey   Result sorted set key name
+     * @param string $aggregation Aggregation method: SUM (for default), MIN, MAX.
+     * @return mixed
+     */
+    public function intersectSortedSets(array $keys, $storeKey, $aggregation = Rediska_Command_IntersectSortedSets::SUM) { $args = func_get_args(); return $this->_executeCommand('intersectSortedSets', $args); }
+
+    /**
+     * Set value to a hash field or fields
+     *
+     * @param string        $key          Key name
+     * @param array|string  $fieldOrData  Field or array of many fields and values: field => value
+     * @param mixed         $value        Value for single field
+     * @param boolean       $overwrite    Overwrite for single field (if false don't set and return false if key already exist). For default true.
+     * @return boolean
+     */
+    public function setToHash($key, $fieldOrData, $value = null, $overwrite = true) { $args = func_get_args(); return $this->_executeCommand('setToHash', $args); }
+
+    /**
+     * Get value from hash field or fields
+     *
+     * @param string       $key           Key name
+     * @param string|array $fieldOrFields Field or fields
+     * @return mixed
+     */
+    public function getFromHash($key, $fieldOrFields) { $args = func_get_args(); return $this->_executeCommand('getFromHash', $args); }
+
+    /**
+     * Increment field value in hash
+     *
+     * @param string $key              Key name
+     * @param mixed  $field            Field
+     * @param number $amount[optional] Increment amount. One for default
+     * @return mixed
+     */
+    public function incrementInHash($key, $field, $amount = 1) { $args = func_get_args(); return $this->_executeCommand('incrementInHash', $args); }
+
+    /**
+     * Test if field is present in hash
+     *
+     * @param string $key   Key name
+     * @param mixed  $field Field
+     * @return boolean
+     */
+    public function existsInHash($key, $field) { $args = func_get_args(); return $this->_executeCommand('existsInHash', $args); }
+
+    /**
+     * Delete field from hash
+     *
+     * @param string $key   Key name
+     * @param mixed  $field Field
+     * @return boolean
+     */
+    public function deleteFromHash($key, $field) { $args = func_get_args(); return $this->_executeCommand('deleteFromHash', $args); }
+
+    /**
+     * Return the number of fields in hash
+     *
+     * @param string $key Key name
+     * @return mixed
+     */
+    public function getHashLength($key) { $args = func_get_args(); return $this->_executeCommand('getHashLength', $args); }
+
+    /**
+     * Get hash fields and values
+     *
+     * @param string $key Key name
+     * @return array
+     */
+    public function getHash($key) { $args = func_get_args(); return $this->_executeCommand('getHash', $args); }
+
+    /**
+     * Get hash fields
+     *
+     * @param string $key Key name
+     * @return mixed
+     */
+    public function getHashFields($key) { $args = func_get_args(); return $this->_executeCommand('getHashFields', $args); }
+
+    /**
+     * Get hash values
+     *
+     * @param string $key Key name
+     * @return array
+     */
+    public function getHashValues($key) { $args = func_get_args(); return $this->_executeCommand('getHashValues', $args); }
+
+    /**
+     * Get sorted elements contained in the List, Set, or Sorted Set value at key.
+     *
+     * @param string        $key   Key name
+     * @param string|array  $value Options or SORT query string (http://code.google.com/p/redis/wiki/SortCommand).
+     *                             Important notes for SORT query string:
+     *                                 1. If you set Rediska namespace option don't forget add it to key names.
+     *                                 2. If you use more then one connection to Redis servers, it will choose by key name,
+     *                                    and key by you pattern's may not present on it.
+     * @return array
+     */
+    public function sort($key, $options = array()) { $args = func_get_args(); return $this->_executeCommand('sort', $args); }
+
+    /**
+     * Publish message to pubsub channel
+     *
+     * @param array|string $channelOrChannels Channel or array of channels
+     * @param mixed        $message           Message
+     * @return mixed
+     */
+    public function publish($channelOrChannels, $message) { $args = func_get_args(); return $this->_executeCommand('publish', $args); }
+
+    /**
+     * Save the DB on disk
+     *
+     * @param boolean[optional] $background Save asynchronously. For default is false
+     * @return mixed
+     */
+    public function save($background = false) { $args = func_get_args(); return $this->_executeCommand('save', $args); }
+
+    /**
+     * Return the UNIX time stamp of the last successfully saving of the dataset on disk
+     *
+     * @return mixed
+     */
+    public function getLastSaveTime() { $args = func_get_args(); return $this->_executeCommand('getLastSaveTime', $args); }
+
+    /**
+     * Stop all the clients, save the DB, then quit the server
+     *
+     * @return mixed
+     */
+    public function shutdown() { $args = func_get_args(); return $this->_executeCommand('shutdown', $args); }
+
+    /**
+     * Rewrite the Append Only File in background when it gets too big
+     *
+     * @return mixed
+     */
+    public function rewriteAppendOnlyFile() { $args = func_get_args(); return $this->_executeCommand('rewriteAppendOnlyFile', $args); }
+
+    /**
+     * Provide information and statistics about the server
+     *
+     * @return mixed
+     */
+    public function info() { $args = func_get_args(); return $this->_executeCommand('info', $args); }
+
+    /**
+     * Change the replication settings of a slave on the fly
+     *
+     * @param string|Rediska_Connection|false $aliasOrConnection Server alias, Rediska_Connection object or false if not slave
+     * @return mixed
+     */
+    public function slaveOf($aliasOrConnection) { $args = func_get_args(); return $this->_executeCommand('slaveOf', $args); }
+
 }
-
-Rediska::registerAutoload();

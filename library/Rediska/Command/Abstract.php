@@ -83,7 +83,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
      * @param string  $name      Command name
      * @param array   $arguments Command arguments
      */
-    public function __construct(Rediska $rediska, $name, $arguments)
+    public function __construct(Rediska $rediska, $name, $arguments = array())
     {
         $this->_rediska = $rediska;
         $this->_name    = $name;
