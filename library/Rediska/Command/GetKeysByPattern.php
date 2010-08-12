@@ -7,10 +7,6 @@
  *   h*llo will match hllo heeeello
  *   h[ae]llo will match hello and hallo, but not hillo
  * 
- * @throws Rediska_Command_Exception
- * @param string $pattern
- * @return array
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -19,6 +15,12 @@
  */
 class Rediska_Command_GetKeysByPattern extends Rediska_Command_Abstract
 {
+    /**
+     * Create command
+     *
+     * @param string $pattern Pattern
+     * @return Rediska_Connection_Exec
+     */
     public function create($pattern) 
     {
         if ($pattern == '') {
@@ -34,6 +36,12 @@ class Rediska_Command_GetKeysByPattern extends Rediska_Command_Abstract
         return $commands;
     }
 
+    /**
+     * Parse responses
+     *
+     * @param array $responses
+     * @return array
+     */
     public function parseResponses($responses)
     {
         $keys = array();

@@ -3,11 +3,6 @@
 /**
  * Increment score of sorted set element
  * 
- * @param string $name  Key name
- * @param mixin  $value Member
- * @param number $score Score to increment
- * @return integer
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -16,15 +11,28 @@
  */
 class Rediska_Command_IncrementScoreInSortedSet extends Rediska_Command_Abstract
 {
+    /**
+     * Supported version
+     *
+     * @var string
+     */
     protected $_version = '1.1';
-    
-    public function create($name, $value, $score)
+
+    /**
+     * Create command
+     *
+     * @param string        $key   Key name
+     * @param mixed         $value Member
+     * @param integer|float $score Score to increment
+     * @return Rediska_Connection_Exec
+     */
+    public function create($key, $value, $score)
     {
-        $connection = $this->_rediska->getConnectionByKeyName($name);
+        $connection = $this->_rediska->getConnectionByKeyName($key);
 
         $value = $this->_rediska->getSerializer()->serialize($value);
 
-        $command = array('ZINCRBY', "{$this->_rediska->getOption('namespace')}$name", $score, $value);
+        $command = array('ZINCRBY', $this->_rediska->getOption('namespace') . $key, $score, $value);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

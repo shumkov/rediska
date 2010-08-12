@@ -1,9 +1,7 @@
 <?php
 
 // Require Rediska
-if (!class_exists('Rediska')) {
-    require_once dirname(__FILE__) . '/../../../../../Rediska.php';
-}
+require_once dirname(__FILE__) . '/../../../../Rediska.php';
 
 /**
  * @see Zend_Cache_Backend

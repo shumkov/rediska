@@ -14,7 +14,7 @@ class Rediska_Serializer_Adapter_ToString implements Rediska_Serializer_Adapter_
     /**
      * Serialize value
      *
-     * @param mixin $value
+     * @param mixed $value
      * @return string
      */
     public function serialize($value)

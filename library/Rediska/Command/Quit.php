@@ -3,8 +3,6 @@
 /**
  * Ask the server to silently close the connection.
  * 
- * @return array
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -14,7 +12,12 @@
 class Rediska_Command_Quit extends Rediska_Command_Abstract
 {
     protected $_affectedConnections = array();
-    
+
+    /**
+     * Create command
+     *
+     * @return Rediska_Connection_Exec
+     */
     public function create() 
     {
         $command = 'QUIT';

@@ -14,7 +14,7 @@ class Rediska_Serializer_Adapter_PhpSerialize implements Rediska_Serializer_Adap
     /**
      * Serialize value
      *
-     * @param mixin $value
+     * @param mixed $value
      * @return string
      */
     public function serialize($value)
@@ -27,7 +27,7 @@ class Rediska_Serializer_Adapter_PhpSerialize implements Rediska_Serializer_Adap
      *
      * @throws Rediska_Serializer_Exception
      * @param string $value
-     * @return mixin
+     * @return mixed
      */
     public function unserialize($value)
     {

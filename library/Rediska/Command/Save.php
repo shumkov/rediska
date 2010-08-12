@@ -1,10 +1,7 @@
 <?php
 
 /**
- * Synchronously save the DB on disk
- * 
- * @param boolean $background Save asynchronously
- * @return boolean
+ * Save the DB on disk
  * 
  * @author Ivan Shumkov
  * @package Rediska
@@ -14,8 +11,15 @@
  */
 class Rediska_Command_Save extends Rediska_Command_Abstract
 {
+    /**
+     * Create command
+     *
+     * @param boolean[optional] $background Save asynchronously. For default is false
+     * @return Rediska_Connection_Exec
+     */
     public function create($background = false) 
     {
+        $command = '';
         if ($background) {
             $command = "BGSAVE";
         } else {
@@ -30,6 +34,12 @@ class Rediska_Command_Save extends Rediska_Command_Abstract
         return $commands;
     }
 
+    /**
+     * Parse responses
+     *
+     * @param array $responses
+     * @return boolean
+     */
     public function parseResponses($responses)
     {
         return true;

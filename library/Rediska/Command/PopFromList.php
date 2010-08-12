@@ -3,10 +3,6 @@
 /**
  * Return and remove the last element of the List at key 
  * 
- * @param string $name       Key name
- * @param string $pushToName Push value to another key
- * @return mixin
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -15,37 +11,50 @@
  */
 class Rediska_Command_PopFromList extends Rediska_Command_Abstract
 {
-    public function create($name, $pushToName = null) 
+    /**
+     * Create command
+     *
+     * @param string           $name       Key name
+     * @param string[optional] $pushToName If not null - push value to another key.
+     * @return Rediska_Connection_Exec
+     */
+    public function create($key, $pushToKey = null)
     {
-        $connection = $this->_rediska->getConnectionByKeyName($name);
+        $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        if (is_null($pushToName)) {
-            $command = "RPOP {$this->_rediska->getOption('namespace')}$name";
+        if (is_null($pushToKey)) {
+            $command = "RPOP {$this->_rediska->getOption('namespace')}$key";
         } else {
-            $toConnection = $this->_rediska->getConnectionByKeyName($pushToName);
+            $toConnection = $this->_rediska->getConnectionByKeyName($pushToKey);
 
             if ($connection->getAlias() == $toConnection->getAlias()) {
                 $this->_throwExceptionIfNotSupported('1.1');
 
                 $command = array('RPOPLPUSH',
-                                 "{$this->_rediska->getOption('namespace')}$name",
-                                 "{$this->_rediska->getOption('namespace')}$pushToName");
+                                 "{$this->_rediska->getOption('namespace')}$key",
+                                 "{$this->_rediska->getOption('namespace')}$pushToKey");
             } else {
                 $this->setAtomic(false);
 
-                $command = "RPOP {$this->_rediska->getOption('namespace')}$name";
+                $command = "RPOP {$this->_rediska->getOption('namespace')}$key";
             }
         }
 
         return new Rediska_Connection_Exec($connection, $command);
     }
 
+    /**
+     * Parse response
+     *
+     * @param string $response
+     * @return mixed
+     */
     public function parseResponse($response)
     {
         if (!$this->isAtomic()) {
             $value = $this->_rediska->getSerializer()->unserialize($response);
 
-            $this->_rediska->prependToList($this->pushToName, $value);
+            $this->_rediska->prependToList($this->pushToKey, $value);
 
             return $value;
         } else {

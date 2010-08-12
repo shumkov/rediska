@@ -3,8 +3,6 @@
 /**
  * Rewrite the Append Only File in background when it gets too big
  * 
- * @return boolean
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -13,6 +11,11 @@
  */
 class Rediska_Command_RewriteAppendOnlyFile extends Rediska_Command_Abstract
 {
+    /**
+     * Create command
+     *
+     * @return array
+     */
     public function create() 
     {
         $command = "BGREWRITEAOF";
@@ -25,7 +28,13 @@ class Rediska_Command_RewriteAppendOnlyFile extends Rediska_Command_Abstract
         return $commands;
     }
 
-    public function parseResponse($response)
+    /**
+     * Parse responses
+     *
+     * @param $responses
+     * @return boolean
+     */
+    public function parseResponses($responses)
     {
         return true;
     }

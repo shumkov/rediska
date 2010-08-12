@@ -46,7 +46,7 @@ class Rediska_Serializer_Adapter_Json extends Rediska_Options implements Rediska
     /**
      * Serialize value
      *
-     * @param mixin $value
+     * @param mixed $value
      * @return string
      */
     public function serialize($value)
@@ -81,7 +81,7 @@ class Rediska_Serializer_Adapter_Json extends Rediska_Options implements Rediska
     /**
      * Unserialize value
      *
-     * @param mixin $value
+     * @param mixed $value
      * @return string
      */
     public function unserialize($value)

@@ -3,10 +3,6 @@
 /**
  * Select the DB having the specified index
  * 
- * @throws Rediska_Command_Exception
- * @param integer $index Db index
- * @return boolean
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -15,6 +11,12 @@
  */
 class Rediska_Command_SelectDb extends Rediska_Command_Abstract
 {
+    /**
+     * Create command
+     *
+     * @param integer $index Db index
+     * @return Rediska_Connection_Exec
+     */
     public function create($index) 
     {
         if (!is_integer($index) || $index < 0) {
@@ -31,6 +33,12 @@ class Rediska_Command_SelectDb extends Rediska_Command_Abstract
         return $commands;
     }
 
+    /**
+     * Parse responses
+     *
+     * @param array $responses
+     * @return boolean
+     */
     public function parseResponses($responses)
     {
         return true;

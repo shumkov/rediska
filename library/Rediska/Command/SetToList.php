@@ -3,12 +3,6 @@
 /**
  * Set a new value as the element at index position of the List at key
  * 
- * @throws Rediska_Command_Exception
- * @param string $name Key name
- * @param mixin $value Value
- * @param integer $index Index
- * @return boolean
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -17,21 +11,35 @@
  */
 class Rediska_Command_SetToList extends Rediska_Command_Abstract
 {
-    public function create($name, $index, $value) 
+    /**
+     * Create command
+     *
+     * @param string  $key   Key name
+     * @param mixed   $value Value
+     * @param integer $index Index
+     * @return Rediska_Connection_Exec
+     */
+    public function create($key, $index, $member)
     {
         if (!is_integer($index)) {
             throw new Rediska_Command_Exception("Index must be integer");
         }
 
-        $connection = $this->_rediska->getConnectionByKeyName($name);
+        $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        $value = $this->_rediska->getSerializer()->serialize($value);
+        $member = $this->_rediska->getSerializer()->serialize($member);
 
-        $command = "LSET {$this->_rediska->getOption('namespace')}$name $index " . strlen($value) . Rediska::EOL . $value;
+        $command = "LSET {$this->_rediska->getOption('namespace')}$key $index " . strlen($member) . Rediska::EOL . $member;
 
         return new Rediska_Connection_Exec($connection, $command);
     }
 
+    /**
+     * Parse response
+     *
+     * @param integer $response
+     * @return boolean
+     */
     public function parseResponse($response)
     {
         return (boolean)$response;

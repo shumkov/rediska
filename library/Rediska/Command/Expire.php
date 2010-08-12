@@ -3,12 +3,6 @@
 /**
  * Set a time to live in seconds or timestamp on a key
  * 
- * @throws Rediska_Command_Exception
- * @param string  $name               Key name
- * @param integer $secondsOrTimestamp Time in seconds or timestamp
- * @param boolean $isTimestamp        Time is timestamp. For default is false.
- * @return boolean 
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -17,13 +11,21 @@
  */
 class Rediska_Command_Expire extends Rediska_Command_Abstract
 {
-    public function create($name, $secondsOrTimestamp, $isTimestamp = false)
+    /**
+     * Create command
+     *
+     * @param string  $key                   Key name
+     * @param integer $secondsOrTimestamp    Time in seconds or timestamp
+     * @param boolean $isTimestamp[optional] Time is timestamp. For default is false.
+     * @return Rediska_Connection_Exec
+     */
+    public function create($key, $secondsOrTimestamp, $isTimestamp = false)
     {
         if (!is_integer($secondsOrTimestamp) || $secondsOrTimestamp <= 0) {
             throw new Rediska_Command_Exception(($isTimestamp ? 'Time' : 'Seconds') . ' must be positive integer');
         }
 
-        $connection = $this->_rediska->getConnectionByKeyName($name);
+        $connection = $this->_rediska->getConnectionByKeyName($key);
 
         if ($isTimestamp) {
             $this->_throwExceptionIfNotSupported('1.1');
@@ -32,11 +34,17 @@ class Rediska_Command_Expire extends Rediska_Command_Abstract
             $command = 'EXPIRE';
         }
 
-        $command = "$command {$this->_rediska->getOption('namespace')}$name $secondsOrTimestamp";
+        $command = "$command {$this->_rediska->getOption('namespace')}$key $secondsOrTimestamp";
 
         return new Rediska_Connection_Exec($connection, $command);
     }
 
+    /**
+     * Parse response
+     *
+     * @param integer $response
+     * @return boolean
+     */
     public function parseResponse($response)
     {
         return (boolean)$response;

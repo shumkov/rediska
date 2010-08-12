@@ -14,9 +14,9 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
     const QUEUED = 'QUEUED';
 
     /**
-     * Command version
-     * 
-     * @var $_version string
+     * Supported version
+     *
+     * @var string
      */
     protected $_version = '1.0';
 
@@ -83,7 +83,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
      * @param string  $name      Command name
      * @param array   $arguments Command arguments
      */
-    public function __construct(Rediska $rediska, $name, $arguments)
+    public function __construct(Rediska $rediska, $name, $arguments = array())
     {
         $this->_rediska = $rediska;
         $this->_name    = $name;
@@ -141,7 +141,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
     /**
      * Execute a command
      *
-     * @return mixin
+     * @return mixed
      */
     public function execute()
     {
@@ -152,7 +152,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
     /**
      * Magic method for execute
      *
-     * @return mixin
+     * @return mixed
      */
     public function __invoke()
     {
@@ -163,7 +163,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
      * Parse responses
      *
      * @param array $responses
-     * @return mixin
+     * @return mixed
      */
     public function parseResponses($responses)
     {
@@ -180,7 +180,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
      * Parse response
      *
      * @param string|array $response
-     * @return mixin
+     * @return mixed
      */
     public function parseResponse($response)
     {
@@ -234,7 +234,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
      * Magic method for get command argument
      *
      * @param string $name
-     * @return mixin
+     * @return mixed
      */
     public function __get($name)
     {

@@ -3,11 +3,6 @@
 /**
  * Get rank of member from sorted set
  * 
- * @param string  $name   Key name
- * @param integer $value  Member value
- * @param boolean $revert Revert elements (not used in sorting)
- * @return integer
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -16,17 +11,30 @@
  */
 class Rediska_Command_GetRankFromSortedSet extends Rediska_Command_Abstract
 {
+    /**
+     * Supported version
+     *
+     * @var string
+     */
     protected $_version = '1.3.4';
 
-    public function create($name, $value, $revert = false)
+    /**
+     * Create command
+     *
+     * @param string  $key              Key name
+     * @param integer $member           Member value
+     * @param boolean $revert[optional] Revert elements (not used in sorting). For default is false
+     * @return Rediska_Connection_Exec
+     */
+    public function create($key, $member, $revert = false)
     {
-        $connection = $this->_rediska->getConnectionByKeyName($name);
+        $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        $value = $this->_rediska->getSerializer()->serialize($value);
+        $member = $this->_rediska->getSerializer()->serialize($member);
 
         $command = array($revert ? 'ZREVRANK' : 'ZRANK',
-                         "{$this->_rediska->getOption('namespace')}$name",
-                         $value);
+                         "{$this->_rediska->getOption('namespace')}$key",
+                         $member);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

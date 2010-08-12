@@ -3,10 +3,6 @@
 /**
  * Publish message to pubsub channel
  * 
- * @param string $name Key name
- * @param mixin  $value Value
- * @return boolean
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -15,8 +11,16 @@
  */
 class Rediska_Command_Publish extends Rediska_Command_Abstract
 {
+    /**
+     * Create command
+     *
+     * @param array|string $channelOrChannels Channel or array of channels
+     * @param mixed        $message           Message
+     * @return Rediska_Connection_Exec
+     */
     public function create($channelOrChannels, $message)
     {
+        $channels = array();
         if (!is_array($channelOrChannels)) {
             $channels = array($channelOrChannels);
         } else {
@@ -39,6 +43,12 @@ class Rediska_Command_Publish extends Rediska_Command_Abstract
         return $execs;
     }
 
+    /**
+     * Parse response
+     *
+     * @param array $responses
+     * @return integer
+     */
     public function parseResponses($responses)
     {
         return array_sum($responses);

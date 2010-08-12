@@ -3,10 +3,6 @@
 /**
  * Get member score from Sorted Set
  * 
- * @param string $name
- * @param mixin $value
- * @return number
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -15,15 +11,27 @@
  */
 class Rediska_Command_GetScoreFromSortedSet extends Rediska_Command_Abstract
 {
+    /**
+     * Supported version
+     *
+     * @var string
+     */
     protected $_version = '1.1';
 
-    public function create($name, $value)
+    /**
+     * Create command
+     *
+     * @param string $key    Key name
+     * @param mixed  $member Member value
+     * @return Rediska_Connection_Exec
+     */
+    public function create($key, $member)
     {
-        $connection = $this->_rediska->getConnectionByKeyName($name);
+        $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        $value = $this->_rediska->getSerializer()->serialize($value);
+        $member = $this->_rediska->getSerializer()->serialize($member);
 
-        $command = array('ZSCORE', "{$this->_rediska->getOption('namespace')}$name", $value);
+        $command = array('ZSCORE', $this->_rediska->getOption('namespace') . $key, $member);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

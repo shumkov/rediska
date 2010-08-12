@@ -3,11 +3,6 @@
 /**
  * Move the key from the currently selected DB to the DB having as index dbindex
  * 
- * @throws Rediska_Command_Exception
- * @param string  $name  Key name
- * @param integer $index Db index
- * @return boolean
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -16,19 +11,32 @@
  */
 class Rediska_Command_MoveToDb extends Rediska_Command_Abstract
 {
-    public function create($name, $dbIndex) 
+    /**
+     * Create command
+     *
+     * @param string  $key     Key name
+     * @param integer $dbIndex Redis DB index
+     * @return Rediska_Connection_Exec
+     */
+    public function create($key, $dbIndex)
     {
         if (!is_integer($dbIndex) || $dbIndex < 0) {
             throw new Rediska_Command_Exception("Index must be zero or positive integer");
         }
 
-        $connection = $this->_rediska->getConnectionByKeyName($name);
+        $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        $command = "MOVE {$this->_rediska->getOption('namespace')}$name $dbIndex";
+        $command = "MOVE {$this->_rediska->getOption('namespace')}$key $dbIndex";
         
         return new Rediska_Connection_Exec($connection, $command);
     }
 
+    /**
+     * Parse response
+     *
+     * @param integer $response
+     * @return boolean
+     */
     public function parseResponse($response)
     {
         return (boolean)$response;

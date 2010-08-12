@@ -3,9 +3,6 @@
 /**
  * Get value of key or array of values by array of keys
  * 
- * @param string|array $nameOrNames Key name or array of names
- * @return mixed
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -14,32 +11,37 @@
  */
 class Rediska_Command_Get extends Rediska_Command_Abstract
 { 
-    protected $_multi = false;
     protected $_keys = array();
     protected $_keysByConnections = array();
 
-    public function create($nameOrNames)
+    /**
+     * Create command
+     *
+     * @param string|array $keyOrKeys Key name or array of names
+     * @return Rediska_Connection_Exec
+     */
+    public function create($keyOrKeys)
     {
-        if (is_array($nameOrNames)) {
+        if (is_array($keyOrKeys)) {
             $this->_multi = true;
-            $names = $nameOrNames;
+            $keys = $keyOrKeys;
 
-            if (empty($names)) {
+            if (empty($keys)) {
                 throw new Rediska_Command_Exception('Not present keys for get');
             }
 
             $sortedResult = array();
-            $this->_keys = $names;
+            $this->_keys = $keys;
             $connections = array();
             $keysByConnections = array();
-            foreach ($names as $name) {
-                $connection = $this->_rediska->getConnectionByKeyName($name);
+            foreach ($keys as $key) {
+                $connection = $this->_rediska->getConnectionByKeyName($key);
                 $connectionAlias = $connection->getAlias();
                 if (!array_key_exists($connectionAlias, $connections)) {
                     $connections[$connectionAlias] = $connection;
                     $keysByConnections[$connectionAlias] = array();
                 }
-                $keysByConnections[$connectionAlias][] = $name;
+                $keysByConnections[$connectionAlias][] = $key;
             }
 
             $result = array();
@@ -55,19 +57,25 @@ class Rediska_Command_Get extends Rediska_Command_Abstract
 
             return $commands;
         } else {
-            $name = $nameOrNames;
+            $key = $keyOrKeys;
 
-            $connection = $this->_rediska->getConnectionByKeyName($name);
+            $connection = $this->_rediska->getConnectionByKeyName($key);
 
-            $command = "GET {$this->_rediska->getOption('namespace')}$name";
+            $command = "GET {$this->_rediska->getOption('namespace')}$key";
 
             return new Rediska_Connection_Exec($connection, $command);
         }
     }
 
+    /**
+     * Parse responses
+     *
+     * @param array $responses
+     * @return mixed
+     */
     public function parseResponses($responses)
     {
-        if ($this->_multi) {
+        if (is_array($this->keyOrKeys)) {
             $result = array();
             if (!empty($responses)) {
                 $mergedResponses = array();

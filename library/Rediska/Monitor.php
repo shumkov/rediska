@@ -1,5 +1,8 @@
 <?php
 
+// Require Rediska
+require_once dirname(__FILE__) . '/../Rediska.php';
+
 /**
  * Rediska monitor
  *

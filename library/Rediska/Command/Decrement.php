@@ -3,11 +3,6 @@
 /**
  * Decrement the number value of key by integer
  * 
- * @throws Rediska_Command_Exception
- * @param string $name Key name
- * @param integer $amount Amount to decrement
- * @return integer New value
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -16,20 +11,27 @@
  */
 class Rediska_Command_Decrement extends Rediska_Command_Abstract
 {
-    public function create($name, $amount = 1) 
+    /**
+     * Create command
+     * 
+     * @param string            $key    Key name
+     * @param integer[optional] $amount Amount to decrement. One for default
+     * @return Rediska_Connection_Exec
+     */
+    public function create($key, $amount = 1)
     {
         if (!is_integer($amount) || $amount <= 0) {
             throw new Rediska_Command_Exception("Amount must be positive integer");
         }
 
-        $connection = $this->_rediska->getConnectionByKeyName($name);
+        $connection = $this->_rediska->getConnectionByKeyName($key);
 
         if ($amount == 1) {
-            $command = "DECR {$this->_rediska->getOption('namespace')}$name";
+            $command = "DECR {$this->_rediska->getOption('namespace')}$key";
         } else {
-            $command = "DECRBY {$this->_rediska->getOption('namespace')}$name $amount";
+            $command = "DECRBY {$this->_rediska->getOption('namespace')}$key $amount";
         }
-        
+
         return new Rediska_Connection_Exec($connection, $command);
     }
 }

@@ -1,9 +1,7 @@
 <?php
 
 /**
- * Synchronously save the DB on disk, then shutdown the server
- * 
- * @return boolean
+ * Stop all the clients, save the DB, then quit the server
  * 
  * @author Ivan Shumkov
  * @package Rediska
@@ -13,9 +11,14 @@
  */
 class Rediska_Command_Shutdown extends Rediska_Command_Abstract
 {
-    public function create($background = false) 
+    /**
+     * Create command
+     *
+     * @return array
+     */
+    public function create() 
     {
-        $command = "SHUTDOWN";
+        $command = 'SHUTDOWN';
         $commands = array();
         foreach($this->_rediska->getConnections() as $connection) {
             $commands[] = new Rediska_Connection_Exec($connection, $command);
@@ -24,6 +27,12 @@ class Rediska_Command_Shutdown extends Rediska_Command_Abstract
         return $commands;
     }
 
+    /**
+     * Parse responses
+     *
+     * @param array $responses
+     * @return true
+     */
     public function parseResponses($responses)
     {
         return true;

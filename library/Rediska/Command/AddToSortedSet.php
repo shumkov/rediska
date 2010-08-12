@@ -3,11 +3,6 @@
 /**
  * Add member to sorted set
  * 
- * @param string $name  Key name
- * @param mixin  $value Member
- * @param number $score Score of member
- * @return boolean
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -16,19 +11,38 @@
  */
 class Rediska_Command_AddToSortedSet extends Rediska_Command_Abstract
 {
+    /**
+     * Supported version
+     *
+     * @var string
+     */
     protected $_version = '1.1';
 
-    public function create($name, $value, $score)
+    /**
+     * Create command
+     *
+     * @param string $key    Key name
+     * @param mixed  $member Member
+     * @param number $score  Score of member
+     * @return Rediska_Connection_Exec
+     */
+    public function create($key, $member, $score)
     {
-        $connection = $this->_rediska->getConnectionByKeyName($name);
+        $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        $value = $this->_rediska->getSerializer()->serialize($value);
+        $member = $this->_rediska->getSerializer()->serialize($member);
 
-        $command = array('ZADD', "{$this->_rediska->getOption('namespace')}$name", $score, $value);
+        $command = array('ZADD', "{$this->_rediska->getOption('namespace')}$key", $score, $member);
 
         return new Rediska_Connection_Exec($connection, $command);
     }
 
+    /**
+     * Parse response
+     *
+     * @param string $response
+     * @return boolean
+     */
     public function parseResponse($response)
     {
         return (boolean)$response;

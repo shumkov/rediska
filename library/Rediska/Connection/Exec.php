@@ -145,7 +145,7 @@ class Rediska_Connection_Exec
      * Read response from connection
      * 
      * @param Rediska_Connection $connection
-     * @return mixin
+     * @return mixed
      */
     public static function readResponseFromConnection(Rediska_Connection $connection)
     {

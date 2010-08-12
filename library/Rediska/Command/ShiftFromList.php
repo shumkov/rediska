@@ -3,9 +3,6 @@
 /**
  * Return and remove the first element of the List at key
  * 
- * @param string $name Key name
- * @return mixin
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -14,15 +11,27 @@
  */
 class Rediska_Command_ShiftFromList extends Rediska_Command_Abstract
 {
-    public function create($name) 
+    /**
+     * Create command
+     *
+     * @param string $key Key name
+     * @return Rediska_Connection_Exec
+     */
+    public function create($key)
     {
-        $connection = $this->_rediska->getConnectionByKeyName($name);
+        $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        $command = "LPOP {$this->_rediska->getOption('namespace')}$name";
+        $command = "LPOP {$this->_rediska->getOption('namespace')}$key";
 
         return new Rediska_Connection_Exec($connection, $command);
     }
 
+    /**
+     * Parse response
+     *
+     * @param string $response
+     * @return mixed
+     */
     public function parseResponse($response)
     {
         return $this->_rediska->getSerializer()->unserialize($response);

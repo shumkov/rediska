@@ -1,9 +1,7 @@
 <?php
 
 // Require Rediska
-if (!class_exists('Rediska')) {
-    require_once dirname(__FILE__) . '/../Rediska.php';
-}
+require_once dirname(__FILE__) . '/../Rediska.php';
 
 /**
  * Rediska basic key
@@ -36,7 +34,7 @@ class Rediska_Key extends Rediska_Key_Abstract
     /**
      * Get key value
      * 
-     * @return mixin
+     * @return mixed
      */
     public function getValue()
     {

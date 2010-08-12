@@ -14,7 +14,7 @@ interface Rediska_Serializer_Adapter_Interface
     /**
      * Serialize value
      *
-     * @param mixin $value
+     * @param mixed $value
      * @return string
      */
     public function serialize($value);
@@ -23,7 +23,7 @@ interface Rediska_Serializer_Adapter_Interface
      * Unserialize value
      *
      * @param string $value
-     * @return mixin
+     * @return mixed
      */
     public function unserialize($value);
 }

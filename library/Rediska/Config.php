@@ -112,7 +112,7 @@ class Rediska_Config implements IteratorAggregate, ArrayAccess, Countable
      * Magic for set a value to parameter
      *
      * @param string $name  Name
-     * @param mixin  $value Value
+     * @param mixed  $value Value
      * @return $value
      */
     public function __set($name, $value)
@@ -126,7 +126,7 @@ class Rediska_Config implements IteratorAggregate, ArrayAccess, Countable
      * Array magic for set a value to parameter
      *
      * @param string $field
-     * @param mixin $value
+     * @param mixed $value
      * @return boolean
      */
     public function offsetSet($name, $value)

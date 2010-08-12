@@ -3,14 +3,6 @@
 /**
  * Get sorted elements contained in the List, Set, or Sorted Set value at key.
  * 
- * @param string        $name  Key name
- * @param string|array  $value Options or SORT query string (http://code.google.com/p/redis/wiki/SortCommand).
- *                             Important notes for SORT query string:
- *                                 1. If you set Rediska namespace option don't forget add it to key names.
- *                                 2. If you use more then one connection to Redis servers, it will choose by key name,
- *                                    and key by you pattern's may not present on it.
- * @return array
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -21,7 +13,7 @@ class Rediska_Command_Sort extends Rediska_Command_Abstract
 {
     const ASC  = 'asc';
     const DESC = 'desc';
-    
+
     protected $_options = array(
         'order'  => self::ASC,
         'limit'  => null,
@@ -32,11 +24,22 @@ class Rediska_Command_Sort extends Rediska_Command_Abstract
         'store'  => null,
     );
 
-    public function create($name, $options = array())
+    /**
+     * Create command
+     *
+     * @param string        $key   Key name
+     * @param string|array  $value Options or SORT query string (http://code.google.com/p/redis/wiki/SortCommand).
+     *                             Important notes for SORT query string:
+     *                                 1. If you set Rediska namespace option don't forget add it to key names.
+     *                                 2. If you use more then one connection to Redis servers, it will choose by key name,
+     *                                    and key by you pattern's may not present on it.
+     * @return Rediska_Connection_Exec
+     */
+    public function create($key, $options = array())
     {
-        $connection = $this->_rediska->getConnectionByKeyName($name);
+        $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        $command = "SORT {$this->_rediska->getOption('namespace')}$name";
+        $command = "SORT {$this->_rediska->getOption('namespace')}$key";
 
         if (!is_string($options)) {
             foreach($options as $name => $value) {
@@ -93,6 +96,17 @@ class Rediska_Command_Sort extends Rediska_Command_Abstract
         return new Rediska_Connection_Exec($connection, $command);
     }
 
+    /**
+     * Parse response
+     *
+     * @param array $response
+     * @return array
+     */
+    public function parseResponse($response)
+    {
+        return array_map(array($this->_rediska->getSerializer(), 'unserialize'), $response);
+    }
+
     protected function _addNamespaceToGetIfNeeded($pattern)
     {
         if ($pattern != '#') {
@@ -110,10 +124,5 @@ class Rediska_Command_Sort extends Rediska_Command_Abstract
         if (count($connections) > 1) {
             throw new Rediska_Command_Exception("You can use '$argument' with only one connection. Use 'on' method to specify it.");
         }
-    }
-
-    public function parseResponse($response)
-    {
-        return array_map(array($this->_rediska->getSerializer(), 'unserialize'), $response);
     }
 }

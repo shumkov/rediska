@@ -3,11 +3,6 @@
 /**
  * Increment field value in hash
  * 
- * @param string $name             Key name
- * @param mixin  $field            Field
- * @param number $amount[optional] Increment amount. Default: 1
- * @return integer
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -16,13 +11,26 @@
  */
 class Rediska_Command_IncrementInHash extends Rediska_Command_Abstract
 {
+    /**
+     * Supported version
+     *
+     * @var string
+     */
     protected $_version = '1.3.10';
 
-    public function create($name, $field, $amount = 1)
+    /**
+     * Create command
+     *
+     * @param string $key              Key name
+     * @param mixed  $field            Field
+     * @param number $amount[optional] Increment amount. One for default
+     * @return Rediska_Connection_Exec
+     */
+    public function create($key, $field, $amount = 1)
     {
-        $connection = $this->_rediska->getConnectionByKeyName($name);
+        $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        $command = array('HINCRBY', "{$this->_rediska->getOption('namespace')}$name", $field, $amount);
+        $command = array('HINCRBY', "{$this->_rediska->getOption('namespace')}$key", $field, $amount);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

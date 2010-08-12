@@ -1,9 +1,7 @@
 <?php
 
 // Require Rediska
-if (!class_exists('Rediska')) {
-    require_once dirname(__FILE__) . '/../../Rediska.php';
-}
+require_once dirname(__FILE__) . '/../../Rediska.php';
 
 /**
  * Rediska Sorted set key
@@ -19,7 +17,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
     /**
      * Add the specified member to the Sorted set
      * 
-     * @param mixin $value Value
+     * @param mixed $value Value
      * @param numeric $score Score
      * @return boolean
      */
@@ -37,7 +35,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
     /**
      * Remove the specified member from the Sorted set
      * 
-     * @param mixin $value Value
+     * @param mixed $value Value
      * @return boolean
      */
     public function remove($value)
@@ -91,7 +89,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
     /**
      * Get member score from Sorted Set
      * 
-     * @param mixin $value
+     * @param mixed $value
      * @return numeric
      */
     public function getScore($value)

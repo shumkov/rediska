@@ -3,11 +3,6 @@
 /**
  * Move the specified member from one Set to another atomically
  * 
- * @param string $fromName From key name
- * @param string $toName   To key name
- * @param mixin  $value    Value
- * @return boolean
- * 
  * @author Ivan Shumkov
  * @package Rediska
  * @version @package_version@
@@ -18,29 +13,43 @@ class Rediska_Command_MoveToSet extends Rediska_Command_Abstract
 {
     protected $_multi = false;
 
-    public function create($fromName, $toName, $value)
+    /**
+     * Create command
+     *
+     * @param string $fromKey From key name
+     * @param string $toKey   To key name
+     * @param mixed  $member  Member
+     * @return Rediska_Connection_Exec
+     */
+    public function create($fromKey, $toKey, $member)
     {        
-        $fromNameConnection = $this->_rediska->getConnectionByKeyName($fromName);
-        $toNameConnection = $this->_rediska->getConnectionByKeyName($toName);
+        $fromKeyConnection = $this->_rediska->getConnectionByKeyName($fromKey);
+        $toKeyConnection = $this->_rediska->getConnectionByKeyName($toKey);
         
-        $value = $this->_rediska->getSerializer()->serialize($value);
+        $member = $this->_rediska->getSerializer()->serialize($member);
 
-        if ("$fromNameConnection" == "$toNameConnection") {
-            $command = "SMOVE {$this->_rediska->getOption('namespace')}$fromName {$this->_rediska->getOption('namespace')}$toName "  . strlen($value) . Rediska::EOL . $value;
+        if ($fromKeyConnection === $toKeyConnection) {
+            $command = "SMOVE {$this->_rediska->getOption('namespace')}$fromKey {$this->_rediska->getOption('namespace')}$toKey "  . strlen($member) . Rediska::EOL . $member;
         } else {
             $this->setAtomic(false);
-            $command = "SISMEMBER {$this->_rediska->getOption('namespace')}$fromName " . strlen($value) . Rediska::EOL . $value;
+            $command = "SISMEMBER {$this->_rediska->getOption('namespace')}$fromKey " . strlen($member) . Rediska::EOL . $member;
         }
 
-        return new Rediska_Connection_Exec($fromNameConnection, $command);
+        return new Rediska_Connection_Exec($fromKeyConnection, $command);
     }
 
+    /**
+     * Parse response
+     *
+     * @param array $responses
+     * @return boolean
+     */
     public function parseResponses($responses)
     {
         if (!$this->isAtomic()) {
             if ($responses[0]) {
-                $this->_rediska->deleteFromSet($this->fromName, $this->value);
-                return $this->_rediska->addToSet($this->toName, $this->value);
+                $this->_rediska->deleteFromSet($this->fromKey, $this->member);
+                return $this->_rediska->addToSet($this->toKey, $this->member);
             } else {
                 return false;
             }
