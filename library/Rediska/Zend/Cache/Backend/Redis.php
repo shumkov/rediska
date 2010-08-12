@@ -1,7 +1,7 @@
 <?php
 
 // Require Rediska
-require_once '../../../../../Rediska.php';
+require_once dirname(__FILE__) . '/../../../../Rediska.php';
 
 /**
  * @see Zend_Cache_Backend

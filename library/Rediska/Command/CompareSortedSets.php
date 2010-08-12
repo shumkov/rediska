@@ -55,7 +55,7 @@ abstract class Rediska_Command_CompareSortedSets extends Rediska_Command_Abstrac
 
         $connections = array();
         $keysByConnections = array();
-        foreach ($keysByConnections as $key) {
+        foreach ($keys as $key) {
             $connection = $this->_rediska->getConnectionByKeyName($key);
             $connectionAlias = $connection->getAlias();
             if (!array_key_exists($connectionAlias, $connections)) {
