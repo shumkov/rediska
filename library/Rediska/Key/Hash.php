@@ -17,13 +17,13 @@ class Rediska_Key_Hash extends Rediska_Key_Abstract implements IteratorAggregate
     /**
      * Construct hash
      *
-     * @param string                    $name        Key name
-     * @param integer                   $expire      Expire time in seconds
-     * @param string|Rediska_Connection $serverAlias Server alias or Rediska_Connection object where key is placed
+     * @param string                    $nameOrOptions  Key name or options
+     * @param integer                   $expire         Expire time in seconds. Deprecated!
+     * @param string|Rediska_Connection $serverAlias    Server alias or Rediska_Connection object where key is placed. Deprecated!
      */
-    public function  __construct($name, $expire = null, $serverAlias = null)
+    public function  __construct($nameOrOptions, $expire = null, $serverAlias = null)
     {
-        parent::__construct($name, $expire, $serverAlias);
+        parent::__construct($nameOrOptions, $expire, $serverAlias);
 
         $this->_throwIfNotSupported();
     }
