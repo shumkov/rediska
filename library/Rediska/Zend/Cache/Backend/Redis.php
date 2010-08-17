@@ -40,38 +40,22 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
     /**
      * Contruct Zend_Cache Redis backend
      * 
-     * @param array $options Options
-     * 
-     * servers        - Array of servers: array(
-     *                                        array('host' => '127.0.0.1', 'port' => 6379, 'weight' => 1, 'password' => '123'),
-     *                                        array('host' => '127.0.0.1', 'port' => 6380, 'weight' => 2)
-     *                                    )
-     * serializer     - Callback function for serialization.
-     *                  You may use PHP extensions like igbinary (http://opensource.dynamoid.com/)
-     *                  or you personal function.
-     *                  For default php function serialize.             
-     * unserializer   - Unserialize callback.
-     * keyDistributor - Algorithm of keys distribution on redis servers.
-     *                  For default 'consistentHashing' which implement
-     *                  consistent hashing algorithm (http://weblogs.java.net/blog/tomwhite/archive/2007/11/consistent_hash.html)
-     *                  You may use basic 'crc32' (crc32(key) % servers_count) algorithm
-     *                  or you personal implementation (option value - name of class
-     *                  which implements Rediska_KeyDistributor_Interface).
-     * 
+     * @param mixed $rediska Rediska instance name, Rediska object or array of options
      */
-    public function __construct(array $options = array())
+    public function __construct($rediska = Rediska::DEFAULT_NAME)
     {
-        parent::__construct($options);
-
-        if (isset($options['namespace'])) {
-            Zend_Cache::throwException('Namespace must definded in front end options (cache_id_prefix)');
+        if ($rediska instanceof Zend_Config) {
+            $rediska = $rediska->toArray();
         }
 
-        $defaultInstance = Rediska::getDefaultInstance();
-        if (empty($options) && $defaultInstance) {
-            $this->_rediska = $defaultInstance;
+        parent::__construct(is_array($rediska) ? $rediska : array());
+
+        if (is_array($rediska)) {
+            $this->_rediska = new Rediska($rediska);
+        } else if (is_string($rediska)) {
+            $this->_rediska = Rediska_Manager::getOrInstanceDefault($rediska);
         } else {
-            $this->_rediska = new Rediska($options);
+            $this->_rediska = $rediska;
         }
     }
 

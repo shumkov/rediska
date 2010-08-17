@@ -21,9 +21,9 @@ class Rediska_PubSub_Channel extends Rediska_Options implements Iterator, ArrayA
     /**
      * Rediska instance
      *
-     * @var Rediska
+     * @var string|Rediska
      */
-    protected $_rediska;
+    protected $_rediska = Rediska::DEFAULT_NAME;
 
     /**
      * Subscriptions
@@ -101,7 +101,6 @@ class Rediska_PubSub_Channel extends Rediska_Options implements Iterator, ArrayA
     {
         $this->setOptions($options);
 
-        $this->_setupRediskaDefaultInstance();
         $this->_throwIfNotSupported();
 
         $this->_connections = new Rediska_PubSub_Connections($this);
@@ -158,7 +157,7 @@ class Rediska_PubSub_Channel extends Rediska_Options implements Iterator, ArrayA
      */
     public function publish($message)
     {
-        return $this->_rediska->publish($this->_subscriptions, $message);
+        return $this->getRediska()->publish($this->_subscriptions, $message);
     }
 
     /**
@@ -318,26 +317,31 @@ class Rediska_PubSub_Channel extends Rediska_Options implements Iterator, ArrayA
 
     /**
      * Set Rediska instance
-     * 
-     * @param Rediska $rediska
-     * @return Rediska_PubSub_Channel
+     *
+     * @param Rediska $rediska Rediska instance or name
+     * @return Rediska_Key_Abstract
      */
-    public function setRediska(Rediska $rediska)
+    public function setRediska($rediska)
     {
+        if (is_object($rediska) && !$rediska instanceof Rediska) {
+            throw new Rediska_PubSub_Exception('$rediska must be Rediska instance or name');
+        }
+
         $this->_rediska = $rediska;
-        
+
         return $this;
     }
 
     /**
      * Get Rediska instance
-     * 
+     *
+     * @throws Rediska_Exception
      * @return Rediska
      */
     public function getRediska()
     {
-        if (!$this->_rediska instanceof Rediska) {
-            throw new Rediska_PubSub_Exception('Rediska instance not found for PubSub channel');
+        if (!is_object($this->_rediska)) {
+            $this->_rediska = Rediska_Manager::getOrInstanceDefault($this->_rediska);
         }
 
         return $this->_rediska;
@@ -557,19 +561,6 @@ class Rediska_PubSub_Channel extends Rediska_Options implements Iterator, ArrayA
 
             default:
                 throw new Rediska_PubSub_Response_Exception('Unknown reponse type: ' . $type);
-        }
-    }
-
-    /**
-     * Setup Rediska instance
-     */
-    protected function _setupRediskaDefaultInstance()
-    {
-        if (!$this->_rediska) {
-            $this->_rediska = Rediska::getDefaultInstance();
-            if (!$this->_rediska) {
-                $this->_rediska = new Rediska();
-            }
         }
     }
 
