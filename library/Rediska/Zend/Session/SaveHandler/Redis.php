@@ -32,22 +32,15 @@ require_once 'Zend/Session/SaveHandler/Exception.php';
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_Zend_Session_SaveHandler_Redis implements Zend_Session_SaveHandler_Interface
+class Rediska_Zend_Session_SaveHandler_Redis extends Rediska_Options_WithRediskaInstance implements Zend_Session_SaveHandler_Interface
 {
-    /**
-     * Rediska instance
-     *
-     * @var Rediska
-     */
-    protected $_rediska;
-    
     /**
      * Sessions set
      * 
      * @var Rediska_Zend_Session_Set
      */
     protected $_set;
-    
+
     /**
      * Configuration
      * 
@@ -57,6 +50,13 @@ class Rediska_Zend_Session_SaveHandler_Redis implements Zend_Session_SaveHandler
         'keyprefix'      => 'PHPSESSIONS_',
         'lifetime'       => null,
     );
+    
+    /**
+     * Exception class name for options
+     * 
+     * @var string
+     */
+    protected $_optionsException = 'Zend_Session_SaveHandler_Exception';
 
     /**
      * Construct save handler
@@ -74,22 +74,10 @@ class Rediska_Zend_Session_SaveHandler_Redis implements Zend_Session_SaveHandler
 
         // Get Rediska instance
         if (isset($options['rediskaOptions'])) {
-            throw new Zend_Session_SaveHandler_Exception("Option 'rediskaOptions' is deprecated. Use 'rediska' option. It may be Rediska object, instance name or array with options");
-        }
-        if (isset($options['rediska'])) {
-            if (is_object($options['rediska'])) {
-                $this->_rediska = $options['rediska'];
-            } else if (is_string($options['rediska'])) {
-                $this->_rediska = Rediska_Manager::getOrInstanceDefault($options['rediska']);
-            } else if (is_array($options['rediska'])) {
-                $this->_rediska = new Rediska($options['rediska']);
-            }
-            unset($options['rediska']);
-        } else {
-            $this->_rediska = Rediska_Manager::getOrInstanceDefault();
+            throw new Zend_Session_SaveHandler_Exception("Option 'rediskaOptions' is deprecated. Use 'rediska' option. It may be Rediska object, instance name or options for new instance");
         }
 
-        $this->setOptions($options);
+        parent::__construct($options);
 
         Rediska_Zend_Session_Set::setSaveHandler($this);
 
@@ -136,7 +124,7 @@ class Rediska_Zend_Session_SaveHandler_Redis implements Zend_Session_SaveHandler
      */
     public function read($id)
     {
-        return $this->_rediska->get($this->_getKeyName($id));
+        return $this->getRediska()->get($this->_getKeyName($id));
     }
 
     /**
@@ -150,10 +138,10 @@ class Rediska_Zend_Session_SaveHandler_Redis implements Zend_Session_SaveHandler
     {
         $this->_set[] = $id;
 
-        $reply = $this->_rediska->set($this->_getKeyName($id), $data);
+        $reply = $this->getRediska()->set($this->_getKeyName($id), $data);
 
         if ($reply) {
-            $this->_rediska->expire($this->_getKeyName($id), $this->_options['lifetime']);
+            $this->getRediska()->expire($this->_getKeyName($id), $this->_options['lifetime']);
         }
 
         return $reply;
@@ -169,7 +157,7 @@ class Rediska_Zend_Session_SaveHandler_Redis implements Zend_Session_SaveHandler
     {
         $this->_set->remove($id);
 
-        $this->_rediska->delete($this->_getKeyName($id));
+        $this->getRediska()->delete($this->_getKeyName($id));
 
         return true;
     }
@@ -190,7 +178,7 @@ class Rediska_Zend_Session_SaveHandler_Redis implements Zend_Session_SaveHandler
             }
     
             // TODO: May by use TTL? Need benchmark.
-            $lifeSession = $this->_rediska->get($sessions);
+            $lifeSession = $this->getRediska()->get($sessions);
             foreach($sessions as $session) {
                 if (!isset($lifeSession[$session])) {
                     $sessionWithoutPrefix = substr($session, strlen($this->_options['keyprefix']));
@@ -200,86 +188,6 @@ class Rediska_Zend_Session_SaveHandler_Redis implements Zend_Session_SaveHandler
         }
 
         return true;
-    }
-
-    /**
-     * Set options array
-     * 
-     * @param array $options Options (see $_options description)
-     * @return Rediska_Zend_Session_SaveHandler_Redis
-     */
-    public function setOptions(array $options)
-    {
-        foreach($options as $name => $value) {
-            if (method_exists($this, "set$name")) {
-                call_user_func(array($this, "set$name"), $value);
-            } else {
-                $this->setOption($name, $value);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set option
-     * 
-     * @throws Zend_Session_SaveHandler_Exception
-     * @param string $name Name of option
-     * @param mixed $value Value of option
-     * @return Rediska_Zend_Session_SaveHandler_Redis
-     */
-    public function setOption($name, $value)
-    {
-        $lowerName = strtolower($name);
-
-        if (!array_key_exists($lowerName, $this->_options)) {
-            throw new Zend_Session_SaveHandler_Exception("Unknown option '$name'");
-        }
-
-        $this->_options[$lowerName] = $value;
-
-        return $this;
-    }
-
-    /**
-     * Get option
-     * 
-     * @param string $name Name of option
-     * @return mixed
-     */
-    public function getOption($name)
-    {
-        $lowerName = strtolower($name);
-        
-        if (!array_key_exists($lowerName, $this->_options)) {
-            throw new Zend_Session_SaveHandler_Exception("Unknown option '$name'");
-        }
-
-        return $this->_options[$lowerName];
-    }
-
-    /**
-     * Set Rediska instance
-     * 
-     * @param Rediska $rediska
-     * @return Rediska_Zend_Session_SaveHandler_Redis
-     */
-    public function setRediska(Rediska $rediska)
-    {
-        $this->_rediska = $rediska;
-        
-        return $this;
-    }
-
-    /**
-     * Get Rediska instance
-     * 
-     * @return Rediska
-     */
-    public function getRediska()
-    {
-        return $this->_rediska;
     }
 
     /**

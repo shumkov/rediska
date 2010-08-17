@@ -35,7 +35,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      * 
      * @var Rediska
      */
-    protected $_rediska;
+    protected $_rediska = Rediska::DEFAULT_NAME;
 
     /**
      * Contruct Zend_Cache Redis backend
@@ -48,15 +48,19 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
             $rediska = $rediska->toArray();
         }
 
-        parent::__construct(is_array($rediska) ? $rediska : array());
+        $this->setRediska($rediska);
+    }
+    
+    public function setRediska($rediska)
+    {
+        $this->_rediska = $rediska;
+        
+        return $this;
+    }
 
-        if (is_array($rediska)) {
-            $this->_rediska = new Rediska($rediska);
-        } else if (is_string($rediska)) {
-            $this->_rediska = Rediska_Manager::getOrInstanceDefault($rediska);
-        } else {
-            $this->_rediska = $rediska;
-        }
+    public function getRediska()
+    {
+        return Rediska_Options_WithRediskaInstance::getRediskaInstance($this->_rediska, 'Zend_Cache_Exception');
     }
 
     /**
@@ -68,7 +72,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     public function load($id, $doNotTestCacheValidity = false)
     {
-        $tmp = $this->_rediska->get($id);
+        $tmp = $this->getRediska()->get($id);
 
         if (is_array($id)) {
             foreach ($id as $k) {
@@ -92,7 +96,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     public function test($id)
     {
-        $tmp = $this->_rediska->get($id);
+        $tmp = $this->getRediska()->get($id);
         if (is_array($tmp)) {
             return $tmp[1];
         }
@@ -114,11 +118,11 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
     public function save($data, $id, $tags = array(), $specificLifetime = false)
     {
         $lifetime = $this->getLifetime($specificLifetime);
-
-        $result = $this->_rediska->set($id, array($data, time(), $lifetime));
-
-        if ($result && $lifetime) {
-            $this->_rediska->expire($id, $lifetime);
+        
+        if ($lifetime) {
+            $result = $this->getRediska()->setAndExpire($id, array($data, time(), $lifetime), $lifetime);
+        } else {
+            $result = $this->getRediska()->set($id, array($data, time(), $lifetime));
         }
 
         if (count($tags) > 0) {
@@ -136,7 +140,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     public function remove($id)
     {
-        return $this->_rediska->delete($id);
+        return $this->getRediska()->delete($id);
     }
 
     /**
@@ -158,7 +162,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
     {
         switch ($mode) {
             case Zend_Cache::CLEANING_MODE_ALL:
-                return $this->_rediska->flushDb();
+                return $this->getRediska()->flushDb();
                 break;
             case Zend_Cache::CLEANING_MODE_OLD:
                 $this->_log("Rediska_Zend_Cache_Backend_Redis::clean() : CLEANING_MODE_OLD is unsupported by the Redis backend");
@@ -289,7 +293,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     public function getMetadatas($id)
     {
-        $tmp = $this->_rediska->get($id);
+        $tmp = $this->getRediska()->get($id);
         if (is_array($tmp)) {
             $data = $tmp[0];
             $mtime = $tmp[1];
@@ -317,7 +321,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     public function touch($id, $extraLifetime)
     {
-        $tmp = $this->_rediska->get($id);
+        $tmp = $this->getRediska()->get($id);
         if (is_array($tmp)) {
             $data = $tmp[0];
             $mtime = $tmp[1];
@@ -331,13 +335,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
             if ($newLifetime <=0) {
                 return false;
             }
-            $result = $this->_rediska->set($id, array($data, time(), $newLifetime));
-
-            if ($result) {
-                $this->_rediska->expire($id, $newLifetime);    
-            }
-
-            return $result;
+            return $this->getRediska()->setAndExpire($id, array($data, time(), $newLifetime), $newLifetime);
         }
         return false;
     }

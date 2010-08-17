@@ -68,7 +68,8 @@ class Rediska extends Rediska_Options
     /**
      * Configuration
      *
-     * name              - Rediska client name
+     * name              - Rediska instance name. See Rediska_Manager
+     * addToManager      - Add instance to Rediska_Manager
      * namespace         - Key names prefix
      * servers           - Array of servers: array(
      *                                        array('host' => '127.0.0.1', 'port' => 6379, 'weight' => 1, 'password' => '123', 'alias' => 'example'),
@@ -88,9 +89,10 @@ class Rediska extends Rediska_Options
      * @var array
      */
     protected $_options = array(
-        'name'      => self::DEFAULT_NAME,
-        'namespace' => '',
-        'servers'   => array(
+        'addtomanager' => true,
+        'name'         => self::DEFAULT_NAME,
+        'namespace'    => '',
+        'servers'      => array(
             array(
                 'host'   => Rediska_Connection::DEFAULT_HOST,
                 'port'   => Rediska_Connection::DEFAULT_PORT,
@@ -107,6 +109,8 @@ class Rediska extends Rediska_Options
      * 
      * @param array $options Options
      * 
+     * name              - Rediska instance name. See Rediska_Manager
+     * addToManager      - Add instance to Rediska_Manager
      * namespace         - Key names prefix
      * servers           - Array of servers: array(
      *                                        array('host' => '127.0.0.1', 'port' => 6379, 'weight' => 1, 'password' => '123', 'alias' => 'example'),
@@ -141,7 +145,9 @@ class Rediska extends Rediska_Options
     {
         $this->_options['name'] = $name;
 
-        Rediska_Manager::add($this);
+        if ($this->_options['addtomanager']) {
+            Rediska_Manager::add($this);
+        }
 
         return $this;
     }

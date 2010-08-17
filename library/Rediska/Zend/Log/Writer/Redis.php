@@ -38,16 +38,7 @@ class Rediska_Zend_Log_Writer_Redis extends Zend_Log_Writer_Abstract
             $rediska = $rediska->toArray();
         }
 
-        if (is_array($rediska)) {
-            $rediska = new Rediska($rediska);
-        } else if (is_string($rediska)) {
-            $rediska = Rediska_Manager::getOrInstanceDefault($rediska);
-        }
-
-        $this->_list = new Rediska_Key_List(array(
-            'name'    => $keyName,
-            'rediska' => $rediska
-        ));
+        $this->_list = new Rediska_Key_List($keyName, array('rediska' => $rediska));
     }
 
     /**

@@ -32,15 +32,8 @@ require_once 'Zend/Config.php';
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_Zend_Auth_Adapter_Redis extends Rediska_Options implements Zend_Auth_Adapter_Interface
+class Rediska_Zend_Auth_Adapter_Redis extends Rediska_Options_WithRediskaInstance implements Zend_Auth_Adapter_Interface
 {
-    /**
-     * Rediska instance
-     * 
-     * @var Rediska
-     */
-    protected $_rediska = Rediska::DEFAULT_NAME;
-
     /**
      * User identity
      * 
@@ -61,6 +54,13 @@ class Rediska_Zend_Auth_Adapter_Redis extends Rediska_Options implements Zend_Au
      * @var array|object
      */
     protected $_userData;
+    
+    /**
+     * Exception class name for options
+     * 
+     * @var string
+     */
+    protected $_optionsException = 'Zend_Auth_Adapter_Exception';
 
     /**
      * Configuration
@@ -81,42 +81,6 @@ class Rediska_Zend_Auth_Adapter_Redis extends Rediska_Options implements Zend_Au
         'credentialattributename' => 'password',
         'userdataisarray'         => false,
     );
-
-    /**
-     * Set Rediska instance
-     *
-     * @param Rediska $rediska Rediska instance or name
-     * @return Rediska_Key_Abstract
-     */
-    public function setRediska($rediska)
-    {
-        if (is_object($rediska) && !$rediska instanceof Rediska) {
-            throw new Rediska_Key_Exception('$rediska must be Rediska instance name, Rediska object or array of options');
-        }
-
-        $this->_rediska = $rediska;
-
-        return $this;
-    }
-
-    /**
-     * Get Rediska instance
-     *
-     * @throws Rediska_Exception
-     * @return Rediska
-     */
-    public function getRediska()
-    {
-        if (!is_object($this->_rediska)) {
-            if (is_array($this->_rediska)) {
-                $this->_rediska = new Rediska($this->_rediska);
-            } else {
-                $this->_rediska = Rediska_Manager::getOrInstanceDefault($this->_rediska);
-            }
-        }
-
-        return $this->_rediska;
-    }
 
     /**
      * Set identity (login)

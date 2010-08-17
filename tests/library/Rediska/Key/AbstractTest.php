@@ -17,9 +17,9 @@ class Rediska_Key_AbstractTest extends Rediska_TestCase
     {
         $key = new Rediska_Key('test');
         $this->assertEquals('test', $key->getName());
-
-        $key = new Rediska_Key(array('name' => 'test'));
-        $this->assertEquals('test', $key->getName());
+        
+        $key = new Rediska_Key('test', array('expire' => 3));
+        $this->assertEquals(3, $key->getExpire());
     }
 
     public function testGetRediska()
@@ -33,9 +33,9 @@ class Rediska_Key_AbstractTest extends Rediska_TestCase
 
         list($firstServer, $secondServer) = $this->rediska->getConnections();
 
-        $key1 = new Rediska_Key(array('name' => 'test', 'serverAlias' => $firstServer));
+        $key1 = new Rediska_Key('test', array('serverAlias' => $firstServer));
         $key1->setValue(1);
-        $key2 = new Rediska_Key(array('name' => 'test', 'serverAlias' => $secondServer));
+        $key2 = new Rediska_Key('test', array('serverAlias' => $secondServer));
         $key2->setValue(2);
 
         $reply = $this->rediska->on($firstServer->getAlias())->get('test');

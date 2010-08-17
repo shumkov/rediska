@@ -12,18 +12,11 @@ require_once dirname(__FILE__) . '/../../../Rediska.php';
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_PubSub_Channel extends Rediska_Options implements Iterator, ArrayAccess
+class Rediska_PubSub_Channel extends Rediska_Options_WithRediskaInstance implements Iterator, ArrayAccess
 {
     const SUBSCRIBE     = 'subscribe';
     const UNSUBSCRIBE   = 'unsubscribe';
     const MESSAGE       = 'message';
-
-    /**
-     * Rediska instance
-     *
-     * @var string|Rediska
-     */
-    protected $_rediska = Rediska::DEFAULT_NAME;
 
     /**
      * Subscriptions
@@ -89,13 +82,20 @@ class Rediska_PubSub_Channel extends Rediska_Options implements Iterator, ArrayA
     static protected $_messages = array();
 
     /**
+     * Exception class name for options
+     * 
+     * @var string
+     */
+    protected $_optionsException = 'Rediska_PubSub_Exception';
+
+    /**
      * Constructor
      * 
      * @param string|array    $nameOrNames Channel name or array of names
      * @patam array[optional] $options     Options:
      *                                         timeout     - Timeout in seconds
      *                                         serverAlias - Server alias or connection object
-     *                                         rediska     - Set rediska instance
+     *                                         rediska     - Rediska instance name, Rediska object or Rediska options for new instance
      */
     public function __construct($nameOrNames, $options = array())
     {
@@ -313,38 +313,6 @@ class Rediska_PubSub_Channel extends Rediska_Options implements Iterator, ArrayA
     public function getServerAlias()
     {
         return $this->_serverAlias;
-    }
-
-    /**
-     * Set Rediska instance
-     *
-     * @param Rediska $rediska Rediska instance or name
-     * @return Rediska_Key_Abstract
-     */
-    public function setRediska($rediska)
-    {
-        if (is_object($rediska) && !$rediska instanceof Rediska) {
-            throw new Rediska_PubSub_Exception('$rediska must be Rediska instance or name');
-        }
-
-        $this->_rediska = $rediska;
-
-        return $this;
-    }
-
-    /**
-     * Get Rediska instance
-     *
-     * @throws Rediska_Exception
-     * @return Rediska
-     */
-    public function getRediska()
-    {
-        if (!is_object($this->_rediska)) {
-            $this->_rediska = Rediska_Manager::getOrInstanceDefault($this->_rediska);
-        }
-
-        return $this->_rediska;
     }
 
     /* Iterator implementation */

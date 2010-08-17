@@ -12,15 +12,8 @@ require_once dirname(__FILE__) . '/../Rediska.php';
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_Monitor extends Rediska_Options implements Iterator
+class Rediska_Monitor extends Rediska_Options_WithRediskaInstance implements Iterator
 {
-    /**
-     * Rediska instance
-     * 
-     * @var string|Rediska
-     */
-    protected $_rediska = Rediska::DEFAULT_NAME;
-
     /**
      * Connections
      *
@@ -69,6 +62,13 @@ class Rediska_Monitor extends Rediska_Options implements Iterator
      * @var string
      */
     protected $_currentCommand;
+    
+    /**
+     * Exception class name for options
+     * 
+     * @var string
+     */
+    protected $_optionsException = 'Rediska_Monitor_Exception';
 
     /**
      * Constructor
@@ -182,38 +182,6 @@ class Rediska_Monitor extends Rediska_Options implements Iterator
     public function getTimeout()
     {
         return $this->_timeout;
-    }
-
-    /**
-     * Set Rediska instance
-     *
-     * @param Rediska $rediska Rediska instance or name
-     * @return Rediska_Key_Abstract
-     */
-    public function setRediska($rediska)
-    {
-        if (is_object($rediska) && !$rediska instanceof Rediska) {
-            throw new Rediska_PubSub_Exception('$rediska must be Rediska instance or name');
-        }
-
-        $this->_rediska = $rediska;
-
-        return $this;
-    }
-
-    /**
-     * Get Rediska instance
-     *
-     * @throws Rediska_Exception
-     * @return Rediska
-     */
-    public function getRediska()
-    {
-        if (!is_object($this->_rediska)) {
-            $this->_rediska = Rediska_Manager::getOrInstanceDefault($this->_rediska);
-        }
-
-        return $this->_rediska;
     }
 
     /* Iterator implementation */

@@ -30,9 +30,10 @@ class Rediska_Zend_Session_Set extends Rediska_Key_Set
             throw new Rediska_Key_Exception('You must initialize Rediska_Zend_Session_SaveHandler_Redis before');
         }
 
-        $this->setRediska(self::getSaveHandler()->getRediska());
+        $keyName = self::getSaveHandler()->getOption('keyPrefix') . 'sessions';
+        $options = array('rediska' => self::getSaveHandler()->getRediska());
 
-        parent::__construct(self::getSaveHandler()->getOption('keyPrefix') . 'sessions');
+        parent::__construct($keyName, $options);
     }
 
     /**

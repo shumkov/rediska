@@ -26,7 +26,7 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
      *
      * @var Rediska
      */
-    protected $_rediska;
+    protected $_rediska = Rediska::DEFAULT_NAME;
 
     /**
      * Queues set
@@ -54,16 +54,10 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
         parent::__construct($options, $queue);
 
         if (!empty($this->_options['driverOptions'])) {
-            if (is_object($options['driverOptions'])) {
-                $this->_rediska = $options['driverOptions'];
-            } else if (is_string($options['driverOptions'])) {
-                $this->_rediska = Rediska_Manager::getOrInstanceDefault($options['driverOptions']);
-            } else if (is_array($options['driverOptions'])) {
-                $this->_rediska = new Rediska($options['driverOptions']);
-            }
-        } else {
-            $this->_rediska = Rediska_Manager::getOrInstanceDefault();
+            $this->_rediska = $options['driverOptions'];
         }
+
+        $this->_rediska = Rediska_Options_WithRediskaInstance::getRediskaInstance($this->_rediska, 'Zend_Queue_Exception', 'driverOptions');
 
         $this->_queues = new Rediska_Key_Set(array(
             'name'    => $this->_getKeyName('queues'),
@@ -105,10 +99,7 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
     public function create($name, $timeout = null)
     {
         $this->_queues->add($name);
-        $this->_queueObjects[$name] = new Rediska_Key_List(array(
-            'name'    => $this->_getKeyName("queue_$name"),
-            'rediska' => $this->_rediska
-        ));
+        $this->_queueObjects[$name] = new Rediska_Key_List($this->_getKeyName("queue_$name"), array('rediska' => $this->_rediska));
 
         return true;
     }
@@ -170,7 +161,7 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
         }
 
         if (!isset($this->_queueObjects[$queueName])) {
-            $this->_queueObjects[$queueName] = new Rediska_Key_List($this->_getKeyName("queue_$queueName"));
+            $this->_queueObjects[$queueName] = new Rediska_Key_List($this->_getKeyName("queue_$queueName"), array('rediska' => $this->_rediska));
         }
 
         return count($this->_queueObjects[$queueName]);
@@ -202,10 +193,7 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
         }
 
         if (!isset($this->_queueObjects[$queueName])) {
-            $this->_queueObjects[$queueName] = new Rediska_Key_List(array(
-                'name'    => $this->_getKeyName("queue_$queueName"),
-                'rediska' => $this->_rediska,
-            ));
+            $this->_queueObjects[$queueName] = new Rediska_Key_List($this->_getKeyName("queue_$queueName"), array('rediska' => $this->_rediska));
         }
 
         $result = $this->_queueObjects[$queueName]->prepend($message);
@@ -253,10 +241,7 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
         }
 
         if (!isset($this->_queueObjects[$queueName])) {
-            $this->_queueObjects[$queueName] = new Rediska_Key_List(array(
-                'name'    => $this->_getKeyName("queue_$queueName"),
-                'rediska' => $this->_rediska,
-            ));
+            $this->_queueObjects[$queueName] = new Rediska_Key_List($this->_getKeyName("queue_$queueName"), array('rediska' => $this->_rediska));
         }
 
         $messages = array();
@@ -295,10 +280,7 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
         $queueName = $this->_queue->getName();
 
         if (!isset($this->_queueObjects[$queueName])) {
-            $this->_queueObjects[$queueName] = new Rediska_Key_List(array(
-                'name'    => $this->_getKeyName("queue_$queueName"),
-                'rediska' => $this->_rediska,
-            ));
+            $this->_queueObjects[$queueName] = new Rediska_Key_List($this->_getKeyName("queue_$queueName"), array('rediska' => $this->_rediska));
         }
 
         return (boolean)$this->_queueObjects[$queueName]->remove($message->body);

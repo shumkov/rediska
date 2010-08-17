@@ -4,7 +4,7 @@
 require_once dirname(__FILE__) . '/../Rediska.php';
 
 /**
- * Rediska manager
+ * Rediska instances manager
  *
  * @author Ivan Shumkov
  * @package Rediska
@@ -83,12 +83,12 @@ class Rediska_Manager
             throw new Rediska_Exception("Rediska instance '$name' not present");
         }
 
-        if (is_object(self::$_instances[$name])) {
-            $rediska = self::$_instances[$name];
-        } else {
+        if (!is_object(self::$_instances[$name])) {
             $options = self::$_instances[$name];
-            $rediska = new Rediska($options);
+            self::$_instances[$name] = new Rediska($options);
         }
+        
+        $rediska = self::$_instances[$name];
 
         return $rediska;
     }

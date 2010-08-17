@@ -9,22 +9,33 @@
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-abstract class Rediska_Key_Abstract extends Rediska_Options
+abstract class Rediska_Key_Abstract extends Rediska_Options_WithRediskaInstance
 {
     /**
-     * Rediska instance
-     *
-     * @var string|Rediska
+     * Key name
+     * 
+     * @var string
      */
-    protected $_rediska = Rediska::DEFAULT_NAME;
+    protected $_name;
+    
+    /**
+     * Exception class name for options
+     * 
+     * @var string
+     */
+    protected $_optionsException = 'Rediska_Key_Exception';
 
     /**
-     * Options
+     * Options:
+     * 
+     * expire            - Expire time
+     * expireIsTimestamp - Expire time is timestamp. For default false (in seconds)
+     * serverAlias       - Server alias or connection object
+     * rediska           - Rediska instance name, Rediska object or Rediska options for new instance
      *
      * @var array
      */
     protected $_options = array(
-        'name'              => null,
         'serveralias'       => null,
         'expire'            => null,
         'expireistimestamp' => false,
@@ -33,26 +44,24 @@ abstract class Rediska_Key_Abstract extends Rediska_Options
     /**
      * Construct key
      *
-     * @param string                    $nameOrOptions  Key name or options
-     * @param integer                   $expire         Expire time in seconds. Deprecated!
-     * @param string|Rediska_Connection $serverAlias    Server alias or Rediska_Connection object where key is placed. Deprecated!
+     * @param string                    $name        Key name
+     * @param integer                   $options     Options:
+     *                                                  expire            - Expire time
+     *                                                  expireIsTimestamp - Expire time is timestamp. For default false (in seconds)
+     *                                                  serverAlias       - Server alias or connection object
+     *                                                  rediska           - Rediska instance name, Rediska object or Rediska options for new instance
+     * @param string|Rediska_Connection $serverAlias Server alias or Rediska_Connection object where key is placed. Deprecated!
      */
-    public function __construct($nameOrOptions, $expire = null, $serverAlias = null)
+    public function __construct($name, $options = array(), $serverAlias = null)
     {
-        if (!is_null($expire)) {
-            throw new Rediska_Key_Exception("\$expire argument is deprectated. Use first argument as array with 'name' and 'expire' option");
+        if (!is_array($options)) {
+            throw new Rediska_Key_Exception("\$expire argument is deprectated. Use 'expire' option");
         }
         if (!is_null($serverAlias)) {
-            throw new Rediska_Key_Exception("\$serverAlias argument is deprectated. Use first argument as array with 'name' and 'serverAlias' option");
+            throw new Rediska_Key_Exception("\$serverAlias argument is deprectated. Use 'serverAlias' option");
         }
 
-        if (is_string($nameOrOptions)) {
-            $options = array('name' => $nameOrOptions);
-        } else if (is_array($nameOrOptions)) {
-            $options = $nameOrOptions;
-        } else {
-            throw new Rediska_Key_Exception('$nameOrOptions must be options array or key name');
-        }
+        $this->setName($name);
 
         parent::__construct($options);
     }
@@ -102,8 +111,8 @@ abstract class Rediska_Key_Abstract extends Rediska_Options
         } catch (Rediska_Exception $e) {
             return false;
         }
-
-        $this->_options['name'] = $newName;
+        
+        $this->setName($newName);
 
         if (!is_null($this->getExpire())) {
             $this->expire($this->getExpire(), $this->isExpireTimestamp());
@@ -159,7 +168,7 @@ abstract class Rediska_Key_Abstract extends Rediska_Options
      */
     public function getName()
     {
-        return $this->_options['name'];
+        return $this->_name;
     }
 
     /**
@@ -170,7 +179,7 @@ abstract class Rediska_Key_Abstract extends Rediska_Options
      */
     public function setName($name)
     {
-        $this->_options['name'] = $name;
+        $this->_name = $name;
 
         return $this;
     }
@@ -232,48 +241,6 @@ abstract class Rediska_Key_Abstract extends Rediska_Options
     {
         return $this->_options['serverAlias'];
     }
-    
-    /**
-     * Set Rediska instance
-     * 
-     * @param Rediska $rediska Rediska instance or name
-     * @return Rediska_Key_Abstract
-     */
-    public function setRediska($rediska)
-    {
-        if (is_object($rediska) && !$rediska instanceof Rediska) {
-            throw new Rediska_Key_Exception('$rediska must be Rediska instance name, Rediska object or array of options');
-        }
-
-        $this->_rediska = $rediska;
-
-        return $this;
-    }
-
-    /**
-     * Get Rediska instance
-     *
-     * @throws Rediska_Exception
-     * @return Rediska
-     */
-    public function getRediska()
-    {
-        if (!is_object($this->_rediska)) {
-            if ($this->_rediska == Rediska::DEFAULT_NAME) {
-                if (Rediska_Manager::has($this->_rediska)) {
-                    throw new Rediska_Key_Exception("You must instance '" . Rediska::DEFAULT_NAME . "' Rediska before or use 'rediska' option for specify instance");
-                } else {
-                    $this->_rediska = Rediska_Manager::get($this->_rediska);
-                }
-            } else if (is_array($this->_rediska)) {
-                $this->_rediska = new Rediska($this->_rediska);
-            } else {
-                $this->_rediska = Rediska_Manager::get($this->_rediska);
-            }
-        }
-
-        return $this->_rediska;
-    }
 
     /**
      *  Get rediska and set specified connection
@@ -284,8 +251,8 @@ abstract class Rediska_Key_Abstract extends Rediska_Options
     {
         $rediska = $this->getRediska();
 
-        if (!is_null($this->_options['serverAlias'])) {
-            $rediska = $rediska->on($this->_options['serverAlias']);
+        if (!is_null($this->getServerAlias())) {
+            $rediska = $rediska->on($this->getServerAlias());
         }
 
         return $rediska;

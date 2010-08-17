@@ -15,15 +15,19 @@ require_once dirname(__FILE__) . '/../../Rediska.php';
 class Rediska_Key_Hash extends Rediska_Key_Abstract implements IteratorAggregate, ArrayAccess, Countable
 {
     /**
-     * Construct hash
+     * Construct key
      *
-     * @param string                    $nameOrOptions  Key name or options
-     * @param integer                   $expire         Expire time in seconds. Deprecated!
-     * @param string|Rediska_Connection $serverAlias    Server alias or Rediska_Connection object where key is placed. Deprecated!
+     * @param string                    $name        Key name
+     * @param integer                   $options     Options:
+     *                                                  expire            - Expire time
+     *                                                  expireIsTimestamp - Expire time is timestamp. For default false (in seconds)
+     *                                                  serverAlias       - Server alias or connection object
+     *                                                  rediska           - Rediska instance name, Rediska object or Rediska options for new instance
+     * @param string|Rediska_Connection $serverAlias Server alias or Rediska_Connection object where key is placed. Deprecated!
      */
-    public function  __construct($nameOrOptions, $expire = null, $serverAlias = null)
+    public function  __construct($name, $options = array(), $serverAlias = null)
     {
-        parent::__construct($nameOrOptions, $expire, $serverAlias);
+        parent::__construct($name, $options, $serverAlias);
 
         $this->_throwIfNotSupported();
     }
