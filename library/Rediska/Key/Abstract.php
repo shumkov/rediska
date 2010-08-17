@@ -290,15 +290,4 @@ abstract class Rediska_Key_Abstract extends Rediska_Options
 
         return $rediska;
     }
-
-    /**
-     * Setup Rediska instance
-     */
-    protected function _setupRediskaDefaultInstance()
-    {
-        $this->_rediska = Rediska::getDefaultInstance();
-        if (!$this->_rediska) {
-            
-        }
-    }
 }
