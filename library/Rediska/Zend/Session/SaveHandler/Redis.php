@@ -73,12 +73,20 @@ class Rediska_Zend_Session_SaveHandler_Redis implements Zend_Session_SaveHandler
         $this->_options['lifetime'] = (integer)ini_get('session.gc_maxlifetime');
 
         // Get Rediska instance
-        $defaultInstance = Rediska::getDefaultInstance();
-        if ($defaultInstance && !isset($options['rediskaOptions'])) {
-            $this->_rediska = $defaultInstance;
+        if (isset($options['rediskaOptions'])) {
+            throw new Zend_Session_SaveHandler_Exception("Option 'rediskaOptions' is deprecated. Use 'rediska' option. It may be Rediska object, instance name or array with options");
+        }
+        if (isset($options['rediska'])) {
+            if (is_object($options['rediska'])) {
+                $this->_rediska = $options['rediska'];
+            } else if (is_string($options['rediska'])) {
+                $this->_rediska = Rediska_Manager::getOrInstanceDefault($options['rediska']);
+            } else if (is_array($options['rediska'])) {
+                $this->_rediska = new Rediska($options['rediska']);
+            }
+            unset($options['rediska']);
         } else {
-            $this->_rediska = new Rediska($options['rediskaOptions']);
-            unset($options['rediskaOptions']);
+            $this->_rediska = Rediska_Manager::getOrInstanceDefault();
         }
 
         $this->setOptions($options);
@@ -250,7 +258,7 @@ class Rediska_Zend_Session_SaveHandler_Redis implements Zend_Session_SaveHandler
 
         return $this->_options[$lowerName];
     }
-    
+
     /**
      * Set Rediska instance
      * 
@@ -263,7 +271,7 @@ class Rediska_Zend_Session_SaveHandler_Redis implements Zend_Session_SaveHandler
         
         return $this;
     }
-    
+
     /**
      * Get Rediska instance
      * 

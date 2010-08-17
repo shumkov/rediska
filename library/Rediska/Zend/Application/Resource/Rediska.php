@@ -26,17 +26,25 @@ class Rediska_Zend_Application_Resource_Rediska extends Zend_Application_Resourc
     {
         $options = $this->getOptions();
 
-        if (isset($options['registry_key'])) {
-            $key = $options['registry_key'];
-            unset($options['registry_key']);
-        } else {
-            $key = self::DEFAULT_REGISTRY_KEY;
+        if (isset($options['instances'])) {
+            foreach($options['instances'] as $name => $instanceOptions) {
+                if ($name == Rediska::DEFAULT_NAME) {
+                    $options = $instanceOptions;
+                } else {
+                    $instanceOptions['name'] = $name;
+                    Rediska_Manager::add($instanceOptions);
+                }
+            }
+            unset($options['instances']);
         }
 
-        $rediska = new Rediska($options);
+        if (!empty($options)) {
+            $options['name'] = Rediska::DEFAULT_NAME;   
+            $rediska = new Rediska($options);
 
-        Zend_Registry::set($key, $rediska);
+            Zend_Registry::set(self::DEFAULT_REGISTRY_KEY, $rediska);
 
-        return $rediska;
+            return $rediska;
+        }
     }
 }

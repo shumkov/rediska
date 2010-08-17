@@ -15,7 +15,7 @@ class Rediska_Zend_SessionTest extends Rediska_TestCase
 
     public function testConstructWithRedisOptions()
     {
-        $saveHandler = new Rediska_Zend_Session_SaveHandler_Redis(array('keyprefix' => 's_', 'rediskaOptions' => array('namespace' => '123')));
+        $saveHandler = new Rediska_Zend_Session_SaveHandler_Redis(array('keyprefix' => 's_', 'rediska' => array('namespace' => '123')));
         $this->assertEquals('123', $saveHandler->getRediska()->getOption('namespace'));
     }
 

@@ -32,14 +32,14 @@ require_once 'Zend/Config.php';
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_Zend_Auth_Adapter_Redis implements Zend_Auth_Adapter_Interface
+class Rediska_Zend_Auth_Adapter_Redis extends Rediska_Options implements Zend_Auth_Adapter_Interface
 {
     /**
      * Rediska instance
      * 
      * @var Rediska
      */
-    protected $_rediska;
+    protected $_rediska = Rediska::DEFAULT_NAME;
 
     /**
      * User identity
@@ -71,7 +71,7 @@ class Rediska_Zend_Auth_Adapter_Redis implements Zend_Auth_Adapter_Interface
      * userDataIsArray         - Set true if you store user data in associative array
      * identity                - User identity (login) for authorization
      * credential              - User credintial (password) for authorization
-     * rediska                 - Rediska instance
+     * rediska                 - Rediska instance name, Rediska object or array of options
      * 
      * @var array
      */
@@ -83,113 +83,36 @@ class Rediska_Zend_Auth_Adapter_Redis implements Zend_Auth_Adapter_Interface
     );
 
     /**
-     * Construct Redis Zend_Auth adapter
-     * 
-     * @param array|Zend_Config $options Options
-     * 
-     * userIdKey               - Redis key where you store relation between login and id. * replaced to identity (login)
-     * userDataKey             - Redis key where you store user data
-     * credentialAttributeName - Name of credential (password) attribute in user data
-     * userDataIsArray         - Set true if you store user data in associative array
-     * identity                - User identity (login) for authorization
-     * credential              - User credintial (password) for authorization
-     * rediska                 - Rediska instance
-     * 
-     */
-    public function __construct($options = array())
-    {
-        if ($options instanceof Zend_Config) {
-            $options = $options->toArray();
-        }
-
-        $options = array_change_key_case($options, CASE_LOWER);
-        $options = array_merge($this->_options, $options);
-
-        $this->setOptions($options);
-
-        $this->_setupRediskaDefaultInstance();
-    }
-    
-    /**
-     * Set options array
-     * 
-     * @param array $options Options (see $_options description)
-     * @return Rediska_Zend_Auth_Adapter_Redis
-     */
-    public function setOptions(array $options)
-    {
-        foreach($options as $name => $value) {
-            if (method_exists($this, "set$name")) {
-                call_user_func(array($this, "set$name"), $value);
-            } else {
-                $this->setOption($name, $value);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set option
-     * 
-     * @throws Zend_Auth_Adapter_Exception
-     * @param string $name Name of option
-     * @param mixed $value Value of option
-     * @return Rediska_Zend_Auth_Adapter_Redis
-     */
-    public function setOption($name, $value)
-    {
-        $lowerName = strtolower($name);
-
-        if (!array_key_exists($lowerName, $this->_options)) {
-            throw new Zend_Auth_Adapter_Exception("Unknown option '$name'");
-        }
-
-        $this->_options[$lowerName] = $value;
-
-        return $this;
-    }
-
-    /**
-     * Get option
-     * 
-     * @throws Zend_Auth_Adapter_Exception 
-     * @param string $name Name of option
-     * @return mixed
-     */
-    public function getOption($name)
-    {
-        $lowerName = strtolower($name);
-
-        if (!array_key_exists($lowerName, $this->_options)) {
-            throw new Zend_Auth_Adapter_Exception("Unknown option '$name'");
-        }
-
-        return $this->_options[$lowerName];
-    }
-    
-    /**
      * Set Rediska instance
-     * 
-     * @param Rediska $rediska
-     * @return Rediska_Zend_Auth_Adapter_Redis
+     *
+     * @param Rediska $rediska Rediska instance or name
+     * @return Rediska_Key_Abstract
      */
-    public function setRediska(Rediska $rediska)
+    public function setRediska($rediska)
     {
+        if (is_object($rediska) && !$rediska instanceof Rediska) {
+            throw new Rediska_Key_Exception('$rediska must be Rediska instance name, Rediska object or array of options');
+        }
+
         $this->_rediska = $rediska;
-        
+
         return $this;
     }
 
     /**
      * Get Rediska instance
-     * 
+     *
+     * @throws Rediska_Exception
      * @return Rediska
      */
     public function getRediska()
     {
-        if (!$this->_rediska instanceof Rediska) {
-            throw new Zend_Auth_Adapter_Exception('Rediska instance not found for ' . get_class($this));
+        if (!is_object($this->_rediska)) {
+            if (is_array($this->_rediska)) {
+                $this->_rediska = new Rediska($this->_rediska);
+            } else {
+                $this->_rediska = Rediska_Manager::getOrInstanceDefault($this->_rediska);
+            }
         }
 
         return $this->_rediska;
@@ -299,18 +222,5 @@ class Rediska_Zend_Auth_Adapter_Redis implements Zend_Auth_Adapter_Interface
         }
 
         return new Zend_Auth_Result($code, $identity, array($message));
-    }
-
-    /**
-     * Setup Rediska instance
-     */
-    protected function _setupRediskaDefaultInstance()
-    {
-        if (is_null($this->_rediska)) {
-            $this->_rediska = Rediska::getDefaultInstance();
-            if (is_null($this->_rediska)) {
-                $this->_rediska = new Rediska();
-            }
-        }
     }
 }

@@ -13,36 +13,29 @@ class Rediska_Key_AbstractTest extends Rediska_TestCase
         $this->key = new Rediska_Key('test');
     }
 
-    public function testDefaultRediskaInstance()
+    public function testConstructor()
     {
-        $this->assertType('Rediska', $this->key->getRediska());
+        $key = new Rediska_Key('test');
+        $this->assertEquals('test', $key->getName());
+
+        $key = new Rediska_Key(array('name' => 'test'));
+        $this->assertEquals('test', $key->getName());
     }
 
-    public function testSetExpireOnConstruct()
+    public function testGetRediska()
     {
-        $key = new Rediska_Key('test', 2);
-
-        $reply = $key->setValue(123);
-        $this->assertTrue($reply);
-
-        $value = $key->getValue();
-        $this->assertEquals(123, $value);
-
-        sleep(3);
-
-        $value = $key->getValue();
-        $this->assertNull($value);
+        $this->assertType('Rediska', $this->key->getRediska());
     }
 
     public function testSpecifiedServerAlias()
     {
         $this->_addSecondServerOrSkipTest();
-        
+
         list($firstServer, $secondServer) = $this->rediska->getConnections();
 
-        $key1 = new Rediska_Key('test', null, $firstServer);
+        $key1 = new Rediska_Key(array('name' => 'test', 'serverAlias' => $firstServer));
         $key1->setValue(1);
-        $key2 = new Rediska_Key('test', null, $secondServer);
+        $key2 = new Rediska_Key(array('name' => 'test', 'serverAlias' => $secondServer));
         $key2->setValue(2);
 
         $reply = $this->rediska->on($firstServer->getAlias())->get('test');

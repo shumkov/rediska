@@ -103,7 +103,7 @@ abstract class Rediska_Command_CompareSortedSets extends Rediska_Command_Abstrac
         $commands = array();
         foreach($keysByConnections as $connectionAlias => $keys) {
             foreach($keys as $key) {
-                $this->_names[] = $key;
+                $this->_keys[] = $key;
                 $command = array("ZRANGE", "{$this->_rediska->getOption('namespace')}$key", 0, -1, 'WITHSCORES');
                 $commands[] = new Rediska_Connection_Exec($connections[$connectionAlias], $command);
             }

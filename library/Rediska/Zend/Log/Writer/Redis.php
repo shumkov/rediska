@@ -29,24 +29,25 @@ class Rediska_Zend_Log_Writer_Redis extends Zend_Log_Writer_Abstract
     /**
      * Writer constructor
      * 
-     * @param string            $keyName Log key name
-     * @param Zend_Config|array $options Rediska options
+     * @param string $keyName Log key name
+     * @param mixed  $rediska Rediska instance name, Rediska object or array of options
      */
-    public function __construct($keyName, $options = array())
+    public function __construct($keyName, $rediska = Rediska::DEFAULT_NAME)
     {
-        if ($options instanceof Zend_Config) {
-            $options = $options->toArray();
+        if ($rediska instanceof Zend_Config) {
+            $rediska = $rediska->toArray();
         }
 
-        $defaultInstance = Rediska::getDefaultInstance();
-        if (empty($options) && $defaultInstance) {
-            $rediska = $defaultInstance;
-        } else {
-            $rediska = new Rediska($options);
+        if (is_array($rediska)) {
+            $rediska = new Rediska($rediska);
+        } else if (is_string($rediska)) {
+            $rediska = Rediska_Manager::getOrInstanceDefault($rediska);
         }
 
-        $this->_list = new Rediska_Key_List($keyName);
-        $this->_list->setRediska($rediska);
+        $this->_list = new Rediska_Key_List(array(
+            'name'    => $keyName,
+            'rediska' => $rediska
+        ));
     }
 
     /**

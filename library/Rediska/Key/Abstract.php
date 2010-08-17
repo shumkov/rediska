@@ -25,9 +25,9 @@ abstract class Rediska_Key_Abstract extends Rediska_Options
      */
     protected $_options = array(
         'name'              => null,
-        'serverAlias'       => null,
+        'serveralias'       => null,
         'expire'            => null,
-        'expireIsTimestamp' => false,
+        'expireistimestamp' => false,
     );
 
     /**
@@ -64,7 +64,7 @@ abstract class Rediska_Key_Abstract extends Rediska_Options
      */
     public function delete()
     {
-        return $this->_getRediskaOn()->delete($this->_name);
+        return $this->_getRediskaOn()->delete($this->getName());
     }
 
     /**
@@ -74,7 +74,7 @@ abstract class Rediska_Key_Abstract extends Rediska_Options
      */
     public function isExists()
     {
-        return $this->_getRediskaOn()->exists($this->_name);
+        return $this->_getRediskaOn()->exists($this->getName());
     }
 
     /**
@@ -85,7 +85,7 @@ abstract class Rediska_Key_Abstract extends Rediska_Options
      */
     public function getType()
     {
-        return $this->_getRediskaOn()->getType($this->_name);
+        return $this->_getRediskaOn()->getType($this->getName());
     }
 
     /**
@@ -98,15 +98,15 @@ abstract class Rediska_Key_Abstract extends Rediska_Options
     public function rename($newName, $overwrite = true)
     {
         try {
-            $this->_getRediskaOn()->rename($this->_name, $newName, $overwrite);
+            $this->_getRediskaOn()->rename($this->getName(), $newName, $overwrite);
         } catch (Rediska_Exception $e) {
             return false;
         }
 
-        $this->_name = $newName;
+        $this->_options['name'] = $newName;
 
-        if (!is_null($this->_expire)) {
-            $this->expire($this->_expire, $this->_isExpireTimestamp);
+        if (!is_null($this->getExpire())) {
+            $this->expire($this->getExpire(), $this->isExpireTimestamp());
         }
 
         return true;
@@ -121,7 +121,7 @@ abstract class Rediska_Key_Abstract extends Rediska_Options
      */
     public function expire($secondsOrTimestamp, $isTimestamp = false)
     {
-        return $this->_getRediskaOn()->expire($this->_name, $secondsOrTimestamp, $isTimestamp);
+        return $this->_getRediskaOn()->expire($this->getName(), $secondsOrTimestamp, $isTimestamp);
     }
 
     /**
@@ -131,7 +131,7 @@ abstract class Rediska_Key_Abstract extends Rediska_Options
      */
     public function getLifetime()
     {
-        return $this->_getRediskaOn()->getLifetime($this->_name);
+        return $this->_getRediskaOn()->getLifetime($this->getName());
     }
 
     /**
@@ -143,10 +143,10 @@ abstract class Rediska_Key_Abstract extends Rediska_Options
      */
     public function moveToDb($dbIndex)
     {
-        $result = $this->_getRediskaOn()->moveToDb($this->_name, $dbIndex);
+        $result = $this->_getRediskaOn()->moveToDb($this->getName(), $dbIndex);
 
-        if (!is_null($this->_expire) && $result) {
-            $this->expire($this->_expire, $this->_isExpireTimestamp);
+        if (!is_null($this->getExpire()) && $result) {
+            $this->expire($this->getExpire(), $this->isExpireTimestamp());
         }
 
         return $result;
@@ -159,7 +159,7 @@ abstract class Rediska_Key_Abstract extends Rediska_Options
      */
     public function getName()
     {
-        return $this->_name;
+        return $this->_options['name'];
     }
 
     /**
@@ -170,7 +170,7 @@ abstract class Rediska_Key_Abstract extends Rediska_Options
      */
     public function setName($name)
     {
-        $this->_name = $name;
+        $this->_options['name'] = $name;
 
         return $this;
     }
@@ -184,8 +184,8 @@ abstract class Rediska_Key_Abstract extends Rediska_Options
      */
     public function setExpire($secondsOrTimestamp, $isTimestamp = false)
     {
-        $this->_expire = $secondsOrTimestamp;
-        $this->_isExpireTimestamp = $isTimestamp;
+        $this->_options['expire'] = $secondsOrTimestamp;
+        $this->_options['expireIsTimestamp'] = $isTimestamp;
         
         return $this;
     }
@@ -197,7 +197,7 @@ abstract class Rediska_Key_Abstract extends Rediska_Options
      */
     public function getExpire()
     {
-        return $this->_expire;
+        return $this->_options['expire'];
     }
 
     /**
@@ -207,7 +207,7 @@ abstract class Rediska_Key_Abstract extends Rediska_Options
      */
     public function isExpireTimestamp()
     {
-        return $this->_isExpireTimestamp;
+        return $this->_options['expireIsTimestamp'];
     }
 
     /**
@@ -218,7 +218,7 @@ abstract class Rediska_Key_Abstract extends Rediska_Options
      */
     public function setServerAlias($serverAlias)
     {
-        $this->_serverAlias = $serverAlias;
+        $this->_options['serverAlias'] = $serverAlias;
 
         return $this;
     }
@@ -230,7 +230,7 @@ abstract class Rediska_Key_Abstract extends Rediska_Options
      */
     public function getServerAlias()
     {
-        return $this->_serverAlias;
+        return $this->_options['serverAlias'];
     }
     
     /**
@@ -242,7 +242,7 @@ abstract class Rediska_Key_Abstract extends Rediska_Options
     public function setRediska($rediska)
     {
         if (is_object($rediska) && !$rediska instanceof Rediska) {
-            throw new Rediska_Key_Exception('$rediska must be Rediska instance or name');
+            throw new Rediska_Key_Exception('$rediska must be Rediska instance name, Rediska object or array of options');
         }
 
         $this->_rediska = $rediska;
@@ -258,18 +258,18 @@ abstract class Rediska_Key_Abstract extends Rediska_Options
      */
     public function getRediska()
     {
-        if (is_string($this->_rediska)) {
-            try {
-                $rediska = Rediska_Manager::get($this->_rediska);
-            } catch(Rediska_Exception $e) {
-                if ($this->_rediska == Rediska::DEFAULT_NAME) {
-                    $rediska = new Rediska();
+        if (!is_object($this->_rediska)) {
+            if ($this->_rediska == Rediska::DEFAULT_NAME) {
+                if (Rediska_Manager::has($this->_rediska)) {
+                    throw new Rediska_Key_Exception("You must instance '" . Rediska::DEFAULT_NAME . "' Rediska before or use 'rediska' option for specify instance");
                 } else {
-                    throw $e;
+                    $this->_rediska = Rediska_Manager::get($this->_rediska);
                 }
+            } else if (is_array($this->_rediska)) {
+                $this->_rediska = new Rediska($this->_rediska);
+            } else {
+                $this->_rediska = Rediska_Manager::get($this->_rediska);
             }
-
-            $this->_rediska = $rediska;
         }
 
         return $this->_rediska;
@@ -284,21 +284,10 @@ abstract class Rediska_Key_Abstract extends Rediska_Options
     {
         $rediska = $this->getRediska();
 
-        if (!is_null($this->_serverAlias)) {
-            $rediska = $rediska->on($this->_serverAlias);
+        if (!is_null($this->_options['serverAlias'])) {
+            $rediska = $rediska->on($this->_options['serverAlias']);
         }
 
         return $rediska;
-    }
-
-    /**
-     * Setup Rediska instance
-     */
-    protected function _setupRediskaDefaultInstance()
-    {
-        $this->_rediska = Rediska::getDefaultInstance();
-        if (!$this->_rediska) {
-            
-        }
     }
 }

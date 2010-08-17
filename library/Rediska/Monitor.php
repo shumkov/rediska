@@ -17,9 +17,9 @@ class Rediska_Monitor extends Rediska_Options implements Iterator
     /**
      * Rediska instance
      * 
-     * @var Rediska
+     * @var string|Rediska
      */
-    protected $_rediska;
+    protected $_rediska = Rediska::DEFAULT_NAME;
 
     /**
      * Connections
@@ -78,8 +78,6 @@ class Rediska_Monitor extends Rediska_Options implements Iterator
     public function __construct($options = array())
     {
         $this->setOptions($options);
-
-        $this->_setupRediskaDefaultInstance();
 
         $this->_connections = new Rediska_Monitor_Connections($this);
     }
@@ -189,11 +187,15 @@ class Rediska_Monitor extends Rediska_Options implements Iterator
     /**
      * Set Rediska instance
      *
-     * @param Rediska $rediska
-     * @return Rediska_PubSub_Channel
+     * @param Rediska $rediska Rediska instance or name
+     * @return Rediska_Key_Abstract
      */
-    public function setRediska(Rediska $rediska)
+    public function setRediska($rediska)
     {
+        if (is_object($rediska) && !$rediska instanceof Rediska) {
+            throw new Rediska_PubSub_Exception('$rediska must be Rediska instance or name');
+        }
+
         $this->_rediska = $rediska;
 
         return $this;
@@ -202,12 +204,13 @@ class Rediska_Monitor extends Rediska_Options implements Iterator
     /**
      * Get Rediska instance
      *
+     * @throws Rediska_Exception
      * @return Rediska
      */
     public function getRediska()
     {
-        if (!$this->_rediska instanceof Rediska) {
-            throw new Rediska_PubSub_Exception('Rediska instance not found for PubSub channel');
+        if (!is_object($this->_rediska)) {
+            $this->_rediska = Rediska_Manager::getOrInstanceDefault($this->_rediska);
         }
 
         return $this->_rediska;
@@ -280,18 +283,5 @@ class Rediska_Monitor extends Rediska_Options implements Iterator
         }
 
         return $timestampAndCommand;
-    }
-
-    /**
-     * Setup Rediska instance
-     */
-    protected function _setupRediskaDefaultInstance()
-    {
-        if (!$this->_rediska) {
-            $this->_rediska = Rediska::getDefaultInstance();
-            if (!$this->_rediska) {
-                $this->_rediska = new Rediska();
-            }
-        }
     }
 }
