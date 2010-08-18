@@ -9,7 +9,7 @@
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_Options_WithRediskaInstance extends Rediska_Options
+class Rediska_Options_RediskaInstance extends Rediska_Options
 {
     /**
      * Rediska instance

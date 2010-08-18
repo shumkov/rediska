@@ -12,7 +12,7 @@ require_once dirname(__FILE__) . '/../../../Rediska.php';
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_PubSub_Channel extends Rediska_Options_WithRediskaInstance implements Iterator, ArrayAccess
+class Rediska_PubSub_Channel extends Rediska_Options_WithRediska implements Iterator, ArrayAccess
 {
     const SUBSCRIBE     = 'subscribe';
     const UNSUBSCRIBE   = 'unsubscribe';

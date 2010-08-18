@@ -12,7 +12,7 @@ require_once dirname(__FILE__) . '/../Rediska.php';
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_Monitor extends Rediska_Options_WithRediskaInstance implements Iterator
+class Rediska_Monitor extends Rediska_Options_RediskaInstance implements Iterator
 {
     /**
      * Connections

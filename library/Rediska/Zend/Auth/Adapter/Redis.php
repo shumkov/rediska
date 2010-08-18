@@ -32,7 +32,7 @@ require_once 'Zend/Config.php';
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_Zend_Auth_Adapter_Redis extends Rediska_Options_WithRediskaInstance implements Zend_Auth_Adapter_Interface
+class Rediska_Zend_Auth_Adapter_Redis extends Rediska_Options_RediskaInstance implements Zend_Auth_Adapter_Interface
 {
     /**
      * User identity

@@ -42,15 +42,17 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      * 
      * @param mixed $rediska Rediska instance name, Rediska object or array of options
      */
-    public function __construct($rediska = Rediska::DEFAULT_NAME)
+    public function __construct($rediska = null)
     {
         if ($rediska instanceof Zend_Config) {
             $rediska = $rediska->toArray();
         }
 
-        $this->setRediska($rediska);
+        if (!is_null($rediska)) {
+            $this->setRediska($rediska);
+        }
     }
-    
+
     public function setRediska($rediska)
     {
         $this->_rediska = $rediska;
@@ -60,7 +62,11 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
 
     public function getRediska()
     {
-        return Rediska_Options_WithRediskaInstance::getRediskaInstance($this->_rediska, 'Zend_Cache_Exception');
+        if (!is_object($this->_rediska)) {
+            $this->_rediska = Rediska_Options_RediskaInstance::getRediskaInstance($this->_rediska, 'Zend_Cache_Exception', 'backend');
+        }
+
+        return $this->_rediska;
     }
 
     /**

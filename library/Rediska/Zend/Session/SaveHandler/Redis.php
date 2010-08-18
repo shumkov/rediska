@@ -32,7 +32,7 @@ require_once 'Zend/Session/SaveHandler/Exception.php';
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_Zend_Session_SaveHandler_Redis extends Rediska_Options_WithRediskaInstance implements Zend_Session_SaveHandler_Interface
+class Rediska_Zend_Session_SaveHandler_Redis extends Rediska_Options_RediskaInstance implements Zend_Session_SaveHandler_Interface
 {
     /**
      * Sessions set

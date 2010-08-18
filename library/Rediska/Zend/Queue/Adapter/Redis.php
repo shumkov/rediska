@@ -57,7 +57,7 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
             $this->_rediska = $options['driverOptions'];
         }
 
-        $this->_rediska = Rediska_Options_WithRediskaInstance::getRediskaInstance($this->_rediska, 'Zend_Queue_Exception', 'driverOptions');
+        $this->_rediska = Rediska_Options_RediskaInstance::getRediskaInstance($this->_rediska, 'Zend_Queue_Exception', 'driverOptions');
 
         $this->_queues = new Rediska_Key_Set(array(
             'name'    => $this->_getKeyName('queues'),
