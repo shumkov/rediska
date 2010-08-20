@@ -48,7 +48,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
             $rediska = $rediska->toArray();
         }
 
-        if (!is_null($rediska)) {
+        if (!empty($rediska)) {
             $this->setRediska($rediska);
         }
     }

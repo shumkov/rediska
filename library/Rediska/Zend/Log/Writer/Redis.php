@@ -44,7 +44,7 @@ class Rediska_Zend_Log_Writer_Redis extends Zend_Log_Writer_Abstract
     /**
      * Formatting is not possible on this writer
      */
-    public function setFormatter($formatter)
+    public function setFormatter(Zend_Log_Formatter_Interface $formatter)
     {
         require_once 'Zend/Log/Exception.php';
         throw new Zend_Log_Exception(get_class() . ' does not support formatting');
@@ -75,11 +75,11 @@ class Rediska_Zend_Log_Writer_Redis extends Zend_Log_Writer_Abstract
             throw new Zend_Log_Exception('keyName not present');
         }
 
-        if (!isset($config['options'])) {
-            $config['options'] = array();
+        if (!isset($config['rediska'])) {
+            $config['rediska'] = Rediska::DEFAULT_NAME;
         }
 
-        return new self($config['keyName'], $config['options']);
+        return new self($config['keyName'], $config['rediska']);
     }
 
     /**
