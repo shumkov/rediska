@@ -15,15 +15,19 @@ require_once dirname(__FILE__) . '/../../Rediska.php';
 class Rediska_Key_Hash extends Rediska_Key_Abstract implements IteratorAggregate, ArrayAccess, Countable
 {
     /**
-     * Construct hash
+     * Construct key
      *
      * @param string                    $name        Key name
-     * @param integer                   $expire      Expire time in seconds
-     * @param string|Rediska_Connection $serverAlias Server alias or Rediska_Connection object where key is placed
+     * @param integer                   $options     Options:
+     *                                                  expire            - Expire time
+     *                                                  expireIsTimestamp - Expire time is timestamp. For default false (in seconds)
+     *                                                  serverAlias       - Server alias or connection object
+     *                                                  rediska           - Rediska instance name, Rediska object or Rediska options for new instance
+     * @param string|Rediska_Connection $serverAlias Server alias or Rediska_Connection object where key is placed. Deprecated!
      */
-    public function  __construct($name, $expire = null, $serverAlias = null)
+    public function  __construct($name, $options = array(), $serverAlias = null)
     {
-        parent::__construct($name, $expire, $serverAlias);
+        parent::__construct($name, $options, $serverAlias);
 
         $this->_throwIfNotSupported();
     }
@@ -38,10 +42,10 @@ class Rediska_Key_Hash extends Rediska_Key_Abstract implements IteratorAggregate
      */
     public function set($fieldOrData, $value = null, $overwrite = true)
     {
-        $result = $this->_getRediskaOn()->setToHash($this->_name, $fieldOrData, $value, $overwrite);
+        $result = $this->_getRediskaOn()->setToHash($this->getName(), $fieldOrData, $value, $overwrite);
 
-        if (!is_null($this->_expire) && ((!$overwrite && $result) || ($overwrite))) {
-            $this->expire($this->_expire, $this->_isExpireTimestamp);
+        if (!is_null($this->getExpire()) && ((!$overwrite && $result) || ($overwrite))) {
+            $this->expire($this->getExpire(), $this->isExpireTimestamp());
         }
 
         return $result;
@@ -88,7 +92,7 @@ class Rediska_Key_Hash extends Rediska_Key_Abstract implements IteratorAggregate
      */
     public function get($fieldOrFields)
     {
-        return $this->_getRediskaOn()->getFromHash($this->_name, $fieldOrFields);
+        return $this->_getRediskaOn()->getFromHash($this->getName(), $fieldOrFields);
     }
 
     /**
@@ -122,10 +126,10 @@ class Rediska_Key_Hash extends Rediska_Key_Abstract implements IteratorAggregate
      */
     public function increment($field, $amount = 1)
     {
-        $result = $this->_getRediskaOn()->incrementInHash($this->_name, $field, $amount);
+        $result = $this->_getRediskaOn()->incrementInHash($this->getName(), $field, $amount);
 
-        if (!is_null($this->_expire) && $result) {
-            $this->expire($this->_expire, $this->_isExpireTimestamp);
+        if (!is_null($this->getExpire()) && $result) {
+            $this->expire($this->getExpire(), $this->isExpireTimestamp());
         }
 
         return $result;
@@ -139,7 +143,7 @@ class Rediska_Key_Hash extends Rediska_Key_Abstract implements IteratorAggregate
      */
     public function exists($field)
     {
-        return $this->_getRediskaOn()->existsInHash($this->_name, $field);
+        return $this->_getRediskaOn()->existsInHash($this->getName(), $field);
     }
 
     /**
@@ -172,10 +176,10 @@ class Rediska_Key_Hash extends Rediska_Key_Abstract implements IteratorAggregate
      */
     public function remove($field)
     {
-        $result = $this->_getRediskaOn()->deleteFromHash($this->_name, $field);
+        $result = $this->_getRediskaOn()->deleteFromHash($this->getName(), $field);
 
-        if (!is_null($this->_expire) && $result) {
-            $this->expire($this->_expire, $this->_isExpireTimestamp);
+        if (!is_null($this->getExpire()) && $result) {
+            $this->expire($this->getExpire(), $this->isExpireTimestamp());
         }
 
         return $result;
@@ -210,7 +214,7 @@ class Rediska_Key_Hash extends Rediska_Key_Abstract implements IteratorAggregate
      */
     public function getFields()
     {
-        return $this->_getRediskaOn()->getHashFields($this->_name);
+        return $this->_getRediskaOn()->getHashFields($this->getName());
     }
 
     /**
@@ -220,7 +224,7 @@ class Rediska_Key_Hash extends Rediska_Key_Abstract implements IteratorAggregate
      */
     public function getValues()
     {
-        return $this->_getRediskaOn()->getHashValues($this->_name);
+        return $this->_getRediskaOn()->getHashValues($this->getName());
     }
 
     /**
@@ -230,14 +234,14 @@ class Rediska_Key_Hash extends Rediska_Key_Abstract implements IteratorAggregate
      */
     public function toArray()
     {
-        return $this->_getRediskaOn()->getHash($this->_name);
+        return $this->_getRediskaOn()->getHash($this->getName());
     }
 
     /* Countable implementation */
 
     public function count()
     {
-        return $this->_getRediskaOn()->getHashLength($this->_name);
+        return $this->_getRediskaOn()->getHashLength($this->getName());
     }
 
     /* IteratorAggregate implementation */

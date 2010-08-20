@@ -29,30 +29,22 @@ class Rediska_Zend_Log_Writer_Redis extends Zend_Log_Writer_Abstract
     /**
      * Writer constructor
      * 
-     * @param string            $keyName Log key name
-     * @param Zend_Config|array $options Rediska options
+     * @param string $keyName Log key name
+     * @param mixed  $rediska Rediska instance name, Rediska object or array of options
      */
-    public function __construct($keyName, $options = array())
+    public function __construct($keyName, $rediska = Rediska::DEFAULT_NAME)
     {
-        if ($options instanceof Zend_Config) {
-            $options = $options->toArray();
+        if ($rediska instanceof Zend_Config) {
+            $rediska = $rediska->toArray();
         }
 
-        $defaultInstance = Rediska::getDefaultInstance();
-        if (empty($options) && $defaultInstance) {
-            $rediska = $defaultInstance;
-        } else {
-            $rediska = new Rediska($options);
-        }
-
-        $this->_list = new Rediska_Key_List($keyName);
-        $this->_list->setRediska($rediska);
+        $this->_list = new Rediska_Key_List($keyName, array('rediska' => $rediska));
     }
 
     /**
      * Formatting is not possible on this writer
      */
-    public function setFormatter($formatter)
+    public function setFormatter(Zend_Log_Formatter_Interface $formatter)
     {
         require_once 'Zend/Log/Exception.php';
         throw new Zend_Log_Exception(get_class() . ' does not support formatting');
@@ -83,11 +75,11 @@ class Rediska_Zend_Log_Writer_Redis extends Zend_Log_Writer_Abstract
             throw new Zend_Log_Exception('keyName not present');
         }
 
-        if (!isset($config['options'])) {
-            $config['options'] = array();
+        if (!isset($config['rediska'])) {
+            $config['rediska'] = Rediska::DEFAULT_NAME;
         }
 
-        return new self($config['keyName'], $config['options']);
+        return new self($config['keyName'], $config['rediska']);
     }
 
     /**

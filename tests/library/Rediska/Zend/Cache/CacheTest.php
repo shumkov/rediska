@@ -2,7 +2,7 @@
 
 require_once 'Zend/Cache.php';
 
-class Rediska_Zend_CacheTest extends Rediska_TestCase
+class Rediska_Zend_Cache_BackendTest extends Rediska_TestCase
 {
     /**
      * @var Zend_Cache_Core
@@ -13,14 +13,9 @@ class Rediska_Zend_CacheTest extends Rediska_TestCase
     {
         parent::setUp();
 
-        $config = $GLOBALS['rediskaConfigs'][0];
-        if (isset($config['namespace'])) {
-            unset($config['namespace']);
-        }
-
         Rediska_Autoloader::load('Rediska_Zend_Cache_Backend_Redis');
 
-        $this->cache = Zend_Cache::factory('Core', 'Rediska_Zend_Cache_Backend_Redis', array('cache_id_prefix' => $this->rediska->getOption('namespace')), $config, false, true, true);
+        $this->cache = Zend_Cache::factory('Core', 'Rediska_Zend_Cache_Backend_Redis', array(), Rediska::DEFAULT_NAME, false, true, true);
     }
     
     public function testLoad()

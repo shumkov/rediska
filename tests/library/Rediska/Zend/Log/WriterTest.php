@@ -2,7 +2,7 @@
 
 require_once 'Zend/Log.php';
 
-class Rediska_Zend_LogTest extends Rediska_TestCase
+class Rediska_Zend_Log_WriterTest extends Rediska_TestCase
 {
     /**
      * @var Zend_Log

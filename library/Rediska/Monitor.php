@@ -12,15 +12,8 @@ require_once dirname(__FILE__) . '/../Rediska.php';
  * @link http://rediska.geometria-lab.net
  * @licence http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_Monitor extends Rediska_Options implements Iterator
+class Rediska_Monitor extends Rediska_Options_RediskaInstance implements Iterator
 {
-    /**
-     * Rediska instance
-     * 
-     * @var Rediska
-     */
-    protected $_rediska;
-
     /**
      * Connections
      *
@@ -69,6 +62,13 @@ class Rediska_Monitor extends Rediska_Options implements Iterator
      * @var string
      */
     protected $_currentCommand;
+    
+    /**
+     * Exception class name for options
+     * 
+     * @var string
+     */
+    protected $_optionsException = 'Rediska_Monitor_Exception';
 
     /**
      * Constructor
@@ -78,8 +78,6 @@ class Rediska_Monitor extends Rediska_Options implements Iterator
     public function __construct($options = array())
     {
         $this->setOptions($options);
-
-        $this->_setupRediskaDefaultInstance();
 
         $this->_connections = new Rediska_Monitor_Connections($this);
     }
@@ -186,33 +184,6 @@ class Rediska_Monitor extends Rediska_Options implements Iterator
         return $this->_timeout;
     }
 
-    /**
-     * Set Rediska instance
-     *
-     * @param Rediska $rediska
-     * @return Rediska_PubSub_Channel
-     */
-    public function setRediska(Rediska $rediska)
-    {
-        $this->_rediska = $rediska;
-
-        return $this;
-    }
-
-    /**
-     * Get Rediska instance
-     *
-     * @return Rediska
-     */
-    public function getRediska()
-    {
-        if (!$this->_rediska instanceof Rediska) {
-            throw new Rediska_PubSub_Exception('Rediska instance not found for PubSub channel');
-        }
-
-        return $this->_rediska;
-    }
-
     /* Iterator implementation */
     
     public function rewind()
@@ -280,18 +251,5 @@ class Rediska_Monitor extends Rediska_Options implements Iterator
         }
 
         return $timestampAndCommand;
-    }
-
-    /**
-     * Setup Rediska instance
-     */
-    protected function _setupRediskaDefaultInstance()
-    {
-        if (!$this->_rediska) {
-            $this->_rediska = Rediska::getDefaultInstance();
-            if (!$this->_rediska) {
-                $this->_rediska = new Rediska();
-            }
-        }
     }
 }

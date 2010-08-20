@@ -31,11 +31,11 @@ class Rediska extends Rediska_Options
     const STABLE_REDIS_VERSION = '1.2.6';
 
     /**
-     * Default rediska instance
-     * 
-     * @var Rediska
+     * Default client name
+     *
+     * @var string
      */
-    protected static $_defaultInstance;
+    const DEFAULT_NAME = 'default';
 
     /**
      * Connections
@@ -67,7 +67,9 @@ class Rediska extends Rediska_Options
 
     /**
      * Configuration
-     * 
+     *
+     * name              - Rediska instance name. See Rediska_Manager
+     * addToManager      - Add instance to Rediska_Manager
      * namespace         - Key names prefix
      * servers           - Array of servers: array(
      *                                        array('host' => '127.0.0.1', 'port' => 6379, 'weight' => 1, 'password' => '123', 'alias' => 'example'),
@@ -87,8 +89,10 @@ class Rediska extends Rediska_Options
      * @var array
      */
     protected $_options = array(
-        'namespace' => '',
-        'servers'   => array(
+        'addtomanager' => true,
+        'name'         => self::DEFAULT_NAME,
+        'namespace'    => '',
+        'servers'      => array(
             array(
                 'host'   => Rediska_Connection::DEFAULT_HOST,
                 'port'   => Rediska_Connection::DEFAULT_PORT,
@@ -105,6 +109,8 @@ class Rediska extends Rediska_Options
      * 
      * @param array $options Options
      * 
+     * name              - Rediska instance name. See Rediska_Manager
+     * addToManager      - Add instance to Rediska_Manager
      * namespace         - Key names prefix
      * servers           - Array of servers: array(
      *                                        array('host' => '127.0.0.1', 'port' => 6379, 'weight' => 1, 'password' => '123', 'alias' => 'example'),
@@ -126,29 +132,34 @@ class Rediska extends Rediska_Options
     {
         parent::__construct($options);
 
-        self::setDefaultInstace($this);
-
         $this->_specifiedConnection = new Rediska_Connection_Specified($this);
     }
 
     /**
-     * Get Rediska default instance
-     * 
+     * Set Rediska client name
+     *
+     * @param string $name
      * @return Rediska
      */
-    public static function getDefaultInstance()
+    public function setName($name)
     {
-        return self::$_defaultInstance;
+        $this->_options['name'] = $name;
+
+        if ($this->_options['addtomanager']) {
+            Rediska_Manager::add($this);
+        }
+
+        return $this;
     }
 
     /**
-     * Set Rediska default instance
-     * 
-     * @param Rediska $instance
+     * Get Rediska client name
+     *
+     * @return string
      */
-    public static function setDefaultInstace(Rediska $instance)
+    public function getName()
     {
-        self::$_defaultInstance = $instance;
+        return $this->_options['name'];
     }
 
     /**
@@ -480,6 +491,26 @@ class Rediska extends Rediska_Options
     /**
      *  Deprecated
      */
+
+    /**
+    * Get Rediska default instance
+    *
+    * @deprecated
+    */
+    public static function getDefaultInstance()
+    {
+        throw new Rediska_Exception("Rediska::getDefaultInstance() is deprecated. Use Rediska_Manager::get()");
+    }
+
+   /**
+    * Set Rediska default instance
+    *
+    * @deprecated
+    */
+    public static function setDefaultInstace(Rediska $instance)
+    {
+        throw new Rediska_Exception("Rediska::setDefaultInstance() is deprecated. Use Rediska_Manager::set()");
+    }
 
    /**
     * Serialize value

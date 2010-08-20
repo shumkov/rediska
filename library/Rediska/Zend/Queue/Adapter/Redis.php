@@ -26,7 +26,7 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
      *
      * @var Rediska
      */
-    protected $_rediska;
+    protected $_rediska = Rediska::DEFAULT_NAME;
 
     /**
      * Queues set
@@ -53,15 +53,13 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
     {
         parent::__construct($options, $queue);
 
-        $defaultInstance = Rediska::getDefaultInstance();
-        if (empty($this->_options['driverOptions']) && $defaultInstance) {
-            $this->_rediska = $defaultInstance;
-        } else {
-            $this->_rediska = new Rediska($this->_options['driverOptions']);
+        if (!empty($this->_options['driverOptions'])) {
+            $this->_rediska = $options['driverOptions'];
         }
 
-        $this->_queues = new Rediska_Key_Set($this->_getKeyName('queues'));
-        $this->_queues->setRediska($this->_rediska);
+        $this->_rediska = Rediska_Options_RediskaInstance::getRediskaInstance($this->_rediska, 'Zend_Queue_Exception', 'driverOptions');
+
+        $this->_queues = new Rediska_Key_Set($this->_getKeyName('queues'), array('rediska' => $this->_rediska));
     }
 
     /**
@@ -98,7 +96,7 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
     public function create($name, $timeout = null)
     {
         $this->_queues->add($name);
-        $this->_queueObjects[$name] = new Rediska_Key_List($this->_getKeyName("queue_$name"));
+        $this->_queueObjects[$name] = new Rediska_Key_List($this->_getKeyName("queue_$name"), array('rediska' => $this->_rediska));
 
         return true;
     }
@@ -160,7 +158,7 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
         }
 
         if (!isset($this->_queueObjects[$queueName])) {
-            $this->_queueObjects[$queueName] = new Rediska_Key_List($this->_getKeyName("queue_$queueName"));
+            $this->_queueObjects[$queueName] = new Rediska_Key_List($this->_getKeyName("queue_$queueName"), array('rediska' => $this->_rediska));
         }
 
         return count($this->_queueObjects[$queueName]);
@@ -192,7 +190,7 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
         }
 
         if (!isset($this->_queueObjects[$queueName])) {
-            $this->_queueObjects[$queueName] = new Rediska_Key_List($this->_getKeyName("queue_$queueName"));
+            $this->_queueObjects[$queueName] = new Rediska_Key_List($this->_getKeyName("queue_$queueName"), array('rediska' => $this->_rediska));
         }
 
         $result = $this->_queueObjects[$queueName]->prepend($message);
@@ -240,7 +238,7 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
         }
 
         if (!isset($this->_queueObjects[$queueName])) {
-            $this->_queueObjects[$queueName] = new Rediska_Key_List($this->_getKeyName("queue_$queueName"));
+            $this->_queueObjects[$queueName] = new Rediska_Key_List($this->_getKeyName("queue_$queueName"), array('rediska' => $this->_rediska));
         }
 
         $messages = array();
@@ -279,7 +277,7 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
         $queueName = $this->_queue->getName();
 
         if (!isset($this->_queueObjects[$queueName])) {
-            $this->_queueObjects[$queueName] = new Rediska_Key_List($this->_getKeyName("queue_$queueName"));
+            $this->_queueObjects[$queueName] = new Rediska_Key_List($this->_getKeyName("queue_$queueName"), array('rediska' => $this->_rediska));
         }
 
         return (boolean)$this->_queueObjects[$queueName]->remove($message->body);
