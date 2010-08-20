@@ -312,7 +312,7 @@ class Rediska extends Rediska_Options
      * Create transaction
      * 
      * @param $aliasOrConnection Server alias or Rediska_Connection object
-     * @return Rediska_Transation
+     * @return Rediska_Transaction
      */
     public function transaction($aliasOrConnection = null)
     {
