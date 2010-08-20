@@ -489,14 +489,6 @@ class Rediska extends Rediska_Options
     }
 
     /**
-     * Remove instance from manager on destruct
-     */
-    public function  __destruct()
-    {
-        Rediska_Manager::remove($this);
-    }
-
-    /**
      *  Deprecated
      */
 
