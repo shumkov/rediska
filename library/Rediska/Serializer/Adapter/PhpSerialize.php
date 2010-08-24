@@ -11,7 +11,7 @@
  */
 class Rediska_Serializer_Adapter_PhpSerialize implements Rediska_Serializer_Adapter_Interface
 {
-    protected $_userErrorHandler;
+    protected $_unserialized = true;
     
     /**
      * Serialize value
@@ -33,28 +33,30 @@ class Rediska_Serializer_Adapter_PhpSerialize implements Rediska_Serializer_Adap
      */
     public function unserialize($value)
     {
-        $this->_userErrorHandler = set_error_handler(array($this, 'throwCantUnserializeException'));
+        set_error_handler(array($this, 'catchUnserializeNotice'));
 
         $unserializedValue = @unserialize($value);
 
         restore_error_handler();
 
+        if (!$this->_unserialized) {
+            $this->_unserialized = true;
+            throw new Rediska_Serializer_Adapter_Exception("Can't unserialize value");
+        }
+
         return $unserializedValue;
     }
 
     /**
-     * Throw can't unserialize exception
-     *
-     * @throws Rediska_Serializer_Exception
+     * Catch unserialize notice
      */
-    public function throwCantUnserializeException($errno, $errstr, $errfile, $errline, $errcontext)
+    public function catchUnserializeNotice($errno, $errstr, $errfile, $errline, $errcontext)
     {
-        restore_error_handler();
-
         if (!error_reporting() && strpos($errstr, 'unserialize()') !== false) {
-            throw new Rediska_Serializer_Adapter_Exception("Can't unserialize value");
-        } elseif ($this->_userErrorHandler) {
-            call_user_func($this->_userErrorHandler, $errno, $errstr, $errfile, $errline, $errcontext);
+            $this->_unserialized = false;
+            return true;
+        } else {
+            return false;
         }
     }
 }

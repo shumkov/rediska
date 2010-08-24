@@ -77,7 +77,7 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
     /**
      * Test if the specified value is a member of the Set
      * 
-     * @prarm mixed  $value Value
+     * @param mixed  $value Value
      * @return boolean
      */
     public function exists($value)
