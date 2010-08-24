@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Rediska command value and score response
+ * 
+ * @author Ivan Shumkov
+ * @package Rediska
+ * @version @package_version@
+ * @link http://rediska.geometria-lab.net
+ * @licence http://www.opensource.org/licenses/bsd-license.php
+ */
 class Rediska_Command_Response_ValueAndScore extends ArrayObject
 {
     public function __set($name, $value)

@@ -138,7 +138,7 @@ class Rediska_Key_Hash extends Rediska_Key_Abstract implements IteratorAggregate
     /**
      * Test if field is present in hash
      *
-     * @prarm mixed  $field Field
+     * @param mixed  $field Field
      * @return boolean
      */
     public function exists($field)

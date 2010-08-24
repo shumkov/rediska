@@ -547,7 +547,7 @@ class Rediska_Transaction
      * Test if the specified value is a member of the Set at key
      *
      * @param string $key    Key value
-     * @prarm mixed  $member Member
+     * @param mixed  $member Member
      * @return Rediska_Transaction
      */
     public function existsInSet($key, $member) { $args = func_get_args(); return $this->_addCommand('existsInSet', $args); }
