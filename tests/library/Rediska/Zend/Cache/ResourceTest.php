@@ -6,7 +6,7 @@ class Rediska_Zend_Cache_ResourceTest extends PHPUnit_Framework_TestCase
     {
         Rediska_Manager::removeAll();
     }
-    
+
     public function testDefaultWithoutInstance()
     {
         $this->setExpectedException('Zend_Cache_Exception', "You must instance '" . Rediska::DEFAULT_NAME . "' Rediska before or use 'backend' option for specify another");
