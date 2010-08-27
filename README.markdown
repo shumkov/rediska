@@ -51,9 +51,8 @@ Get started!
 
      `git clone http://github.com/shumkov/rediska.git`
 
-     For adding Rediska to your applcation you need copy Rediska from library folder to you application library folder (which must be in PHP's `include_path`)
+     For adding Rediska to your applcation you need copy Rediska from library folder to you application library folder
 
-    
       * [Add Rediska to your Zend Framework application](http://rediska.geometria-lab.net/documentation/integration-with-frameworks/zend-framework/configuration-and-bootstraping)
 
       * [Add Rediska plugin to your Symfony application](http://rediska.geometria-lab.net/documentation/integration-with-frameworks/symfony)
@@ -103,6 +102,7 @@ Project structure
 * __README.txt__    - This document
 * __VERSION.txt__   - Current version of Rediska
 * __benchmarks/__   - Rediska benchmarks. In progress...
+* __docs__          - Rediska API documentation
 * __examples/__     - Rediska expamples
 * __library/__      - Rediska library. Put files from library to you include_path and use: `require_once "Rediska.php"`
 * __package.xml__   - Install Rediska to PHP library dir: `pear install package.xml`. Now use Rediska is easy (without `include_path` configuration): `require_once "Rediska.php"`
