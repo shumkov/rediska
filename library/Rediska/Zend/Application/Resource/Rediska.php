@@ -16,7 +16,7 @@ require_once 'Zend/Application/Resource/ResourceAbstract.php';
  * @package Rediska
  * @version @package_version@
  * @link http://rediska.geometria-lab.net
- * @licence http://www.opensource.org/licenses/bsd-license.php
+ * @license http://www.opensource.org/licenses/bsd-license.php
  */
 class Rediska_Zend_Application_Resource_Rediska extends Zend_Application_Resource_ResourceAbstract
 {

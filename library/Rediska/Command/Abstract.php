@@ -7,7 +7,7 @@
  * @package Rediska
  * @version @package_version@
  * @link http://rediska.geometria-lab.net
- * @licence http://www.opensource.org/licenses/bsd-license.php
+ * @license http://www.opensource.org/licenses/bsd-license.php
  */
 abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
 {

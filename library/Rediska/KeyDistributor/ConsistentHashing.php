@@ -6,7 +6,7 @@
  * @link http://github.com/kijin/distrib
  * @version 0.1.1
  * @link http://rediska.geometria-lab.net
- * @licence http://www.opensource.org/licenses/bsd-license.php
+ * @license http://www.opensource.org/licenses/bsd-license.php
  */
 class Rediska_KeyDistributor_ConsistentHashing implements Rediska_KeyDistributor_Interface
 {

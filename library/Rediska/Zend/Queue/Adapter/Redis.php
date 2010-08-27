@@ -15,7 +15,7 @@ require_once 'Zend/Queue/Adapter/AdapterAbstract.php';
  * @package Rediska
  * @version @package_version@
  * @link http://rediska.geometria-lab.net
- * @licence http://www.opensource.org/licenses/bsd-license.php
+ * @license http://www.opensource.org/licenses/bsd-license.php
  */
 class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstract
 {
