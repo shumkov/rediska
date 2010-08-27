@@ -81,8 +81,6 @@ Get started!
 
          <?php
 
-         require_once 'Rediska/Key.php';
-
          // Set 'value' to key 'keyName'
          $key = new Rediska_Key('keyName');
          $key->setValue('value');
