@@ -1,8 +1,9 @@
 <?php
 
 /**
- * @package Rediska
  * @author Kijin Sung <kijinbear@gmail.com>
+ * @package Rediska
+ * @category Key distributor
  * @link http://github.com/kijin/distrib
  * @version 0.1.1
  * @link http://rediska.geometria-lab.net

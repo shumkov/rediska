@@ -18,6 +18,7 @@ require_once 'Zend/Cache/Backend/ExtendedInterface.php';
  * 
  * @author Ivan Shumkov
  * @package Rediska
+ * @category Zend Framework integration
  * @version @package_version@
  * @link http://rediska.geometria-lab.net
  * @license http://www.opensource.org/licenses/bsd-license.php
