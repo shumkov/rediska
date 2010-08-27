@@ -5,9 +5,10 @@
  * 
  * @author Ivan Shumkov
  * @package Rediska
+ * @category Connection
  * @version @package_version@
  * @link http://rediska.geometria-lab.net
- * @licence http://www.opensource.org/licenses/bsd-license.php
+ * @license http://www.opensource.org/licenses/bsd-license.php
  */
 class Rediska_Connection_Exec
 {

@@ -1,0 +1,931 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>Docs For Class Rediska_Zend_Cache_Backend_Redis</title>
+			<link rel="stylesheet" href="../media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+			<div class="page-body">			
+<h2 class="class-name"><img src="../media/images/Class_logo.png"
+														alt=" Class"
+														title=" Class"
+														style="vertical-align: middle"> Rediska_Zend_Cache_Backend_Redis</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+													<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+						|											<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+						
+											<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+						
+			</div>
+	<div class="info-box-body">
+        		<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Redis adapter for Zend_Cache</p>
+	<ul class="tags">
+				<li><span class="field">author:</span> Ivan Shumkov</li>
+				<li><span class="field">version:</span> @package_version@</li>
+				<li><span class="field">link:</span> <a href="http://rediska.geometria-lab.net">http://rediska.geometria-lab.net</a></li>
+				<li><span class="field">license:</span> <a href="http://www.opensource.org/licenses/bsd-license.php">http://www.opensource.org/licenses/bsd-license.php</a></li>
+			</ul>
+		<p class="notes">
+			Located in <a class="field" href="_Rediska---Zend---Cache---Backend---Redis.php.html">/Rediska/Zend/Cache/Backend/Redis.php</a> (line <span class="field">26</span>)
+		</p>
+		
+				
+		<pre>Zend_Cache_Backend
+   |
+   --Rediska_Zend_Cache_Backend_Redis</pre>
+	
+			</div>
+</div>
+
+
+	<a name="sec-const-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Class Constant Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+						<span class="disabled">Constants</span> (<a href="#sec-consts">details</a>)
+												<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+				 
+				|
+										| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			<div class="const-summary">
+								<div class="const-title">
+					<img src="../media/images/Constant.png" alt=" " />
+					<a href="#TAGS_UNSUPPORTED_BY_CLEAN_OF_REDIS_BACKEND" title="details" class="const-name">TAGS_UNSUPPORTED_BY_CLEAN_OF_REDIS_BACKEND</a> = 					<span class="var-type"> 'Rediska_Zend_Cache_Backend_Redis::clean() : tags are unsupported by the Redis backend'</span>
+
+				</div>
+								<div class="const-title">
+					<img src="../media/images/Constant.png" alt=" " />
+					<a href="#TAGS_UNSUPPORTED_BY_SAVE_OF_REDIS_BACKEND" title="details" class="const-name">TAGS_UNSUPPORTED_BY_SAVE_OF_REDIS_BACKEND</a> = 					<span class="var-type">  'Rediska_Zend_Cache_Backend_Redis::save() : tags are unsupported by the Redis backend'</span>
+
+				</div>
+							</div>
+		</div>
+	</div>
+
+	<a name="sec-var-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Variable Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+						<span class="disabled">Vars</span> (<a href="#sec-vars">details</a>)
+							| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+															<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			<div class="var-summary">
+																								<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type"><a href="../Rediska/Rediska.html">Rediska</a></span>
+					<a href="#$_rediska" title="details" class="var-name">$_rediska</a>
+				</div>
+											</div>
+		</div>
+	</div>
+
+	<a name="sec-method-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Method Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+															<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+							
+															<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+				 
+				|
+						<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
+		</div>
+		<div class="info-box-body">			
+			<div class="method-summary">
+																																																																																																																																																																								<div class="method-definition">
+					<img src="../media/images/Constructor.png" alt=" "/>
+											<span class="method-result">Rediska_Zend_Cache_Backend_Redis</span>
+										<a href="#__construct" title="details" class="method-name">__construct</a>
+											([<span class="var-type"></span>&nbsp;<span class="var-name">$options</span> = <span class="var-default">array()</span>], <span class="var-type">mixed</span>&nbsp;<span class="var-name">$rediska</span>)
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">boolean</span>
+										<a href="#clean" title="details" class="method-name">clean</a>
+											([<span class="var-type">string</span>&nbsp;<span class="var-name">$mode</span> = <span class="var-default">Zend_Cache::CLEANING_MODE_ALL</span>], [<span class="var-type">array</span>&nbsp;<span class="var-name">$tags</span> = <span class="var-default">array()</span>])
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">array</span>
+										<a href="#getCapabilities" title="details" class="method-name">getCapabilities</a>
+										()
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">int</span>
+										<a href="#getFillingPercentage" title="details" class="method-name">getFillingPercentage</a>
+										()
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">array</span>
+										<a href="#getIds" title="details" class="method-name">getIds</a>
+										()
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">array</span>
+										<a href="#getIdsMatchingAnyTags" title="details" class="method-name">getIdsMatchingAnyTags</a>
+											([<span class="var-type">array</span>&nbsp;<span class="var-name">$tags</span> = <span class="var-default">array()</span>])
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">array</span>
+										<a href="#getIdsMatchingTags" title="details" class="method-name">getIdsMatchingTags</a>
+											([<span class="var-type">array</span>&nbsp;<span class="var-name">$tags</span> = <span class="var-default">array()</span>])
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">array</span>
+										<a href="#getIdsNotMatchingTags" title="details" class="method-name">getIdsNotMatchingTags</a>
+											([<span class="var-type">array</span>&nbsp;<span class="var-name">$tags</span> = <span class="var-default">array()</span>])
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">array</span>
+										<a href="#getMetadatas" title="details" class="method-name">getMetadatas</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$id</span>)
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#getRediska" title="details" class="method-name">getRediska</a>
+										()
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">array</span>
+										<a href="#getTags" title="details" class="method-name">getTags</a>
+										()
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">boolean</span>
+										<a href="#isAutomaticCleaningAvailable" title="details" class="method-name">isAutomaticCleaningAvailable</a>
+										()
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">string|false</span>
+										<a href="#load" title="details" class="method-name">load</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$id</span>, [<span class="var-type">boolean</span>&nbsp;<span class="var-name">$doNotTestCacheValidity</span> = <span class="var-default">false</span>])
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">boolean</span>
+										<a href="#remove" title="details" class="method-name">remove</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$id</span>)
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">boolean</span>
+										<a href="#save" title="details" class="method-name">save</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$data</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$id</span>, [<span class="var-type">array</span>&nbsp;<span class="var-name">$tags</span> = <span class="var-default">array()</span>], [<span class="var-type">int</span>&nbsp;<span class="var-name">$specificLifetime</span> = <span class="var-default">false</span>])
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#setDirectives" title="details" class="method-name">setDirectives</a>
+											(<span class="var-type">array</span>&nbsp;<span class="var-name">$directives</span>)
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#setRediska" title="details" class="method-name">setRediska</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$rediska</span>)
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">mixed|false</span>
+										<a href="#test" title="details" class="method-name">test</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$id</span>)
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">boolean</span>
+										<a href="#touch" title="details" class="method-name">touch</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$id</span>, <span class="var-type">int</span>&nbsp;<span class="var-name">$extraLifetime</span>)
+									</div>
+											</div>
+		</div>
+	</div>		
+
+	<a name="sec-vars"></a>
+	<div class="info-box">
+		<div class="info-box-title">Variables</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+										<a href="#sec-var-summary">Vars</a> (<span class="disabled">details</span>)
+						
+			
+												<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+							
+										| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			
+<a name="var$_rediska" id="$_rediska"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type"><a href="../Rediska/Rediska.html">Rediska</a></span>
+			<span class="var-name">$_rediska</span>
+			 = <span class="var-default"> Rediska::DEFAULT_NAME</span>			(line <span class="line-number">39</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Rediska instance</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+						
+		</div>
+	</div>
+	
+	<a name="sec-methods"></a>
+	<div class="info-box">
+		<div class="info-box-title">Methods</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+															<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+														<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
+						
+		</div>
+		<div class="info-box-body">
+			<A NAME='method_detail'></A>
+<a name="method__construct" id="__construct"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Constructor.png" />
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">46</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Contruct Zend_Cache Redis backend</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">Rediska_Zend_Cache_Backend_Redis</span>
+		<span class="method-name">
+			__construct
+		</span>
+					([<span class="var-type"></span>&nbsp;<span class="var-name">$options</span> = <span class="var-default">array()</span>], <span class="var-type">mixed</span>&nbsp;<span class="var-name">$rediska</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">mixed</span>
+				<span class="var-name">$rediska</span><span class="var-description">: Rediska instance name, Rediska object or array of options</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$options</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodclean" id="clean"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">clean</span> (line <span class="line-number">168</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Clean some cache records</p>
+<p class="description"><p>Available modes are :  'all' (default)  =&gt; remove all cache entries ($tags is not used)  'old'            =&gt; unsupported  'matchingTag'    =&gt; unsupported  'notMatchingTag' =&gt; unsupported  'matchingAnyTag' =&gt; unsupported</p></p>
+	<ul class="tags">
+				<li><span class="field">return:</span> True if no problem</li>
+				<li><span class="field">throws:</span> Zend_Cache_Exception</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">boolean</span>
+		<span class="method-name">
+			clean
+		</span>
+					([<span class="var-type">string</span>&nbsp;<span class="var-name">$mode</span> = <span class="var-default">Zend_Cache::CLEANING_MODE_ALL</span>], [<span class="var-type">array</span>&nbsp;<span class="var-name">$tags</span> = <span class="var-default">array()</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$mode</span><span class="var-description">: Clean mode</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$tags</span><span class="var-description">: Array of tags</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodgetCapabilities" id="getCapabilities"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">getCapabilities</span> (line <span class="line-number">364</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Return an associative array of capabilities (booleans) of the backend</p>
+<p class="description"><p>The array must include these keys : <ul><li>automatic_cleaning (is automating cleaning necessary)</li><li>tags (are tags supported)</li><li>expired_read (is it possible to read expired cache records
+                 (for doNotTestCacheValidity option for example))</li><li>priority does the backend deal with priority when saving</li><li>infinite_lifetime (is infinite lifetime can work with this backend)</li><li>get_list (is it possible to get the list of cache ids and the complete list of tags)</li></ul></p></p>
+	<ul class="tags">
+				<li><span class="field">return:</span> associative of with capabilities</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">array</span>
+		<span class="method-name">
+			getCapabilities
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodgetFillingPercentage" id="getFillingPercentage"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">getFillingPercentage</span> (line <span class="line-number">284</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Return the filling percentage of the backend storage</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> integer between 0 and 100</li>
+				<li><span class="field">throws:</span> Zend_Cache_Exception</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">int</span>
+		<span class="method-name">
+			getFillingPercentage
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodgetIds" id="getIds"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">getIds</span> (line <span class="line-number">219</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Return an array of stored cache ids</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> array of stored cache ids (string)</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">array</span>
+		<span class="method-name">
+			getIds
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodgetIdsMatchingAnyTags" id="getIdsMatchingAnyTags"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">getIdsMatchingAnyTags</span> (line <span class="line-number">272</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Return an array of stored cache ids which match any given tags</p>
+<p class="description"><p>In case of multiple tags, a logical AND is made between tags</p></p>
+	<ul class="tags">
+				<li><span class="field">return:</span> array of any matching cache ids (string)</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">array</span>
+		<span class="method-name">
+			getIdsMatchingAnyTags
+		</span>
+					([<span class="var-type">array</span>&nbsp;<span class="var-name">$tags</span> = <span class="var-default">array()</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$tags</span><span class="var-description">: array of tags</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodgetIdsMatchingTags" id="getIdsMatchingTags"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">getIdsMatchingTags</span> (line <span class="line-number">244</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Return an array of stored cache ids which match given tags</p>
+<p class="description"><p>In case of multiple tags, a logical AND is made between tags</p></p>
+	<ul class="tags">
+				<li><span class="field">return:</span> array of matching cache ids (string)</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">array</span>
+		<span class="method-name">
+			getIdsMatchingTags
+		</span>
+					([<span class="var-type">array</span>&nbsp;<span class="var-name">$tags</span> = <span class="var-default">array()</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$tags</span><span class="var-description">: array of tags</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodgetIdsNotMatchingTags" id="getIdsNotMatchingTags"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">getIdsNotMatchingTags</span> (line <span class="line-number">258</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Return an array of stored cache ids which don't match given tags</p>
+<p class="description"><p>In case of multiple tags, a logical OR is made between tags</p></p>
+	<ul class="tags">
+				<li><span class="field">return:</span> array of not matching cache ids (string)</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">array</span>
+		<span class="method-name">
+			getIdsNotMatchingTags
+		</span>
+					([<span class="var-type">array</span>&nbsp;<span class="var-name">$tags</span> = <span class="var-default">array()</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$tags</span><span class="var-description">: array of tags</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodgetMetadatas" id="getMetadatas"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">getMetadatas</span> (line <span class="line-number">301</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Return an array of metadatas for the given cache id</p>
+<p class="description"><p>The array must include these keys : <ul><li>expire : the expire timestamp</li><li>tags : a string array of tags</li><li>mtime : timestamp of last modification time</li></ul></p></p>
+	<ul class="tags">
+				<li><span class="field">return:</span> array of metadatas (false if the cache id is not found)</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">array</span>
+		<span class="method-name">
+			getMetadatas
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$id</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$id</span><span class="var-description">: cache id</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodgetRediska" id="getRediska"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">getRediska</span> (line <span class="line-number">64</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			getRediska
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodgetTags" id="getTags"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">getTags</span> (line <span class="line-number">230</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Return an array of stored tags</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> array of stored tags (string)</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">array</span>
+		<span class="method-name">
+			getTags
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodisAutomaticCleaningAvailable" id="isAutomaticCleaningAvailable"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">isAutomaticCleaningAvailable</span> (line <span class="line-number">193</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Return true if the automatic cleaning is available for the backend</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">boolean</span>
+		<span class="method-name">
+			isAutomaticCleaningAvailable
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodload" id="load"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">load</span> (line <span class="line-number">80</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Load value with given id from cache</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> cached datas</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">string|false</span>
+		<span class="method-name">
+			load
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$id</span>, [<span class="var-type">boolean</span>&nbsp;<span class="var-name">$doNotTestCacheValidity</span> = <span class="var-default">false</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$id</span><span class="var-description">: Cache id</span>			</li>
+					<li>
+				<span class="var-type">boolean</span>
+				<span class="var-name">$doNotTestCacheValidity</span><span class="var-description">: If set to true, the cache validity won't be tested</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodremove" id="remove"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">remove</span> (line <span class="line-number">148</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Remove a cache record</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> True if no problem</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">boolean</span>
+		<span class="method-name">
+			remove
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$id</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$id</span><span class="var-description">: Cache id</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodsave" id="save"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">save</span> (line <span class="line-number">125</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Save some string datas into a cache record</p>
+<p class="description"><p>Note : $data is always &quot;string&quot; (serialization is done by the  core not by the backend)</p></p>
+	<ul class="tags">
+				<li><span class="field">return:</span> True if no problem</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">boolean</span>
+		<span class="method-name">
+			save
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$data</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$id</span>, [<span class="var-type">array</span>&nbsp;<span class="var-name">$tags</span> = <span class="var-default">array()</span>], [<span class="var-type">int</span>&nbsp;<span class="var-name">$specificLifetime</span> = <span class="var-default">false</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$data</span><span class="var-description">: Datas to cache</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$id</span><span class="var-description">: Cache id</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$tags</span><span class="var-description">: Array of strings, the cache record will be tagged by each string entry</span>			</li>
+					<li>
+				<span class="var-type">int</span>
+				<span class="var-name">$specificLifetime</span><span class="var-description">: If != false, set a specific lifetime for this cache record (null =&gt; infinite lifetime)</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodsetDirectives" id="setDirectives"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">setDirectives</span> (line <span class="line-number">205</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Set the frontend directives</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> Zend_Cache_Exception</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			setDirectives
+		</span>
+					(<span class="var-type">array</span>&nbsp;<span class="var-name">$directives</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$directives</span><span class="var-description">: Assoc of directives</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodsetRediska" id="setRediska"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">setRediska</span> (line <span class="line-number">57</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			setRediska
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$rediska</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$rediska</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodtest" id="test"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">test</span> (line <span class="line-number">104</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Test if a cache is available or not (for the given id)</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> (a cache is not available) or &quot;last modified&quot; timestamp (int) of the available cache record</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">mixed|false</span>
+		<span class="method-name">
+			test
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$id</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$id</span><span class="var-description">: Cache id</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodtouch" id="touch"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">touch</span> (line <span class="line-number">329</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Give (if possible) an extra lifetime to the given cache id</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> true if ok</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">boolean</span>
+		<span class="method-name">
+			touch
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$id</span>, <span class="var-type">int</span>&nbsp;<span class="var-name">$extraLifetime</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$id</span><span class="var-description">: cache id</span>			</li>
+					<li>
+				<span class="var-type">int</span>
+				<span class="var-name">$extraLifetime</span>			</li>
+				</ul>
+		
+			
+	</div>
+						
+		</div>
+	</div>
+
+	<a name="sec-consts"></a>
+	<div class="info-box">
+		<div class="info-box-title">Class Constants</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+										<a href="#sec-var-summary">Constants</a> (<span class="disabled">details</span>)
+						
+			
+												<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+														| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			<a name="constTAGS_UNSUPPORTED_BY_CLEAN_OF_REDIS_BACKEND" id="TAGS_UNSUPPORTED_BY_CLEAN_OF_REDIS_BACKEND"><!-- --></A>
+<div class="evenrow">
+
+	<div class="const-header">
+		<img src="../media/images/Variable.png" />
+		<span class="const-title">
+			<span class="const-name">TAGS_UNSUPPORTED_BY_CLEAN_OF_REDIS_BACKEND</span>
+			 = <span class="const-default"> 'Rediska_Zend_Cache_Backend_Redis::clean() : tags are unsupported by the Redis backend'</span>
+			(line <span class="line-number">31</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Log message</p>
+	
+	
+</div>
+<a name="constTAGS_UNSUPPORTED_BY_SAVE_OF_REDIS_BACKEND" id="TAGS_UNSUPPORTED_BY_SAVE_OF_REDIS_BACKEND"><!-- --></A>
+<div class="oddrow">
+
+	<div class="const-header">
+		<img src="../media/images/Variable.png" />
+		<span class="const-title">
+			<span class="const-name">TAGS_UNSUPPORTED_BY_SAVE_OF_REDIS_BACKEND</span>
+			 = <span class="const-default">  'Rediska_Zend_Cache_Backend_Redis::save() : tags are unsupported by the Redis backend'</span>
+			(line <span class="line-number">32</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	
+	
+</div>
+						
+		</div>
+	</div>
+	
+	<p class="notes" id="credit">
+		Documentation generated on Fri, 27 Aug 2010 13:55:35 +0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+	</p>
+	</div></body>
+</html>

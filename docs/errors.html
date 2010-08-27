@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>phpDocumentor Parser Errors and Warnings</title>
+			<link rel="stylesheet" href="media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+						<a href="#Post-parsing">Post-parsing</a><br>
+<a href="#AddToSet.php">AddToSet.php</a><br>
+<a href="#AddToSortedSet.php">AddToSortedSet.php</a><br>
+<a href="#Append.php">Append.php</a><br>
+<a href="#AppendToList.php">AppendToList.php</a><br>
+<a href="#Autoloader.php">Autoloader.php</a><br>
+<a href="#Channel.php">Channel.php</a><br>
+<a href="#Commands.php">Commands.php</a><br>
+<a href="#CompareSets.php">CompareSets.php</a><br>
+<a href="#CompareSortedSets.php">CompareSortedSets.php</a><br>
+<a href="#Config.php">Config.php</a><br>
+<a href="#Connection.php">Connection.php</a><br>
+<a href="#Connections.php">Connections.php</a><br>
+<a href="#ConsistentHashing.php">ConsistentHashing.php</a><br>
+<a href="#Crc32.php">Crc32.php</a><br>
+<a href="#Decrement.php">Decrement.php</a><br>
+<a href="#Delete.php">Delete.php</a><br>
+<a href="#DeleteFromHash.php">DeleteFromHash.php</a><br>
+<a href="#DeleteFromList.php">DeleteFromList.php</a><br>
+<a href="#DeleteFromSet.php">DeleteFromSet.php</a><br>
+<a href="#DeleteFromSortedSet.php">DeleteFromSortedSet.php</a><br>
+<a href="#DeleteFromSortedSetByRank.php">DeleteFromSortedSetByRank.php</a><br>
+<a href="#DeleteFromSortedSetByScore.php">DeleteFromSortedSetByScore.php</a><br>
+<a href="#DiffSets.php">DiffSets.php</a><br>
+<a href="#Exception.php">Exception.php</a><br>
+<a href="#Exec.php">Exec.php</a><br>
+<a href="#Exists.php">Exists.php</a><br>
+<a href="#ExistsInHash.php">ExistsInHash.php</a><br>
+<a href="#ExistsInSet.php">ExistsInSet.php</a><br>
+<a href="#Expire.php">Expire.php</a><br>
+<a href="#FlushDb.php">FlushDb.php</a><br>
+<a href="#Get.php">Get.php</a><br>
+<a href="#GetFromHash.php">GetFromHash.php</a><br>
+<a href="#GetFromList.php">GetFromList.php</a><br>
+<a href="#GetFromSortedSetByScore.php">GetFromSortedSetByScore.php</a><br>
+<a href="#GetHash.php">GetHash.php</a><br>
+<a href="#GetHashFields.php">GetHashFields.php</a><br>
+<a href="#GetHashLength.php">GetHashLength.php</a><br>
+<a href="#GetHashValues.php">GetHashValues.php</a><br>
+<a href="#GetKeysByPattern.php">GetKeysByPattern.php</a><br>
+<a href="#GetKeysCount.php">GetKeysCount.php</a><br>
+<a href="#GetLastSaveTime.php">GetLastSaveTime.php</a><br>
+<a href="#GetLifetime.php">GetLifetime.php</a><br>
+<a href="#GetList.php">GetList.php</a><br>
+<a href="#GetListLength.php">GetListLength.php</a><br>
+<a href="#GetRandomFromSet.php">GetRandomFromSet.php</a><br>
+<a href="#GetRandomKey.php">GetRandomKey.php</a><br>
+<a href="#GetRankFromSortedSet.php">GetRankFromSortedSet.php</a><br>
+<a href="#GetScoreFromSortedSet.php">GetScoreFromSortedSet.php</a><br>
+<a href="#GetSet.php">GetSet.php</a><br>
+<a href="#GetSetLength.php">GetSetLength.php</a><br>
+<a href="#GetSortedSet.php">GetSortedSet.php</a><br>
+<a href="#GetSortedSetLength.php">GetSortedSetLength.php</a><br>
+<a href="#GetType.php">GetType.php</a><br>
+<a href="#Hash.php">Hash.php</a><br>
+<a href="#Increment.php">Increment.php</a><br>
+<a href="#IncrementInHash.php">IncrementInHash.php</a><br>
+<a href="#IncrementScoreInSortedSet.php">IncrementScoreInSortedSet.php</a><br>
+<a href="#Info.php">Info.php</a><br>
+<a href="#Interface.php">Interface.php</a><br>
+<a href="#IntersectSets.php">IntersectSets.php</a><br>
+<a href="#IntersectSortedSets.php">IntersectSortedSets.php</a><br>
+<a href="#Json.php">Json.php</a><br>
+<a href="#Key.php">Key.php</a><br>
+<a href="#List.php">List.php</a><br>
+<a href="#ListNameAndValue.php">ListNameAndValue.php</a><br>
+<a href="#Manager.php">Manager.php</a><br>
+<a href="#Message.php">Message.php</a><br>
+<a href="#Monitor.php">Monitor.php</a><br>
+<a href="#MoveToDb.php">MoveToDb.php</a><br>
+<a href="#MoveToSet.php">MoveToSet.php</a><br>
+<a href="#Options.php">Options.php</a><br>
+<a href="#PhpSerialize.php">PhpSerialize.php</a><br>
+<a href="#Pipeline.php">Pipeline.php</a><br>
+<a href="#PopFromList.php">PopFromList.php</a><br>
+<a href="#PopFromListBlocking.php">PopFromListBlocking.php</a><br>
+<a href="#PrependToList.php">PrependToList.php</a><br>
+<a href="#Publish.php">Publish.php</a><br>
+<a href="#Quit.php">Quit.php</a><br>
+<a href="#Redis.php">Redis.php</a><br>
+<a href="#Rediska.php">Rediska.php</a><br>
+<a href="#RediskaInstance.php">RediskaInstance.php</a><br>
+<a href="#Rename.php">Rename.php</a><br>
+<a href="#RewriteAppendOnlyFile.php">RewriteAppendOnlyFile.php</a><br>
+<a href="#Save.php">Save.php</a><br>
+<a href="#SelectDb.php">SelectDb.php</a><br>
+<a href="#Serializer.php">Serializer.php</a><br>
+<a href="#Set.php">Set.php</a><br>
+<a href="#SetAndExpire.php">SetAndExpire.php</a><br>
+<a href="#SetAndGet.php">SetAndGet.php</a><br>
+<a href="#SetToHash.php">SetToHash.php</a><br>
+<a href="#SetToList.php">SetToList.php</a><br>
+<a href="#ShiftFromList.php">ShiftFromList.php</a><br>
+<a href="#ShiftFromListBlocking.php">ShiftFromListBlocking.php</a><br>
+<a href="#Shutdown.php">Shutdown.php</a><br>
+<a href="#SlaveOf.php">SlaveOf.php</a><br>
+<a href="#Sort.php">Sort.php</a><br>
+<a href="#SortedSet.php">SortedSet.php</a><br>
+<a href="#Specified.php">Specified.php</a><br>
+<a href="#Subscribe.php">Subscribe.php</a><br>
+<a href="#Substring.php">Substring.php</a><br>
+<a href="#TimeoutException.php">TimeoutException.php</a><br>
+<a href="#ToString.php">ToString.php</a><br>
+<a href="#Transaction.php">Transaction.php</a><br>
+<a href="#TruncateList.php">TruncateList.php</a><br>
+<a href="#UnionSets.php">UnionSets.php</a><br>
+<a href="#UnionSortedSets.php">UnionSortedSets.php</a><br>
+<a href="#Unsubscribe.php">Unsubscribe.php</a><br>
+<a href="#ValueAndScore.php">ValueAndScore.php</a><br>
+<a name="Post-parsing"></a>
+<h1>Post-parsing</h1>
+<h2>Warnings:</h2><br>
+<b>Warning</b> - Class Rediska_Zend_Cache_Backend_Redis parent Zend_Cache_Backend not found<br>
+<b>Warning</b> - Class Rediska_Zend_Application_Resource_Rediska parent Zend_Application_Resource_ResourceAbstract not found<br>
+<b>Warning</b> - Class Rediska_Zend_Log_Writer_Redis parent Zend_Log_Writer_Abstract not found<br>
+<b>Warning</b> - Class Rediska_Zend_Queue_Adapter_Redis parent Zend_Queue_Adapter_AdapterAbstract not found<br>
+<a name="Abstract.php"></a>
+<h1>Abstract.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 12</b> - package default is already in category default, will now replace with category Commands<br>
+<b>Warning on line 12</b> - DocBlock would be page-level, but precedes class "Rediska_PubSub_Response_Abstract", use another DocBlock to document the file<br>
+<b>Warning on line 12</b> - package default is already in category default, will now replace with category Key-objects<br>
+<b>Warning on line 13</b> - package Rediska is already in category default, will now replace with category Key-objects<br>
+<b>Warning on line 13</b> - package Rediska is already in category default, will now replace with category Commands<br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_Abstract", use another DocBlock to document the file<br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Key_Abstract", use another DocBlock to document the file<br>
+<a name="AddToSet.php"></a>
+<h1>AddToSet.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_AddToSet", use another DocBlock to document the file<br>
+<a name="AddToSortedSet.php"></a>
+<h1>AddToSortedSet.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_AddToSortedSet", use another DocBlock to document the file<br>
+<a name="Append.php"></a>
+<h1>Append.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_Append", use another DocBlock to document the file<br>
+<a name="AppendToList.php"></a>
+<h1>AppendToList.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_AppendToList", use another DocBlock to document the file<br>
+<a name="Autoloader.php"></a>
+<h1>Autoloader.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 12</b> - DocBlock would be page-level, but precedes class "Rediska_Autoloader", use another DocBlock to document the file<br>
+<a name="Channel.php"></a>
+<h1>Channel.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 545</b> - File "/Users/ivanshumkov/Sites/Rediska/library/Rediska/PubSub/Channel.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
+<a name="Commands.php"></a>
+<h1>Commands.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Commands", use another DocBlock to document the file<br>
+<a name="CompareSets.php"></a>
+<h1>CompareSets.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_CompareSets", use another DocBlock to document the file<br>
+<a name="CompareSortedSets.php"></a>
+<h1>CompareSortedSets.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_CompareSortedSets", use another DocBlock to document the file<br>
+<a name="Config.php"></a>
+<h1>Config.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 11</b> - package default is already in category Commands, will now replace with category default<br>
+<b>Warning on line 12</b> - package Rediska is already in category Commands, will now replace with category default<br>
+<b>Warning on line 12</b> - DocBlock would be page-level, but precedes class "Rediska_Config", use another DocBlock to document the file<br>
+<a name="Connection.php"></a>
+<h1>Connection.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Connection", use another DocBlock to document the file<br>
+<a name="Connections.php"></a>
+<h1>Connections.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_PubSub_Connections", use another DocBlock to document the file<br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Monitor_Connections", use another DocBlock to document the file<br>
+<b>Warning on line 13</b> - package Rediska is already in category Key-distributor, will now replace with category default<br>
+<a name="ConsistentHashing.php"></a>
+<h1>ConsistentHashing.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 11</b> - package default is already in category default, will now replace with category Key-distributor<br>
+<b>Warning on line 12</b> - package Rediska is already in category Key-objects, will now replace with category Key-distributor<br>
+<b>Warning on line 12</b> - DocBlock would be page-level, but precedes class "Rediska_KeyDistributor_ConsistentHashing", use another DocBlock to document the file<br>
+<a name="Crc32.php"></a>
+<h1>Crc32.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 11</b> - DocBlock would be page-level, but precedes class "Rediska_KeyDistributor_Crc32", use another DocBlock to document the file<br>
+<a name="Decrement.php"></a>
+<h1>Decrement.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_Decrement", use another DocBlock to document the file<br>
+<a name="Delete.php"></a>
+<h1>Delete.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_Delete", use another DocBlock to document the file<br>
+<a name="DeleteFromHash.php"></a>
+<h1>DeleteFromHash.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 16</b> - DocBlock would be page-level, but precedes class "Rediska_Command_DeleteFromHash", use another DocBlock to document the file<br>
+<a name="DeleteFromList.php"></a>
+<h1>DeleteFromList.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_DeleteFromList", use another DocBlock to document the file<br>
+<a name="DeleteFromSet.php"></a>
+<h1>DeleteFromSet.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_DeleteFromSet", use another DocBlock to document the file<br>
+<a name="DeleteFromSortedSet.php"></a>
+<h1>DeleteFromSortedSet.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_DeleteFromSortedSet", use another DocBlock to document the file<br>
+<a name="DeleteFromSortedSetByRank.php"></a>
+<h1>DeleteFromSortedSetByRank.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_DeleteFromSortedSetByRank", use another DocBlock to document the file<br>
+<a name="DeleteFromSortedSetByScore.php"></a>
+<h1>DeleteFromSortedSetByScore.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_DeleteFromSortedSetByScore", use another DocBlock to document the file<br>
+<a name="DiffSets.php"></a>
+<h1>DiffSets.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_DiffSets", use another DocBlock to document the file<br>
+<a name="Exception.php"></a>
+<h1>Exception.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 11</b> - package default is already in category Serializer, will now replace with category default<br>
+<b>Warning on line 11</b> - package default is already in category Connection, will now replace with category default<br>
+<b>Warning on line 12</b> - DocBlock would be page-level, but precedes class "Rediska_Transaction_Exception", use another DocBlock to document the file<br>
+<b>Warning on line 12</b> - package Rediska is already in category Serializer, will now replace with category default<br>
+<b>Warning on line 12</b> - DocBlock would be page-level, but precedes class "Rediska_PubSub_Response_Exception", use another DocBlock to document the file<br>
+<b>Warning on line 12</b> - package default is already in category default, will now replace with category Serializer<br>
+<b>Warning on line 12</b> - package Rediska is already in category Connection, will now replace with category default<br>
+<b>Warning on line 12</b> - DocBlock would be page-level, but precedes class "Rediska_Monitor_Exception", use another DocBlock to document the file<br>
+<b>Warning on line 12</b> - DocBlock would be page-level, but precedes class "Rediska_Exception", use another DocBlock to document the file<br>
+<b>Warning on line 12</b> - package default is already in category default, will now replace with category Connection<br>
+<b>Warning on line 12</b> - DocBlock would be page-level, but precedes class "Rediska_PubSub_Exception", use another DocBlock to document the file<br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Connection_Exec_Exception", use another DocBlock to document the file<br>
+<b>Warning on line 13</b> - package Rediska is already in category default, will now replace with category Connection<br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Serializer_Adapter_Exception", use another DocBlock to document the file<br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_Exception", use another DocBlock to document the file<br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Connection_Exception", use another DocBlock to document the file<br>
+<b>Warning on line 13</b> - package Rediska is already in category default, will now replace with category Serializer<br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Key_Exception", use another DocBlock to document the file<br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Serializer_Exception", use another DocBlock to document the file<br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_KeyDistributor_Exception", use another DocBlock to document the file<br>
+<a name="Exec.php"></a>
+<h1>Exec.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Connection_Exec", use another DocBlock to document the file<br>
+<a name="Exists.php"></a>
+<h1>Exists.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_Exists", use another DocBlock to document the file<br>
+<a name="ExistsInHash.php"></a>
+<h1>ExistsInHash.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_ExistsInHash", use another DocBlock to document the file<br>
+<a name="ExistsInSet.php"></a>
+<h1>ExistsInSet.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_ExistsInSet", use another DocBlock to document the file<br>
+<a name="Expire.php"></a>
+<h1>Expire.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_Expire", use another DocBlock to document the file<br>
+<a name="FlushDb.php"></a>
+<h1>FlushDb.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_FlushDb", use another DocBlock to document the file<br>
+<a name="Get.php"></a>
+<h1>Get.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_Get", use another DocBlock to document the file<br>
+<a name="GetFromHash.php"></a>
+<h1>GetFromHash.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_GetFromHash", use another DocBlock to document the file<br>
+<a name="GetFromList.php"></a>
+<h1>GetFromList.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_GetFromList", use another DocBlock to document the file<br>
+<a name="GetFromSortedSetByScore.php"></a>
+<h1>GetFromSortedSetByScore.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_GetFromSortedSetByScore", use another DocBlock to document the file<br>
+<a name="GetHash.php"></a>
+<h1>GetHash.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_GetHash", use another DocBlock to document the file<br>
+<a name="GetHashFields.php"></a>
+<h1>GetHashFields.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_GetHashFields", use another DocBlock to document the file<br>
+<a name="GetHashLength.php"></a>
+<h1>GetHashLength.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_GetHashLength", use another DocBlock to document the file<br>
+<a name="GetHashValues.php"></a>
+<h1>GetHashValues.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_GetHashValues", use another DocBlock to document the file<br>
+<a name="GetKeysByPattern.php"></a>
+<h1>GetKeysByPattern.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 17</b> - DocBlock would be page-level, but precedes class "Rediska_Command_GetKeysByPattern", use another DocBlock to document the file<br>
+<a name="GetKeysCount.php"></a>
+<h1>GetKeysCount.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_GetKeysCount", use another DocBlock to document the file<br>
+<a name="GetLastSaveTime.php"></a>
+<h1>GetLastSaveTime.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_GetLastSaveTime", use another DocBlock to document the file<br>
+<a name="GetLifetime.php"></a>
+<h1>GetLifetime.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_GetLifetime", use another DocBlock to document the file<br>
+<a name="GetList.php"></a>
+<h1>GetList.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 18</b> - DocBlock would be page-level, but precedes class "Rediska_Command_GetList", use another DocBlock to document the file<br>
+<a name="GetListLength.php"></a>
+<h1>GetListLength.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_GetListLength", use another DocBlock to document the file<br>
+<a name="GetRandomFromSet.php"></a>
+<h1>GetRandomFromSet.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_GetRandomFromSet", use another DocBlock to document the file<br>
+<a name="GetRandomKey.php"></a>
+<h1>GetRandomKey.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_GetRandomKey", use another DocBlock to document the file<br>
+<a name="GetRankFromSortedSet.php"></a>
+<h1>GetRankFromSortedSet.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_GetRankFromSortedSet", use another DocBlock to document the file<br>
+<a name="GetScoreFromSortedSet.php"></a>
+<h1>GetScoreFromSortedSet.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_GetScoreFromSortedSet", use another DocBlock to document the file<br>
+<a name="GetSet.php"></a>
+<h1>GetSet.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_GetSet", use another DocBlock to document the file<br>
+<a name="GetSetLength.php"></a>
+<h1>GetSetLength.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_GetSetLength", use another DocBlock to document the file<br>
+<a name="GetSortedSet.php"></a>
+<h1>GetSortedSet.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_GetSortedSet", use another DocBlock to document the file<br>
+<a name="GetSortedSetLength.php"></a>
+<h1>GetSortedSetLength.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_GetSortedSetLength", use another DocBlock to document the file<br>
+<a name="GetType.php"></a>
+<h1>GetType.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_GetType", use another DocBlock to document the file<br>
+<a name="Hash.php"></a>
+<h1>Hash.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 16</b> - package default is already in category Key-objects, will now replace with category default<br>
+<b>Warning on line 265</b> - File "/Users/ivanshumkov/Sites/Rediska/library/Rediska/Key/Hash.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
+<a name="Increment.php"></a>
+<h1>Increment.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_Increment", use another DocBlock to document the file<br>
+<a name="IncrementInHash.php"></a>
+<h1>IncrementInHash.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_IncrementInHash", use another DocBlock to document the file<br>
+<a name="IncrementScoreInSortedSet.php"></a>
+<h1>IncrementScoreInSortedSet.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_IncrementScoreInSortedSet", use another DocBlock to document the file<br>
+<a name="Info.php"></a>
+<h1>Info.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_Info", use another DocBlock to document the file<br>
+<a name="Interface.php"></a>
+<h1>Interface.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_Interface", use another DocBlock to document the file<br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_KeyDistributor_Interface", use another DocBlock to document the file<br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Serializer_Adapter_Interface", use another DocBlock to document the file<br>
+<a name="IntersectSets.php"></a>
+<h1>IntersectSets.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_IntersectSets", use another DocBlock to document the file<br>
+<a name="IntersectSortedSets.php"></a>
+<h1>IntersectSortedSets.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_IntersectSortedSets", use another DocBlock to document the file<br>
+<a name="Json.php"></a>
+<h1>Json.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Serializer_Adapter_Json", use another DocBlock to document the file<br>
+<a name="Key.php"></a>
+<h1>Key.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 150</b> - File "/Users/ivanshumkov/Sites/Rediska/library/Rediska/Key.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
+<a name="List.php"></a>
+<h1>List.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 280</b> - File "/Users/ivanshumkov/Sites/Rediska/library/Rediska/Key/List.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
+<a name="ListNameAndValue.php"></a>
+<h1>ListNameAndValue.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_Response_ListNameAndValue", use another DocBlock to document the file<br>
+<a name="Manager.php"></a>
+<h1>Manager.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 15</b> - package default is already in category Key-distributor, will now replace with category default<br>
+<b>Warning on line 144</b> - File "/Users/ivanshumkov/Sites/Rediska/library/Rediska/Manager.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
+<a name="Message.php"></a>
+<h1>Message.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 12</b> - DocBlock would be page-level, but precedes class "Rediska_PubSub_Response_Message", use another DocBlock to document the file<br>
+<a name="Monitor.php"></a>
+<h1>Monitor.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 254</b> - File "/Users/ivanshumkov/Sites/Rediska/library/Rediska/Monitor.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
+<a name="MoveToDb.php"></a>
+<h1>MoveToDb.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_MoveToDb", use another DocBlock to document the file<br>
+<a name="MoveToSet.php"></a>
+<h1>MoveToSet.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_MoveToSet", use another DocBlock to document the file<br>
+<a name="Options.php"></a>
+<h1>Options.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 12</b> - DocBlock would be page-level, but precedes class "Rediska_Options", use another DocBlock to document the file<br>
+<a name="PhpSerialize.php"></a>
+<h1>PhpSerialize.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Serializer_Adapter_PhpSerialize", use another DocBlock to document the file<br>
+<a name="Pipeline.php"></a>
+<h1>Pipeline.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 12</b> - DocBlock would be page-level, but precedes class "Rediska_Pipeline", use another DocBlock to document the file<br>
+<a name="PopFromList.php"></a>
+<h1>PopFromList.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_PopFromList", use another DocBlock to document the file<br>
+<a name="PopFromListBlocking.php"></a>
+<h1>PopFromListBlocking.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_PopFromListBlocking", use another DocBlock to document the file<br>
+<a name="PrependToList.php"></a>
+<h1>PrependToList.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_PrependToList", use another DocBlock to document the file<br>
+<a name="Publish.php"></a>
+<h1>Publish.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_Publish", use another DocBlock to document the file<br>
+<a name="Quit.php"></a>
+<h1>Quit.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_Quit", use another DocBlock to document the file<br>
+<a name="Redis.php"></a>
+<h1>Redis.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 95</b> - File "/Users/ivanshumkov/Sites/Rediska/library/Rediska/Zend/Log/Writer/Redis.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
+<b>Warning on line 190</b> - File "/Users/ivanshumkov/Sites/Rediska/library/Rediska/Zend/Auth/Adapter/Redis.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
+<b>Warning on line 202</b> - File "/Users/ivanshumkov/Sites/Rediska/library/Rediska/Zend/Session/SaveHandler/Redis.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
+<b>Warning on line 312</b> - File "/Users/ivanshumkov/Sites/Rediska/library/Rediska/Zend/Queue/Adapter/Redis.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
+<b>Warning on line 374</b> - File "/Users/ivanshumkov/Sites/Rediska/library/Rediska/Zend/Cache/Backend/Redis.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
+<a name="Rediska.php"></a>
+<h1>Rediska.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 50</b> - File "/Users/ivanshumkov/Sites/Rediska/library/Rediska/Zend/Application/Resource/Rediska.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
+<b>Warning on line 1210</b> - File "/Users/ivanshumkov/Sites/Rediska/library/Rediska.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
+<a name="RediskaInstance.php"></a>
+<h1>RediskaInstance.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 12</b> - DocBlock would be page-level, but precedes class "Rediska_Options_RediskaInstance", use another DocBlock to document the file<br>
+<a name="Rename.php"></a>
+<h1>Rename.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_Rename", use another DocBlock to document the file<br>
+<a name="RewriteAppendOnlyFile.php"></a>
+<h1>RewriteAppendOnlyFile.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_RewriteAppendOnlyFile", use another DocBlock to document the file<br>
+<a name="Save.php"></a>
+<h1>Save.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_Save", use another DocBlock to document the file<br>
+<a name="SelectDb.php"></a>
+<h1>SelectDb.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_SelectDb", use another DocBlock to document the file<br>
+<a name="Serializer.php"></a>
+<h1>Serializer.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Serializer", use another DocBlock to document the file<br>
+<a name="Set.php"></a>
+<h1>Set.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_Set", use another DocBlock to document the file<br>
+<b>Warning on line 61</b> - File "/Users/ivanshumkov/Sites/Rediska/library/Rediska/Zend/Session/Set.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
+<b>Warning on line 233</b> - File "/Users/ivanshumkov/Sites/Rediska/library/Rediska/Key/Set.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
+<a name="SetAndExpire.php"></a>
+<h1>SetAndExpire.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_SetAndExpire", use another DocBlock to document the file<br>
+<a name="SetAndGet.php"></a>
+<h1>SetAndGet.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_SetAndGet", use another DocBlock to document the file<br>
+<a name="SetToHash.php"></a>
+<h1>SetToHash.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_SetToHash", use another DocBlock to document the file<br>
+<a name="SetToList.php"></a>
+<h1>SetToList.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_SetToList", use another DocBlock to document the file<br>
+<a name="ShiftFromList.php"></a>
+<h1>ShiftFromList.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_ShiftFromList", use another DocBlock to document the file<br>
+<a name="ShiftFromListBlocking.php"></a>
+<h1>ShiftFromListBlocking.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_ShiftFromListBlocking", use another DocBlock to document the file<br>
+<a name="Shutdown.php"></a>
+<h1>Shutdown.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_Shutdown", use another DocBlock to document the file<br>
+<a name="SlaveOf.php"></a>
+<h1>SlaveOf.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_SlaveOf", use another DocBlock to document the file<br>
+<a name="Sort.php"></a>
+<h1>Sort.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_Sort", use another DocBlock to document the file<br>
+<a name="SortedSet.php"></a>
+<h1>SortedSet.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 297</b> - File "/Users/ivanshumkov/Sites/Rediska/library/Rediska/Key/SortedSet.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
+<a name="Specified.php"></a>
+<h1>Specified.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Connection_Specified", use another DocBlock to document the file<br>
+<a name="Subscribe.php"></a>
+<h1>Subscribe.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 12</b> - DocBlock would be page-level, but precedes class "Rediska_PubSub_Response_Subscribe", use another DocBlock to document the file<br>
+<a name="Substring.php"></a>
+<h1>Substring.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_Substring", use another DocBlock to document the file<br>
+<a name="TimeoutException.php"></a>
+<h1>TimeoutException.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Connection_TimeoutException", use another DocBlock to document the file<br>
+<a name="ToString.php"></a>
+<h1>ToString.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Serializer_Adapter_ToString", use another DocBlock to document the file<br>
+<a name="Transaction.php"></a>
+<h1>Transaction.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 12</b> - DocBlock would be page-level, but precedes class "Rediska_Transaction", use another DocBlock to document the file<br>
+<a name="TruncateList.php"></a>
+<h1>TruncateList.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_TruncateList", use another DocBlock to document the file<br>
+<a name="UnionSets.php"></a>
+<h1>UnionSets.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_UnionSets", use another DocBlock to document the file<br>
+<a name="UnionSortedSets.php"></a>
+<h1>UnionSortedSets.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_UnionSortedSets", use another DocBlock to document the file<br>
+<a name="Unsubscribe.php"></a>
+<h1>Unsubscribe.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 12</b> - DocBlock would be page-level, but precedes class "Rediska_PubSub_Response_Unsubscribe", use another DocBlock to document the file<br>
+<a name="ValueAndScore.php"></a>
+<h1>ValueAndScore.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 13</b> - DocBlock would be page-level, but precedes class "Rediska_Command_Response_ValueAndScore", use another DocBlock to document the file<br>
+	<p class="notes" id="credit">
+		Documentation generated on Fri, 27 Aug 2010 13:55:38 +0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+	</p>
+	</body>
+</html>

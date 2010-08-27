@@ -5,9 +5,10 @@
  * 
  * @author Ivan Shumkov
  * @package Rediska
+ * @category Key objects
  * @version @package_version@
  * @link http://rediska.geometria-lab.net
- * @licence http://www.opensource.org/licenses/bsd-license.php
+ * @license http://www.opensource.org/licenses/bsd-license.php
  */
 abstract class Rediska_Key_Abstract extends Rediska_Options_RediskaInstance
 {

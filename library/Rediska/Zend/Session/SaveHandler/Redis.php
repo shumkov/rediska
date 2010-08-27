@@ -28,9 +28,10 @@ require_once 'Zend/Session/SaveHandler/Exception.php';
  * 
  * @author Ivan Shumkov
  * @package Rediska
+ * @category Zend Framework integration
  * @version @package_version@
  * @link http://rediska.geometria-lab.net
- * @licence http://www.opensource.org/licenses/bsd-license.php
+ * @license http://www.opensource.org/licenses/bsd-license.php
  */
 class Rediska_Zend_Session_SaveHandler_Redis extends Rediska_Options_RediskaInstance implements Zend_Session_SaveHandler_Interface
 {
