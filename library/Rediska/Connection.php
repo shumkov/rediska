@@ -49,7 +49,7 @@ class Rediska_Connection extends Rediska_Options
         'password'     => null,
         'persistent'   => false,
         'timeout'      => null,
-        'readTimeout'  => null,
+        'readtimeout'  => null,
         'blockingmode' => true,
     );
 
