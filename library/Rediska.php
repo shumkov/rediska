@@ -12,7 +12,7 @@ Rediska_Autoloader::register();
  * @package Rediska
  * @version @package_version@
  * @link http://rediska.geometria-lab.net
- * @licence http://www.opensource.org/licenses/bsd-license.php
+ * @license http://www.opensource.org/licenses/bsd-license.php
  */
 class Rediska extends Rediska_Options
 {
@@ -28,7 +28,7 @@ class Rediska extends Rediska_Options
      * 
      * @var string
      */
-    const STABLE_REDIS_VERSION = '1.2.6';
+    const STABLE_REDIS_VERSION = '2.0';
 
     /**
      * Default client name
