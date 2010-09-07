@@ -232,6 +232,28 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
     }
 
     /**
+     * Get Rediska
+     *
+     * @return Rediska
+     */
+    public function getRediska()
+    {
+	    return $this->_rediska;
+    }
+
+    /**
+     * Set Rediska
+     *
+     * @return Rediska_Command_Abstract
+     */
+    public function setRediska($rediska)
+    {
+        $this->_rediska = $rediska; 
+
+        return $this;
+    }
+
+    /**
      * Magic method for get command argument
      *
      * @param string $name
