@@ -1,4 +1,4 @@
-Version 0.5.0 (August 21, 2010):
+Version 0.5.0 (September 7, 2010):
  * Feature #2033: Implement hash commands: HSET, HGET, HDEL, HEXISTS, HLEN, HKEYS, HVALS, HGETALL, HMSET, HINCRBY, HMGET, HSETNX
  * Feature #2035: Hash object
  * Feature #2036: Transactions. Implement MULTI, EXEC, DISCARD
