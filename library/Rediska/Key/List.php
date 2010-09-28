@@ -91,8 +91,8 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
     /**
      * Set a new value as the element at index position of the List
      * 
-     * @param mixed $value Value
      * @param integer $index Index
+     * @param mixed $value Value
      * @return boolean
      */
     public function set($index, $value)

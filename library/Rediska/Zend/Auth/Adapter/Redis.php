@@ -66,7 +66,7 @@ class Rediska_Zend_Auth_Adapter_Redis extends Rediska_Options_RediskaInstance im
     /**
      * Configuration
      * 
-     * userIdKey               - Redis key where you store relation between login and id. * replaced to identity (login)
+     * userIdKey               - Redis key where you store relation between login and id. '*' replaced to identity (login)
      * userDataKey             - Redis key where you store user data
      * credentialAttributeName - Name of credential (password) attribute in user data
      * userDataIsArray         - Set true if you store user data in associative array
