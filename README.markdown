@@ -11,7 +11,9 @@ Features
 * Multiple servers support
 * Consistent hashing, crc32 or you personal algorythm for key distribution
 * Working with keys as objects
-* Use Lists, Sets and Sorted sets as native PHP arrays
+* Use Lists, Sets, Sorted sets and Hashes as native PHP arrays
+* Transactions
+* Publish/Subscribe
 * Pipelining
 * Easy extending Rediska by adding you own commands or overwrite standart
 * [Zend Framework](http://framework.zend.com/) integration
@@ -25,7 +27,6 @@ Coming soon
 
 * Cloud key distribution
 * Ketama (fast C library for key distribution) support
-* Tags for group expiring keys
 * Benchmarks and performance optimization
 
 Get started!
