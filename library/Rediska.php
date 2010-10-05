@@ -54,16 +54,23 @@ class Rediska extends Rediska_Options
     /**
      * Object for distribution keys by servers 
      * 
-     * @var Rediska_KeyDistributor_Abstract
+     * @var Rediska_KeyDistributor_Interface
      */
     protected $_keyDistributor;
-    
+
     /**
      * Serializer object
      * 
-     * @var Rediska_Serializer_Interface
+     * @var Rediska_Serializer
      */
     protected $_serializer;
+
+    /**
+     * Profiler object
+     *
+     * @var Rediska_Profiler
+     */
+    protected $_profiler;
 
     /**
      * Configuration
@@ -85,6 +92,7 @@ class Rediska extends Rediska_Options
      *                     or you personal implementation (option value - name of class
      *                     which implements Rediska_KeyDistributor_Interface).
      * redisVersion      - Redis server version for command specification.
+     * profiler          - enable...
      *
      * @var array
      */
@@ -102,6 +110,9 @@ class Rediska extends Rediska_Options
         'serializeradapter' => 'phpSerialize',
         'keydistributor'    => 'consistentHashing',
         'redisversion'      => self::STABLE_REDIS_VERSION,
+        'profiler'          => array(
+            'enable' => false
+        ),
     );
 
     /**
@@ -454,6 +465,37 @@ class Rediska extends Rediska_Options
         }
 
         return $this->_serializer;
+    }
+
+    /**
+     * Set profiler
+     *
+     * @param Rediska_Profiler|array $profilerOrOptions Profiler object or array of options
+     * @return Rediska
+     */
+    public function setProfiler($profilerOrOptions)
+    {
+        $this->_options['profiler'] = $profilerOrOptions;
+        
+
+        if (is_array($profilerOrOptions)) {
+            $this->_profiler = new Rediska_Profiler($profilerOrOptions);
+        } else if ($profilerOrOptions instanceof Rediska_Profiler) {
+            $this->_profiler = $profilerOrOptions;
+        } else {
+            throw new Rediska_Exception('Profiler must be object or array of options');
+        }
+
+        return $this;
+    }
+
+    public function getProfiler()
+    {
+        if (!$this->_profiler) {
+            $this->_profiler = new Rediska_Profiler($options);
+        }
+
+        return ;
     }
 
     /**
