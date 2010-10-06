@@ -29,7 +29,7 @@ class Rediska_Profiler extends Rediska_Options implements IteratorAggregate, Cou
         return $this->_currentProfile;
     }
 
-    public function stop($profiledObject)
+    public function stop($profiledContext)
     {
         if (!$this->getOption('enable')) {
             return false;
@@ -43,7 +43,7 @@ class Rediska_Profiler extends Rediska_Options implements IteratorAggregate, Cou
             throw new Rediska_Profiler_Exception('Already stoped.');
         }
 
-        $this->_currentProfile->stop($profiledObject);
+        $this->_currentProfile->stop($profiledContext);
 
         $this->_totalElapsedTime += $this->_currentProfile->getElapsedTime();
 
@@ -54,8 +54,8 @@ class Rediska_Profiler extends Rediska_Options implements IteratorAggregate, Cou
 
     public function reset()
     {
-        $this->_profiles         = 0;
-        $this->_startTime        = 0;
+        $this->_profiles         = array();
+        $this->_currentProfile   = null;
         $this->_totalElapsedTime = 0;
 
         return $this;
@@ -71,14 +71,18 @@ class Rediska_Profiler extends Rediska_Options implements IteratorAggregate, Cou
         return end($this->_profiles);
     }
 
-    protected function getTotalElapsedTile()
+    public function getTotalElapsedTime($zero = 0)
     {
-        return $this->_totalElapsedTime;
+        if ($zero) {
+            return sprintf("%.{$zero}f", $this->_totalElapsedTime);
+        } else {
+            return $this->_totalElapsedTime;
+        }
     }
 
     public function getIterator()
     {
-        return $this->getProfiles();
+        return new ArrayObject($this->_profiles);
     }
 
     public function count()

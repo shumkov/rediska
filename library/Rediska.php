@@ -476,26 +476,29 @@ class Rediska extends Rediska_Options
     public function setProfiler($profilerOrOptions)
     {
         $this->_options['profiler'] = $profilerOrOptions;
+        $this->_profiler = null;
         
-
-        if (is_array($profilerOrOptions)) {
-            $this->_profiler = new Rediska_Profiler($profilerOrOptions);
-        } else if ($profilerOrOptions instanceof Rediska_Profiler) {
-            $this->_profiler = $profilerOrOptions;
-        } else {
-            throw new Rediska_Exception('Profiler must be object or array of options');
-        }
-
         return $this;
     }
 
+    /**
+     * Get profiler
+     *
+     * @return Rediska_Profiler
+     */
     public function getProfiler()
     {
         if (!$this->_profiler) {
-            $this->_profiler = new Rediska_Profiler($options);
+            if (is_array($this->_options['profiler'])) {
+                $this->_profiler = new Rediska_Profiler($this->_options['profiler']);
+            } else if ($this->_options['profiler'] instanceof Rediska_Profiler) {
+                $this->_profiler = $this->_options['profiler'];
+            } else {
+                throw new Rediska_Exception('Profiler must be object or array of options');
+            }
         }
 
-        return ;
+        return $this->_profiler;
     }
 
     /**
@@ -521,9 +524,13 @@ class Rediska extends Rediska_Options
     {
         $this->_specifiedConnection->resetConnection();
 
+        $this->getProfiler()->start();
+
         $command = Rediska_Commands::get($this, $name, $args);
 
         $response = $command->execute();
+
+        $this->getProfiler()->stop($command);
 
         unset($command);
 

@@ -1,12 +1,12 @@
 <?php
 
-class Rediska_Profiler_Profile extends Rediska_Profiler_Profile_Abstract
+class Rediska_Profiler_Profile
 {
     protected $_startTime;
 
     protected $_stopTime;
 
-    protected $_profiledObject;
+    protected $_profiledContext;
 
     public function __construct()
     {
@@ -18,9 +18,9 @@ class Rediska_Profiler_Profile extends Rediska_Profiler_Profile_Abstract
         $this->_startTime = microtime(true);
     }
 
-    public function stop($profiledObject)
+    public function stop($profiledContext)
     {
-        $this->_profiledObject = $profiledObject;
+        $this->_profiledContext = $profiledContext;
         $this->_stopTime = microtime(true);
     }
 
@@ -31,15 +31,21 @@ class Rediska_Profiler_Profile extends Rediska_Profiler_Profile_Abstract
 
     public function getLabel()
     {
-        return $this->_profiledObject->getName();
+        return $this->_profiledContext->getName();
     }
 
-    public function getElapsedTime()
+    public function getElapsedTime($zero = 0)
     {
         if (!$this->hasStopped()) {
             return false;
         }
 
-        return $this->_endTime - $this->_startTime;
+        $elapsedTime = $this->_stopTime - $this->_startTime;
+
+        if ($zero) {
+            return sprintf("%.{$zero}f", $elapsedTime);
+        } else {
+            return $elapsedTime;
+        }
     }
 }
