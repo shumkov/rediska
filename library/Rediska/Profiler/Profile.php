@@ -34,7 +34,7 @@ class Rediska_Profiler_Profile
         return $this->_profiledContext->getName();
     }
 
-    public function getElapsedTime($zero = 0)
+    public function getElapsedTime($decimals = null)
     {
         if (!$this->hasStopped()) {
             return false;
@@ -42,8 +42,8 @@ class Rediska_Profiler_Profile
 
         $elapsedTime = $this->_stopTime - $this->_startTime;
 
-        if ($zero) {
-            return sprintf("%.{$zero}f", $elapsedTime);
+        if ($decimals) {
+            return number_format($elapsedTime, $decimals);
         } else {
             return $elapsedTime;
         }

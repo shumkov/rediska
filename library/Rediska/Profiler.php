@@ -1,16 +1,14 @@
 <?php
 
-class Rediska_Profiler extends Rediska_Options implements IteratorAggregate, Countable
+class Rediska_Profiler implements Rediska_Profiler_Interface,
+                                  IteratorAggregate,
+                                  Countable
 {
     protected $_profiles = array();
 
     protected $_currentProfile;
 
     protected $_totalElapsedTime = 0;
-
-    protected $_options = array(
-        'enable' => true
-    );
 
     public function start()
     {
@@ -71,10 +69,10 @@ class Rediska_Profiler extends Rediska_Options implements IteratorAggregate, Cou
         return end($this->_profiles);
     }
 
-    public function getTotalElapsedTime($zero = 0)
+    public function getTotalElapsedTime($decimals = null)
     {
-        if ($zero) {
-            return sprintf("%.{$zero}f", $this->_totalElapsedTime);
+        if ($decimals) {
+            return number_format($this->_totalElapsedTime, $decimals);
         } else {
             return $this->_totalElapsedTime;
         }

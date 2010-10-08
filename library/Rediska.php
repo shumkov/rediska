@@ -111,7 +111,8 @@ class Rediska extends Rediska_Options
         'keydistributor'    => 'consistentHashing',
         'redisversion'      => self::STABLE_REDIS_VERSION,
         'profiler'          => array(
-            'enable' => false
+            'enable' => false,
+            'class'  => 'Rediska_Profiler',
         ),
     );
 
