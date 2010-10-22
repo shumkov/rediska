@@ -26,7 +26,7 @@ class Rediska_Command_Response_ListNameAndValue extends ArrayObject
     {
         if (!empty($response)) {
             $name = $response[0];
-            if ($rediska->getOption('namespace') !== '' && strpos($name, $rediska->getOption('namespace')) === 0) {
+            if ($rediska->getOption('namespace') != '' && strpos($name, $rediska->getOption('namespace')) === 0) {
                 $name = substr($name, strlen($rediska->getOption('namespace')));
             }
     

@@ -39,7 +39,7 @@ class Rediska_Command_GetRandomKey extends Rediska_Command_Abstract
         if ($response == '') {
             return null;
         } else {
-            if (strpos($response, $this->_rediska->getOption('namespace')) === 0) {
+            if ($this->_rediska->getOption('namespace') != '' && strpos($response, $this->_rediska->getOption('namespace')) === 0) {
                 $response = substr($response, strlen($this->_rediska->getOption('namespace')));
             }
 

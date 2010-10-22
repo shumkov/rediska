@@ -2,7 +2,7 @@
 
 /**
  * Get sorted elements contained in the List, Set, or Sorted Set value at key.
- * 
+ *
  * @author Ivan Shumkov
  * @package Rediska
  * @subpackage Commands
@@ -75,13 +75,12 @@ class Rediska_Command_Sort extends Rediska_Command_Abstract
             // Get
             if (isset($this->_options['get'])) {
                 $this->_throwExceptionIfManyConnections('get');
-                $command .= " GET";
                 if (!is_string($this->_options['get'])) {
                     foreach($this->_options['get'] as $pattern) {
-                        $command .= ' ' . $this->_addNamespaceToGetIfNeeded($pattern);
+                        $command .= ' GET ' . $this->_addNamespaceToGetIfNeeded($pattern);
                     }
                 } else {
-                    $command .= ' ' . $this->_addNamespaceToGetIfNeeded($this->_options['get']);
+                    $command .= ' GET ' . $this->_addNamespaceToGetIfNeeded($this->_options['get']);
                 }
             }
 
@@ -93,7 +92,7 @@ class Rediska_Command_Sort extends Rediska_Command_Abstract
         } else {
             $command .= ' ' . $options;
         }
-        
+
         return new Rediska_Connection_Exec($connection, $command);
     }
 
