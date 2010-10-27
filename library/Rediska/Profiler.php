@@ -1,87 +1,151 @@
 <?php
 
+/**
+ * Rediska profiler
+ *
+ * @author Ivan Shumkov
+ * @package Rediska
+ * @subpackage Profiler
+ * @version @package_version@
+ * @link http://rediska.geometria-lab.net
+ * @license http://www.opensource.org/licenses/bsd-license.php
+ */
 class Rediska_Profiler implements Rediska_Profiler_Interface,
                                   IteratorAggregate,
                                   Countable
 {
     protected $_profiles = array();
 
-    protected $_currentProfile;
-
-    protected $_totalElapsedTime = 0;
-
-    public function start()
+    /**
+     * Start profile
+     *
+     * @param mixed $context
+     * @return Rediska_Profiler_Profile
+     */
+    public function start($context)
     {
-        if ($this->_currentProfile) {
-            throw new Rediska_Profiler_Exception('Already started.');
-        }
+        $profile = new Rediska_Profiler_Profile($this, $context);
+        $profile->start();
 
-        $this->_currentProfile = new Rediska_Profiler_Profile();
+        $this->_profiles[] = $profile;
 
-        $this->_profiles[] = $this->_currentProfile;
-
-        return $this->_currentProfile;
+        return $profile;
     }
 
-    public function stop($context)
+    /**
+     * Stop profile
+     *
+     * @return Rediska_Profiler_Profile
+     */
+    public function stop()
     {
-        if (!$this->_currentProfile) {
-            throw new Rediska_Profiler_Exception('Start profiler before end.');
+        $hasUnstopped = false;
+        foreach(array_reverse($this->_profiles) as $profile) {
+            if (!$profile->hasStopped()) {
+                $hasUnstopped = true;
+                break;
+            }
+        }
+        if ($hasUnstopped) {
+            $profile->stop();
+        } else {
+            throw new Rediska_Profiler_Exception('You need start profiler before stop it');
         }
 
-        if ($this->_currentProfile->hasStopped()) {
-            throw new Rediska_Profiler_Exception('Already stoped.');
-        }
-
-        $this->_currentProfile->stop($context);
-
-        $this->_totalElapsedTime += $this->_currentProfile->getElapsedTime();
-
-        $this->_currentProfile = null;
-
-        return end($this->_profiles);
+        return $profile;
     }
 
+    /**
+     * Reset profiler
+     *
+     * @return Rediska_Profiler
+     */
     public function reset()
     {
-        $this->_profiles         = array();
-        $this->_currentProfile   = null;
-        $this->_totalElapsedTime = 0;
+        $this->_profiles = array();
 
         return $this;
     }
 
+    /**
+     * Get profiles
+     *
+     * @return array
+     */
     public function getProfiles()
     {
         return $this->_profiles;
     }
 
-    public function getLastProfile()
-    {
-        return end($this->_profiles);
-    }
-
+    /**
+     * Get total elapsed time
+     *
+     * @param integer[optional] $decimals
+     * @return integer
+     */
     public function getTotalElapsedTime($decimals = null)
     {
+        $totalElapsedTime = 0;
+        foreach ($this->getProfiles() as $profile) {
+            if ($profile->hasStopped()) {
+                $totalElapsedTime += $profile->getElapsedTime();
+            }
+        }
+
         if ($decimals) {
-            return number_format($this->_totalElapsedTime, $decimals);
+            return number_format($totalElapsedTime, $decimals);
         } else {
-            return $this->_totalElapsedTime;
+            return $totalElapsedTime;
         }
     }
 
+    /**
+     * Start callback. Called from profile
+     *
+     * @param Rediska_Profiler_Profile $profile
+     */
+    public function startCallBack(Rediska_Profiler_Profile $profile)
+    {
+
+    }
+
+    /**
+     * Stop callback. Called from profile
+     *
+     * @param Rediska_Profiler_Profile $profile
+     */
+    public function stopCallback(Rediska_Profiler_Profile $profile)
+    {
+
+    }
+
+    /**
+     * Get iterator. Implements IteratorAggregate interface
+     *
+     * @return ArrayObject
+     */
     public function getIterator()
     {
         return new ArrayObject($this->_profiles);
     }
 
+    /**
+     * Get profiles count. Implements Countable interface
+     *
+     * @return integer
+     */
     public function count()
     {
         return count($this->_profiles);
     }
 
+    /**
+     * Magic to string
+     *
+     * @return string
+     */
     public function  __toString()
     {
-        return count($this) . ' => ' . $this->getTotalElapsedTime(4);
+        return count($this) . ' profiles => ' . $this->getTotalElapsedTime(4);
     }
 }

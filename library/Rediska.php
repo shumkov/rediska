@@ -495,7 +495,7 @@ class Rediska extends Rediska_Options
             } else if (is_array($this->_options['profiler'])) {
                 if (!isset($this->_options['profiler']['name'])) {
                     throw new Rediska_Exception("You must specify profiler 'name'.");
-                } else if (in_array($this->_options['profiler']['name'], array('file'))) {
+                } else if (in_array($this->_options['profiler']['name'], array('stream'))) {
                     $name = ucfirst($this->_options['profiler']['name']);
                     $className = "Rediska_Profiler_$name";
                     unset($this->_options['profiler']['name']);
@@ -545,13 +545,13 @@ class Rediska extends Rediska_Options
     {
         $this->_specifiedConnection->resetConnection();
 
-        $this->getProfiler()->start();
-
         $command = Rediska_Commands::get($this, $name, $args);
+
+        $this->getProfiler()->start($command);
 
         $response = $command->execute();
 
-        $this->getProfiler()->stop($command);
+        $this->getProfiler()->stop();
 
         unset($command);
 
