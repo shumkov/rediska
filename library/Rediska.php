@@ -110,10 +110,7 @@ class Rediska extends Rediska_Options
         'serializeradapter' => 'phpSerialize',
         'keydistributor'    => 'consistentHashing',
         'redisversion'      => self::STABLE_REDIS_VERSION,
-        'profiler'          => array(
-            'enable' => false,
-            'class'  => 'Rediska_Profiler',
-        ),
+        'profiler'          => false,
     );
 
     /**
@@ -138,6 +135,7 @@ class Rediska extends Rediska_Options
      *                     or you personal implementation (option value - name of class
      *                     which implements Rediska_KeyDistributor_Interface).
      * redisVersion      - Redis server version for command specification.
+     * profiler
      * 
      */
     public function __construct(array $options = array()) 
@@ -490,12 +488,34 @@ class Rediska extends Rediska_Options
     public function getProfiler()
     {
         if (!$this->_profiler) {
-            if (is_array($this->_options['profiler'])) {
-                $this->_profiler = new Rediska_Profiler($this->_options['profiler']);
-            } else if ($this->_options['profiler'] instanceof Rediska_Profiler) {
+            if ($this->_options['profiler'] === false) {
+                $this->_profiler = new Rediska_Profiler_Null();
+            } else if ($this->_options['profiler'] === true) {
+                $this->_profiler = new Rediska_Profiler();
+            } else if (is_array($this->_options['profiler'])) {
+                if (!isset($this->_options['profiler']['name'])) {
+                    throw new Rediska_Exception("You must specify profiler 'name'.");
+                } else if (in_array($this->_options['profiler']['name'], array('file'))) {
+                    $name = ucfirst($this->_options['profiler']['name']);
+                    $className = "Rediska_Profiler_$name";
+                    unset($this->_options['profiler']['name']);
+                    $this->_profiler = new $className($this->_options['profiler']);
+                } else if (@class_exists($this->_options['profiler']['name'])) {
+                    $className = $this->_options['profiler']['name'];
+                    unset($this->_options['profiler']['name']);
+                    $this->_profiler = new $className($this->_options['profiler']);
+                } else {
+                    throw new Rediska_Exception("Profiler '{$this->_options['profiler']['name']}' not found. You need include it before or setup autoload.");
+                }
+            } elseif (is_object($this->_options['profiler'])) {
                 $this->_profiler = $this->_options['profiler'];
             } else {
-                throw new Rediska_Exception('Profiler must be object or array of options');
+                throw new Rediska_Exception("Profiler option must be a boolean, object or array of options");
+            }
+
+            if (!$this->_profiler instanceof Rediska_Profiler_Interface) {
+                $profilerClass = get_class($this->_profiler);
+                throw new Rediska_Serializer_Exception("Profiler '$profilerClass' must implement Rediska_Profiler_Interface");
             }
         }
 

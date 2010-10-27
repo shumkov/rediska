@@ -280,6 +280,51 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
     }
 
     /**
+     * Magic to string
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        $string = $this->getName() . '(';
+        if (!empty($this->_arguments)) {
+            $arguments = array_values($this->_arguments);
+            $string .= $this->_argumentsToString($string, $arguments);
+        }
+        $string .= ')';
+        return $string;
+    }
+
+    protected function _argumentsToString($string, $arguments)
+    {
+        $strings = array();
+        foreach($arguments as $name => $value) {
+            $key = !is_integer($name) ? "'$name' => " : '';
+
+            if (is_object($value)) {
+                //$string .= get_class($argument);
+                $argument = $value;
+            } else if (is_numeric($value)) {
+                $argument = $value;
+            } else if (is_string($value)) {
+                $argument = "'$value'";
+            } else if (is_array($value)) {
+                $argument = 'array(' . $this->_argumentsToString($string, $value) . ')';
+            } else if (is_null($value)) {
+                $argument = 'null';
+            } else if ($value === true) {
+                $argument = 'true';
+            } else if ($value === false) {
+                $argument = 'false';
+            }
+
+            $strings[] = $key . $argument;
+        }
+
+        return implode(', ', $strings);
+    }
+
+    /**
      * Validate command arguments
      *
      * @param array $arguments

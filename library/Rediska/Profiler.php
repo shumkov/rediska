@@ -12,10 +12,6 @@ class Rediska_Profiler implements Rediska_Profiler_Interface,
 
     public function start()
     {
-        if (!$this->getOption('enable')) {
-            return false;
-        }
-
         if ($this->_currentProfile) {
             throw new Rediska_Profiler_Exception('Already started.');
         }
@@ -27,12 +23,8 @@ class Rediska_Profiler implements Rediska_Profiler_Interface,
         return $this->_currentProfile;
     }
 
-    public function stop($profiledContext)
+    public function stop($context)
     {
-        if (!$this->getOption('enable')) {
-            return false;
-        }
-
         if (!$this->_currentProfile) {
             throw new Rediska_Profiler_Exception('Start profiler before end.');
         }
@@ -41,7 +33,7 @@ class Rediska_Profiler implements Rediska_Profiler_Interface,
             throw new Rediska_Profiler_Exception('Already stoped.');
         }
 
-        $this->_currentProfile->stop($profiledContext);
+        $this->_currentProfile->stop($context);
 
         $this->_totalElapsedTime += $this->_currentProfile->getElapsedTime();
 
@@ -86,5 +78,10 @@ class Rediska_Profiler implements Rediska_Profiler_Interface,
     public function count()
     {
         return count($this->_profiles);
+    }
+
+    public function  __toString()
+    {
+        return count($this) . ' => ' . $this->getTotalElapsedTime(4);
     }
 }

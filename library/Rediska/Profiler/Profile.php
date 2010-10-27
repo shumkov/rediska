@@ -6,7 +6,7 @@ class Rediska_Profiler_Profile
 
     protected $_stopTime;
 
-    protected $_profiledContext;
+    protected $_context;
 
     public function __construct()
     {
@@ -18,9 +18,9 @@ class Rediska_Profiler_Profile
         $this->_startTime = microtime(true);
     }
 
-    public function stop($profiledContext)
+    public function stop($context)
     {
-        $this->_profiledContext = $profiledContext;
+        $this->_context = $context;
         $this->_stopTime = microtime(true);
     }
 
@@ -29,9 +29,9 @@ class Rediska_Profiler_Profile
         return $this->_stopTime !== null;
     }
 
-    public function getLabel()
+    public function getContext()
     {
-        return $this->_profiledContext->getName();
+        return $this->_context;
     }
 
     public function getElapsedTime($decimals = null)
@@ -47,5 +47,10 @@ class Rediska_Profiler_Profile
         } else {
             return $elapsedTime;
         }
+    }
+
+    public function  __toString()
+    {
+        return $this->getContext() . ' => ' . $this->getElapsedTime(4);
     }
 }
