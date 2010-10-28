@@ -81,6 +81,29 @@ class Rediska_Key extends Rediska_Key_Abstract
     }
 
     /**
+     * Append value
+     *
+     * @param mixed $value Value
+     * @return integer
+     */
+    public function append($value)
+    {
+        return $this->_getRediskaOn()->append($this->getName(), $value);
+    }
+
+    /**
+     * Substring value
+     *
+     * @param integer           $start Start
+     * @param integer[optional] $end   End. If end is omitted, the substring starting from $start until the end of the string will be returned. For default end of string
+     * @return string
+     */
+    public function substring($start, $end = -1)
+    {
+        return $this->_getRediskaOn()->substring($this->getName(), $start, $end);
+    }
+
+    /**
      * Get value, if value not present set it from chain method
      * 
      * @param $object Object of chain method
@@ -90,6 +113,11 @@ class Rediska_Key extends Rediska_Key_Abstract
         return new Rediska_Key_GetOrSetValue($this, $object);
     }
 
+    /**
+     * Magic for get value
+     *
+     * @return string
+     */
     public function __toString()
     {
         return (string)$this->getValue();
