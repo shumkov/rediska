@@ -229,6 +229,16 @@ class Rediska_Key_Hash extends Rediska_Key_Abstract implements IteratorAggregate
     }
 
     /**
+     * Get hash length
+     *
+     * @return intger
+     */
+    public function getLength()
+    {
+        return $this->_getRediskaOn()->getHashLength($this->getName());
+    }
+
+    /**
      * Get hash as array
      *
      * @return array
@@ -242,7 +252,7 @@ class Rediska_Key_Hash extends Rediska_Key_Abstract implements IteratorAggregate
 
     public function count()
     {
-        return $this->_getRediskaOn()->getHashLength($this->getName());
+        return $this->getLength();
     }
 
     /* IteratorAggregate implementation */

@@ -54,7 +54,7 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
      * 
      * @return integer
      */
-    public function count()
+    public function getLength()
     {
         return $this->_getRediskaOn()->getListLength($this->getName());
     }
@@ -247,6 +247,11 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
     /**
      * Implement intrefaces
      */
+
+    public function count()
+    {
+        return $this->getLength();
+    }
 
     public function getIterator()
     {

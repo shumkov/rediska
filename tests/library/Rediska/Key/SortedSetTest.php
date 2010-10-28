@@ -47,13 +47,23 @@ class Rediska_Key_SortedSetTest extends Rediska_TestCase
         $this->assertTrue(empty($values));
     }
 
-    public function testCount()
+    public function testGetLength()
     {
         $this->rediska->addToSortedSet('test', 123, 1);
         $this->rediska->addToSortedSet('test', 456, 2);
 
-        $this->assertEquals(2, $this->set->count());
+        $this->assertEquals(2, $this->set->getLength());
         $this->assertEquals(2, count($this->set));
+    }
+
+    public function testGetLengthByScore()
+    {
+        $this->rediska->addToSortedSet('test', 1, 1);
+        $this->rediska->addToSortedSet('test', 2, 2);
+        $this->rediska->addToSortedSet('test', 3, 3);
+
+        $reply = $this->set->getLengthByScore(2, 3);
+        $this->assertEquals(2, $reply);
     }
 
     public function testGetByScore()

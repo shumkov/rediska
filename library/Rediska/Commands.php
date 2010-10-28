@@ -77,6 +77,7 @@ class Rediska_Commands
         'getsortedset'               => 'Rediska_Command_GetSortedSet',
         'getfromsortedsetbyscore'    => 'Rediska_Command_GetFromSortedSetByScore',
         'getsortedsetlength'         => 'Rediska_Command_GetSortedSetLength',
+        'getsortedsetlengthbyscore'  => 'Rediska_Command_GetSortedSetLengthByScore',
         'incrementscoreinsortedset'  => 'Rediska_Command_IncrementScoreInSortedSet',
         'deletefromsortedsetbyscore' => 'Rediska_Command_DeleteFromSortedSetByScore',
         'deletefromsortedsetbyrank'  => 'Rediska_Command_DeleteFromSortedSetByRank',
