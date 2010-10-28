@@ -23,10 +23,14 @@ class Rediska_Key extends Rediska_Key_Abstract
      */
     public function setValue($value)
     {
-        $reply = $this->_getRediskaOn()->set($this->getName(), $value);
+        if ($this->getExpire() !== null && !$this->isExpireTimestamp()) {
+            $reply = $this->setAndExpire($value, $this->getExpire());
+        } else {
+            $reply = $this->_getRediskaOn()->set($this->getName(), $value);
 
-        if ($reply && !is_null($this->getExpire())) {
-            $this->expire($this->getExpire(), $this->isExpireTimestamp());
+            if ($reply && !is_null($this->getExpire())) {
+                $this->expire($this->getExpire(), $this->isExpireTimestamp());
+            }
         }
 
         return $reply;
@@ -45,7 +49,8 @@ class Rediska_Key extends Rediska_Key_Abstract
     /**
      * Increment integer value
      * 
-     * @param unknown_type $amount
+     * @param integer $amount
+     * @return integer
      */
     public function increment($amount = 1)
     {
@@ -55,11 +60,24 @@ class Rediska_Key extends Rediska_Key_Abstract
     /**
      * Decrement integer value
      * 
-     * @param unknown_type $amount
+     * @param integer $amount
+     * @return integer
      */
     public function decrement($amount = 1)
     {
         return $this->_getRediskaOn()->decrement($this->getName(), $amount);
+    }
+
+    /**
+     * Set and expire
+     *
+     * @param mixed   $value
+     * @param integer $seconds
+     * @return boolean
+     */
+    public function setAndExpire($value, $seconds)
+    {
+        return $this->_getRediskaOn()->setAndExpire($this->getName(), $value, $seconds);
     }
 
     /**

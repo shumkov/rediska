@@ -22,18 +22,18 @@ class Rediska_Command_SetAndExpire extends Rediska_Command_Abstract
     /**
      * Create command
      *
-     * @param string  $key   Key name
-     * @param mixed   $value Value
-     * @param integer $time  Expire time
+     * @param string  $key      Key name
+     * @param mixed   $value    Value
+     * @param integer $seconds  Expire time in seconds
      * @return Rediska_Connection_Exec
      */
-    public function create($key, $value, $time)
+    public function create($key, $value, $seconds)
     {
-        $connection = $this->_rediska->getConnectionByKeyName($key);
+        $connection = $this->getRediska()->getConnectionByKeyName($key);
 
         $command = array('SETEX',
-                         $this->_rediska->getOption('namespace') . $key,
-                         $time, $this->_rediska->getSerializer()->serialize($value));
+                         $this->getRediska()->getOption('namespace') . $key,
+                         $seconds, $this->getRediska()->getSerializer()->serialize($value));
 
         return new Rediska_Connection_Exec($connection, $command);
     }
