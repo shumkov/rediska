@@ -1,3 +1,10 @@
+Version 0.5.1 (October 28, 2010):
+ * Feature #2033: Implement ZCOUNT
+ * Improvement #4054: Add append and substring command to Rediska_Key
+ * Improvement #4055: Add setAndExpire command to Rediska_Key
+ * Bug #4290: Warning with empty namespace
+ * Bug #4476: Get parameter in sort command
+
 Version 0.5.0 (September 7, 2010):
  * Feature #2033: Implement hash commands: HSET, HGET, HDEL, HEXISTS, HLEN, HKEYS, HVALS, HGETALL, HMSET, HINCRBY, HMGET, HSETNX
  * Feature #2035: Hash object

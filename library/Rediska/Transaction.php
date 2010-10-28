@@ -354,12 +354,12 @@ class Rediska_Transaction
     /**
      * Set + Expire atomic command
      *
-     * @param string  $key   Key name
-     * @param mixed   $value Value
-     * @param integer $time  Expire time
+     * @param string  $key      Key name
+     * @param mixed   $value    Value
+     * @param integer $seconds  Expire time in seconds
      * @return Rediska_Transaction
      */
-    public function setAndExpire($key, $value, $time) { $args = func_get_args(); return $this->_addCommand('setAndExpire', $args); }
+    public function setAndExpire($key, $value, $seconds) { $args = func_get_args(); return $this->_addCommand('setAndExpire', $args); }
 
     /**
      * Increment the number value of key by integer
@@ -392,8 +392,8 @@ class Rediska_Transaction
     /**
      * Append value to a end of string key
      *
-     * @param $key    Key name
-     * @param $value  Value
+     * @param string $key    Key name
+     * @param mixed  $value  Value
      * @return Rediska_Transaction
      */
     public function append($key, $value) { $args = func_get_args(); return $this->_addCommand('append', $args); }
@@ -648,6 +648,16 @@ class Rediska_Transaction
      * @return Rediska_Transaction
      */
     public function getSortedSetLength($key) { $args = func_get_args(); return $this->_addCommand('getSortedSetLength', $args); }
+
+    /**
+     * Get count of members from sorted set by min and max score
+     *
+     * @param string $key Key name
+     * @param number $min Min score
+     * @param number $max Max score
+     * @return Rediska_Transaction
+     */
+    public function getSortedSetLengthByScore($key, $min, $max) { $args = func_get_args(); return $this->_addCommand('getSortedSetLengthByScore', $args); }
 
     /**
      * Increment score of sorted set element
