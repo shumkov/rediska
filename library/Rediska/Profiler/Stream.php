@@ -148,9 +148,9 @@ class Rediska_Profiler_Stream extends Rediska_Profiler
     public function stopCallback(Rediska_Profiler_Profile $profile)
     {
         $placeHolders = array(
-            'timestamp'   => date('Y-m-d H:i:s'),
-            'profile'     => $profile->getContext(),
-            'elapsedTime' => $profile->getElapsedTime(4)
+            '%timestamp%'   => date('Y-m-d H:i:s'),
+            '%profile%'     => $profile->getContext(),
+            '%elapsedTime%' => $profile->getElapsedTime(4)
         );
 
         $data = str_replace(
