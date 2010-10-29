@@ -27,6 +27,13 @@ class Rediska_Profiler_Stream extends Rediska_Profiler
     protected $_mode = 'a';
 
     /**
+     * Output format
+     *
+     * @var string
+     */
+    protected $_format = '[%timestamp%] %profile% => %elapsedTime%';
+
+    /**
      * Constructor
      *
      * @param array $options
@@ -41,7 +48,11 @@ class Rediska_Profiler_Stream extends Rediska_Profiler
             $this->setStream($options['stream']);
         } else {
             throw new Rediska_Profiler_Exception("You must specify option 'stream'");
-        }       
+        }
+
+        if (isset($options['format'])) {
+            $this->setFormat($options['format']);
+        }
     }
 
     /**
@@ -107,13 +118,48 @@ class Rediska_Profiler_Stream extends Rediska_Profiler
     }
 
     /**
+     * Set output format
+     *
+     * @param string $format
+     * @return Rediska_Profiler_Stream
+     */
+    public function setFormat($format)
+    {
+        $this->_format = $format;
+
+        return $this;
+    }
+
+    /**
+     * Get output format
+     *
+     * @return string
+     */
+    public function getFormat()
+    {
+        return $this->_format;
+    }
+
+    /**
      * Start callback. Called from profile
      *
      * @param Rediska_Profiler_Profile $profile
      */
     public function stopCallback(Rediska_Profiler_Profile $profile)
     {
-        $this->_write(date('[Y-m-d H:i:s] ') . $profile . Rediska::EOL);
+        $placeHolders = array(
+            'timestamp'   => date('Y-m-d H:i:s'),
+            'profile'     => $profile->getContext(),
+            'elapsedTime' => $profile->getElapsedTime(4)
+        );
+
+        $data = str_replace(
+            array_keys($placeHolders),
+            array_values($placeHolders),
+            $this->_format . Rediska::EOL
+        );
+
+        $this->_write($data);
     }
 
     /**
