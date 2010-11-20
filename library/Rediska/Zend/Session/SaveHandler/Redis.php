@@ -71,7 +71,19 @@ class Rediska_Zend_Session_SaveHandler_Redis extends Rediska_Options_RediskaInst
         }
 
         // Set default lifetime
-        $this->_options['lifetime'] = (integer)ini_get('session.gc_maxlifetime');
+        if (isset($options['lifetime'])) {
+            $this->_options['lifetime'] = $options['lifetime'];
+            unset($options['lifetime']);
+        } else {
+            $gc_maxlifetime = ini_get('session.gc_maxlifetime');
+            if ($gc_maxlifetime == 0 || $gc_maxlifetime === null) {
+                trigger_error(
+                    "Please set session.gc_maxlifetime to enable garbage collection.",
+                    E_USER_WARNING
+                );
+            }
+            $this->_options['lifetime'] = (integer) $gc_maxlifetime;
+        }
 
         // Get Rediska instance
         if (isset($options['rediskaOptions'])) {
@@ -171,23 +183,6 @@ class Rediska_Zend_Session_SaveHandler_Redis extends Rediska_Options_RediskaInst
      */
     public function gc($maxlifetime)
     {
-        $sessions = $this->_set->toArray();
-
-        if (!empty($sessions)) {
-            foreach($sessions as &$session) {
-                $session = $this->_getKeyName($session);
-            }
-    
-            // TODO: May by use TTL? Need benchmark.
-            $lifeSession = $this->getRediska()->get($sessions);
-            foreach($sessions as $session) {
-                if (!isset($lifeSession[$session])) {
-                    $sessionWithoutPrefix = substr($session, strlen($this->_options['keyprefix']));
-                    $this->_set->remove($sessionWithoutPrefix);
-                }
-            }
-        }
-
         return true;
     }
 
