@@ -9,7 +9,14 @@ set_include_path(implode(PATH_SEPARATOR, array(
 require_once 'Rediska.php';
 
 // Configuration
-require_once 'Zend/Config/Ini.php';
+@include_once 'Zend/Config/Ini.php';
+if (!class_exists('Zend_Config_Ini')) {
+    echo "The Zend Framework is needed to run this test suite. ";
+    echo "Please add it to your include_path.";
+    echo "\n";
+    exit(1);
+}
+
 $configPath = dirname(__FILE__) . '/config.ini';
 if (!file_exists($configPath)) {
     $configPath = dirname(__FILE__) . '/config.ini-dist';
@@ -29,7 +36,7 @@ class ZendStudioLauncher extends PHPUnit_Framework_TestSuite
         $zendPath = getCwd();
         chdir(realpath(dirname(__FILE__)));
         require_once 'PHPUnit/Util/Configuration.php';
-        // test phpUnit version 
+        // test phpUnit version
         if (version_compare(PHPUnit_Runner_Version::id(), '3.4', '>=')) {
             $configuration = PHPUnit_Util_Configuration::getInstance('phpunit.xml');
         } else {
@@ -43,7 +50,7 @@ class ZendStudioLauncher extends PHPUnit_Framework_TestSuite
             }
         }
     }
-    
+
     public static function suite()
     {
         return new self();
