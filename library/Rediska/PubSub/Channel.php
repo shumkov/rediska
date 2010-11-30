@@ -158,7 +158,13 @@ class Rediska_PubSub_Channel extends Rediska_Options_RediskaInstance implements 
      */
     public function publish($message)
     {
-        return $this->getRediska()->publish($this->_subscriptions, $message);
+        $rediska = $this->getRediska();
+
+        if ($this->getServerAlias() !== null) {
+            $rediska = $rediska->on($this->getServerAlias());
+        }
+
+        return $rediska->publish($this->_subscriptions, $message);
     }
 
     /**
