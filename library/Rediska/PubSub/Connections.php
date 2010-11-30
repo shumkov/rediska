@@ -58,7 +58,7 @@ class Rediska_PubSub_Connections implements IteratorAggregate, Countable
         $this->_channel = $channel;
 
         // Set specified connection
-        if (!$channel->getServerAlias() instanceof Rediska_Connection) {
+        if ($channel->getServerAlias() instanceof Rediska_Connection) {
             $this->_specifiedConnection = $channel->getServerAlias();
         } elseif ($channel->getServerAlias() !== null) {
             $this->_specifiedConnection = $channel->getRediska()->getConnectionByAlias($channel->getServerAlias());
