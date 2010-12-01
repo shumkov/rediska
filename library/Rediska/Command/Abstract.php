@@ -43,9 +43,16 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
     protected $_arguments = array();
 
     /**
+     * Argument names and values
+     *
+     * @var array
+     */
+    protected $_argumentNamesAndValues = array();
+
+    /**
      * Arguments name
      * 
-     * @var unknown_type
+     * @var array
      */
     static protected $_argumentNames = array();
 
@@ -54,7 +61,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
      * 
      * @var array
      */
-    protected $_execs = array();
+    protected $_execs;
     
     /**
      * Atomic flag for pipelines
@@ -86,18 +93,13 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
      */
     public function __construct(Rediska $rediska, $name, $arguments = array())
     {
-        $this->_rediska = $rediska;
-        $this->_name    = $name;
+        $this->_rediska   = $rediska;
+        $this->_name      = $name;
+        $this->_arguments = $arguments;
+
+        $this->_argumentNamesAndValues = $this->_getAndValidateArguments($arguments);
 
         $this->_throwExceptionIfNotSupported();
-
-        $this->_validateArguments($arguments);
-
-        $this->_execs = call_user_func_array(array($this, 'create'), $arguments);
-
-        if (!is_array($this->_execs)) {
-            $this->_execs = array($this->_execs);
-        }
     }
 
     /**
@@ -107,7 +109,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
      */
     public function write()
     {
-        foreach($this->_execs as $exec) {
+        foreach($this->_getExecs() as $exec) {
             $exec->write();
         }
 
@@ -125,7 +127,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
     {
         $responses = array();
 
-        foreach ($this->_execs as $exec) {
+        foreach ($this->_getExecs() as $exec) {
             $responses[] = $exec->read();
         }
 
@@ -262,10 +264,10 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
      */
     public function __get($name)
     {
-        if (array_key_exists($name, $this->_arguments)) {
-            return $this->_arguments[$name];
+        if (array_key_exists($name, $this->_argumentNamesAndValues)) {
+            return $this->_argumentNamesAndValues[$name];
         } else {
-            throw new Rediska_Command_Exception("Argument '$name' not present for command '$this->_name'");
+            throw new Rediska_Command_Exception("Argument '$name' not present for command '{$this->getName()}'");
         }
     }
 
@@ -277,16 +279,82 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
      */
     public function __isset($name)
     {
-        return isset($this->_arguments[$name]);
+        return isset($this->_argumentNamesAndValues[$name]);
     }
 
     /**
-     * Validate command arguments
+     * Magic to string
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        $string = $this->getName() . '(';
+        if (!empty($this->_arguments)) {
+            $arguments = array_values($this->_arguments);
+            $string .= $this->_argumentsToString($string, $arguments);
+        }
+        $string .= ')';
+
+        return $string;
+    }
+
+    protected function _getExecs()
+    {
+        if ($this->_execs === null) {
+            $this->_execs = call_user_func_array(array($this, 'create'), $this->_arguments);
+
+            if (!is_array($this->_execs)) {
+                $this->_execs = array($this->_execs);
+            }
+        }
+
+        return $this->_execs;
+    }
+
+    /**
+     * Convert arguments to string
+     *
+     * @param string $string
+     * @param array $arguments
+     * @return string
+     */
+    protected function _argumentsToString($string, $arguments)
+    {
+        $strings = array();
+        foreach($arguments as $name => $value) {
+            $key = !is_integer($name) ? "'$name' => " : '';
+
+            if (is_object($value)) {
+                //$string .= get_class($argument);
+                $argument = (string)$value;
+            } else if (is_numeric($value)) {
+                $argument = $value;
+            } else if (is_string($value)) {
+                $argument = "'$value'";
+            } else if (is_array($value)) {
+                $argument = 'array(' . $this->_argumentsToString($string, $value) . ')';
+            } else if (is_null($value)) {
+                $argument = 'null';
+            } else if ($value === true) {
+                $argument = 'true';
+            } else if ($value === false) {
+                $argument = 'false';
+            }
+
+            $strings[] = $key . $argument;
+        }
+
+        return implode(', ', $strings);
+    }
+
+    /**
+     * Get and validate command arguments
      *
      * @param array $arguments
      * @return array
      */
-    protected function _validateArguments($arguments)
+    protected function _getAndValidateArguments($arguments)
     {
         $className = get_class($this);
         if (!isset(self::$_argumentNames[$className])) {
@@ -298,6 +366,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
         }
 
         $count = 0;
+        $argumentNamesAndValues = array();
         foreach(self::$_argumentNames[$className] as $parameter) {
             if (array_key_exists($count, $arguments)) {
                 $value = $arguments[$count];
@@ -306,9 +375,11 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
             } else {
                 throw new Rediska_Command_Exception("Argument '{$parameter->getName()}' not present for command '$this->_name'");
             }
-            $this->_arguments[$parameter->getName()] = $value;
+            $argumentNamesAndValues[$parameter->getName()] = $value;
             $count++;
         }
+
+        return $argumentNamesAndValues;
     }
 
     /**
