@@ -86,6 +86,7 @@ class Rediska_Autoloader
         }
 
         $path = self::getRediskaPath() . '/' . str_replace('_', '/', $className) . '.php';
+
         return include $path;
     }
 
