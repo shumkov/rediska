@@ -69,13 +69,17 @@ class Rediska_Pipeline
         $results = array();
 
         if (!empty($this->_commands)) {
+            $this->_rediska->getProfiler()->start($this);
+
             foreach($this->_commands as $command) {
                 $command->write();
             }
-    
+
             foreach($this->_commands as $command) {
                 $results[] = $command->read();
             }
+
+            $this->_rediska->getProfiler()->stop();
         }
 
         return $results;
@@ -152,6 +156,22 @@ class Rediska_Pipeline
         $this->_specifiedConnection->resetConnection();
 
         return $this;
+    }
+
+    /**
+     * Magic to string
+     *
+     * @return string
+     */
+    public function  __toString()
+    {
+        if (empty($this->_commands)) {
+            $string = 'Empty pipeline';
+        } else {
+            $string = 'Pipeline: ' . implode(', ', $this->_commands);
+        }
+
+        return $string;
     }
 
     /**

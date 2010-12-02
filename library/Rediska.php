@@ -92,7 +92,7 @@ class Rediska extends Rediska_Options
      *                     or you personal implementation (option value - name of class
      *                     which implements Rediska_KeyDistributor_Interface).
      * redisVersion      - Redis server version for command specification.
-     * profiler          - enable...
+     * profiler          - Rediska profiler. false for disable
      *
      * @var array
      */

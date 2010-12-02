@@ -194,6 +194,9 @@ class Rediska_Profiler_Stream extends Rediska_Profiler
         }
     }
 
+    /**
+     * Close stream on destruct
+     */
     public function __destruct()
     {
         if (is_resource($this->_stream)) {

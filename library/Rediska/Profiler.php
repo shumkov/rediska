@@ -14,6 +14,11 @@ class Rediska_Profiler implements Rediska_Profiler_Interface,
                                   IteratorAggregate,
                                   Countable
 {
+    /**
+     * Profiles
+     *
+     * @var array
+     */
     protected $_profiles = array();
 
     /**
