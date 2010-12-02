@@ -54,16 +54,23 @@ class Rediska extends Rediska_Options
     /**
      * Object for distribution keys by servers 
      * 
-     * @var Rediska_KeyDistributor_Abstract
+     * @var Rediska_KeyDistributor_Interface
      */
     protected $_keyDistributor;
-    
+
     /**
      * Serializer object
      * 
-     * @var Rediska_Serializer_Interface
+     * @var Rediska_Serializer
      */
     protected $_serializer;
+
+    /**
+     * Profiler object
+     *
+     * @var Rediska_Profiler
+     */
+    protected $_profiler;
 
     /**
      * Configuration
@@ -85,6 +92,7 @@ class Rediska extends Rediska_Options
      *                     or you personal implementation (option value - name of class
      *                     which implements Rediska_KeyDistributor_Interface).
      * redisVersion      - Redis server version for command specification.
+     * profiler          - Rediska profiler. false for disable
      *
      * @var array
      */
@@ -102,6 +110,7 @@ class Rediska extends Rediska_Options
         'serializeradapter' => 'phpSerialize',
         'keydistributor'    => 'consistentHashing',
         'redisversion'      => self::STABLE_REDIS_VERSION,
+        'profiler'          => false,
     );
 
     /**
@@ -126,6 +135,7 @@ class Rediska extends Rediska_Options
      *                     or you personal implementation (option value - name of class
      *                     which implements Rediska_KeyDistributor_Interface).
      * redisVersion      - Redis server version for command specification.
+     * profiler
      * 
      */
     public function __construct(array $options = array()) 
@@ -457,6 +467,62 @@ class Rediska extends Rediska_Options
     }
 
     /**
+     * Set profiler
+     *
+     * @param Rediska_Profiler|array $profilerOrOptions Profiler object or array of options
+     * @return Rediska
+     */
+    public function setProfiler($profilerOrOptions)
+    {
+        $this->_options['profiler'] = $profilerOrOptions;
+        $this->_profiler = null;
+        
+        return $this;
+    }
+
+    /**
+     * Get profiler
+     *
+     * @return Rediska_Profiler
+     */
+    public function getProfiler()
+    {
+        if (!$this->_profiler) {
+            if ($this->_options['profiler'] === false) {
+                $this->_profiler = new Rediska_Profiler_Null();
+            } else if ($this->_options['profiler'] === true) {
+                $this->_profiler = new Rediska_Profiler();
+            } else if (is_array($this->_options['profiler'])) {
+                if (!isset($this->_options['profiler']['name'])) {
+                    throw new Rediska_Exception("You must specify profiler 'name'.");
+                } else if (in_array($this->_options['profiler']['name'], array('stream'))) {
+                    $name = ucfirst($this->_options['profiler']['name']);
+                    $className = "Rediska_Profiler_$name";
+                    unset($this->_options['profiler']['name']);
+                    $this->_profiler = new $className($this->_options['profiler']);
+                } else if (@class_exists($this->_options['profiler']['name'])) {
+                    $className = $this->_options['profiler']['name'];
+                    unset($this->_options['profiler']['name']);
+                    $this->_profiler = new $className($this->_options['profiler']);
+                } else {
+                    throw new Rediska_Exception("Profiler '{$this->_options['profiler']['name']}' not found. You need include it before or setup autoload.");
+                }
+            } elseif (is_object($this->_options['profiler'])) {
+                $this->_profiler = $this->_options['profiler'];
+            } else {
+                throw new Rediska_Exception("Profiler option must be a boolean, object or array of options");
+            }
+
+            if (!$this->_profiler instanceof Rediska_Profiler_Interface) {
+                $profilerClass = get_class($this->_profiler);
+                throw new Rediska_Serializer_Exception("Profiler '$profilerClass' must implement Rediska_Profiler_Interface");
+            }
+        }
+
+        return $this->_profiler;
+    }
+
+    /**
      * Magic method for execute command
      *
      * @param string $name Command name
@@ -481,7 +547,11 @@ class Rediska extends Rediska_Options
 
         $command = Rediska_Commands::get($this, $name, $args);
 
+        $this->getProfiler()->start($command);
+
         $response = $command->execute();
+
+        $this->getProfiler()->stop();
 
         unset($command);
 
