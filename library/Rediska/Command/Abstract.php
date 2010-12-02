@@ -291,7 +291,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
         $string = $this->getName() . '(';
         if (!empty($this->_arguments)) {
             $arguments = array_values($this->_arguments);
-            $string .= $this->_argumentsToString($string, $arguments);
+            $string .= $this->_argumentsToString($arguments);
         }
         $string .= ')';
 
@@ -318,7 +318,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
      * @param array $arguments
      * @return string
      */
-    protected function _argumentsToString($string, $arguments)
+    protected function _argumentsToString($arguments)
     {
         $strings = array();
         foreach($arguments as $name => $value) {
@@ -332,7 +332,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
             } else if (is_string($value)) {
                 $argument = "'$value'";
             } else if (is_array($value)) {
-                $argument = 'array(' . $this->_argumentsToString($string, $value) . ')';
+                $argument = 'array(' . $this->_argumentsToString($value) . ')';
             } else if (is_null($value)) {
                 $argument = 'null';
             } else if ($value === true) {
