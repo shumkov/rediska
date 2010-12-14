@@ -7,3 +7,4 @@ nbproject
 *.tgz
 tests/config.ini
 library/Zend
+.svn
