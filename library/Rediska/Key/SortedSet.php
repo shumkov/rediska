@@ -96,9 +96,9 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
      * @param boolean $revert     Revert elements (not used in sorting)
      * @return array
      */
-	public function getByRank($withScores = false, $limit = -1, $offset = 0, $revert = false)
+	public function getByRank($withScores = false, $limit = 0, $offset = 0, $revert = false)
 	{
-		return $this->_getRediskaOn()->getSortedSet($this->getName(), $withScores, $offset, ($offset + $limit), $revert);
+		return $this->_getRediskaOn()->getSortedSet($this->getName(), $withScores, $offset, ($offset + $limit - 1), $revert);
 	}
 
     /**
