@@ -42,13 +42,6 @@ class Rediska_PubSub_Connections implements IteratorAggregate, Countable
     protected $_connections = array();
 
     /**
-     * Pool of connections
-     * 
-     * @var array
-     */
-    static protected $_allConnections = array();
-
-    /**
      * Constructor
      *
      * @param Rediska_PubSub_Channel $channel
@@ -77,7 +70,7 @@ class Rediska_PubSub_Connections implements IteratorAggregate, Countable
 
         if (!array_key_exists($connection->getAlias(), $this->_channelsByConnections)) {
             $this->_channelsByConnections[$connection->getAlias()] = array();
-            $this->_connections[] = $connection;
+            $this->_connections[$connection->getAlias()] = $connection;
         }
         if (!in_array($channel, $this->_channelsByConnections[$connection->getAlias()])) {
             $this->_channelsByConnections[$connection->getAlias()][] = $channel;
@@ -115,10 +108,15 @@ class Rediska_PubSub_Connections implements IteratorAggregate, Countable
 
         if (empty($this->_channelsByConnections[$connection->getAlias()])) {
             unset($this->_channelsByConnections[$connection->getAlias()]);
+            unset($this->_connections[$connection->getAlias()]);
 
-            $this->_connections = array();
-            foreach($this->_channelsByConnections as $connectionAlias => $channels) {
-                $this->_connections[] = $this->getConnectionByAlias($connectionAlias);
+            // If only one - move to blocking mode
+            if (count($this->_connections) == 1) {
+                foreach($this->_connections as $connection) {
+                    if (!$connection->getOption('blockingMode')) {
+                        $connection->setOption('blockingMode', true);
+                    }
+                }
             }
         }
 
@@ -139,11 +137,20 @@ class Rediska_PubSub_Connections implements IteratorAggregate, Countable
         } else {
             $connection = $this->_channel->getRediska()->getConnectionByKeyName($name);
         }
-        if (!array_key_exists($connection->getAlias(), self::$_allConnections)) {
-            self::$_allConnections[$connection->getAlias()] = clone $connection;
-            self::$_allConnections[$connection->getAlias()]->setBlockingMode(false);
+
+        if (!array_key_exists($connection->getAlias(), $this->_connections)) {
+            $this->_connections[$connection->getAlias()] = clone $connection;
+
+            // If more than one - move to non blocking mode
+            if (count($this->_connections) > 1) {
+                foreach($this->_connections as $connection) {
+                    if ($connection->getOption('blockingMode')) {
+                        $connection->setOption('blockingMode', false);
+                    }
+                }
+            }
         }
-        $connection = self::$_allConnections[$connection->getAlias()];
+        $connection = $this->_connections[$connection->getAlias()];
 
         return $connection;
     }
@@ -156,11 +163,11 @@ class Rediska_PubSub_Connections implements IteratorAggregate, Countable
      */
     public function getConnectionByAlias($alias)
     {
-        if (!isset(self::$_allConnections[$alias])) {
+        if (!isset($this->_connections[$alias])) {
             throw new Rediska_PubSub_Exception("Can't find connection '$alias'");
         }
 
-        return self::$_allConnections[$alias];
+        return $this->_connections[$alias];
     }
 
     /**

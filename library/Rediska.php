@@ -103,7 +103,7 @@ class Rediska extends Rediska_Options
      * @var array
      */
     protected $_options = array(
-        'addtomanager' => true,
+        'addToManager' => true,
         'name'         => self::DEFAULT_NAME,
         'namespace'    => '',
         'servers'      => array(
@@ -113,9 +113,9 @@ class Rediska extends Rediska_Options
                 'weight' => Rediska_Connection::DEFAULT_WEIGHT,
             )
         ),
-        'serializeradapter' => 'phpSerialize',
-        'keydistributor'    => 'consistentHashing',
-        'redisversion'      => self::STABLE_REDIS_VERSION,
+        'serializerAdapter' => 'phpSerialize',
+        'keyDistributor'    => 'consistentHashing',
+        'redisVersion'      => self::STABLE_REDIS_VERSION,
         'profiler'          => false,
     );
 
@@ -167,7 +167,7 @@ class Rediska extends Rediska_Options
     {
         $this->_options['name'] = $name;
 
-        if ($this->_options['addtomanager']) {
+        if ($this->_options['addToManager']) {
             Rediska_Manager::add($this);
         }
 
@@ -423,7 +423,7 @@ class Rediska extends Rediska_Options
      */
     public function setKeyDistributor($name)
     {
-        $this->_options['keydistributor'] = $name;
+        $this->_options['keyDistributor'] = $name;
 
         if (is_object($name)) {
             $this->_keyDistributor = $name;
@@ -458,7 +458,7 @@ class Rediska extends Rediska_Options
      */
     public function setSerializerAdapter($adapter)
     {
-        $this->_options['serializeradapter'] = $adapter;
+        $this->_options['serializerAdapter'] = $adapter;
         $this->_serializer = null;
 
         return $this;
@@ -472,7 +472,7 @@ class Rediska extends Rediska_Options
     public function getSerializer()
     {
         if (!$this->_serializer) {
-            $this->_serializer = new Rediska_Serializer($this->_options['serializeradapter']);
+            $this->_serializer = new Rediska_Serializer($this->_options['serializerAdapter']);
         }
 
         return $this->_serializer;

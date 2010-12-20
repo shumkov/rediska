@@ -49,7 +49,7 @@ class Rediska_Connection extends Rediska_Options
         'password'     => null,
         'persistent'   => false,
         'timeout'      => null,
-        'readtimeout'  => null,
+        'readTimeout'  => null,
         'blockingmode' => true,
     );
 
@@ -85,13 +85,13 @@ class Rediska_Connection extends Rediska_Options
             }
 
             // Set read timeout
-            if ($this->_options['readtimeout'] != null) {
-                $this->setReadTimeout($this->_options['readtimeout']);
+            if ($this->_options['readTimeout'] != null) {
+                $this->setReadTimeout($this->_options['readTimeout']);
             }
 
             // Set blocking mode
-            if ($this->_options['blockingmode'] == false) {
-                $this->setBlockingMode($this->_options['blockingmode']);
+            if ($this->_options['blockingMode'] == false) {
+                $this->setBlockingMode($this->_options['blockingMode']);
             }
 
             // Send password
@@ -227,7 +227,7 @@ class Rediska_Connection extends Rediska_Options
         }
 
         if ($reply === false) {
-            if ($this->_options['blockingmode'] || (!$this->_options['blockingmode'] && $info['eof'])) {
+            if ($this->_options['blockingMode'] || (!$this->_options['blockingMode'] && $info['eof'])) {
                 $this->disconnect();
                 throw new Rediska_Connection_Exception("Can't read from socket.");
             }
@@ -248,11 +248,11 @@ class Rediska_Connection extends Rediska_Options
      */
     public function setReadTimeout($timeout)
     {
-        $this->_options['readtimeout'] = $timeout;
+        $this->_options['readTimeout'] = $timeout;
 
         if ($this->isConnected()) {
-            $seconds = floor($this->_options['readtimeout']);
-            $microseconds = ($this->_options['readtimeout'] - $seconds) * 1000000;
+            $seconds = floor($this->_options['readTimeout']);
+            $microseconds = ($this->_options['readTimeout'] - $seconds) * 1000000;
 
             stream_set_timeout($this->_socket, $seconds, $microseconds);
         }
@@ -268,10 +268,10 @@ class Rediska_Connection extends Rediska_Options
      */
     public function setBlockingMode($flag = true)
     {
-        $this->_options['blockingmode'] = $flag;
+        $this->_options['blockingMode'] = $flag;
 
         if ($this->isConnected()) {
-            stream_set_blocking($this->_socket, $this->_options['blockingmode']);
+            stream_set_blocking($this->_socket, $this->_options['blockingMode']);
         }
 
         return $this;

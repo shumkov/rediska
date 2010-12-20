@@ -37,9 +37,9 @@ abstract class Rediska_Key_Abstract extends Rediska_Options_RediskaInstance
      * @var array
      */
     protected $_options = array(
-        'serveralias'       => null,
+        'serverAlias'       => null,
         'expire'            => null,
-        'expireistimestamp' => false,
+        'expireIsTimestamp' => false,
     );
 
     /**
