@@ -48,7 +48,7 @@ class Rediska_Zend_Session_SaveHandler_Redis extends Rediska_Options_RediskaInst
      * @var array
      */
     protected $_options = array(
-        'keyprefix' => 'PHPSESSIONS_',
+        'keyPrefix' => 'PHPSESSIONS_',
         'lifetime'  => null,
     );
     
@@ -132,7 +132,7 @@ class Rediska_Zend_Session_SaveHandler_Redis extends Rediska_Options_RediskaInst
         return $this->getRediska()->setAndExpire(
             $this->_getKeyName($id),
             $data,
-            $this->_options['lifetime']
+            $this->getOption('lifetime')
         );
     }
 
@@ -165,7 +165,7 @@ class Rediska_Zend_Session_SaveHandler_Redis extends Rediska_Options_RediskaInst
      */
     protected function _getKeyName($id)
     {
-        return $this->_options['keyprefix'] . $id;
+        return $this->getOption('keyPrefix') . $id;
     }
 
     /**

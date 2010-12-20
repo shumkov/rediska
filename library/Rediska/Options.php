@@ -22,7 +22,6 @@ abstract class Rediska_Options
 
     public function __construct(array $options = array()) 
     {
-        $options = array_change_key_case($options, CASE_LOWER);
         $options = array_merge($this->_options, $options);
 
         $this->setOptions($options);
@@ -37,11 +36,7 @@ abstract class Rediska_Options
     public function setOptions(array $options)
     {
         foreach($options as $name => $value) {
-            if (method_exists($this, "set$name")) {
-                call_user_func(array($this, "set$name"), $value);
-            } else {
-                $this->setOption($name, $value);
-            }
+            $this->setOption($name, $value);
         }
 
         return $this;
@@ -66,15 +61,14 @@ abstract class Rediska_Options
      */
     public function setOption($name, $value)
     {
-        $lowerName = strtolower($name);
-
-        if (!array_key_exists($lowerName, $this->_options)) {
+        if (method_exists($this, "set$name")) {
+            return call_user_func(array($this, "set$name"), $value);
+        } else if (array_key_exists($name, $this->_options)) {
+            $this->_options[$name] = $value;
+            return $this;
+        } else {
             throw new $this->_optionsException("Unknown option '$name'");
         }
-
-        $this->_options[$lowerName] = $value;
-
-        return $this;
     }
 
     /**
@@ -85,12 +79,12 @@ abstract class Rediska_Options
      */
     public function getOption($name)
     {
-        $lowerName = strtolower($name);
-
-        if (!array_key_exists($lowerName, $this->_options)) {
+        if (method_exists($this, "get$name")) {
+            return call_user_func(array($this, "get$name"));
+        } else if (array_key_exists($name, $this->_options)) {
+            return $this->_options[$name];
+        } else {
             throw new $this->_optionsException("Unknown option '$name'");
         }
-
-        return $this->_options[$lowerName];
     }
 }
