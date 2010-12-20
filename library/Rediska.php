@@ -92,7 +92,13 @@ class Rediska extends Rediska_Options
      *                     or you personal implementation (option value - name of class
      *                     which implements Rediska_KeyDistributor_Interface).
      * redisVersion      - Redis server version for command specification.
-     * profiler          - Rediska profiler. false for disable
+     * profiler          - Rediska profiler. Disable for default. Don't use it on production!
+     *                     Value of this option may be:
+     *                         * True or false
+     *                         * Object wich implements Rediska_Profiler_Interface
+     *                         * Array with key 'name' wich value is name of profiler ('stream' for example)
+     *                           or class name wich implements Rediska_Profiler_Interface. Other keys passed
+     *                           as options to profiler
      *
      * @var array
      */
@@ -135,7 +141,13 @@ class Rediska extends Rediska_Options
      *                     or you personal implementation (option value - name of class
      *                     which implements Rediska_KeyDistributor_Interface).
      * redisVersion      - Redis server version for command specification.
-     * profiler
+     * profiler          - Rediska profiler. Disable for default. Don't use it on production!
+     *                     Value of this option may be:
+     *                         * True or false
+     *                         * Object wich implements Rediska_Profiler_Interface
+     *                         * Array with key 'name' wich value is name of profiler ('stream' for example)
+     *                           or class name wich implements Rediska_Profiler_Interface. Other keys passed
+     *                           as options to profiler
      * 
      */
     public function __construct(array $options = array()) 

@@ -101,7 +101,12 @@ class Rediska_Transaction
 
         if ($this->isStarted()) {
             $exec = new Rediska_Connection_Exec($this->_connection, 'EXEC');
+
+            $this->_rediska->getProfiler()->start($this);
+
             $responses = $exec->execute();
+
+            $this->_rediska->getProfiler()->stop();
 
             if (!empty($this->_commands)) {
                 if (!$responses) {
@@ -207,6 +212,15 @@ class Rediska_Transaction
         $redisVersion = $this->_rediska->getOption('redisVersion');
         if (version_compare($version, $this->_rediska->getOption('redisVersion')) == 1) {
             throw new Rediska_Transaction_Exception("Transaction requires {$version}+ version of Redis server. Current version is {$redisVersion}. To change it specify 'redisVersion' option.");
+        }
+    }
+
+    public function  __toString()
+    {
+        if (empty($this->_commands)) {
+            return 'Empty transaction';
+        } else {
+            return 'Transaction: ' . implode(', ', $this->_commands);
         }
     }
 
