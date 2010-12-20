@@ -14,17 +14,19 @@ Features
 * Use Lists, Sets, Sorted sets and Hashes as native PHP arrays
 * Transactions
 * Publish/Subscribe
+* Profiler
 * Pipelining
 * Easy extending Rediska by adding you own commands or overwrite standart
 * [Zend Framework](http://framework.zend.com/) integration
 * [Syfmony](http://www.symfony-project.org/) framework integration
-* Full [documentation](http://localhost:3000/documentation)
+* Full [documentation](http://rediska.geometria-lab.ru/documentation)
 * Example application
 * [PHPUnit](http://phpunit.de/) tests
 
 Coming soon
 ---
 
+* PHP extension
 * Cloud key distribution
 * Ketama (fast C library for key distribution) support
 * Benchmarks and performance optimization
@@ -101,7 +103,6 @@ Project structure
 * __README.txt__    - This document
 * __VERSION.txt__   - Current version of Rediska
 * __benchmarks/__   - Rediska benchmarks. In progress...
-* __docs/__         - Rediska API documentation
 * __examples/__     - Rediska expamples
 * __library/__      - Rediska library. Put files from library to you include_path and use: `require_once "Rediska.php"`
 * __package.xml__   - Install Rediska to PHP library dir: `pear install package.xml`. Now use Rediska is easy (without `include_path` configuration): `require_once "Rediska.php"`
