@@ -15,16 +15,25 @@ class Rediska_Command_GetSet extends Rediska_Command_Abstract
     /**
      * Create command
      *
-     * @param string $key Key name
+     * @param string  $key Key name
+     * @param boolean $responseIterator[optional]  If true - command return iterator which read from socket buffer.
+     *                                             Important: new connection will be created 
      * @return Rediska_Connection_Exec
      */
-    public function create($key)
+    public function create($key, $responseIterator = false)
     {
         $connection = $this->_rediska->getConnectionByKeyName($key);
 
         $command = "SMEMBERS {$this->_rediska->getOption('namespace')}$key";
 
-        return new Rediska_Connection_Exec($connection, $command);
+        $exec = new Rediska_Connection_Exec($connection, $command);
+        
+        if ($responseIterator) {
+            $exec->setResponseIterator(true);
+            $exec->setResponseCallback(array($this->getRediska()->getSerializer(), 'unserialize'));
+        }
+        
+        return $exec;
     }
 
     /**

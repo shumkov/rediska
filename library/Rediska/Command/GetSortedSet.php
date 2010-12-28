@@ -22,11 +22,13 @@ class Rediska_Command_GetSortedSet extends Rediska_Command_Abstract
     /**
      * Create command
      *
-     * @param string  $key                  Key name
-     * @param integer $withScores[optional] Return values with scores. For default is false.
-     * @param integer $start[optional]      Start index. For default is begin of set.
-     * @param integer $end[optional]        End index. For default is end of set.
-     * @param boolean $revert[optional]     Revert elements (not used in sorting). For default is false
+     * @param string  $key                         Key name
+     * @param integer $withScores[optional]        Return values with scores. For default is false.
+     * @param integer $start[optional]             Start index. For default is begin of set.
+     * @param integer $end[optional]               End index. For default is end of set.
+     * @param boolean $revert[optional]            Revert elements (not used in sorting). For default is false
+     * @param boolean $responseIterator[optional]  If true - command return iterator which read from socket buffer.
+     *                                             Important: new connection will be created 
      * @return Rediska_Connection_Exec
      */
     public function create($key, $withScores = false, $start = 0, $end = -1, $revert = false, $responseIterator = false)

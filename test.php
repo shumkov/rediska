@@ -11,7 +11,7 @@ $rediska = new Rediska(array(
 $rediska->delete('test');
 
 for ($i = 0; $i <= 1000; $i++) {
-    $rediska->addToSortedSet('test', 'value_' . $i, $i);
+    $rediska->addToSortedSet('test', array('type' => 'value', 'count' => $i), $i);
 }
 
 foreach($rediska->getSortedSet('test', true, 0, -1, false, true) as $value) {
