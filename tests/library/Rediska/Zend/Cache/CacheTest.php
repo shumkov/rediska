@@ -13,8 +13,6 @@ class Rediska_Zend_Cache_BackendTest extends Rediska_TestCase
     {
         parent::setUp();
 
-        Rediska_Autoloader::load('Rediska_Zend_Cache_Backend_Redis');
-
         $this->cache = Zend_Cache::factory('Core', 'Rediska_Zend_Cache_Backend_Redis', array(), array(), false, true, true);
     }
 

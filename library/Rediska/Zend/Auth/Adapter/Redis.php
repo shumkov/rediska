@@ -80,7 +80,7 @@ class Rediska_Zend_Auth_Adapter_Redis extends Rediska_Options_RediskaInstance im
         'userIdKey'               => 'user_ids:*',
         'userDataKey'             => 'users:*',
         'credentialAttributeName' => 'password',
-        'userDataisarray'         => false,
+        'userDataIsArray'         => false,
     );
 
     /**
