@@ -20,12 +20,14 @@ class Rediska_Command_GetList extends Rediska_Command_Abstract
     /**
      * Create command
      *
-     * @param string  $key             Key name
-     * @param integer $start[optional] Start index. For default is begin of list
-     * @param integer $end[optional]   End index. For default is end of list
+     * @param string  $key                         Key name
+     * @param integer $start[optional]             Start index. For default is begin of list
+     * @param integer $end[optional]               End index. For default is end of list
+     * @param boolean $responseIterator[optional]  If true - command return iterator which read from socket buffer.
+     *                                             Important: new connection will be created 
      * @return Rediska_Connection_Exec
      */
-    public function create($key, $start = 0, $end = -1)
+    public function create($key, $start = 0, $end = -1, $responseIterator = false)
     {
         if (!is_integer($start)) {
             throw new Rediska_Command_Exception("Start must be integer");
@@ -38,7 +40,14 @@ class Rediska_Command_GetList extends Rediska_Command_Abstract
 
         $command = "LRANGE {$this->_rediska->getOption('namespace')}$key $start $end";
 
-        return new Rediska_Connection_Exec($connection, $command);
+        $exec = new Rediska_Connection_Exec($connection, $command);
+        
+        if ($responseIterator) {
+            $exec->setResponseIterator(true);
+            $exec->setResponseCallback(array($this->getRediska()->getSerializer(), 'unserialize'));
+        }
+        
+        return $exec;
     }
 
     /**
