@@ -17,27 +17,48 @@ class Rediska_Connection_Exec
     const REPLY_INTEGER    = ':';
     const REPLY_BULK       = '$';
     const REPLY_MULTY_BULK = '*';
-    
+
     /**
      * Rediska connection
      * 
      * @var Rediska_Connection
      */
     protected $_connection;
-    
+
+    /**
+     * Cloned connection for iterator
+     *
+     * @var Rediska_Connection
+     */
+    protected $_connectionClone;
+
     /**
      * Command
      * 
      * @var array|string
      */
     protected $_command;
-    
+
     /**
      * Is writed
      * 
      * @var $_isWrited string
      */
     protected $_isWrited = false;
+
+    /**
+     * Response callback
+     * 
+     * @var callback
+     */
+    protected $_responseCallback;
+
+    /**
+     * Retrun iterator as response
+     *
+     * @var mixin
+     */
+    protected $_responseIterator;
 
     /**
      * Constructor
@@ -62,10 +83,20 @@ class Rediska_Connection_Exec
      */
     public function write()
     {
-        $result = $this->_connection->write($this->_command);
+        $result = $this->getConnection()->write($this->getCommand());
         $this->_isWrited = true;
 
         return $result;
+    }
+
+    /**
+     * Is writed?
+     *
+     * @return boolean
+     */
+    public function isWrited()
+    {
+        return $this->_isWrited;
     }
 
     /**
@@ -75,13 +106,27 @@ class Rediska_Connection_Exec
      */
     public function read()
     {
-        if (!$this->_isWrited) {
+        if (!$this->isWrited()) {
             throw new Rediska_Connection_Exec_Exception('You must write command before read');
         }
 
-        $response = self::readResponseFromConnection($this->_connection);
-
         $this->_isWrited = false;
+
+        if ($this->getResponseIterator() !== null) {
+            if ($this->getResponseIterator() === true) {
+                $className = 'Rediska_Connection_Exec_MultiBulkIterator';
+            } else {
+                $className = $this->getResponseIterator();
+            }
+
+            $response = new $className($this->getConnection(), $this->getResponseCallback());
+        } else {
+            $response = self::readResponseFromConnection($this->getConnection());
+
+            if ($this->_responseCallback !== null) {
+                $response = call_user_func($this->getResponseCallback(), $response);
+            }
+        }
 
         return $response;
     }
@@ -114,6 +159,16 @@ class Rediska_Connection_Exec
      */
     public function getConnection()
     {
+        if ($this->_responseIterator === null) {
+            return $this->_connection;
+        } else {
+            if ($this->_connectionClone === null) {
+                $this->_connectionClone = clone $this->_connection;
+            }
+
+            return $this->_connectionClone;
+        }
+
         return $this->_connection;
     }
     
@@ -126,6 +181,56 @@ class Rediska_Connection_Exec
     {
         return $this->_command;
     }
+
+    /**
+     * Set response callback
+     *
+     * @param mixin $callback
+     * @return Rediska_Connection_Exec
+     */
+    public function setResponseCallback($callback)
+    {
+        if ($callback !== null && !is_callable($callback)) {
+            throw new Rediska_Connection_Exec_Exception('Bad callback');
+        }
+
+        $this->_responseCallback = $callback;
+
+        return $this;
+    }
+
+    /**
+     * Get response callback
+     *
+     * @return mixin
+     */
+    public function getResponseCallback()
+    {
+        return $this->_responseCallback;
+    }
+
+    /**
+     * Set response iterator
+     *
+     * @param boolean $enable
+     */
+    public function setResponseIterator($responseIterator)
+    {
+        $this->_responseIterator = $responseIterator;
+
+        return $this;
+    }
+
+    /**
+     * Is enabled response iterator
+     *
+     * @return boolean
+     */
+    public function getResponseIterator()
+    {
+        return $this->_responseIterator;
+    }
+
 
     /**
      * Transfrom Multi Bulk command to string
@@ -169,16 +274,12 @@ class Rediska_Connection_Exec
             case self::REPLY_ERROR:
                 $message = substr($data, 4);
 
-                throw new Rediska_Command_Exception($message);
+                throw new Rediska_Connection_Exec_Exception($message);
             case self::REPLY_INTEGER:
                 if (strpos($data, '.') !== false) {
                     $number = (integer)$data;
                 } else {
                     $number = (float)$data;
-                }
-
-                if ((string)$number != $data) {
-                    throw new Rediska_Connection_Exec_Exception("Can't convert data ':$data' to integer");
                 }
 
                 return $number;
@@ -187,19 +288,11 @@ class Rediska_Connection_Exec
                     return null;
                 } else {
                     $length = (integer)$data;
-        
-                    if ((string)$length != $data) {
-                        throw new Rediska_Connection_Exec_Exception("Can't convert bulk reply header '$$data' to integer");
-                    }
 
                     return $connection->read($length);
                 }
             case self::REPLY_MULTY_BULK:
                 $count = (integer)$data;
-
-                if ((string)$count != $data) {
-                    throw new Rediska_Connection_Exec_Exception("Can't convert multi-response header '$data' to integer");
-                }
 
                 $replies = array();
                 for ($i = 0; $i < $count; $i++) {

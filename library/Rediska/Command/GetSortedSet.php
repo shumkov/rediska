@@ -29,7 +29,7 @@ class Rediska_Command_GetSortedSet extends Rediska_Command_Abstract
      * @param boolean $revert[optional]     Revert elements (not used in sorting). For default is false
      * @return Rediska_Connection_Exec
      */
-    public function create($key, $withScores = false, $start = 0, $end = -1, $revert = false)
+    public function create($key, $withScores = false, $start = 0, $end = -1, $revert = false, $responseIterator = false)
     {
         if (!is_integer($start)) {
             throw new Rediska_Command_Exception("Start must be integer");
@@ -49,7 +49,17 @@ class Rediska_Command_GetSortedSet extends Rediska_Command_Abstract
             $command[] = 'WITHSCORES';
         }
 
-        return new Rediska_Connection_Exec($connection, $command);
+        $exec = new Rediska_Connection_Exec($connection, $command);
+
+        if ($responseIterator) {
+            if ($withScores) {
+                $responseIterator = 'Rediska_Command_GetSortedSet_WithScoresIterator';
+            }
+            $exec->setResponseIterator($responseIterator);
+            $exec->setResponseCallback(array($this, 'parseIteratorResponse'));
+        }
+
+        return $exec;
     }
 
     /**
@@ -60,14 +70,31 @@ class Rediska_Command_GetSortedSet extends Rediska_Command_Abstract
      */
     public function parseResponse($response)
     {
-        $values = $response;
-
-        if ($this->withScores) {
-            $values = Rediska_Command_Response_ValueAndScore::combine($this->_rediska, $values);
+        if ($this->responseIterator) {
+            return $response;
         } else {
-            $values = array_map(array($this->_rediska->getSerializer(), 'unserialize'), $values);
-        }
+            $values = $response;
 
-        return $values;
+            if ($this->withScores) {
+                $values = Rediska_Command_Response_ValueAndScore::combine($this->_rediska, $values);
+            } else {
+                $values = array_map(array($this->_rediska->getSerializer(), 'unserialize'), $values);
+            }
+
+            return $values;
+        }
+    }
+
+    public function parseIteratorResponse($response)
+    {
+        if ($this->withScores) {
+            list($value, $score) = $response;
+
+            $value = $this->getRediska()->getSerializer()->unserialize($value);
+
+            return new Rediska_Command_Response_ValueAndScore(array('value' => $value, 'score' => $score));
+        } else {
+            return $this->getRediska()->getSerializer()->unserialize($response);
+        }
     }
 }
