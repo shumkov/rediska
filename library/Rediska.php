@@ -471,7 +471,7 @@ class Rediska extends Rediska_Options
      */
     public function getSerializer()
     {
-        if (!$this->_serializer) {
+        if ($this->_serializer === null) {
             $this->_serializer = new Rediska_Serializer($this->_options['serializerAdapter']);
         }
 
@@ -554,7 +554,7 @@ class Rediska extends Rediska_Options
      * @return mixed
      */
     protected function _executeCommand($name, $args = array())
-    {
+    {        
         $this->_specifiedConnection->resetConnection();
 
         $command = Rediska_Commands::get($this, $name, $args);

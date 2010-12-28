@@ -146,6 +146,7 @@ class Rediska_Pipeline
         }
 
         $command = Rediska_Commands::get($this->_rediska, $name, $args);
+        $command->initialize();
 
         if (!$command->isAtomic()) {
             throw new Rediska_Exception("Command '$name' doesn't work properly (not atomic) in pipeline on multiple servers");

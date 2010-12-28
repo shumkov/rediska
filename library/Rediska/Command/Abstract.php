@@ -101,6 +101,26 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
 
         $this->_throwExceptionIfNotSupported();
     }
+    
+    /**
+     * Initialize command
+     * 
+     * @return boolean
+     */
+    public function initialize()
+    {
+        if ($this->_execs === null) {
+            $this->_execs = call_user_func_array(array($this, 'create'), $this->_arguments);
+
+            if (!is_array($this->_execs)) {
+                $this->_execs = array($this->_execs);
+            }
+            
+            return true;
+        }
+
+        return false;
+    }
 
     /**
      * Write commands
@@ -109,7 +129,9 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
      */
     public function write()
     {
-        foreach($this->_getExecs() as $exec) {
+        $this->initialize();
+
+        foreach($this->_execs as $exec) {
             $exec->write();
         }
 
@@ -127,7 +149,11 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
     {
         $responses = array();
 
-        foreach ($this->_getExecs() as $exec) {
+        if (!$this->_isWrited) {
+            throw new Rediska_Command_Exception('You need write before');
+        }
+
+        foreach ($this->_execs as $exec) {
             $responses[] = $exec->read();
         }
 
@@ -297,19 +323,6 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
         $string .= ')';
 
         return $string;
-    }
-
-    protected function _getExecs()
-    {
-        if ($this->_execs === null) {
-            $this->_execs = call_user_func_array(array($this, 'create'), $this->_arguments);
-
-            if (!is_array($this->_execs)) {
-                $this->_execs = array($this->_execs);
-            }
-        }
-
-        return $this->_execs;
     }
 
     /**
