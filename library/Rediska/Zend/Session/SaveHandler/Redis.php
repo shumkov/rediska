@@ -85,6 +85,9 @@ class Rediska_Zend_Session_SaveHandler_Redis extends Rediska_Options_RediskaInst
         }
 
         parent::__construct($options);
+
+        Rediska_Zend_Session_Set::setSaveHandler($this);
+        $this->_set = new Rediska_Zend_Session_Set();
     }
 
     /**
@@ -129,6 +132,10 @@ class Rediska_Zend_Session_SaveHandler_Redis extends Rediska_Options_RediskaInst
      */
     public function write($id, $data)
     {
+        $timestamp = time();
+
+        $this->_set[$timestamp] = $id;
+
         return $this->getRediska()->setAndExpire(
             $this->_getKeyName($id),
             $data,
@@ -144,6 +151,8 @@ class Rediska_Zend_Session_SaveHandler_Redis extends Rediska_Options_RediskaInst
      */
     public function destroy($id)
     {
+        $this->_set->remove($id);
+
         return $this->getRediska()->delete($this->_getKeyName($id));
     }
 
@@ -155,7 +164,7 @@ class Rediska_Zend_Session_SaveHandler_Redis extends Rediska_Options_RediskaInst
      */
     public function gc($maxlifetime)
     {
-        return true;
+        return $this->_set->removeByScore(0, time() - $this->getOption('lifetime'));
     }
 
     /**
