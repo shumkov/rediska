@@ -132,9 +132,16 @@ class Rediska_Zend_Session_SaveHandler_Redis extends Rediska_Options_RediskaInst
      */
     public function write($id, $data)
     {
-        $timestamp = time();
-
-        $this->_set[$timestamp] = $id;
+        try {
+            $timestamp = time();
+            $this->_set[$timestamp] = $id;
+        } catch(Rediska_Connection_Exec_Exception $e) {
+            if ($e->getMessage() == 'Operation against a key holding the wrong kind of value') {
+                $this->_set->delete();
+            } else {
+                throw $e;
+            }
+        }
 
         return $this->getRediska()->setAndExpire(
             $this->_getKeyName($id),
@@ -151,7 +158,15 @@ class Rediska_Zend_Session_SaveHandler_Redis extends Rediska_Options_RediskaInst
      */
     public function destroy($id)
     {
-        $this->_set->remove($id);
+        try {
+            $this->_set->remove($id);
+        } catch(Rediska_Connection_Exec_Exception $e) {
+            if ($e->getMessage() == 'Operation against a key holding the wrong kind of value') {
+                $this->_set->delete();
+            } else {
+                throw $e;
+            }
+        }
 
         return $this->getRediska()->delete($this->_getKeyName($id));
     }
@@ -164,7 +179,15 @@ class Rediska_Zend_Session_SaveHandler_Redis extends Rediska_Options_RediskaInst
      */
     public function gc($maxlifetime)
     {
-        return $this->_set->removeByScore(0, time() - $this->getOption('lifetime'));
+        try {
+            return $this->_set->removeByScore(0, time() - $this->getOption('lifetime'));
+        } catch(Rediska_Connection_Exec_Exception $e) {
+            if ($e->getMessage() == 'Operation against a key holding the wrong kind of value') {
+                $this->_set->delete();
+            } else {
+                throw $e;
+            }
+        }
     }
 
     /**
