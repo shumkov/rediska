@@ -120,19 +120,19 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
     {
         return $this->_getRediskaOn()->incrementScoreInSortedSet($this->getName(), $value, $score);
     }
-    
+
     /**
      * Get Sorted set by Rank
      *
      * @param boolean $withScores Get with scores
-     * @param integer $limit      Limit (if no limit or offset is set, the entire Sorted Set is returned)
-     * @param integer $offset     Offset
+     * @param integer $start      Start index
+     * @param integer $end        End index
      * @param boolean $revert     Revert elements (not used in sorting)
      * @return array
      */
-    public function getByRank($withScores = false, $limit = 0, $offset = 0, $revert = false)
+    public function getByRank($withScores = false, $start = 0, $end = -1, $revert = false, $responseIterator = false)
     {
-        return $this->_getRediskaOn()->getSortedSet($this->getName(), $withScores, $offset, ($offset + $limit - 1), $revert);
+        return $this->_getRediskaOn()->getSortedSet($this->getName(), $withScores, $start, $end, $revert, $responseIterator);
     }
 
     /**
@@ -215,7 +215,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
      */
     public function toArray($withScores = false, $start = 0, $end = -1, $revert = false, $responseIterator = false)
     {
-        return $this->_getRediskaOn()->getSortedSet($this->getName(), $withScores, $start, $end, $revert, $responseIterator);
+        return $this->getByRank($withScores, $start, $end, $revert, $responseIterator);
     }
 
     /**
