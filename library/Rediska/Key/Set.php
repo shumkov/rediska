@@ -5,7 +5,7 @@ require_once dirname(__FILE__) . '/../../Rediska.php';
 
 /**
  * Rediska Set key
- * 
+ *
  * @author Ivan Shumkov
  * @package Rediska
  * @subpackage Key objects
@@ -17,7 +17,7 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
 {
     /**
      * Add the specified member to the Set
-     * 
+     *
      * @param mixed $value Value
      * @return boolean
      */
@@ -31,10 +31,10 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
 
         return $result;
     }
-    
+
     /**
      * Remove the specified member from the Set
-     * 
+     *
      * @param mixed $value Value
      * @return boolean
      */
@@ -48,10 +48,10 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
 
         return $result;
     }
-    
+
     /**
      * Move the specified member from one Set to another atomically
-     * 
+     *
      * @param string|Rediska_Key_Set $set   Set key name or object
      * @param mixed                  $value Value
      * @return boolean
@@ -64,20 +64,20 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
 
         return $this->_getRediskaOn()->moveToSet($this->getName(), $set, $value);
     }
-    
+
     /**
      * Get Set length
-     * 
+     *
      * @return integer
      */
     public function getLength()
     {
         return $this->_getRediskaOn()->getSetLength($this->getName());
     }
-    
+
     /**
      * Test if the specified value is a member of the Set
-     * 
+     *
      * @param mixed  $value Value
      * @return boolean
      */
@@ -88,7 +88,7 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
 
     /**
      * Return the intersection between the Sets
-     * 
+     *
      * @param string|Rediska_Key_Set|array $setOrSets    Set key name or object, or array of its
      * @param string|null                  $storeKeyName Store intersection to set with key name
      * @return array|boolean
@@ -99,10 +99,10 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
 
         return $this->_getRediskaOn()->intersectSets($sets, $storeKeyName);
     }
-    
+
     /**
      * Return the union between the Sets
-     * 
+     *
      * @param string|Rediska_Key_Set|array $setOrSets    Set key name or object, or array of its
      * @param string|null                  $storeKeyName Store union to set with key name
      * @return array|boolean
@@ -113,10 +113,10 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
 
         return $this->_getRediskaOn()->unionSets($sets, $storeKeyName);
     }
-    
+
     /**
      * Return the difference between the Sets
-     * 
+     *
      * @param string|array $setOrSets    Set key name or object, or array of its
      * @param string|null  $storeKeyName Store union to set with key name
      * @return array|boolean
@@ -129,8 +129,20 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
     }
 
     /**
+     * Get Set values
+     *
+     * @param boolean $responseIterator[optional]  If true - command return iterator which read from socket buffer.
+     *                                             Important: new connection will be created
+     * @return array
+     */
+    public function getValues($responseIterator = false)
+    {
+        return $this->_getRediskaOn()->getSet($this->getName(), $responseIterator);
+    }
+
+    /**
      * Get sorted the elements
-     * 
+     *
      * @param string|array  $value Options or SORT query string (http://code.google.com/p/redis/wiki/SortCommand).
      *                             Important notes for SORT query string:
      *                                 1. If you set Rediska namespace option don't forget add it to key names.
@@ -145,18 +157,19 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
 
     /**
      * Get Set values
-     * 
-     * @param string $sort Deprecated
+     *
+     * @param boolean $responseIterator[optional]  If true - command return iterator which read from socket buffer.
+     *                                             Important: new connection will be created
      * @return array
      */
-    public function toArray($sort = null)
+    public function toArray($responseIterator = false)
     {
-        return $this->_getRediskaOn()->getSet($this->getName(), $sort);
+        return $this->getValues($responseIterator);
     }
-    
+
     /**
      * Add array to Set
-     * 
+     *
      * @param array $array
      */
     public function fromArray(array $array)
@@ -215,7 +228,7 @@ class Rediska_Key_Set extends Rediska_Key_Abstract implements IteratorAggregate,
     {
         throw new Rediska_Key_Exception('Offset is not allowed in sets');
     }
-    
+
     protected function _prepareSetsForCompare($setOrSets)
     {
         if (!is_array($setOrSets)) {

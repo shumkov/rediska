@@ -5,7 +5,7 @@ require_once dirname(__FILE__) . '/../../Rediska.php';
 
 /**
  * Rediska Sorted set key
- * 
+ *
  * @author Ivan Shumkov
  * @package Rediska
  * @subpackage Key objects
@@ -17,7 +17,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
 {
     /**
      * Add the specified member to the Sorted set
-     * 
+     *
      * @param mixed $value Value
      * @param numeric $score Score
      * @return boolean
@@ -32,10 +32,10 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
 
         return $result;
     }
-    
+
     /**
      * Remove the specified member from the Sorted set
-     * 
+     *
      * @param mixed $value Value
      * @return boolean
      */
@@ -74,7 +74,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
 
     /**
      * Get Sorted set by score
-     * 
+     *
      * @param number  $min        Min score
      * @param number  $max        Max score
      * @param boolean $withScores Get with scores
@@ -86,10 +86,10 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
     {
         return $this->_getRediskaOn()->getFromSortedSetByScore($this->getName(), $min, $max, $withScores, $limit, $offset);
     }
-    
+
     /**
      * Remove members from sorted set by score
-     * 
+     *
      * @param $min Min score
      * @param $max Max score
      * @return integer
@@ -101,7 +101,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
 
     /**
      * Get member score from Sorted Set
-     * 
+     *
      * @param mixed $value
      * @return numeric
      */
@@ -109,10 +109,10 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
     {
         return $this->_getRediskaOn()->getScoreFromSortedSet($this->getName(), $value);
     }
-    
+
     /**
      * Increment score of element
-     * 
+     *
      * @param $value
      * @return integer
      */
@@ -128,6 +128,9 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
      * @param integer $start      Start index
      * @param integer $end        End index
      * @param boolean $revert     Revert elements (not used in sorting)
+     * @param boolean $responseIterator[optional]  If true - command return iterator which read from socket buffer.
+     *                                             Important: new connection will be created
+     *
      * @return array
      */
     public function getByRank($withScores = false, $start = 0, $end = -1, $revert = false, $responseIterator = false)
@@ -137,11 +140,11 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
 
     /**
      * Remove all elements in the sorted set at key with rank between start and end
-     * 
+     *
      * @param numeric $start Start position
      * @param numeric $end   End position
      * @return integer
-     */ 
+     */
     public function removeByRank($start, $end)
     {
         return $this->_getRediskaOn()->deleteFromSortedSetByRank($this->getName(), $start, $end);
@@ -149,19 +152,19 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
 
     /**
      * Get rank of member
-     * 
+     *
      * @param integer $value  Member value
      * @param boolean $revert Revert elements (not used in sorting)
      * @return integer
-     */ 
+     */
     public function getRank($value, $revert = false)
     {
         return $this->_getRediskaOn()->getRankFromSortedSet($this->getName(), $value, $revert);
     }
-    
+
     /**
      * Store to key union between the sorted sets
-     * 
+     *
      * @param string|Rediska_Key_SortedSet|array  $setOrSets    Sorted set key name or object, or array of its
      * @param string                              $storeKeyName Result sorted set key name
      * @param string                              $aggregation  Aggregation method: SUM (for default), MIN, MAX.
@@ -173,10 +176,10 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
 
         return $this->_getRediskaOn()->unionSortedSets($sets, $storeKeyName, $aggregation);
     }
-    
+
     /**
      * Store to key intersection between sorted sets
-     * 
+     *
      * @param string|Rediska_Key_SortedSet|array  $setOrSets    Sorted set key name or object, or array of its
      * @param string                              $storeKeyName Result sorted set key name
      * @param string                              $aggregation  Aggregation method: SUM (for default), MIN, MAX.
@@ -191,7 +194,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
 
     /**
      * Get sorted the elements
-     * 
+     *
      * @param string|array  $value Options or SORT query string (http://code.google.com/p/redis/wiki/SortCommand).
      *                             Important notes for SORT query string:
      *                                 1. If you set Rediska namespace option don't forget add it to key names.
@@ -206,11 +209,14 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
 
     /**
      * Get Sorted set values
-     * 
+     *
      * @param integer $withScores  Return values with scores
      * @param integer $start       Start index
      * @param integer $end         End index
      * @param boolean $revert      Revert elements (not used in sorting)
+     * @param boolean $responseIterator[optional]  If true - command return iterator which read from socket buffer.
+     *                                             Important: new connection will be created
+     *
      * @return array
      */
     public function toArray($withScores = false, $start = 0, $end = -1, $revert = false, $responseIterator = false)
@@ -220,7 +226,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
 
     /**
      * Add array to Sorted set
-     * 
+     *
      * @param array $array
      */
     public function fromArray(array $array)
@@ -298,7 +304,7 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
         } else {
             $sets = $setOrSets;
         }
-        
+
         // With weights?
         $withWeights = false;
         foreach($sets as $nameOrIndex => $weightOrName) {
