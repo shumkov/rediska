@@ -14,7 +14,7 @@ class Rediska_Profiler_Stream extends Rediska_Profiler
 {
     /**
      * PHP stream
-     * 
+     *
      * @var stream|null
      */
     protected $_stream;
@@ -141,7 +141,7 @@ class Rediska_Profiler_Stream extends Rediska_Profiler
     }
 
     /**
-     * Start callback. Called from profile
+     * Stop callback. Called from profile
      *
      * @param Rediska_Profiler_Profile $profile
      */
