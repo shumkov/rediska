@@ -57,10 +57,10 @@ class Rediska_Zend_Profiler_Firebug extends Rediska_Profiler
         $commandString = $profile->getContext()->__toString();
 
         $matches = array();
-        preg_match('/^(.+)\((.*)\)$/', $commandString, $matches);
+        preg_match('/^(.+)\((.*)\)$/s', $commandString, $matches);
 
         $this->getMessage()->addRow(array(
-            $profile->getElapsedTime(4),
+            (double)$profile->getElapsedTime(4),
             $matches[1],
             $matches[2]
         ));
