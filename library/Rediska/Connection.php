@@ -51,6 +51,7 @@ class Rediska_Connection extends Rediska_Options
         'timeout'      => null,
         'readTimeout'  => null,
         'blockingmode' => true,
+        'phpiredis'    => false,
     );
 
     /**
@@ -62,41 +63,64 @@ class Rediska_Connection extends Rediska_Options
     public function connect() 
     {
         if (!$this->isConnected()) {
-            $socketAddress = 'tcp://' . $this->getHost() . ':' . $this->getPort();
-
-            if ($this->_options['persistent']) {
-                $flag = STREAM_CLIENT_PERSISTENT | STREAM_CLIENT_CONNECT;
-            } else {
-                $flag = STREAM_CLIENT_CONNECT;
-            }
-
-            $this->_socket = @stream_socket_client($socketAddress, $errno, $errmsg, $this->getTimeout(), $flag);
-
-            // Throw exception if can't connect
-            if (!is_resource($this->_socket)) {
-                $msg = "Can't connect to Redis server on {$this->getHost()}:{$this->getPort()}";
-                if ($errno || $errmsg) {
-                    $msg .= "," . ($errno ? " error $errno" : "") . ($errmsg ? " $errmsg" : "");
+            if ($this->getOption('phpiredis')) {
+                if ($this->_options['persistent']) {
+                    $function = 'phpiredis_pconnect';
+                } else {
+                    $function = 'phpiredis_connect';
                 }
 
-                $this->_socket = null;
+                $this->_socket = call_user_func($function, $this->getHost(), $this->getPort());
 
-                throw new Rediska_Connection_Exception($msg);
-            }
+                if ($this->_options['timeout'] != null) {
+                    throw new Rediska_Connection_Exception('Timeout not supported');
+                }
 
-            // Set read timeout
-            if ($this->_options['readTimeout'] != null) {
-                $this->setReadTimeout($this->_options['readTimeout']);
-            }
+                if ($this->_options['readTimeout'] != null) {
+                    throw new Rediska_Connection_Exception('ReadTimeout not supported');
+                }
 
-            // Set blocking mode
-            if ($this->_options['blockingMode'] == false) {
-                $this->setBlockingMode($this->_options['blockingMode']);
+                // Set blocking mode
+                if ($this->_options['blockingMode'] == false) {
+                    throw new Rediska_Connection_Exception('BlockingMode not supported');
+                }
+            } else {
+                $socketAddress = 'tcp://' . $this->getHost() . ':' . $this->getPort();
+
+                if ($this->_options['persistent']) {
+                    $flag = STREAM_CLIENT_PERSISTENT | STREAM_CLIENT_CONNECT;
+                } else {
+                    $flag = STREAM_CLIENT_CONNECT;
+                }
+
+                $this->_socket = @stream_socket_client($socketAddress, $errno, $errmsg, $this->getTimeout(), $flag);
+
+                // Throw exception if can't connect
+                if (!is_resource($this->_socket)) {
+                    $msg = "Can't connect to Redis server on {$this->getHost()}:{$this->getPort()}";
+                    if ($errno || $errmsg) {
+                        $msg .= "," . ($errno ? " error $errno" : "") . ($errmsg ? " $errmsg" : "");
+                    }
+
+                    $this->_socket = null;
+
+                    throw new Rediska_Connection_Exception($msg);
+                }
+
+                // Set read timeout
+                if ($this->_options['readTimeout'] != null) {
+                    $this->setReadTimeout($this->_options['readTimeout']);
+                }
+
+                // Set blocking mode
+                if ($this->_options['blockingMode'] == false) {
+                    $this->setBlockingMode($this->_options['blockingMode']);
+                }
             }
 
             // Send password
             if ($this->getPassword() != '') {
-                $auth = new Rediska_Connection_Exec($this, "AUTH {$this->getPassword()}");
+                $auth = new Rediska_Connection_Exec($this, array("AUTH", $this->getPassword()));
                 try {
                    $auth->execute();
                 } catch (Rediska_Command_Exception $e) {
@@ -106,7 +130,7 @@ class Rediska_Connection extends Rediska_Options
 
             // Set db
             if ($this->_options['db'] !== self::DEFAULT_DB) {
-                $selectDb = new Rediska_Connection_Exec($this, "SELECT {$this->_options['db']}");
+                $selectDb = new Rediska_Connection_Exec($this, array("SELECT", $this->_options['db']));
                 try {
                    $selectDb->execute();
                 } catch (Rediska_Command_Exception $e) {
@@ -128,7 +152,11 @@ class Rediska_Connection extends Rediska_Options
     public function disconnect() 
     {
         if ($this->isConnected()) {
-            @fclose($this->_socket);
+            if ($this->getOption('phpiredis')) {
+                phpiredis_disconnect($this->_socket);
+            } else {
+                @fclose($this->_socket);
+            }
 
             return true;
         } else {
@@ -143,7 +171,11 @@ class Rediska_Connection extends Rediska_Options
      */
     public function isConnected()
     {
-        return is_resource($this->_socket);
+        if ($this->getOption('phpiredis')) {
+            return $this->_socket === null;
+        } else {
+            return is_resource($this->_socket);
+        }
     }
 
     /**
@@ -273,6 +305,17 @@ class Rediska_Connection extends Rediska_Options
         if ($this->isConnected()) {
             stream_set_blocking($this->_socket, $this->_options['blockingMode']);
         }
+
+        return $this;
+    }
+
+    public function setPhpiredis($flag = true)
+    {
+        if (!extension_loaded('phpiredis')) {
+            throw new Rediska_Connection_Exception('You must install phpiredis extension: https://github.com/seppo0010/phpiredis');
+        }
+
+        $this->_options['phpiredis'] = $flag;
 
         return $this;
     }
