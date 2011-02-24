@@ -249,6 +249,31 @@ class Rediska extends Rediska_Options
     }
 
     /**
+     * Remove server
+     *
+     * @param  $alias
+     * @return void
+     */
+    public function removeServer($aliasOrConnection)
+    {
+        if ($aliasOrConnection instanceof Rediska_Connection) {
+            $alias = $aliasOrConnection->getAlias();
+        }
+
+        if (!isset($this->_connections[$alias])) {
+            throw new Rediska_Exception("Can't find connection '$alias'");
+        }
+
+        unset($this->_connections[$alias]);
+
+        if ($this->_keyDistributor) {
+            $this->_keyDistributor->removeConnection($alias);
+        }
+
+        return $this;
+    }
+
+    /**
      * Get Rediska connection instance by key name
      * 
      * @throws Rediska_Connection_Exception
