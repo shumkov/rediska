@@ -25,7 +25,9 @@ class Rediska_Command_DeleteFromSet extends Rediska_Command_Abstract
 
         $member = $this->_rediska->getSerializer()->serialize($member);
 
-        $command = "SREM {$this->_rediska->getOption('namespace')}$key " . strlen($member) . Rediska::EOL . $member;
+        $command = array('SREM',
+                         $this->_rediska->getOption('namespace') . $key,
+                         $member);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

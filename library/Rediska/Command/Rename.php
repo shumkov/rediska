@@ -28,17 +28,20 @@ class Rediska_Command_Rename extends Rediska_Command_Abstract
         $command = '';
         if ($oldKeyConnection === $newKeyConnection) {
             if ($overwrite) {
-                $command = "RENAME";
+                $command = array();
             } else {
-                $command = "RENAMENX";
+                $command = "";
             }
-            $command .= " {$this->_rediska->getOption('namespace')}$oldKey {$this->_rediska->getOption('namespace')}$newKey";
+            $command = array($overwrite ? 'RENAME' : 'RENAMENX',
+                             $this->_rediska->getOption('namespace') . $oldKey,
+                             $this->_rediska->getOption('namespace') . $newKey);
         } else {
             $this->setAtomic(false);
 
-            $command = "GET {$this->_rediska->getOption('namespace')}$oldKey";
+            $command = array('GET',
+                             $this->_rediska->getOption('namespace') . $oldKey);
         }
-        
+
         return new Rediska_Connection_Exec($oldKeyConnection, $command);
     }
 

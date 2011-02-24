@@ -25,7 +25,9 @@ class Rediska_Command_AddToSet extends Rediska_Command_Abstract
 
         $member = $this->_rediska->getSerializer()->serialize($member);
 
-        $command = "SADD {$this->_rediska->getOption('namespace')}$key " . strlen($member) . Rediska::EOL . $member;
+        $command = array('SADD',
+                         $this->_rediska->getOption('namespace') . $key,
+                         $member);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

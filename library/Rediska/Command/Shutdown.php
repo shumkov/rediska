@@ -19,7 +19,7 @@ class Rediska_Command_Shutdown extends Rediska_Command_Abstract
      */
     public function create() 
     {
-        $command = 'SHUTDOWN';
+        $command = array('SHUTDOWN');
         $commands = array();
         foreach($this->_rediska->getConnections() as $connection) {
             $commands[] = new Rediska_Connection_Exec($connection, $command);

@@ -22,7 +22,8 @@ class Rediska_Command_GetSetLength extends Rediska_Command_Abstract
     {
         $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        $command = "SCARD {$this->_rediska->getOption('namespace')}$key";
+        $command = array('SCARD',
+                         $this->_rediska->getOption('namespace') . $key);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

@@ -10,14 +10,6 @@ class Rediska_Command_SortTest extends Rediska_TestCase
         $this->assertEquals(array('ccc', 'bbb'), $values);
     }
 
-    public function testSortWithString()
-    {       
-        $this->_appendThreeMembers();
-        
-        $values = $this->rediska->sort('test', 'LIMIT 0 2 ALPHA DESC');
-        $this->assertEquals(array('ccc', 'bbb'), $values);
-    }
-
     protected function _appendThreeMembers()
     {
         $this->rediska->appendToList('test', 'aaa');

@@ -21,7 +21,7 @@ class Rediska_Command_Quit extends Rediska_Command_Abstract
      */
     public function create() 
     {
-        $command = 'QUIT';
+        $command = array('QUIT');
 
         $this->_affectedConnections = $this->_rediska->getConnections();
 

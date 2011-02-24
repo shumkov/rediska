@@ -31,7 +31,10 @@ class Rediska_Command_GetSortedSetLengthByScore extends Rediska_Command_Abstract
     {
         $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        $command = array('ZCOUNT', $this->_rediska->getOption('namespace') . $key, $min, $max);
+        $command = array('ZCOUNT',
+                         $this->_rediska->getOption('namespace') . $key,
+                         $min,
+                         $max);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

@@ -22,7 +22,8 @@ class Rediska_Command_GetListLength extends Rediska_Command_Abstract
     {
         $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        $command = "LLEN {$this->_rediska->getOption('namespace')}$key";
+        $command = array('LLEN',
+                         $this->_rediska->getOption('namespace') . $key);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

@@ -31,12 +31,6 @@ class Rediska_Command_GetListTest extends Rediska_TestCase
         $reply = $this->rediska->getList('test', 1);
         $this->assertEquals(array('bbb', 'ccc'), $reply);
     }
-    
-    public function testGetListWithSortIsDepricated()
-    {
-        $this->setExpectedException('Rediska_Command_Exception');
-        $this->rediska->getList('test', 'limit 0 3 desc');
-    }
 
     protected function _appendThreeMembers()
     {

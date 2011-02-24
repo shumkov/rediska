@@ -22,7 +22,10 @@ class Rediska_Command_Substring extends Rediska_Command_Abstract
      */
     public function create($key, $start, $end = -1)
     {
-        $command = array('SUBSTR', $this->_rediska->getOption('namespace') . $key, $start, $end);
+        $command = array('SUBSTR',
+                         $this->_rediska->getOption('namespace') . $key,
+                         $start,
+                         $end);
 
         $connection = $this->_rediska->getConnectionByKeyName($key);
 

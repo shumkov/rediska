@@ -41,11 +41,10 @@ class Rediska_Command_Delete extends Rediska_Command_Abstract
 
             $commands = array();
             foreach($keysByConnections as $connectionAlias => $keys) {
-                $command = "DEL ";
+                $command = array('DEL');
                 foreach($keys as $key) {
-                    $command .= " {$this->_rediska->getOption('namespace')}$key";
+                    $command[] = $this->_rediska->getOption('namespace') . $key;
                 }
-                
                 $commands[] = new Rediska_Connection_Exec($connections[$connectionAlias], $command);
             }
 
@@ -55,7 +54,8 @@ class Rediska_Command_Delete extends Rediska_Command_Abstract
 
             $connection = $this->_rediska->getConnectionByKeyName($key);
 
-            $command = "DEL {$this->_rediska->getOption('namespace')}$key";
+            $command = array('DEL',
+                             $this->_rediska->getOption('namespace') . $key);
 
             return new Rediska_Connection_Exec($connection, $command);
         }

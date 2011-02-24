@@ -20,11 +20,8 @@ class Rediska_Command_SelectDb extends Rediska_Command_Abstract
      */
     public function create($index) 
     {
-        if (!is_integer($index) || $index < 0) {
-            throw new Rediska_Command_Exception("Index must be zero or positive integer");
-        }
-
-        $command = "SELECT $index";
+        $command = array('SELECT',
+                         $index);
 
         $commands = array();
         foreach($this->_rediska->getConnections() as $connection) {

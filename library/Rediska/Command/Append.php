@@ -21,9 +21,13 @@ class Rediska_Command_Append extends Rediska_Command_Abstract
      */
     public function create($key, $value)
     {
-        $command = array('APPEND', $this->_rediska->getOption('namespace') . $key, $this->_rediska->getSerializer()->serialize($value));
-
         $connection = $this->_rediska->getConnectionByKeyName($key);
+        
+        $member = $this->_rediska->getSerializer()->serialize($value);
+
+        $command = array('APPEND',
+                         $this->_rediska->getOption('namespace') . $key,
+                         $member);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

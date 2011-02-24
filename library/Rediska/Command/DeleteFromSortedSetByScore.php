@@ -31,7 +31,10 @@ class Rediska_Command_DeleteFromSortedSetByScore extends Rediska_Command_Abstrac
     {
         $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        $command = array('ZREMRANGEBYSCORE', $this->_rediska->getOption('namespace') . $key, $min, $max);
+        $command = array('ZREMRANGEBYSCORE',
+                         $this->_rediska->getOption('namespace') . $key,
+                         $min,
+                         $max);
         
         return new Rediska_Connection_Exec($connection, $command);
     }

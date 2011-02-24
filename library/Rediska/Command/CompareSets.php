@@ -49,21 +49,22 @@ abstract class Rediska_Command_CompareSets extends Rediska_Command_Abstract
             if (!is_null($storeKey)) {
                 $storeConnection = $this->_rediska->getConnectionByKeyName($storeKey);
                 if ($storeConnection === $connection) {
-                    $command = "{$this->_storeCommand} {$this->_rediska->getOption('namespace')}$storeKey";
+                    $command = array($this->_storeCommand,
+                                     $this->_rediska->getOption('namespace') . $storeKey);
                 } else {
                     $this->setAtomic(false);
                     $this->_storeConnection = $storeConnection;
-                    $command = $this->_command;
+                    $command = array($this->_command);
                 }
             } else {
-                $command = $this->_command;
+                $command = array($this->_command);
             }
 
             $connectionKeys = array_keys($connections);
             $connectionAlias = $connectionKeys[0];
 
             foreach($keysByConnections[$connectionAlias] as $key) {
-                $command .= " {$this->_rediska->getOption('namespace')}$key";
+                $command[] = $this->_rediska->getOption('namespace') . $key;
             }
 
             return new Rediska_Connection_Exec($connection, $command);
@@ -73,7 +74,8 @@ abstract class Rediska_Command_CompareSets extends Rediska_Command_Abstract
             $commands = array();
             foreach($keysByConnections as $connectionAlias => $keys) {
                 foreach ($keys as $key) {
-                    $command = "SMEMBERS {$this->_rediska->getOption('namespace')}$key";
+                    $command = array('SMEMBERS',
+                                     $this->_rediska->getOption('namespace') . $key);
                     $commands[] = new Rediska_Connection_Exec($connections[$connectionAlias], $command);
                 }
             }

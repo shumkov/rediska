@@ -19,7 +19,7 @@ class Rediska_Command_RewriteAppendOnlyFile extends Rediska_Command_Abstract
      */
     public function create() 
     {
-        $command = "BGREWRITEAOF";
+        $command = array('BGREWRITEAOF');
 
         $commands = array();
         foreach($this->_rediska->getConnections() as $connection) {

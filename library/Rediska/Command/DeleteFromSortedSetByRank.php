@@ -31,7 +31,10 @@ class Rediska_Command_DeleteFromSortedSetByRank extends Rediska_Command_Abstract
     {
         $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        $command = array('ZREMRANGEBYRANK', $this->_rediska->getOption('namespace') . $key, $start, $end);
+        $command = array('ZREMRANGEBYRANK',
+                         $this->_rediska->getOption('namespace') . $key,
+                         $start,
+                         $end);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

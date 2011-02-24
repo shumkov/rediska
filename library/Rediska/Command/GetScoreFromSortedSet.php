@@ -32,7 +32,9 @@ class Rediska_Command_GetScoreFromSortedSet extends Rediska_Command_Abstract
 
         $member = $this->_rediska->getSerializer()->serialize($member);
 
-        $command = array('ZSCORE', $this->_rediska->getOption('namespace') . $key, $member);
+        $command = array('ZSCORE',
+                         $this->_rediska->getOption('namespace') . $key,
+                         $member);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

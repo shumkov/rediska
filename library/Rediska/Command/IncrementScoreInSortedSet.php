@@ -33,7 +33,10 @@ class Rediska_Command_IncrementScoreInSortedSet extends Rediska_Command_Abstract
 
         $value = $this->_rediska->getSerializer()->serialize($value);
 
-        $command = array('ZINCRBY', $this->_rediska->getOption('namespace') . $key, $score, $value);
+        $command = array('ZINCRBY',
+                         $this->_rediska->getOption('namespace') . $key,
+                         $score,
+                         $value);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

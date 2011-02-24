@@ -30,7 +30,9 @@ class Rediska_Command_GetHashValues extends Rediska_Command_Abstract
     public function create($key)
     {
         $connection = $this->_rediska->getConnectionByKeyName($key);
-        $command = array('HVALS', $this->_rediska->getOption('namespace') . $key);
+
+        $command = array('HVALS',
+                         $this->_rediska->getOption('namespace') . $key);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

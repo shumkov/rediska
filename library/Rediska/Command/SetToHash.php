@@ -37,7 +37,8 @@ class Rediska_Command_SetToHash extends Rediska_Command_Abstract
                 throw new Rediska_Command_Exception('Not present fields and values for set');
             }
 
-            $command = array('HMSET', $this->_rediska->getOption('namespace') . $key);
+            $command = array('HMSET',
+                             $this->_rediska->getOption('namespace') . $key);
             foreach($data as $field => $value) {
                 $command[] = $field;
                 $command[] = $this->_rediska->getSerializer()->serialize($value);
@@ -47,7 +48,10 @@ class Rediska_Command_SetToHash extends Rediska_Command_Abstract
 
             $value = $this->_rediska->getSerializer()->serialize($value);
     
-            $command = array($overwrite ? 'HSET' : 'HSETNX', $this->_rediska->getOption('namespace') . $key, $field, $value);
+            $command = array($overwrite ? 'HSET' : 'HSETNX',
+                             $this->_rediska->getOption('namespace') . $key,
+                             $field,
+                             $value);
         }
         
         $connection = $this->_rediska->getConnectionByKeyName($key);

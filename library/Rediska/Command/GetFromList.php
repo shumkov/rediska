@@ -21,14 +21,12 @@ class Rediska_Command_GetFromList extends Rediska_Command_Abstract
      */
     public function create($key, $index)
     {
-        if (!is_integer($index)) {
-            throw new Rediska_Command_Exception("Index must be integer");
-        }
-
         $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        $command = "LINDEX {$this->_rediska->getOption('namespace')}$key $index";
-        
+        $command = array('LINDEX',
+                         $this->_rediska->getOption('namespace') . $key,
+                         $index);
+
         return new Rediska_Connection_Exec($connection, $command);
     }
 

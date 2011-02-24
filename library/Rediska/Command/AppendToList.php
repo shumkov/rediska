@@ -25,7 +25,9 @@ class Rediska_Command_AppendToList extends Rediska_Command_Abstract
 
         $value = $this->_rediska->getSerializer()->serialize($value);
 
-        $command = "RPUSH {$this->_rediska->getOption('namespace')}$key " . strlen($value) . Rediska::EOL . $value;
+        $command = array('RPUSH',
+                         $this->_rediska->getOption('namespace') . $key,
+                         $value);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

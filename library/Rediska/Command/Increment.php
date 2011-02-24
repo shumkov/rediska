@@ -21,16 +21,15 @@ class Rediska_Command_Increment extends Rediska_Command_Abstract
      */
     public function create($key, $amount = 1)
     {
-        if (!is_integer($amount) || $amount <= 0) {
-            throw new Rediska_Command_Exception("Amount must be positive integer");
-        }
-
         $connection = $this->_rediska->getConnectionByKeyName($key);
 
         if ($amount == 1) {
-            $command = "INCR {$this->_rediska->getOption('namespace')}$key";
+            $command = array('INCR',
+                             $this->_rediska->getOption('namespace') . $key);
         } else {
-            $command = "INCRBY {$this->_rediska->getOption('namespace')}$key $amount";
+            $command = array('INCRBY',
+                             $this->_rediska->getOption('namespace') . $key,
+                             $amount);
         }
 
         return new Rediska_Connection_Exec($connection, $command);

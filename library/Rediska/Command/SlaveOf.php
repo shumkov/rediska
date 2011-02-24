@@ -35,7 +35,9 @@ class Rediska_Command_SlaveOf extends Rediska_Command_Abstract
             $port = $connection->getPort();
         }
 
-        $command = "SLAVEOF $host $port";
+        $command = array('SLAVEOF',
+                         $host,
+                         $port);
         $commands = array();
         foreach($this->_rediska->getConnections() as $connection) {
             $commands[] = new Rediska_Connection_Exec($connection, $command);

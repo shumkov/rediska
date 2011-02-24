@@ -21,8 +21,7 @@ class Rediska_Command_Info extends Rediska_Command_Abstract
      */
     public function create() 
     {
-        $command = 'INFO';
-        $info = array();
+        $command = array('INFO');
         $commands = array();
         foreach($this->_rediska->getConnections() as $connection) {
             $this->_connections[] = $connection->getAlias();
