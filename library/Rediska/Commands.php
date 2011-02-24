@@ -42,8 +42,11 @@ class Rediska_Commands
         'setandexpire' => 'Rediska_Command_SetAndExpire',
         'increment'    => 'Rediska_Command_Increment',
         'decrement'    => 'Rediska_Command_Decrement',
-        'substring'    => 'Rediska_Command_Substring',
+        'setrange'     => 'Rediska_Command_SetRange',
+        'getrange'     => 'Rediska_Command_GetRange',
+        'substring'    => 'Rediska_Command_GetRange',
         'append'       => 'Rediska_Command_Append',
+        'getlength'    => 'Rediska_Command_GetLength',
 
         // Commands operating on lists
         'appendtolist'          => 'Rediska_Command_AppendToList',

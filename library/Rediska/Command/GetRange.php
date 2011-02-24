@@ -10,8 +10,10 @@
  * @link http://rediska.geometria-lab.net
  * @license http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_Command_Substring extends Rediska_Command_Abstract
+class Rediska_Command_GetRange extends Rediska_Command_Abstract
 {
+    protected $_version = '1.3.4';
+
     /**
      * Create command
      *
@@ -22,7 +24,14 @@ class Rediska_Command_Substring extends Rediska_Command_Abstract
      */
     public function create($key, $start, $end = -1)
     {
-        $command = array('SUBSTR',
+        if ($this->getName() == 'substring') {
+            trigger_error('Substring is deprecated - use getRange command', E_USER_WARNING);
+        }
+
+        $redisVersion = $this->getRediska()->getOption('redisVersion');
+        $isVersionLessThen2 = version_compare('2.0', $redisVersion) == 1;
+
+        $command = array($isVersionLessThen2 ? 'SUBSTR' : 'GETRANGE',
                          $this->_rediska->getOption('namespace') . $key,
                          $start,
                          $end);
@@ -30,5 +39,16 @@ class Rediska_Command_Substring extends Rediska_Command_Abstract
         $connection = $this->_rediska->getConnectionByKeyName($key);
 
         return new Rediska_Connection_Exec($connection, $command);
+    }
+
+    /**
+     * Parse response
+     *
+     * @param string $response
+     * @return mixin
+     */
+    public function parseResponse($response)
+    {
+        return $this->getRediska()->getSerializer()->unserialize($response);
     }
 }

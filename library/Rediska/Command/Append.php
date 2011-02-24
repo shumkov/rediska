@@ -12,6 +12,8 @@
  */
 class Rediska_Command_Append extends Rediska_Command_Abstract
 {
+    protected $_version = '1.3.3';
+
     /**
      * Create command
      *
