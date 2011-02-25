@@ -15,17 +15,23 @@ class Rediska_Command_AppendToList extends Rediska_Command_Abstract
     /**
      * Create command
      *
-     * @param string $key     Key name
-     * @param mixed  $value   Element value
+     * @param string            $key                Key name
+     * @param mixed             $value              Element value
+     * @param boolean[optional] $createIfNotExists  Create list if not exists
      * @return Rediska_Connection_Exec
      */
-    public function create($key, $value)
+    public function create($key, $value, $createIfNotExists = true)
     {
+        if (!$createIfNotExists) {
+            $this->_throwExceptionIfNotSupported('2.1.1');
+        }
+
+
         $connection = $this->_rediska->getConnectionByKeyName($key);
 
         $value = $this->_rediska->getSerializer()->serialize($value);
 
-        $command = array('RPUSH',
+        $command = array($createIfNotExists ? 'RPUSH' : 'RPUSHX',
                          $this->_rediska->getOption('namespace') . $key,
                          $value);
 

@@ -63,6 +63,9 @@ class Rediska_Commands
         'shiftfromlistblocking' => 'Rediska_Command_ShiftFromListBlocking',
         'popfromlist'           => 'Rediska_Command_PopFromList',
         'popfromlistblocking'   => 'Rediska_Command_PopFromListBlocking',
+        'inserttolist'          => 'Rediska_Command_InsertToList',
+        'inserttolistafter'     => 'Rediska_Command_InsertToListAfter',
+        'inserttolistbefore'    => 'Rediska_Command_InsertToListBefore',
 
         // Commands operating on sets
         'addtoset'         => 'Rediska_Command_AddToSet',

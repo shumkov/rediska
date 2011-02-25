@@ -18,12 +18,13 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
     /**
      * Append value to the end of List
      *
-     * @param mixed $value Value
+     * @param mixed             $value              Value
+     * @param boolean[optional] $createIfNotExists  Create list if not exists
      * @return boolean
      */
-    public function append($value)
+    public function append($value, $createIfNotExists = true)
     {
-        $result = $this->_getRediskaOn()->appendToList($this->getName(), $value);
+        $result = $this->_getRediskaOn()->appendToList($this->getName(), $value, $createIfNotExists);
 
         if (!is_null($this->getExpire()) && $result) {
             $this->expire($this->getExpire(), $this->isExpireTimestamp());
@@ -35,12 +36,13 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
     /**
      * Append value to the head of List
      *
-     * @param mixed $value Value
+     * @param mixed             $value              Value
+     * @param boolean[optional] $createIfNotExists  Create list if not exists
      * @return boolean
      */
-    public function prepend($value)
+    public function prepend($value, $createIfNotExists = true)
     {
-        $result = $this->_getRediskaOn()->prependToList($this->getName(), $value);
+        $result = $this->_getRediskaOn()->prependToList($this->getName(), $value, $createIfNotExists);
 
         if (!is_null($this->getExpire()) && $result) {
             $this->expire($this->getExpire(), $this->isExpireTimestamp());
@@ -104,6 +106,43 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
         }
 
         return $result;
+    }
+
+    /**
+     * Insert a new value as the element after the reference value
+     *
+     * @param mixed   $referenceValue Reference value
+     * @param mixed   $value          Value
+     * @return integer|boolean
+     */
+    public function insertAfter($referenceValue, $value)
+    {
+        return $this->_getRediskaOn()->insertToListAfter($this->getName(), $referenceValue, $value);
+    }
+
+    /**
+     * Insert a new value as the element before the reference value
+     *
+     * @param mixed   $referenceValue Reference value
+     * @param mixed   $value          Value
+     * @return integer|boolean
+     */
+    public function insertBefore($referenceValue, $value)
+    {
+        return $this->_getRediskaOn()->insertToListBefore($this->getName(), $referenceValue, $value);
+    }
+
+    /**
+     * Insert a new value as the element before or after the reference value
+     *
+     * @param string  $position       BEFORE or AFTER
+     * @param mixed   $referenceValue Reference value
+     * @param mixed   $value          Value
+     * @return integer|boolean
+     */
+    public function insert($position, $referenceValue, $value)
+    {
+        return $this->_getRediskaOn()->insertToList($this->getName(), $position, $referenceValue, $value);
     }
 
     /**
