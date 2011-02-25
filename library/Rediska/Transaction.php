@@ -1,8 +1,5 @@
 <?php
 
-// Require Rediska
-require_once dirname(__FILE__) . '/../Rediska.php';
-
 /**
  * Rediska transaction
  * 
@@ -36,13 +33,6 @@ class Rediska_Transaction
     protected $_specifiedConnection;
 
     /**
-     * Is transaction started
-     * 
-     * @var boolean
-     */
-    protected $_isStarted = false;
-
-    /**
      * Commands buffer
      * 
      * @var array
@@ -50,9 +40,11 @@ class Rediska_Transaction
     protected $_commands = array();
 
     /**
-     * @var array
+     * If transaction watched something
+     *
+     * @var bool
      */
-    protected $_watch = array();
+    protected $_isWatched = false;
 
     /**
      * Constructor
@@ -64,7 +56,7 @@ class Rediska_Transaction
     {
         $this->_rediska             = $rediska;
         $this->_specifiedConnection = $specifiedConnection;
-        $this->_connection          = clone $connection;
+        $this->_connection          = $connection;
 
         $this->_throwIfNotSupported('Transactions', '1.3.8');
     }
@@ -79,10 +71,6 @@ class Rediska_Transaction
     public function watch($keyOrKeys)
     {
         $this->_throwIfNotSupported('Watch', '2.1');
-
-        if ($this->isStarted()) {
-            throw new Rediska_Transaction_Exception('Watch not supported if transaction already started');
-        }
 
         $command = array('WATCH');
 
@@ -99,9 +87,7 @@ class Rediska_Transaction
         $exec = new Rediska_Connection_Exec($this->_connection, $command);
         $exec->execute();
 
-        // Remember watches
-        $this->_watch = array_merge($this->_watch, $keys);
-        array_unique($this->_watch);
+        $this->_isWatched = true;
 
         return $this;
     }
@@ -120,39 +106,9 @@ class Rediska_Transaction
         $exec = new Rediska_Connection_Exec($this->_connection, $command);
         $exec->execute();
 
-        // Clean watches
-        $this->_watch = array();
+        $this->_isWatched = false;
 
         return $this;
-    }
-
-    /**
-     * Start transaction
-     * 
-     * @return boolean
-     */
-    public function start()
-    {
-        if ($this->isStarted()) {
-            return false;
-        }
-
-        $multi = new Rediska_Connection_Exec($this->_connection, 'MULTI');
-        $multi->execute();
-        
-        $this->_isStarted = true;
-
-        return true;
-    }
-
-    /**
-     * Is transaction started
-     * 
-     * @return boolean
-     */
-    public function isStarted()
-    {
-        return $this->_isStarted;
     }
 
     /**
@@ -160,31 +116,34 @@ class Rediska_Transaction
      * 
      * @return array
      */
-    public function execute($retry = 0)
+    public function execute()
     {
         $results = array();
 
-        if ($this->isStarted()) {
-            $exec = new Rediska_Connection_Exec($this->_connection, 'EXEC');
-
+        if (!empty($this->_commands)) {
             $this->_rediska->getProfiler()->start($this);
 
+            $multi = new Rediska_Connection_Exec($this->_connection, 'MULTI');
+            $multi->execute();
+
+            foreach($this->_commands as $command) {
+                $command->execute();
+            }
+
+            $exec = new Rediska_Connection_Exec($this->_connection, 'EXEC');
             $responses = $exec->execute();
 
             $this->_rediska->getProfiler()->stop();
 
-            if (!empty($this->_commands)) {
-                if (!$responses) {
-                    throw new Rediska_Transaction_AbortedException('Transaction has been aborted by server');
-                }
-
-                foreach($this->_commands as $i => $command) {
-                    $results[] = $command->parseResponses(array($responses[$i]));
-                }
+            if (!$responses) {
+                throw new Rediska_Transaction_AbortedException('Transaction has been aborted by server');
             }
 
-            $this->_commands = array();
-            $this->_isStarted = false;
+            foreach($this->_commands as $i => $command) {
+                $results[] = $command->parseResponses(array($responses[$i]));
+            }
+
+            $this->_reset();
         }
 
         return $results;
@@ -207,17 +166,13 @@ class Rediska_Transaction
      */
     public function discard()
     {
-        if (!$this->isStarted()) {
-            return false;
+        if ($this->_isWatched) {
+            $this->unwatch();
         }
 
-        $discard = new Rediska_Connection_Exec($this->_connection, 'DISCARD');
-        $reply = $discard->execute();
+        $this->_reset();
 
-        $this->_commands = array();
-        $this->_isStarted = false;
-
-        return $reply;
+        return true;
     }
 
     /**
@@ -245,21 +200,13 @@ class Rediska_Transaction
      */
     protected function _addCommand($name, $args = array())
     {
-        $this->start();
-
         $this->_specifiedConnection->setConnection($this->_connection);
 
         $command = Rediska_Commands::get($this->_rediska, $name, $args);
         $command->initialize();
 
         if (!$command->isAtomic()) {
-            throw new Rediska_Exception("Command '$name' doesn't work properly (not atomic) in pipeline on multiple servers");
-        }
-
-        $command->execute();
-
-        if (!$command->isQueued()) {
-            throw new Rediska_Transaction_Exception("Command not added to transaction!");
+            throw new Rediska_Exception("Command '$name' doesn't work properly (not atomic) in transaction on multiple servers");
         }
 
         $this->_commands[] = $command;
@@ -287,6 +234,12 @@ class Rediska_Transaction
         } else {
             return 'Transaction: ' . implode(', ', $this->_commands);
         }
+    }
+
+    protected function _reset()
+    {
+        $this->_commands = array();
+        $this->_isWatched = false;
     }
 
     /**
