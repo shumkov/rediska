@@ -75,15 +75,57 @@ class Rediska_KeyTest extends Rediska_TestCase
         $this->assertEquals('abcabc', $reply);
     }
 
-    public function testSubstring()
+    public function testSetBit()
     {
-        $this->key->setValue('abc');
+        $this->key->setBit(0, 1);
+        $this->key->setBit(4, 1);
 
-        $reply = $this->key->substring(0);
+        $reply = $this->rediska->getBit($this->key->getName(), 0);
+        $this->assertEquals(1, $reply);
+
+        $reply = $this->rediska->getBit($this->key->getName(), 1);
+        $this->assertEquals(0, $reply);
+
+        $reply = $this->rediska->getBit($this->key->getName(), 4);
+        $this->assertEquals(1, $reply);
+    }
+
+    public function testGetBit()
+    {
+        $this->rediska->setBit($this->key->getName(), 2, 1);
+
+        $reply = $this->key->getBit(2);
+        $this->assertEquals(1, $reply);
+    }
+
+    public function testSetRange()
+    {
+        $this->rediska->set($this->key->getName(), 'abc');
+
+        $reply = $this->key->setRange(2, 'z');
+        $this->assertEquals(3, $reply);
+
+        $reply = $this->rediska->get($this->key->getName());
+        $this->assertEquals('abz', $reply);
+    }
+
+    public function testGetRange()
+    {
+        $this->rediska->set($this->key->getName(), 'abc');
+
+        $reply = $this->key->getRange(0);
         $this->assertEquals('abc', $reply);
 
-        $reply = $this->key->substring(0, 1);
+        $reply = $this->key->getRange(0, 1);
         $this->assertEquals('ab', $reply);
+    }
+
+    public function testGetLength()
+    {
+        $this->rediska->set($this->key->getName(), 'abc');
+
+        $reply = $this->key->getLength('test');
+        $this->assertEquals(3, $reply);
     }
 
     public function testGetOrSetValue()
@@ -113,6 +155,60 @@ class Rediska_KeyTest extends Rediska_TestCase
 
         $getOrSetValueObject = $this->key->getOrSetValue($provider);
         $this->assertEquals(123, "{$getOrSetValueObject}");
+    }
+
+    public function testCount()
+    {
+        $this->rediska->set($this->key->getName(), 'abc');
+
+        $reply = count($this->key);
+        $this->assertEquals(3, $reply);
+    }
+
+    public function testOffsetExists()
+    {
+        $this->rediska->setBit($this->key->getName(), 1, 1);
+
+        $reply = isset($this->key[0]);
+        $this->assertFalse($reply);
+
+        $reply = isset($this->key[1]);
+        $this->assertTrue($reply);
+    }
+
+    public function testOffsetGet()
+    {
+        $this->rediska->setBit($this->key->getName(), 1, 1);
+
+        $reply = $this->key[0];
+        $this->assertEquals(0, $reply);
+
+        $reply = $this->key[1];
+        $this->assertEquals(1, $reply);
+    }
+
+    public function testOffsetSet()
+    {
+        $this->key[1] = 1;
+
+        $reply = $this->rediska->getBit($this->key->getName(), 0);
+        $this->assertEquals(0, $reply);
+
+        $reply = $this->rediska->getBit($this->key->getName(), 1);
+        $this->assertEquals(1, $reply);
+    }
+
+    public function testOffsetUnset()
+    {
+        $this->rediska->setBit($this->key->getName(), 1, 1);
+
+        $reply = $this->rediska->getBit($this->key->getName(), 1);
+        $this->assertEquals(1, $reply);
+
+        unset($this->key[1]);
+
+        $reply = $this->rediska->getBit($this->key->getName(), 1);
+        $this->assertEquals(0, $reply);
     }
 }
 
