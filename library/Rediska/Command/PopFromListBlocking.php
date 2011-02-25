@@ -22,50 +22,60 @@ class Rediska_Command_PopFromListBlocking extends Rediska_Command_Abstract
     /**
      * Create command
      *
-     * @param string|array $keyOrKeys         Key name or array of names
-     * @param integer      $timeout[optional] Timeout. Disable for default.
+     * @param string|array $keyOrKeys           Key name or array of names
+     * @param integer      $timeout[optional]   Timeout. Default - 0 - disabled.
+     * @param string       $pushToKey[optional] If not null - push value to another key.
      * @return Rediska_Connection_Exec
      */
-    public function create($keyOrKeys, $timeout = 0)
+    public function create($keyOrKeys, $timeout = 0, $pushToKey = null)
     {
-        $keys = array();
-        if (!is_array($keyOrKeys)) {
-            $keys = array($keyOrKeys);
-        } elseif (!empty($keyOrKeys)) {
-            $keys = $keyOrKeys;
+        if ($pushToKey !== null) {
+            if (is_array($keyOrKeys)) {
+                throw new Rediska_Command_Exception('PopFromListBlocking with $pushToKey argument accept only one key');
+            }
+
+            $connection = $this->getRediska()->getConnectionByKeyName($pushToKey);
+
         } else {
-            throw new Rediska_Command_Exception('Not present keys for pop');
-        }
-
-        $connections = array();
-        $keysByConnections = array();
-        foreach ($keys as $key) {
-            $connection = $this->_rediska->getConnectionByKeyName($key);
-            $connectionAlias = $connection->getAlias();
-            if (!array_key_exists($connectionAlias, $connections)) {
-                $connections[$connectionAlias] = $connection;
-                $keysByConnections[$connectionAlias] = array();
+            $keys = array();
+            if (!is_array($keyOrKeys)) {
+                $keys = array($keyOrKeys);
+            } elseif (!empty($keyOrKeys)) {
+                $keys = $keyOrKeys;
+            } else {
+                throw new Rediska_Command_Exception('Not present keys for pop');
             }
-            $keysByConnections[$connectionAlias][] = $key;
-        }
 
-        // TODO: Implement for many connections
-        if (count($keysByConnections) > 1) {
-            throw new Rediska_Command_Exception("Blocking pop until worked only with one connection. Try to use Rediska#on() method for specify it.");
-        }
-
-        $execs = array();
-        foreach ($keysByConnections as $connectionAlias => $keys) {
-            $command = array('BRPOP');
-            foreach($keys as $key) {
-                $command[] = $this->_rediska->getOption('namespace') . $key;
+            $connections = array();
+            $keysByConnections = array();
+            foreach ($keys as $key) {
+                $connection = $this->_rediska->getConnectionByKeyName($key);
+                $connectionAlias = $connection->getAlias();
+                if (!array_key_exists($connectionAlias, $connections)) {
+                    $connections[$connectionAlias] = $connection;
+                    $keysByConnections[$connectionAlias] = array();
+                }
+                $keysByConnections[$connectionAlias][] = $key;
             }
-            $command[] = $timeout;
 
-            $execs[] = new Rediska_Connection_Exec($connections[$connectionAlias], $command);
+            // TODO: Implement for many connections
+            if (count($keysByConnections) > 1) {
+                throw new Rediska_Command_Exception("Blocking pop until worked only with one connection. Try to use Rediska#on() method for specify it.");
+            }
+
+            $execs = array();
+            foreach ($keysByConnections as $connectionAlias => $keys) {
+                $command = array('BRPOP');
+                foreach($keys as $key) {
+                    $command[] = $this->_rediska->getOption('namespace') . $key;
+                }
+                $command[] = $timeout;
+
+                $execs[] = new Rediska_Connection_Exec($connections[$connectionAlias], $command);
+            }
+
+            return $execs;
         }
-
-        return $execs;
     }
 
     /**
