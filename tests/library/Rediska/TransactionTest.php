@@ -22,12 +22,6 @@ class Rediska_TransactionTest extends Rediska_TestCase
         $this->transaction->discard();
     }
 
-    public function testStart()
-    {
-        $this->transaction->start();
-        $this->assertTrue($this->transaction->isStarted());
-    }
-
     public function testAddCommands()
     {
         $response = $this->transaction->set('a', 1)->get('a')->delete('a')->set('b', 2);

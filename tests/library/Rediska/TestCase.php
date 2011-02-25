@@ -36,7 +36,7 @@ class Rediska_TestCase extends PHPUnit_Framework_TestCase
         }
 
         $this->markTestSkipped("You must add to config.ini and start second redis server before run test");
-        
+
         return false;
     }
 }

@@ -37,15 +37,17 @@ class Rediska_Commands
 
         // Commands operating on string values
         'set'          => 'Rediska_Command_Set',
+        'setandexpire' => 'Rediska_Command_SetAndExpire',
         'setandget'    => 'Rediska_Command_SetAndGet',
         'get'          => 'Rediska_Command_Get',
-        'setandexpire' => 'Rediska_Command_SetAndExpire',
+        'append'       => 'Rediska_Command_Append',
         'increment'    => 'Rediska_Command_Increment',
         'decrement'    => 'Rediska_Command_Decrement',
         'setrange'     => 'Rediska_Command_SetRange',
         'getrange'     => 'Rediska_Command_GetRange',
         'substring'    => 'Rediska_Command_GetRange',
-        'append'       => 'Rediska_Command_Append',
+        'setbit'       => 'Rediska_Command_SetBit',
+        'getbit'       => 'Rediska_Command_GetBit',
         'getlength'    => 'Rediska_Command_GetLength',
 
         // Commands operating on lists

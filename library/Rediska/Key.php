@@ -188,7 +188,7 @@ class Rediska_Key extends Rediska_Key_Abstract implements Countable, ArrayAccess
 
     public function count()
     {
-        $this->getLength();
+        return $this->getLength();
     }
 
     /**
@@ -207,6 +207,10 @@ class Rediska_Key extends Rediska_Key_Abstract implements Countable, ArrayAccess
 
     public function offsetSet($offset, $value)
     {
+        if ($offset === null) {
+            throw new Rediska_Key_Exception("You must specify offset");
+        }
+
         return $this->setBit($offset, $value);
     }
 
