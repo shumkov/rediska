@@ -30,7 +30,9 @@ class Rediska_Command_ExistsInHash extends Rediska_Command_Abstract
     {
         $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        $command = array('HEXISTS', $this->_rediska->getOption('namespace') . $key, $field);
+        $command = array('HEXISTS',
+                         $this->_rediska->getOption('namespace') . $key,
+                         $field);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

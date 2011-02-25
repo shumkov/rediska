@@ -30,7 +30,10 @@ class Rediska_Command_SetToList extends Rediska_Command_Abstract
 
         $member = $this->_rediska->getSerializer()->serialize($member);
 
-        $command = "LSET {$this->_rediska->getOption('namespace')}$key $index " . strlen($member) . Rediska::EOL . $member;
+        $command = array('LSET',
+                         $this->_rediska->getOption('namespace') . $key,
+                         $index,
+                         $member);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

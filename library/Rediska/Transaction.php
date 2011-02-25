@@ -1,5 +1,8 @@
 <?php
 
+// Require Rediska
+require_once dirname(__FILE__) . '/../Rediska.php';
+
 /**
  * Rediska transaction
  * 
@@ -58,7 +61,57 @@ class Rediska_Transaction
         $this->_specifiedConnection = $specifiedConnection;
         $this->_connection          = clone $connection;
 
-        $this->_throwIfNotSupported();
+        $this->_throwIfNotSupported('Transactions', '1.3.8');
+    }
+
+    /**
+     * Marks the given keys to be watched for conditional execution of a transaction.
+     *
+     * @throws Rediska_Transaction_Exception
+     * @param  $keyOrKeys Key or array of keys
+     * @return Rediska_Transaction
+     */
+    public function watch($keyOrKeys)
+    {
+        $this->_throwIfNotSupported('Watch', '2.1');
+
+        if ($this->isStarted()) {
+            throw new Rediska_Transaction_Exception('Watch not supported if transaction already started');
+        }
+
+        $command = array('WATCH');
+
+        if (!is_array($keyOrKeys)) {
+            $keys = array($keyOrKeys);
+        } else {
+            $keys = $keyOrKeys;
+        }
+
+        foreach($keys as $key) {
+            $command[] = $this->_rediska->getOption('namespace') . $key;
+        }
+
+        $exec = new Rediska_Connection_Exec($this->_connection, $command);
+        $exec->execute();
+
+        return $this;
+    }
+
+    /**
+     * Flushes all the previously watched keys for a transaction.
+     *
+     * @return Rediska_Transaction
+     */
+    public function unwatch()
+    {
+        $this->_throwIfNotSupported('Unwatch', '2.1');
+
+        $command = 'UNWATCH';
+
+        $exec = new Rediska_Connection_Exec($this->_connection, $command);
+        $exec->execute();
+
+        return $this;
     }
 
     /**
@@ -110,7 +163,7 @@ class Rediska_Transaction
 
             if (!empty($this->_commands)) {
                 if (!$responses) {
-                    throw new Rediska_Transaction_Exception('Transaction has been aborted by server');
+                    throw new Rediska_Transaction_AbortedException('Transaction has been aborted by server');
                 }
 
                 foreach($this->_commands as $i => $command) {
@@ -207,12 +260,11 @@ class Rediska_Transaction
     /**
      * Throw if transaction not supported by Redis
      */
-    protected function _throwIfNotSupported()
+    protected function _throwIfNotSupported($title, $version)
     {
-        $version = '1.3.8';
         $redisVersion = $this->_rediska->getOption('redisVersion');
         if (version_compare($version, $this->_rediska->getOption('redisVersion')) == 1) {
-            throw new Rediska_Transaction_Exception("Transaction requires {$version}+ version of Redis server. Current version is {$redisVersion}. To change it specify 'redisVersion' option.");
+            throw new Rediska_Transaction_Exception("$title requires {$version}+ version of Redis server. Current version is {$redisVersion}. To change it specify 'redisVersion' option.");
         }
     }
 

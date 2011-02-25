@@ -33,17 +33,10 @@ class Rediska_Command_GetSortedSet extends Rediska_Command_Abstract
      */
     public function create($key, $withScores = false, $start = 0, $end = -1, $revert = false, $responseIterator = false)
     {
-        if (!is_integer($start)) {
-            throw new Rediska_Command_Exception("Start must be integer");
-        }
-        if (!is_integer($end)) {
-            throw new Rediska_Command_Exception("End must be integer");
-        }
-
         $connection = $this->_rediska->getConnectionByKeyName($key);
 
         $command = array($revert ? 'ZREVRANGE' : 'ZRANGE',
-                         "{$this->_rediska->getOption('namespace')}$key",
+                         $this->_rediska->getOption('namespace') . $key,
                          $start,
                          $end);
 

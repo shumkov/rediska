@@ -22,7 +22,8 @@ class Rediska_Command_GetType extends Rediska_Command_Abstract
     {
         $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        $command = "TYPE {$this->_rediska->getOption('namespace')}$key";
+        $command = array('TYPE',
+                         $this->_rediska->getOption('namespace') . $key);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

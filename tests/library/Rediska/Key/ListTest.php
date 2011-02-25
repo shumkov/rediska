@@ -173,9 +173,6 @@ class Rediska_Key_ListTest extends Rediska_TestCase
 
         $values = $this->list->sort(array('order' => 'desc', 'limit' => 2));
         $this->assertEquals(array(789, 456), $values);
-
-        $values = $this->list->sort('LIMIT 0 2 DESC');
-        $this->assertEquals(array(789, 456), $values);
     }
 
     public function testIteration()

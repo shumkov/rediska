@@ -23,7 +23,7 @@ class Rediska_Command_GetRandomKey extends Rediska_Command_Abstract
         $index = rand(0, count($connections) - 1);
         $connection = $connections[$index];
 
-        $command = "RANDOMKEY";
+        $command = array('RANDOMKEY');
 
         return new Rediska_Connection_Exec($connection, $command);
     }

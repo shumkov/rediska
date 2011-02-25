@@ -25,7 +25,9 @@ class Rediska_Command_ExistsInSet extends Rediska_Command_Abstract
 
         $member = $this->_rediska->getSerializer()->serialize($member);
 
-        $command = "SISMEMBER {$this->_rediska->getOption('namespace')}$key " . strlen($member) . Rediska::EOL . $member;
+        $command = array('SISMEMBER',
+                         $this->_rediska->getOption('namespace') . $key,
+                         $member);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

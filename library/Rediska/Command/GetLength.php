@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Return the length of the List value at key
+ * Returns the length of the string value stored at key
  * 
  * @author Ivan Shumkov
  * @package Rediska
@@ -10,20 +10,22 @@
  * @link http://rediska.geometria-lab.net
  * @license http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_Command_GetListLength extends Rediska_Command_Abstract
-{
+class Rediska_Command_GetLength extends Rediska_Command_Abstract
+{ 
+    protected $_version = '2.1.2';
+
     /**
      * Create command
      *
-     * @param string $key Key name
+     * @param string  $key Key name
      * @return Rediska_Connection_Exec
      */
     public function create($key)
     {
-        $connection = $this->_rediska->getConnectionByKeyName($key);
+        $connection = $this->getRediska()->getConnectionByKeyName($key);
 
-        $command = array('LLEN',
-                         $this->_rediska->getOption('namespace') . $key);
+        $command = array('STRLEN',
+                         $this->getRediska()->getOption('namespace'). $key);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

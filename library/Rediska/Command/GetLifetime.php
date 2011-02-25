@@ -21,7 +21,9 @@ class Rediska_Command_GetLifetime extends Rediska_Command_Abstract
     public function create($key)
     {
         $connection = $this->_rediska->getConnectionByKeyName($key);
-        $command = "TTL {$this->_rediska->getOption('namespace')}$key";
+
+        $command = array('TTL',
+                         $this->_rediska->getOption('namespace') . $key);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

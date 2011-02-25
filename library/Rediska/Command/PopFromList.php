@@ -24,7 +24,8 @@ class Rediska_Command_PopFromList extends Rediska_Command_Abstract
         $connection = $this->_rediska->getConnectionByKeyName($key);
 
         if (is_null($pushToKey)) {
-            $command = "RPOP {$this->_rediska->getOption('namespace')}$key";
+            $command = array('RPOP',
+                             $this->_rediska->getOption('namespace') . $key);
         } else {
             $toConnection = $this->_rediska->getConnectionByKeyName($pushToKey);
 
@@ -32,12 +33,13 @@ class Rediska_Command_PopFromList extends Rediska_Command_Abstract
                 $this->_throwExceptionIfNotSupported('1.1');
 
                 $command = array('RPOPLPUSH',
-                                 "{$this->_rediska->getOption('namespace')}$key",
-                                 "{$this->_rediska->getOption('namespace')}$pushToKey");
+                                 $this->_rediska->getOption('namespace') . $key,
+                                 $this->_rediska->getOption('namespace') . $pushToKey);
             } else {
                 $this->setAtomic(false);
 
-                $command = "RPOP {$this->_rediska->getOption('namespace')}$key";
+                $command = array('RPOP',
+                                 $this->_rediska->getOption('namespace') . $key);
             }
         }
 

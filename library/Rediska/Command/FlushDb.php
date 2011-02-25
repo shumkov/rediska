@@ -21,9 +21,9 @@ class Rediska_Command_FlushDb extends Rediska_Command_Abstract
     public function create($all = false) 
     {
         if ($all) {
-            $command = "FLUSHALL";
+            $command = array('FLUSHALL');
         } else {
-            $command = "FLUSHDB";
+            $command = array('FLUSHDB');
         }
 
         $commands = array();

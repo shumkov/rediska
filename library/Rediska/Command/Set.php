@@ -67,14 +67,10 @@ class Rediska_Command_Set extends Rediska_Command_Abstract
 
             $value = $this->_rediska->getSerializer()->serialize($value);
 
-            $command = '';
-            if ($overwrite) {
-                $command = 'SET';
-            } else {
-                $command = 'SETNX';
-            }
-            $command .= " {$this->_rediska->getOption('namespace')}$key " . strlen($value) . Rediska::EOL . $value;
-    
+            $command = array($overwrite ? 'SET' : 'SETNX',
+                             $this->_rediska->getOption('namespace') . $key,
+                             $value);
+
             return new Rediska_Connection_Exec($connection, $command);
         }
     }

@@ -13,7 +13,7 @@ require_once dirname(__FILE__) . '/../Rediska.php';
  * @link http://rediska.geometria-lab.net
  * @license http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_Key extends Rediska_Key_Abstract
+class Rediska_Key extends Rediska_Key_Abstract implements Countable, ArrayAccess
 {
     /**
      * Set key value
@@ -92,15 +92,74 @@ class Rediska_Key extends Rediska_Key_Abstract
     }
 
     /**
-     * Substring value
+     * Returns the bit value at offset in the string value stored at key
+     *
+     * @param integer $offset Offset
+     * @param integer $bit    Bit (0 or 1)
+     * @return integer
+     */
+    public function setBit($offset, $bit)
+    {
+        return $this->_getRediskaOn()->setBit($this->getName(), $offset, $bit);
+    }
+
+    /**
+     * Returns the bit value at offset in the string value stored at key
+     *
+     * @param integer $offset Offset
+     * @return integer
+     */
+    public function getBit($offset)
+    {
+        return $this->_getRediskaOn()->getBit($this->getName(), $offset);
+    }
+
+    /**
+     * Set range
+     *
+     * @param string  $key    Key name
+     * @param integer $offset Offset
+     * @param integer $value  Value
+     * @return string
+     */
+    public function setRange($offset, $value)
+    {
+        return $this->_getRediskaOn()->setRange($this->getName(), $offset, $value);
+    }
+
+    /**
+     * Get range
      *
      * @param integer           $start Start
      * @param integer[optional] $end   End. If end is omitted, the substring starting from $start until the end of the string will be returned. For default end of string
-     * @return string
+     * @return mixin
+     */
+    public function getRange($start, $end = -1)
+    {
+        return $this->_getRediskaOn()->getRange($this->getName(), $start, $end);
+    }
+
+    /**
+     * Get range
+     *
+     * @deprecated
+     * @param integer           $start Start
+     * @param integer[optional] $end   End. If end is omitted, the substring starting from $start until the end of the string will be returned. For default end of string
+     * @return mixin
      */
     public function substring($start, $end = -1)
     {
         return $this->_getRediskaOn()->substring($this->getName(), $start, $end);
+    }
+
+    /**
+     * Returns the length of the string
+     *
+     * @return integer
+     */
+    public function getLength()
+    {
+        return $this->_getRediskaOn()->getLength($this->getName());
     }
 
     /**
@@ -121,6 +180,39 @@ class Rediska_Key extends Rediska_Key_Abstract
     public function __toString()
     {
         return (string)$this->getValue();
+    }
+
+    /**
+     * Implements Countable
+     */
+
+    public function count()
+    {
+        $this->getLength();
+    }
+
+    /**
+     * Implements ArrayAccess
+     */
+
+    public function offsetExists($offset)
+    {
+        return (boolean)$this->getBit($offset);
+    }
+
+    public function offsetGet($offset)
+    {
+        return $this->getBit($offset);
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        return $this->setBit($offset, $value);
+    }
+
+    public function offsetUnset($offset)
+    {
+        return $this->setBit($offset, 0);
     }
 }
 

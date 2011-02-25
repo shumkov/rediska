@@ -21,7 +21,7 @@ class Rediska_Command_GetLastSaveTime extends Rediska_Command_Abstract
      */
     public function create() 
     {
-        $command = "LASTSAVE";
+        $command = array('LASTSAVE');
         $commands = array();
         foreach($this->_rediska->getConnections() as $connection) {
             $this->_connections[] = $connection->getAlias();

@@ -22,16 +22,15 @@ class Rediska_Command_DeleteFromList extends Rediska_Command_Abstract
      */
     public function create($key, $value, $count = 0)
     {        
-        if (!is_integer($count)) {
-            throw new Rediska_Command_Exception("Count must be integer");
-        }
-
         $connection = $this->_rediska->getConnectionByKeyName($key);
 
         $value = $this->_rediska->getSerializer()->serialize($value);
 
-        $command = "LREM {$this->_rediska->getOption('namespace')}$key $count " . strlen($value) . Rediska::EOL . $value;
-        
+        $command = array('LREM',
+                         $this->_rediska->getOption('namespace') . $key,
+                         $count,
+                         $value);
+
         return new Rediska_Connection_Exec($connection, $command);
     }
 }

@@ -20,7 +20,7 @@ class Rediska_Command_GetKeysCount extends Rediska_Command_Abstract
     public function create()
     {
         $commands = array();
-        $command = 'DBSIZE';
+        $command = array('DBSIZE');
         foreach($this->_rediska->getConnections() as $connection) {
             $commands[] = new Rediska_Connection_Exec($connection, $command);
         }

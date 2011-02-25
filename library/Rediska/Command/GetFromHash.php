@@ -40,7 +40,9 @@ class Rediska_Command_GetFromHash extends Rediska_Command_Abstract
             $command = array_merge(array('HMGET', $this->_rediska->getOption('namespace') . $key), $this->_fields);
         } else {
             $field = $fieldOrFields;
-            $command = array('HGET', $this->_rediska->getOption('namespace') . $key, $field);
+            $command = array('HGET',
+                             $this->_rediska->getOption('namespace') . $key,
+                             $field);
         }
 
         $connection = $this->_rediska->getConnectionByKeyName($key);

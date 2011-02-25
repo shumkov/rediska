@@ -25,7 +25,9 @@ class Rediska_Command_SetAndGet extends Rediska_Command_Abstract
 
         $value = $this->_rediska->getSerializer()->serialize($value);
 
-        $command = "GETSET {$this->_rediska->getOption('namespace')}$key " . strlen($value) . Rediska::EOL . $value;
+        $command = array('GETSET',
+                         $this->_rediska->getOption('namespace') . $key,
+                         $value);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

@@ -83,14 +83,9 @@ class Rediska_Manager
             throw new Rediska_Exception("Rediska instance '$name' not present");
         }
 
-        if (!is_object(self::$_instances[$name])) {
-            $options = self::$_instances[$name];
-            self::$_instances[$name] = new Rediska($options);
-        }
-        
-        $rediska = self::$_instances[$name];
+        self::_instanceFromOptions($name);
 
-        return $rediska;
+        return self::$_instances[$name];
     }
 
     /**
@@ -100,7 +95,11 @@ class Rediska_Manager
      */
     public static function getAll()
     {
-        return array_values(self::$_instances);
+        foreach(self::$_instances as $name => $instanceOrOptions) {
+            self::_instanceFromOptions($name);
+        }
+
+        return self::$_instances;
     }
 
     /**
@@ -141,5 +140,20 @@ class Rediska_Manager
         self::$_instances = array();
 
         return $count;
+    }
+
+    /**
+     * Instance from options if not yet
+     *
+     * @static
+     * @param  $name
+     * @return void
+     */
+    protected static function _instanceFromOptions($name)
+    {
+        if (!is_object(self::$_instances[$name])) {
+            $options = self::$_instances[$name];
+            self::$_instances[$name] = new Rediska($options);
+        }
     }
 }

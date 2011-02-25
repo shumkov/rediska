@@ -24,12 +24,12 @@ class Rediska_Command_GetRandomFromSet extends Rediska_Command_Abstract
         $connection = $this->_rediska->getConnectionByKeyName($key);
 
         if ($pop) {
-            $command = "SPOP";
+            $command = array('SPOP');
         } else {
-            $command = "SRANDMEMBER";
+            $command = array('SRANDMEMBER');
         }
 
-        $command .= " {$this->_rediska->getOption('namespace')}$key";
+        $command[] = $this->_rediska->getOption('namespace') . $key;
 
         return new Rediska_Connection_Exec($connection, $command);
     }

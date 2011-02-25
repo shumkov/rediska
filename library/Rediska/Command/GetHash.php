@@ -29,7 +29,8 @@ class Rediska_Command_GetHash extends Rediska_Command_Abstract
     {
         $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        $command = array('HGETALL', $this->_rediska->getOption('namespace') . $key);
+        $command = array('HGETALL',
+                         $this->_rediska->getOption('namespace') . $key);
 
         return new Rediska_Connection_Exec($connection, $command);
     }

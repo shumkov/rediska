@@ -30,10 +30,15 @@ class Rediska_Command_MoveToSet extends Rediska_Command_Abstract
         $member = $this->_rediska->getSerializer()->serialize($member);
 
         if ($fromKeyConnection === $toKeyConnection) {
-            $command = "SMOVE {$this->_rediska->getOption('namespace')}$fromKey {$this->_rediska->getOption('namespace')}$toKey "  . strlen($member) . Rediska::EOL . $member;
+            $command = array('SMOVE',
+                             $this->_rediska->getOption('namespace') . $fromKey,
+                             $this->_rediska->getOption('namespace') . $toKey,
+                             $member);
         } else {
             $this->setAtomic(false);
-            $command = "SISMEMBER {$this->_rediska->getOption('namespace')}$fromKey " . strlen($member) . Rediska::EOL . $member;
+            $command = array('SISMEMBER',
+                             $this->_rediska->getOption('namespace') . $fromKey,
+                             $member);
         }
 
         return new Rediska_Connection_Exec($fromKeyConnection, $command);

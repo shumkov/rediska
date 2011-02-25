@@ -20,12 +20,7 @@ class Rediska_Command_Save extends Rediska_Command_Abstract
      */
     public function create($background = false) 
     {
-        $command = '';
-        if ($background) {
-            $command = "BGSAVE";
-        } else {
-            $command = "SAVE";
-        }
+        $command = array($background ? 'BGSAVE' : 'SAVE');
 
         $commands = array();
         foreach($this->_rediska->getConnections() as $connection) {

@@ -133,9 +133,6 @@ class Rediska_Key_SetTest extends Rediska_TestCase
 
         $values = $this->set->sort(array('order' => 'desc', 'limit' => 2));
         $this->assertEquals(array(789, 456), $values);
-
-        $values = $this->set->sort('LIMIT 0 2 DESC');
-        $this->assertEquals(array(789, 456), $values);
     }
     
     public function testToArray()

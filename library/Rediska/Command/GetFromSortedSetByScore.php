@@ -32,17 +32,12 @@ class Rediska_Command_GetFromSortedSetByScore extends Rediska_Command_Abstract
      */
     public function create($key, $min, $max, $withScores = false, $limit = null, $offset = null)
     {
-        if (!is_null($limit) && !is_integer($limit)) {
-            throw new Rediska_Command_Exception("Limit must be integer");
-        }
-
-        if (!is_null($offset) && !is_integer($offset)) {
-            throw new Rediska_Command_Exception("Offset must be integer");
-        }
-
         $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        $command = array('ZRANGEBYSCORE', $this->_rediska->getOption('namespace') . $key, $min, $max);
+        $command = array('ZRANGEBYSCORE',
+                         $this->_rediska->getOption('namespace') . $key,
+                         $min,
+                         $max);
 
         if (!is_null($limit)) {
             if (is_null($offset)) {
@@ -52,7 +47,7 @@ class Rediska_Command_GetFromSortedSetByScore extends Rediska_Command_Abstract
             $command[] = $offset;
             $command[] = $limit;
         }
-        
+
         if ($withScores) {
             $this->_throwExceptionIfNotSupported('1.3.4');
 

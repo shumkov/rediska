@@ -48,9 +48,9 @@ class Rediska_Command_Get extends Rediska_Command_Abstract
             $result = array();
             $commands = array();
             foreach($keysByConnections as $connectionAlias => $keys) {
-                $command = "MGET ";
+                $command = array('MGET');
                 foreach($keys as $key) {
-                    $command .= " {$this->_rediska->getOption('namespace')}$key";
+                    $command[] = $this->_rediska->getOption('namespace') . $key;
                     $this->_keysByConnections[] = $key;
                 }
                 $commands[] = new Rediska_Connection_Exec($connections[$connectionAlias], $command);
@@ -62,7 +62,8 @@ class Rediska_Command_Get extends Rediska_Command_Abstract
 
             $connection = $this->_rediska->getConnectionByKeyName($key);
 
-            $command = "GET {$this->_rediska->getOption('namespace')}$key";
+            $command = array('GET',
+                             $this->_rediska->getOption('namespace') . $key);
 
             return new Rediska_Connection_Exec($connection, $command);
         }

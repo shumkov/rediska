@@ -24,7 +24,8 @@ class Rediska_Command_GetSet extends Rediska_Command_Abstract
     {
         $connection = $this->_rediska->getConnectionByKeyName($key);
 
-        $command = "SMEMBERS {$this->_rediska->getOption('namespace')}$key";
+        $command = array('SMEMBERS',
+                         $this->_rediska->getOption('namespace') . $key);
 
         $exec = new Rediska_Connection_Exec($connection, $command);
         
