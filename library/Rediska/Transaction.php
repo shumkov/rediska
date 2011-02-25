@@ -50,6 +50,11 @@ class Rediska_Transaction
     protected $_commands = array();
 
     /**
+     * @var array
+     */
+    protected $_watch = array();
+
+    /**
      * Constructor
      * 
      * @param Rediska            $rediska    Rediska instance
@@ -94,6 +99,10 @@ class Rediska_Transaction
         $exec = new Rediska_Connection_Exec($this->_connection, $command);
         $exec->execute();
 
+        // Remember watches
+        $this->_watch = array_merge($this->_watch, $keys);
+        array_unique($this->_watch);
+
         return $this;
     }
 
@@ -110,6 +119,9 @@ class Rediska_Transaction
 
         $exec = new Rediska_Connection_Exec($this->_connection, $command);
         $exec->execute();
+
+        // Clean watches
+        $this->_watch = array();
 
         return $this;
     }
@@ -148,7 +160,7 @@ class Rediska_Transaction
      * 
      * @return array
      */
-    public function execute()
+    public function execute($retry = 0)
     {
         $results = array();
 
