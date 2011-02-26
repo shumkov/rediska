@@ -23,6 +23,12 @@ class Rediska_Key_ListTest extends Rediska_TestCase
         $values = $this->rediska->getFromList('test', 1);
         $this->assertEquals(456, $values);
     }
+
+    public function testAppendWithoutCreate()
+    {
+        $reply = $this->list->append(123, false);
+        $this->assertEquals(0, $reply);
+    }
     
     public function testPrepend()
     {
@@ -33,6 +39,12 @@ class Rediska_Key_ListTest extends Rediska_TestCase
 
         $values = $this->rediska->getFromList('test', 1);
         $this->assertEquals(123, $values);
+    }
+
+    public function testPrependWithoutCreate()
+    {
+        $reply = $this->list->prepend(123, false);
+        $this->assertEquals(0, $reply);
     }
     
     public function testCount()
@@ -91,6 +103,45 @@ class Rediska_Key_ListTest extends Rediska_TestCase
 
         $value = $this->rediska->getFromList('test', 0);
         $this->assertEquals(456, $value);
+    }
+
+    public function testInsertAfter()
+    {
+        $this->rediska->appendToList('test', 'aaa');
+        $this->rediska->appendToList('test', 'bbb');
+
+        $reply = $this->list->insertAfter('aaa', 'ccc');
+        $this->assertEquals(3, $reply);
+
+        $reply = $this->rediska->getList('test');
+        $this->assertEquals(array('aaa', 'ccc', 'bbb'), $reply);
+    }
+
+    public function testInsertBefore()
+    {
+        $this->rediska->appendToList('test', 'aaa');
+        $this->rediska->appendToList('test', 'bbb');
+
+        $reply = $this->list->insertBefore('aaa', 'ccc');
+        $this->assertEquals(3, $reply);
+
+        $reply = $this->rediska->getList('test');
+        $this->assertEquals(array('ccc', 'aaa', 'bbb'), $reply);
+    }
+
+    public function testInsert()
+    {
+        $this->rediska->appendToList('test', 'aaa');
+        $this->rediska->appendToList('test', 'bbb');
+
+        $reply = $this->list->insert('after', 'aaa', 'ccc');
+        $this->assertEquals(3, $reply);
+
+        $reply = $this->list->insert('before', 'aaa', 'ddd');
+        $this->assertEquals(4, $reply);
+
+        $reply = $this->rediska->getList('test');
+        $this->assertEquals(array('ddd', 'aaa', 'ccc', 'bbb'), $reply);
     }
 
     public function testRemove()

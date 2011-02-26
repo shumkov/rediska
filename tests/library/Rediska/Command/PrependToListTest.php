@@ -4,10 +4,11 @@ class Rediska_Command_PrependToListTest extends Rediska_TestCase
 {
     public function testReturnTrue()
     {
-        $reply = $this->rediska->prependToList('test', 'aaa');
-        $this->assertEquals(1, $reply);
+        $this->rediska->prependToList('test', 'aaa');
+        $reply = $this->rediska->prependToList('test', 'bbb');
+        $this->assertEquals(2, $reply);
     }
-    
+
     public function testPrepended()
     {
         $this->rediska->prependToList('test', 'aaa');
@@ -18,5 +19,14 @@ class Rediska_Command_PrependToListTest extends Rediska_TestCase
 
         $reply = $this->rediska->getListLength('test');
         $this->assertEquals(2, $reply);
+    }
+
+    public function testCreateIfNotExists()
+    {
+        $retry = $this->rediska->prependToList('test', 'aaa', false);
+        $this->assertEquals(0, $retry);
+
+        $reply = $this->rediska->getListLength('test');
+        $this->assertEquals(0, $reply);
     }
 }
