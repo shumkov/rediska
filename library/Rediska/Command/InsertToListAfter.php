@@ -10,7 +10,7 @@
  * @link http://rediska.geometria-lab.net
  * @license http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_Command_InsertToListAfter extends Rediska_Command_InsertToList
+class Rediska_Command_InsertToListAfter extends Rediska_Command_InsertToListAbstract
 {
     /**
      * Create command
@@ -22,6 +22,6 @@ class Rediska_Command_InsertToListAfter extends Rediska_Command_InsertToList
      */
     public function create($key, $referenceValue, $value)
     {
-        return parent::create($key, self::AFTER, $referenceValue, $value);
+        return $this->_create($key, self::AFTER, $referenceValue, $value);
     }
 }
