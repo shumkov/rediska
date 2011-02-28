@@ -20,22 +20,50 @@ class Rediska_Command_PopFromListBlocking extends Rediska_Command_Abstract
     protected $_version = '1.3.1';
 
     /**
+     * Store connection
+     *
+     * @var Rediska_Connection
+     */
+    protected $_storeConnection;
+
+    /**
      * Create command
      *
      * @param string|array $keyOrKeys           Key name or array of names
-     * @param integer      $timeout[optional]   Timeout. Default - 0 - disabled.
-     * @param string       $pushToKey[optional] If not null - push value to another key.
+     * @param integer      $timeout[optional]   Timeout. 0 for default - timeout is disabled.
+     * @param string       $pushToKey[optional] If not null - push value to another list.
      * @return Rediska_Connection_Exec
      */
     public function create($keyOrKeys, $timeout = 0, $pushToKey = null)
     {
+        // TODO: Refactor this shit
+
         if ($pushToKey !== null) {
             if (is_array($keyOrKeys)) {
                 throw new Rediska_Command_Exception('PopFromListBlocking with $pushToKey argument accept only one key');
             }
 
-            $connection = $this->getRediska()->getConnectionByKeyName($pushToKey);
+            $key = $keyOrKeys;
 
+            $connection = $this->getRediska()->getConnectionByKeyName($key);
+
+            $this->_storeConnection = $this->getRediska()->getConnectionByKeyName($pushToKey);
+
+            if ($connection != $this->_storeConnection) {
+                $this->setAtomic(false);
+
+                $command = array('BRPOP',
+                                 $this->getRediska()->getOption('namespace') . $key);
+            } else {
+                $this->_throwExceptionIfNotSupported('2.1.7');
+
+                $command = array('BRPOPLPUSH',
+                                 $this->getRediska()->getOption('namespace') . $key,
+                                 $this->getRediska()->getOption('namespace') . $pushToKey,
+                                 $timeout);
+            }
+
+            return new Rediska_Connection_Exec($connection, $command);
         } else {
             $keys = array();
             if (!is_array($keyOrKeys)) {
@@ -86,13 +114,33 @@ class Rediska_Command_PopFromListBlocking extends Rediska_Command_Abstract
      */
     public function parseResponse($response)
     {
-        $result = null;
-        if (!is_array($this->keyOrKeys) && !empty($response)) {
-            $result = $this->_rediska->getSerializer()->unserialize($response[1]);
-        } else {
-            $result = Rediska_Command_Response_ListNameAndValue::factory($this->_rediska, $response);
-        }
+        if ($this->pushToKey !== null) {
+            if (empty($response)) {
+                return null;
+            }
 
-        return $result;
+            if (!$this->isAtomic()) {
+                $command = array('LPUSH',
+                                 $this->_rediska->getOption('namespace') . $this->pushToKey,
+                                 $response[1]);
+
+                $exec = new Rediska_Connection_Exec($this->_storeConnection, $command);
+                $exec->execute();
+
+                $value = $response[1];
+            } else {
+                $value = $response;
+            }
+
+            return $this->_rediska->getSerializer()->unserialize($value);
+        } else {
+            if (!is_array($this->keyOrKeys) && !empty($response)) {
+                $result = $this->_rediska->getSerializer()->unserialize($response[1]);
+            } else {
+                $result = Rediska_Command_Response_ListNameAndValue::factory($this->_rediska, $response);
+            }
+
+            return $result;
+        }
     }
 }
