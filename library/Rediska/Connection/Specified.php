@@ -306,7 +306,7 @@ class Rediska_Connection_Specified
      * @param integer[optional] $end   End. If end is omitted, the substring starting from $start until the end of the string will be returned. For default end of string
      * @return mixin
      */
-    public function getRange($key, $start, $end = -1) { $args = func_get_args(); return $this->_executeCommand('getRange', $args); }
+    public function substring($key, $start, $end = -1) { $args = func_get_args(); return $this->_executeCommand('substring', $args); }
 
     /**
      * Returns the bit value at offset in the string value stored at key

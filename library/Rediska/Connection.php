@@ -50,7 +50,7 @@ class Rediska_Connection extends Rediska_Options
         'persistent'   => false,
         'timeout'      => null,
         'readTimeout'  => null,
-        'blockingmode' => true,
+        'blockingMode' => true,
     );
 
     /**
@@ -401,7 +401,8 @@ class Rediska_Connection extends Rediska_Options
     /**
      * Do not clone socket
      */
-    public function __clone() {
+    public function __clone()
+    {
         $this->_socket = null;
     }
 }
