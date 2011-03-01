@@ -1,3 +1,28 @@
+Version 0.5.5 (March 2, 2011):
+ * Feature #4214: Profiler
+ * Feature #9921: Implement SETBIT, GETBIT, SETRANGE, GETRANGE, STRLEN
+ * Feature #9932: Implement LINSERT, LPUSHX, RPUSHX
+ * Feature #9933: Implement BRPOPLPUSH
+ * Feature #3531: Implement WATCH, UNWATCH
+ * Feature #9876: Add removeServer method
+ * Improvement #10020: Move all command to new binary safe protocol
+ * Improvement #9920: Deprecate old expire behavior
+ * Improvement #8863: Add optional response iterator for sets, sortedsets and lists with realtime reading from socket
+ * Improvement #3967: Add timeout argument to getCommand and getMessage in monitor and pub/sub
+ * Improvement #4379: Remove case insensitive from options
+ * Improvement #4902: Set connection to blocking mode if only one connection in pub/sub channel
+ * Improvement #6751: Change Set with online sessions to SortedSet for optimization
+ * Improvement #6778: Autoloader optimization
+ * Improvement #9021: Add getByRank to Rediska_Key_SortedSet
+ * Improvement #9045: Add getFieldsAndValues() to Rediska_Key_Hash
+ * Improvement #9052: Add getValues to Rediska_Key_Set and Rediska_Key_List
+ * Bug #4900: Require Rediska bug in Rediska_PubSub_Channel
+ * Bug #6745: Pub/sub channel can't get Rediska_Connections
+ * Bug #6746: True subscribe response throws exception
+ * Bug #6747: Add specified connection to publish
+ * Bug #6748: Fix memory leaks
+ * Bug #6777: Fix test bootstrap
+
 Version 0.5.1 (October 28, 2010):
  * Feature #2033: Implement ZCOUNT
  * Improvement #4054: Add append and substring command to Rediska_Key
