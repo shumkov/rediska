@@ -786,6 +786,16 @@ class Rediska extends Rediska_Options
     public function set($keyOrData, $valueOrOverwrite = null, $overwrite = true) { $args = func_get_args(); return $this->_executeCommand('set', $args); }
 
     /**
+     * Set + Expire atomic command
+     *
+     * @param string  $key      Key name
+     * @param mixed   $value    Value
+     * @param integer $seconds  Expire time in seconds
+     * @return mixed
+     */
+    public function setAndExpire($key, $value, $seconds) { $args = func_get_args(); return $this->_executeCommand('setAndExpire', $args); }
+
+    /**
      * Atomic set value and return old 
      *
      * @param string $key   Key name
@@ -803,14 +813,13 @@ class Rediska extends Rediska_Options
     public function get($keyOrKeys) { $args = func_get_args(); return $this->_executeCommand('get', $args); }
 
     /**
-     * Set + Expire atomic command
+     * Append value to a end of string key
      *
-     * @param string  $key      Key name
-     * @param mixed   $value    Value
-     * @param integer $seconds  Expire time in seconds
+     * @param string $key    Key name
+     * @param mixed  $value  Value
      * @return mixed
      */
-    public function setAndExpire($key, $value, $seconds) { $args = func_get_args(); return $this->_executeCommand('setAndExpire', $args); }
+    public function append($key, $value) { $args = func_get_args(); return $this->_executeCommand('append', $args); }
 
     /**
      * Increment the number value of key by integer
@@ -831,41 +840,81 @@ class Rediska extends Rediska_Options
     public function decrement($key, $amount = 1) { $args = func_get_args(); return $this->_executeCommand('decrement', $args); }
 
     /**
+     * Overwrite part of a string at key starting at the specified offset
+     *
+     * @param string  $key    Key name
+     * @param integer $offset Offset
+     * @param integer $value  Value
+     * @return mixed
+     */
+    public function setRange($key, $offset, $value) { $args = func_get_args(); return $this->_executeCommand('setRange', $args); }
+
+    /**
      * Return a subset of the string from offset start to offset end (both offsets are inclusive)
      *
      * @param string            $key   Key name
      * @param integer           $start Start
      * @param integer[optional] $end   End. If end is omitted, the substring starting from $start until the end of the string will be returned. For default end of string
-     * @return mixed
+     * @return mixin
      */
-    public function substring($key, $start, $end = -1) { $args = func_get_args(); return $this->_executeCommand('substring', $args); }
+    public function getRange($key, $start, $end = -1) { $args = func_get_args(); return $this->_executeCommand('getRange', $args); }
 
     /**
-     * Append value to a end of string key
+     * Return a subset of the string from offset start to offset end (both offsets are inclusive)
      *
-     * @param string $key    Key name
-     * @param mixed  $value  Value
+     * @param string            $key   Key name
+     * @param integer           $start Start
+     * @param integer[optional] $end   End. If end is omitted, the substring starting from $start until the end of the string will be returned. For default end of string
+     * @return mixin
+     */
+    public function getRange($key, $start, $end = -1) { $args = func_get_args(); return $this->_executeCommand('getRange', $args); }
+
+    /**
+     * Returns the bit value at offset in the string value stored at key
+     *
+     * @param string  $key    Key name
+     * @param integer $offset Offset
+     * @param integer $bit    Bit (0 or 1)
      * @return mixed
      */
-    public function append($key, $value) { $args = func_get_args(); return $this->_executeCommand('append', $args); }
+    public function setBit($key, $offset, $bit) { $args = func_get_args(); return $this->_executeCommand('setBit', $args); }
+
+    /**
+     * Returns the bit value at offset in the string value stored at key
+     *
+     * @param string  $key    Key name
+     * @param integer $offset Offset
+     * @return mixed
+     */
+    public function getBit($key, $offset) { $args = func_get_args(); return $this->_executeCommand('getBit', $args); }
+
+    /**
+     * Returns the length of the string value stored at key
+     *
+     * @param string  $key Key name
+     * @return mixed
+     */
+    public function getLength($key) { $args = func_get_args(); return $this->_executeCommand('getLength', $args); }
 
     /**
      * Append value to the end of List
      *
-     * @param string $key     Key name
-     * @param mixed  $value   Element value
+     * @param string            $key                Key name
+     * @param mixed             $value              Element value
+     * @param boolean[optional] $createIfNotExists  Create list if not exists
      * @return mixed
      */
-    public function appendToList($key, $value) { $args = func_get_args(); return $this->_executeCommand('appendToList', $args); }
+    public function appendToList($key, $value, $createIfNotExists = true) { $args = func_get_args(); return $this->_executeCommand('appendToList', $args); }
 
     /**
      * Append value to the head of List
      *
-     * @param string $key    Key name
-     * @param mixed  $member Member
+     * @param string            $key                Key name
+     * @param mixed             $value              Element value
+     * @param boolean[optional] $createIfNotExists  Create list if not exists
      * @return mixed
      */
-    public function prependToList($key, $member) { $args = func_get_args(); return $this->_executeCommand('prependToList', $args); }
+    public function prependToList($key, $value, $createIfNotExists = true) { $args = func_get_args(); return $this->_executeCommand('prependToList', $args); }
 
     /**
      * Return the length of the List value at key
@@ -878,12 +927,14 @@ class Rediska extends Rediska_Options
     /**
      * Get List by key
      *
-     * @param string  $key             Key name
-     * @param integer $start[optional] Start index. For default is begin of list
-     * @param integer $end[optional]   End index. For default is end of list
+     * @param string  $key                         Key name
+     * @param integer $start[optional]             Start index. For default is begin of list
+     * @param integer $end[optional]               End index. For default is end of list
+     * @param boolean $responseIterator[optional]  If true - command return iterator which read from socket buffer.
+     *                                             Important: new connection will be created 
      * @return array
      */
-    public function getList($key, $start = 0, $end = -1) { $args = func_get_args(); return $this->_executeCommand('getList', $args); }
+    public function getList($key, $start = 0, $end = -1, $responseIterator = false) { $args = func_get_args(); return $this->_executeCommand('getList', $args); }
 
     /**
      * Trim the list at key to the specified range of elements
@@ -953,11 +1004,43 @@ class Rediska extends Rediska_Options
     /**
      * Return and remove the last element of the List at key and block if list is empty or not exists
      *
-     * @param string|array $keyOrKeys         Key name or array of names
-     * @param integer      $timeout[optional] Timeout. Disable for default.
+     * @param string|array $keyOrKeys           Key name or array of names
+     * @param integer      $timeout[optional]   Timeout. 0 for default - timeout is disabled.
+     * @param string       $pushToKey[optional] If not null - push value to another list.
      * @return mixed
      */
-    public function popFromListBlocking($keyOrKeys, $timeout = 0) { $args = func_get_args(); return $this->_executeCommand('popFromListBlocking', $args); }
+    public function popFromListBlocking($keyOrKeys, $timeout = 0, $pushToKey = null) { $args = func_get_args(); return $this->_executeCommand('popFromListBlocking', $args); }
+
+    /**
+     * Insert a new value as the element before or after the reference value
+     *
+     * @param string  $key            Key name
+     * @param string  $position       BEFORE or AFTER
+     * @param mixed   $referenceValue Reference value
+     * @param mixed   $value          Value
+     * @return integer|boolean
+     */
+    public function insertToList($key, $position, $referenceValue, $value) { $args = func_get_args(); return $this->_executeCommand('insertToList', $args); }
+
+    /**
+     * Insert a new value as the element after the reference value
+     *
+     * @param string  $key            Key name
+     * @param mixed   $referenceValue Reference value
+     * @param mixed   $value          Value
+     * @return integer|boolean
+     */
+    public function insertToListAfter($key, $referenceValue, $value) { $args = func_get_args(); return $this->_executeCommand('insertToListAfter', $args); }
+
+    /**
+     * Insert a new value as the element before the reference value
+     *
+     * @param string  $key            Key name
+     * @param mixed   $referenceValue Reference value
+     * @param mixed   $value          Value
+     * @return integer|boolean
+     */
+    public function insertToListBefore($key, $referenceValue, $value) { $args = func_get_args(); return $this->_executeCommand('insertToListBefore', $args); }
 
     /**
      * Add the specified member to the Set value at key
@@ -1033,10 +1116,12 @@ class Rediska extends Rediska_Options
     /**
      * Return all the members of the Set value at key
      *
-     * @param string $key Key name
+     * @param string  $key Key name
+     * @param boolean $responseIterator[optional]  If true - command return iterator which read from socket buffer.
+     *                                             Important: new connection will be created 
      * @return array
      */
-    public function getSet($key) { $args = func_get_args(); return $this->_executeCommand('getSet', $args); }
+    public function getSet($key, $responseIterator = false) { $args = func_get_args(); return $this->_executeCommand('getSet', $args); }
 
     /**
      * Move the specified member from one Set to another atomically
@@ -1070,14 +1155,16 @@ class Rediska extends Rediska_Options
     /**
      * Get all the members of the Sorted Set value at key
      *
-     * @param string  $key                  Key name
-     * @param integer $withScores[optional] Return values with scores. For default is false.
-     * @param integer $start[optional]      Start index. For default is begin of set.
-     * @param integer $end[optional]        End index. For default is end of set.
-     * @param boolean $revert[optional]     Revert elements (not used in sorting). For default is false
+     * @param string  $key                         Key name
+     * @param integer $withScores[optional]        Return values with scores. For default is false.
+     * @param integer $start[optional]             Start index. For default is begin of set.
+     * @param integer $end[optional]               End index. For default is end of set.
+     * @param boolean $revert[optional]            Revert elements (not used in sorting). For default is false
+     * @param boolean $responseIterator[optional]  If true - command return iterator which read from socket buffer.
+     *                                             Important: new connection will be created 
      * @return array
      */
-    public function getSortedSet($key, $withScores = false, $start = 0, $end = -1, $revert = false) { $args = func_get_args(); return $this->_executeCommand('getSortedSet', $args); }
+    public function getSortedSet($key, $withScores = false, $start = 0, $end = -1, $revert = false, $responseIterator = false) { $args = func_get_args(); return $this->_executeCommand('getSortedSet', $args); }
 
     /**
      * Get members from sorted set by min and max score
@@ -1263,14 +1350,23 @@ class Rediska extends Rediska_Options
      * Get sorted elements contained in the List, Set, or Sorted Set value at key.
      *
      * @param string        $key   Key name
-     * @param string|array  $value Options or SORT query string (http://code.google.com/p/redis/wiki/SortCommand).
-     *                             Important notes for SORT query string:
-     *                                 1. If you set Rediska namespace option don't forget add it to key names.
-     *                                 2. If you use more then one connection to Redis servers, it will choose by key name,
-     *                                    and key by you pattern's may not present on it.
+     * @param array         $value Options:
+     *                               * order
+     *                               * limit
+     *                               * offset
+     *                               * alpha
+     *                               * get
+     *                               * by
+     *                               * store
+     *
+     *                              See more: http://code.google.com/p/redis/wiki/SortCommand
+
+     *                              If you use more then one connection to Redis servers,
+     *                              it will choose by key name, and key by you pattern's may not present on it.
+     *
      * @return array
      */
-    public function sort($key, $options = array()) { $args = func_get_args(); return $this->_executeCommand('sort', $args); }
+    public function sort($key, array $options = array()) { $args = func_get_args(); return $this->_executeCommand('sort', $args); }
 
     /**
      * Publish message to pubsub channel
