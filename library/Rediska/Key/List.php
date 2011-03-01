@@ -219,15 +219,15 @@ class Rediska_Key_List extends Rediska_Key_Abstract implements IteratorAggregate
     }
 
     /**
-     * Return and remove the last element of the List and block if list empty or not exists
+     * Return and remove the last element of the List and block if list empty or not exists.
      *
-     * @param $timeout[optional] Blocking timeout
-     * @param $pushTo[optional]  If not Key name of list
+     * @param integer $timeout[optional]   Blocking timeout. 0 for default - timeout is disabled.
+     * @param string  $pushToKey[optional] If not null - push value to another list.
      * @return mixed
      */
-    public function popBlocking($timeout = 0, $pushTo = null)
+    public function popBlocking($timeout = 0, $pushToKey = null)
     {
-        $result = $this->_getRediskaOn()->popFromListBlocking($this->getName(), $timeout);
+        $result = $this->_getRediskaOn()->popFromListBlocking($this->getName(), $timeout, $pushToKey);
 
         if (!is_null($this->getExpire()) && $result) {
             $this->expire($this->getExpire(), $this->isExpireTimestamp());

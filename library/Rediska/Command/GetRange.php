@@ -29,7 +29,7 @@ class Rediska_Command_GetRange extends Rediska_Command_Abstract
         }
 
         $redisVersion = $this->getRediska()->getOption('redisVersion');
-        $isVersionLessThen2 = version_compare('2.0', $redisVersion) == 1;
+        $isVersionLessThen2 = version_compare('2.0.4', $redisVersion) >= 0;
 
         $command = array($isVersionLessThen2 ? 'SUBSTR' : 'GETRANGE',
                          $this->_rediska->getOption('namespace') . $key,
