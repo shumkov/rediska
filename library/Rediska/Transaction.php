@@ -448,7 +448,7 @@ class Rediska_Transaction
      * @param integer[optional] $end   End. If end is omitted, the substring starting from $start until the end of the string will be returned. For default end of string
      * @return Rediska_Transaction
      */
-    public function getRange($key, $start, $end = -1) { $args = func_get_args(); return $this->_addCommand('getRange', $args); }
+    public function substring($key, $start, $end = -1) { $args = func_get_args(); return $this->_addCommand('substring', $args); }
 
     /**
      * Returns the bit value at offset in the string value stored at key

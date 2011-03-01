@@ -25,7 +25,7 @@ class Rediska_Command_GetRange extends Rediska_Command_Abstract
     public function create($key, $start, $end = -1)
     {
         if ($this->getName() == 'substring') {
-            trigger_error('Substring is deprecated - use getRange command', E_USER_WARNING);
+            trigger_error('Substring is deprecated. Use getRange command instead', E_USER_WARNING);
         }
 
         $redisVersion = $this->getRediska()->getOption('redisVersion');
