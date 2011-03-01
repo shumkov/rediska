@@ -194,6 +194,10 @@ abstract class Rediska_Key_Abstract extends Rediska_Options_RediskaInstance
      */
     public function setExpire($secondsOrTimestamp, $isTimestamp = false)
     {
+        if ($secondsOrTimestamp !== null) {
+            trigger_error('Expire option is deprecated, because expire behaviour was changed in Redis 2.2. Use expire method instead.', E_USER_WARNING);
+        }
+
         $this->_options['expire'] = $secondsOrTimestamp;
         $this->_options['expireIsTimestamp'] = $isTimestamp;
         
