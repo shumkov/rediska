@@ -339,8 +339,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
             $key = !is_integer($name) ? "'$name' => " : '';
 
             if (is_object($value)) {
-                //$string .= get_class($argument);
-                $argument = (string)$value;
+                $argument = get_class($value) . ' $' . $name;
             } else if (is_numeric($value)) {
                 $argument = $value;
             } else if (is_string($value)) {

@@ -18,6 +18,7 @@ Version 0.5.5 (March 2, 2011):
  * Improvement #9052: Add getValues to Rediska_Key_Set and Rediska_Key_List
  * Bug #4900: Require Rediska bug in Rediska_PubSub_Channel
  * Bug #6745: Pub/sub channel can't get Rediska_Connections
+ * Bug #10061: Subscribe throws exception by timeout if it not specified
  * Bug #6746: True subscribe response throws exception
  * Bug #6747: Add specified connection to publish
  * Bug #6748: Fix memory leaks
