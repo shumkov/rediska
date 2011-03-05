@@ -1,4 +1,4 @@
-Version 0.5.5 (March 2, 2011):
+Version 0.5.5 (March 8, 2011):
  * Feature #4214: Profiler
  * Feature #9921: Implement SETBIT, GETBIT, SETRANGE, GETRANGE, STRLEN
  * Feature #9932: Implement LINSERT, LPUSHX, RPUSHX
@@ -16,6 +16,7 @@ Version 0.5.5 (March 2, 2011):
  * Improvement #9021: Add getByRank to Rediska_Key_SortedSet
  * Improvement #9045: Add getFieldsAndValues() to Rediska_Key_Hash
  * Improvement #9052: Add getValues to Rediska_Key_Set and Rediska_Key_List
+ * Improvement #10093: Add expire argument to Rediska_Key::getOrSetValue
  * Bug #4900: Require Rediska bug in Rediska_PubSub_Channel
  * Bug #6745: Pub/sub channel can't get Rediska_Connections
  * Bug #10061: Subscribe throws exception by timeout if it not specified
