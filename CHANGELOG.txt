@@ -24,6 +24,7 @@ Version 0.5.5 (March 8, 2011):
  * Bug #6747: Add specified connection to publish
  * Bug #6748: Fix memory leaks
  * Bug #6777: Fix test bootstrap
+ * Bug #10159: Break typo in consitent hashing
 
 Version 0.5.1 (October 28, 2010):
  * Feature #2033: Implement ZCOUNT
