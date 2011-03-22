@@ -59,11 +59,16 @@ class Rediska_Zend_Profiler_Firebug extends Rediska_Profiler
         $matches = array();
         preg_match('/^(.+)\((.*)\)$/s', $commandString, $matches);
 
-        $this->getMessage()->addRow(array(
-            (double)$profile->getElapsedTime(4),
-            $matches[1],
-            $matches[2]
-        ));
+        $row = array((double)$profile->getElapsedTime(4));
+
+        if (isset($matches[1])) {
+            $row[] = $matches[1];
+            $row[] = $matches[2];
+        } else {
+            $row[] = $commandString;
+        }
+
+        $this->getMessage()->addRow($row);
 
         $placeHolders = array(
             '%rediskaName%'      => $profile->getContext()->getRediska()->getName(),
