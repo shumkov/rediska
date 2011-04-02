@@ -36,11 +36,11 @@ More information and documentation on homepage: http://rediska.geometria-lab.net
   <email>till@php.net</email>
   <active>yes</active>
  </developer>
- <date>2010-10-28</date>
- <time>17:27:04</time>
+ <date>2011-04-02</date>
+ <time>13:48:51</time>
  <version>
-  <release>0.5.1</release>
-  <api>0.5.1</api>
+  <release>0.5.5</release>
+  <api>0.5.5</api>
  </version>
  <stability>
   <release>beta</release>
@@ -55,873 +55,6 @@ This is an beta release, see README.markdown for examples.
    <dir name="benchmarks">
     <file baseinstalldir="/" name="keydistributors.php" role="doc" />
    </dir> <!-- /benchmarks -->
-   <dir name="docs">
-    <dir name="images">
-     <file baseinstalldir="/" name="AbstractClass.png" role="data" />
-     <file baseinstalldir="/" name="AbstractClass_logo.png" role="data" />
-     <file baseinstalldir="/" name="AbstractMethod.png" role="data" />
-     <file baseinstalldir="/" name="AbstractPrivateClass.png" role="data" />
-     <file baseinstalldir="/" name="AbstractPrivateClass_logo.png" role="data" />
-     <file baseinstalldir="/" name="AbstractPrivateMethod.png" role="data" />
-     <file baseinstalldir="/" name="accordian.gif" role="data" />
-     <file baseinstalldir="/" name="blank.png" role="data" />
-     <file baseinstalldir="/" name="block-bg.gif" role="data" />
-     <file baseinstalldir="/" name="block-bottom.gif" role="data" />
-     <file baseinstalldir="/" name="block-top.gif" role="data" />
-     <file baseinstalldir="/" name="class.gif" role="data" />
-     <file baseinstalldir="/" name="Class.png" role="data" />
-     <file baseinstalldir="/" name="class_folder.png" role="data" />
-     <file baseinstalldir="/" name="Class_logo.png" role="data" />
-     <file baseinstalldir="/" name="cmp.gif" role="data" />
-     <file baseinstalldir="/" name="collapse-all.gif" role="data" />
-     <file baseinstalldir="/" name="collapse-bg.gif" role="data" />
-     <file baseinstalldir="/" name="config.gif" role="data" />
-     <file baseinstalldir="/" name="Constant.png" role="data" />
-     <file baseinstalldir="/" name="Constructor.png" role="data" />
-     <file baseinstalldir="/" name="Destructor.png" role="data" />
-     <file baseinstalldir="/" name="docs.gif" role="data" />
-     <file baseinstalldir="/" name="elbow-end.gif" role="data" />
-     <file baseinstalldir="/" name="empty.png" role="data" />
-     <file baseinstalldir="/" name="event.gif" role="data" />
-     <file baseinstalldir="/" name="example.gif" role="data" />
-     <file baseinstalldir="/" name="expand-all.gif" role="data" />
-     <file baseinstalldir="/" name="expand-bg-over.gif" role="data" />
-     <file baseinstalldir="/" name="expand-bg.gif" role="data" />
-     <file baseinstalldir="/" name="expand-members.gif" role="data" />
-     <file baseinstalldir="/" name="extanim32.gif" role="data" />
-     <file baseinstalldir="/" name="extanim64.gif" role="data" />
-     <file baseinstalldir="/" name="fav.gif" role="data" />
-     <file baseinstalldir="/" name="file.png" role="data" />
-     <file baseinstalldir="/" name="folder.gif" role="data" />
-     <file baseinstalldir="/" name="folder.png" role="data" />
-     <file baseinstalldir="/" name="folder_open.gif" role="data" />
-     <file baseinstalldir="/" name="form.png" role="data" />
-     <file baseinstalldir="/" name="forum.gif" role="data" />
-     <file baseinstalldir="/" name="Function.png" role="data" />
-     <file baseinstalldir="/" name="function_folder.png" role="data" />
-     <file baseinstalldir="/" name="Global.png" role="data" />
-     <file baseinstalldir="/" name="hd-bg.gif" role="data" />
-     <file baseinstalldir="/" name="hide-inherited.gif" role="data" />
-     <file baseinstalldir="/" name="I.png" role="data" />
-     <file baseinstalldir="/" name="icon-grid.gif" role="data" />
-     <file baseinstalldir="/" name="Index.png" role="data" />
-     <file baseinstalldir="/" name="inherited.gif" role="data" />
-     <file baseinstalldir="/" name="Interface.png" role="data" />
-     <file baseinstalldir="/" name="Interface_logo.png" role="data" />
-     <file baseinstalldir="/" name="L.png" role="data" />
-     <file baseinstalldir="/" name="Lminus.png" role="data" />
-     <file baseinstalldir="/" name="Lplus.png" role="data" />
-     <file baseinstalldir="/" name="member-collapsed.gif" role="data" />
-     <file baseinstalldir="/" name="member-expanded.gif" role="data" />
-     <file baseinstalldir="/" name="member-hover.gif" role="data" />
-     <file baseinstalldir="/" name="method.gif" role="data" />
-     <file baseinstalldir="/" name="Method.png" role="data" />
-     <file baseinstalldir="/" name="minus.gif" role="data" />
-     <file baseinstalldir="/" name="next_button.png" role="data" />
-     <file baseinstalldir="/" name="next_button_disabled.png" role="data" />
-     <file baseinstalldir="/" name="package.png" role="data" />
-     <file baseinstalldir="/" name="package_folder.png" role="data" />
-     <file baseinstalldir="/" name="Page.png" role="data" />
-     <file baseinstalldir="/" name="Page_logo.png" role="data" />
-     <file baseinstalldir="/" name="pkg-closed.gif" role="data" />
-     <file baseinstalldir="/" name="pkg-open.gif" role="data" />
-     <file baseinstalldir="/" name="pkg.gif" role="data" />
-     <file baseinstalldir="/" name="plus.gif" role="data" />
-     <file baseinstalldir="/" name="previous_button.png" role="data" />
-     <file baseinstalldir="/" name="previous_button_disabled.png" role="data" />
-     <file baseinstalldir="/" name="print.gif" role="data" />
-     <file baseinstalldir="/" name="PrivateClass.png" role="data" />
-     <file baseinstalldir="/" name="PrivateClass_logo.png" role="data" />
-     <file baseinstalldir="/" name="PrivateMethod.png" role="data" />
-     <file baseinstalldir="/" name="PrivateVariable.png" role="data" />
-     <file baseinstalldir="/" name="private_class_logo.png" role="data" />
-     <file baseinstalldir="/" name="prop.gif" role="data" />
-     <file baseinstalldir="/" name="s.gif" role="data" />
-     <file baseinstalldir="/" name="static.gif" role="data" />
-     <file baseinstalldir="/" name="StaticMethod.png" role="data" />
-     <file baseinstalldir="/" name="StaticVariable.png" role="data" />
-     <file baseinstalldir="/" name="T.png" role="data" />
-     <file baseinstalldir="/" name="tabs.gif" role="data" />
-     <file baseinstalldir="/" name="Tminus.png" role="data" />
-     <file baseinstalldir="/" name="Tplus.png" role="data" />
-     <file baseinstalldir="/" name="tree-bg.gif" role="data" />
-     <file baseinstalldir="/" name="tutorial.png" role="data" />
-     <file baseinstalldir="/" name="tutorial_folder.png" role="data" />
-     <file baseinstalldir="/" name="up_button.png" role="data" />
-     <file baseinstalldir="/" name="Variable.png" role="data" />
-     <file baseinstalldir="/" name="wel-bg.gif" role="data" />
-     <file baseinstalldir="/" name="welcome-bg.gif" role="data" />
-    </dir> <!-- /docs/images -->
-    <dir name="media">
-     <dir name="images">
-      <file baseinstalldir="/" name="AbstractClass.png" role="data" />
-      <file baseinstalldir="/" name="AbstractClass_logo.png" role="data" />
-      <file baseinstalldir="/" name="AbstractMethod.png" role="data" />
-      <file baseinstalldir="/" name="AbstractPrivateClass.png" role="data" />
-      <file baseinstalldir="/" name="AbstractPrivateClass_logo.png" role="data" />
-      <file baseinstalldir="/" name="AbstractPrivateMethod.png" role="data" />
-      <file baseinstalldir="/" name="blank.png" role="data" />
-      <file baseinstalldir="/" name="Class.png" role="data" />
-      <file baseinstalldir="/" name="class_folder.png" role="data" />
-      <file baseinstalldir="/" name="Class_logo.png" role="data" />
-      <file baseinstalldir="/" name="Constant.png" role="data" />
-      <file baseinstalldir="/" name="Constructor.png" role="data" />
-      <file baseinstalldir="/" name="Destructor.png" role="data" />
-      <file baseinstalldir="/" name="empty.png" role="data" />
-      <file baseinstalldir="/" name="file.png" role="data" />
-      <file baseinstalldir="/" name="folder.png" role="data" />
-      <file baseinstalldir="/" name="Function.png" role="data" />
-      <file baseinstalldir="/" name="function_folder.png" role="data" />
-      <file baseinstalldir="/" name="Global.png" role="data" />
-      <file baseinstalldir="/" name="I.png" role="data" />
-      <file baseinstalldir="/" name="Index.png" role="data" />
-      <file baseinstalldir="/" name="Interface.png" role="data" />
-      <file baseinstalldir="/" name="Interface_logo.png" role="data" />
-      <file baseinstalldir="/" name="L.png" role="data" />
-      <file baseinstalldir="/" name="Lminus.png" role="data" />
-      <file baseinstalldir="/" name="Lplus.png" role="data" />
-      <file baseinstalldir="/" name="Method.png" role="data" />
-      <file baseinstalldir="/" name="next_button.png" role="data" />
-      <file baseinstalldir="/" name="next_button_disabled.png" role="data" />
-      <file baseinstalldir="/" name="package.png" role="data" />
-      <file baseinstalldir="/" name="package_folder.png" role="data" />
-      <file baseinstalldir="/" name="Page.png" role="data" />
-      <file baseinstalldir="/" name="Page_logo.png" role="data" />
-      <file baseinstalldir="/" name="previous_button.png" role="data" />
-      <file baseinstalldir="/" name="previous_button_disabled.png" role="data" />
-      <file baseinstalldir="/" name="PrivateClass.png" role="data" />
-      <file baseinstalldir="/" name="PrivateClass_logo.png" role="data" />
-      <file baseinstalldir="/" name="PrivateMethod.png" role="data" />
-      <file baseinstalldir="/" name="PrivateVariable.png" role="data" />
-      <file baseinstalldir="/" name="private_class_logo.png" role="data" />
-      <file baseinstalldir="/" name="StaticMethod.png" role="data" />
-      <file baseinstalldir="/" name="StaticVariable.png" role="data" />
-      <file baseinstalldir="/" name="T.png" role="data" />
-      <file baseinstalldir="/" name="Tminus.png" role="data" />
-      <file baseinstalldir="/" name="Tplus.png" role="data" />
-      <file baseinstalldir="/" name="tutorial.png" role="data" />
-      <file baseinstalldir="/" name="tutorial_folder.png" role="data" />
-      <file baseinstalldir="/" name="up_button.png" role="data" />
-      <file baseinstalldir="/" name="Variable.png" role="data" />
-     </dir> <!-- /docs/media/images -->
-     <file baseinstalldir="/" name="banner.css" role="data" />
-     <file baseinstalldir="/" name="stylesheet.css" role="data" />
-    </dir> <!-- /docs/media -->
-    <dir name="Rediska">
-     <file baseinstalldir="/" name="Rediska.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Autoloader.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Commands.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_Abstract.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_AddToSet.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_AddToSortedSet.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_Append.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_AppendToList.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_CompareSets.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_CompareSortedSets.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_Decrement.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_Delete.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_DeleteFromHash.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_DeleteFromList.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_DeleteFromSet.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_DeleteFromSortedSet.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_DeleteFromSortedSetByRank.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_DeleteFromSortedSetByScore.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_DiffSets.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_Exception.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_Exists.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_ExistsInHash.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_ExistsInSet.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_Expire.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_FlushDb.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_Get.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_GetFromHash.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_GetFromList.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_GetFromSortedSetByScore.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_GetHash.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_GetHashFields.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_GetHashLength.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_GetHashValues.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_GetKeysByPattern.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_GetKeysCount.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_GetLastSaveTime.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_GetLifetime.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_GetList.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_GetListLength.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_GetRandomFromSet.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_GetRandomKey.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_GetRankFromSortedSet.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_GetScoreFromSortedSet.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_GetSet.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_GetSetLength.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_GetSortedSet.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_GetSortedSetLength.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_GetType.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_Increment.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_IncrementInHash.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_IncrementScoreInSortedSet.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_Info.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_Interface.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_IntersectSets.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_IntersectSortedSets.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_MoveToDb.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_MoveToSet.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_PopFromList.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_PopFromListBlocking.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_PrependToList.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_Publish.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_Quit.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_Rename.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_Response_ListNameAndValue.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_Response_ValueAndScore.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_RewriteAppendOnlyFile.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_Save.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_SelectDb.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_Set.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_SetAndExpire.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_SetAndGet.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_SetToHash.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_SetToList.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_ShiftFromList.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_ShiftFromListBlocking.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_Shutdown.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_SlaveOf.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_Sort.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_Substring.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_TruncateList.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_UnionSets.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Command_UnionSortedSets.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Config.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Connection.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Connection_Exception.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Connection_Exec.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Connection_Exec_Exception.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Connection_Specified.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Connection_TimeoutException.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Exception.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Key.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_KeyDistributor_ConsistentHashing.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_KeyDistributor_Crc32.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_KeyDistributor_Exception.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_KeyDistributor_Interface.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Key_Abstract.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Key_Exception.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Key_GetOrSetValue.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Key_Hash.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Key_List.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Key_Set.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Key_SortedSet.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Manager.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Monitor.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Monitor_Connections.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Monitor_Exception.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Options.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Options_RediskaInstance.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Pipeline.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_PubSub_Channel.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_PubSub_Connections.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_PubSub_Exception.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_PubSub_Response_Abstract.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_PubSub_Response_Exception.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_PubSub_Response_Message.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_PubSub_Response_Subscribe.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_PubSub_Response_Unsubscribe.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Serializer.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Serializer_Adapter_Exception.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Serializer_Adapter_Interface.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Serializer_Adapter_Json.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Serializer_Adapter_PhpSerialize.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Serializer_Adapter_ToString.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Serializer_Exception.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Transaction.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Transaction_Exception.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Zend_Application_Resource_Rediska.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Zend_Auth_Adapter_Redis.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Zend_Cache_Backend_Redis.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Zend_Log_Writer_Redis.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Zend_Queue_Adapter_Redis.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Zend_Session_SaveHandler_Redis.html" role="doc" />
-     <file baseinstalldir="/" name="Rediska_Zend_Session_Set.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Autoloader.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---Abstract.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---AddToSet.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---AddToSortedSet.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---Append.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---AppendToList.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---CompareSets.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---CompareSortedSets.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---Decrement.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---Delete.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---DeleteFromHash.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---DeleteFromList.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---DeleteFromSet.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---DeleteFromSortedSet.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---DeleteFromSortedSetByRank.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---DeleteFromSortedSetByScore.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---DiffSets.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---Exception.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---Exists.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---ExistsInHash.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---ExistsInSet.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---Expire.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---FlushDb.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---Get.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---GetFromHash.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---GetFromList.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---GetFromSortedSetByScore.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---GetHash.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---GetHashFields.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---GetHashLength.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---GetHashValues.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---GetKeysByPattern.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---GetKeysCount.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---GetLastSaveTime.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---GetLifetime.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---GetList.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---GetListLength.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---GetRandomFromSet.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---GetRandomKey.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---GetRankFromSortedSet.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---GetScoreFromSortedSet.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---GetSet.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---GetSetLength.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---GetSortedSet.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---GetSortedSetLength.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---GetType.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---Increment.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---IncrementInHash.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---IncrementScoreInSortedSet.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---Info.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---Interface.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---IntersectSets.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---IntersectSortedSets.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---MoveToDb.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---MoveToSet.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---PopFromList.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---PopFromListBlocking.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---PrependToList.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---Publish.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---Quit.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---Rename.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---Response---ListNameAndValue.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---Response---ValueAndScore.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---RewriteAppendOnlyFile.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---Save.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---SelectDb.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---Set.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---SetAndExpire.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---SetAndGet.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---SetToHash.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---SetToList.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---ShiftFromList.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---ShiftFromListBlocking.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---Shutdown.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---SlaveOf.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---Sort.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---Substring.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---TruncateList.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---UnionSets.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Command---UnionSortedSets.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Commands.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Config.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Connection---Exception.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Connection---Exec---Exception.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Connection---Exec.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Connection---Specified.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Connection---TimeoutException.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Connection.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Exception.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Key---Abstract.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Key---Exception.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Key---Hash.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Key---List.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Key---Set.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Key---SortedSet.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Key.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---KeyDistributor---ConsistentHashing.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---KeyDistributor---Crc32.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---KeyDistributor---Exception.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---KeyDistributor---Interface.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Manager.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Monitor---Connections.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Monitor---Exception.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Monitor.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Options---RediskaInstance.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Options.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Pipeline.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---PubSub---Channel.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---PubSub---Connections.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---PubSub---Exception.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---PubSub---Response---Abstract.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---PubSub---Response---Exception.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---PubSub---Response---Message.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---PubSub---Response---Subscribe.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---PubSub---Response---Unsubscribe.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Serializer---Adapter---Exception.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Serializer---Adapter---Interface.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Serializer---Adapter---Json.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Serializer---Adapter---PhpSerialize.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Serializer---Adapter---ToString.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Serializer---Exception.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Serializer.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Transaction---Exception.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Transaction.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Zend---Application---Resource---Rediska.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Zend---Auth---Adapter---Redis.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Zend---Cache---Backend---Redis.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Zend---Log---Writer---Redis.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Zend---Queue---Adapter---Redis.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Zend---Session---SaveHandler---Redis.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska---Zend---Session---Set.php.html" role="doc" />
-     <file baseinstalldir="/" name="_Rediska.php.html" role="doc" />
-    </dir> <!-- /docs/Rediska -->
-    <dir name="scripts">
-     <dir name="extjs">
-      <dir name="adapter">
-       <dir name="ext">
-        <file baseinstalldir="/" name="ext-base.js" role="data" />
-       </dir> <!-- /docs/scripts/extjs/adapter/ext -->
-       <dir name="jquery">
-        <file baseinstalldir="/" name="ext-jquery-adapter.js" role="data" />
-        <file baseinstalldir="/" name="jquery.js" role="data" />
-       </dir> <!-- /docs/scripts/extjs/adapter/jquery -->
-       <dir name="prototype">
-        <file baseinstalldir="/" name="effects.js" role="data" />
-        <file baseinstalldir="/" name="ext-prototype-adapter.js" role="data" />
-        <file baseinstalldir="/" name="prototype.js" role="data" />
-        <file baseinstalldir="/" name="scriptaculous.js" role="data" />
-       </dir> <!-- /docs/scripts/extjs/adapter/prototype -->
-       <dir name="yui">
-        <file baseinstalldir="/" name="ext-yui-adapter.js" role="data" />
-        <file baseinstalldir="/" name="yui-utilities.js" role="data" />
-       </dir> <!-- /docs/scripts/extjs/adapter/yui -->
-      </dir> <!-- /docs/scripts/extjs/adapter -->
-      <dir name="resources">
-       <dir name="css">
-        <file baseinstalldir="/" name="borders.css" role="data" />
-        <file baseinstalldir="/" name="box.css" role="data" />
-        <file baseinstalldir="/" name="button.css" role="data" />
-        <file baseinstalldir="/" name="combo.css" role="data" />
-        <file baseinstalldir="/" name="core.css" role="data" />
-        <file baseinstalldir="/" name="date-picker.css" role="data" />
-        <file baseinstalldir="/" name="dd.css" role="data" />
-        <file baseinstalldir="/" name="debug.css" role="data" />
-        <file baseinstalldir="/" name="dialog.css" role="data" />
-        <file baseinstalldir="/" name="editor.css" role="data" />
-        <file baseinstalldir="/" name="ext-all.css" role="data" />
-        <file baseinstalldir="/" name="form.css" role="data" />
-        <file baseinstalldir="/" name="grid.css" role="data" />
-        <file baseinstalldir="/" name="layout.css" role="data" />
-        <file baseinstalldir="/" name="menu.css" role="data" />
-        <file baseinstalldir="/" name="panel.css" role="data" />
-        <file baseinstalldir="/" name="progress.css" role="data" />
-        <file baseinstalldir="/" name="qtips.css" role="data" />
-        <file baseinstalldir="/" name="README.txt" role="data" />
-        <file baseinstalldir="/" name="reset-min.css" role="data" />
-        <file baseinstalldir="/" name="reset.css" role="data" />
-        <file baseinstalldir="/" name="resizable.css" role="data" />
-        <file baseinstalldir="/" name="slider.css" role="data" />
-        <file baseinstalldir="/" name="tabs.css" role="data" />
-        <file baseinstalldir="/" name="toolbar.css" role="data" />
-        <file baseinstalldir="/" name="tree.css" role="data" />
-        <file baseinstalldir="/" name="window.css" role="data" />
-        <file baseinstalldir="/" name="xtheme-gray.css" role="data" />
-       </dir> <!-- /docs/scripts/extjs/resources/css -->
-       <dir name="images">
-        <dir name="default">
-         <dir name="box">
-          <file baseinstalldir="/" name="corners-blue.gif" role="data" />
-          <file baseinstalldir="/" name="corners.gif" role="data" />
-          <file baseinstalldir="/" name="l-blue.gif" role="data" />
-          <file baseinstalldir="/" name="l.gif" role="data" />
-          <file baseinstalldir="/" name="r-blue.gif" role="data" />
-          <file baseinstalldir="/" name="r.gif" role="data" />
-          <file baseinstalldir="/" name="tb-blue.gif" role="data" />
-          <file baseinstalldir="/" name="tb.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/default/box -->
-         <dir name="button">
-          <file baseinstalldir="/" name="btn-arrow.gif" role="data" />
-          <file baseinstalldir="/" name="btn-sprite.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/default/button -->
-         <dir name="dd">
-          <file baseinstalldir="/" name="drop-add.gif" role="data" />
-          <file baseinstalldir="/" name="drop-no.gif" role="data" />
-          <file baseinstalldir="/" name="drop-yes.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/default/dd -->
-         <dir name="editor">
-          <file baseinstalldir="/" name="tb-sprite.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/default/editor -->
-         <dir name="form">
-          <file baseinstalldir="/" name="clear-trigger.gif" role="data" />
-          <file baseinstalldir="/" name="clear-trigger.psd" role="data" />
-          <file baseinstalldir="/" name="date-trigger.gif" role="data" />
-          <file baseinstalldir="/" name="date-trigger.psd" role="data" />
-          <file baseinstalldir="/" name="error-tip-corners.gif" role="data" />
-          <file baseinstalldir="/" name="exclamation.gif" role="data" />
-          <file baseinstalldir="/" name="search-trigger.gif" role="data" />
-          <file baseinstalldir="/" name="search-trigger.psd" role="data" />
-          <file baseinstalldir="/" name="text-bg.gif" role="data" />
-          <file baseinstalldir="/" name="trigger-tpl.gif" role="data" />
-          <file baseinstalldir="/" name="trigger.gif" role="data" />
-          <file baseinstalldir="/" name="trigger.psd" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/default/form -->
-         <dir name="grid">
-          <file baseinstalldir="/" name="arrow-left-white.gif" role="data" />
-          <file baseinstalldir="/" name="arrow-right-white.gif" role="data" />
-          <file baseinstalldir="/" name="col-move-bottom.gif" role="data" />
-          <file baseinstalldir="/" name="col-move-top.gif" role="data" />
-          <file baseinstalldir="/" name="columns.gif" role="data" />
-          <file baseinstalldir="/" name="dirty.gif" role="data" />
-          <file baseinstalldir="/" name="done.gif" role="data" />
-          <file baseinstalldir="/" name="drop-no.gif" role="data" />
-          <file baseinstalldir="/" name="drop-yes.gif" role="data" />
-          <file baseinstalldir="/" name="footer-bg.gif" role="data" />
-          <file baseinstalldir="/" name="grid-blue-hd.gif" role="data" />
-          <file baseinstalldir="/" name="grid-blue-split.gif" role="data" />
-          <file baseinstalldir="/" name="grid-hrow.gif" role="data" />
-          <file baseinstalldir="/" name="grid-loading.gif" role="data" />
-          <file baseinstalldir="/" name="grid-split.gif" role="data" />
-          <file baseinstalldir="/" name="grid-vista-hd.gif" role="data" />
-          <file baseinstalldir="/" name="grid3-hd-btn.gif" role="data" />
-          <file baseinstalldir="/" name="grid3-hrow-over.gif" role="data" />
-          <file baseinstalldir="/" name="grid3-hrow.gif" role="data" />
-          <file baseinstalldir="/" name="grid3-special-col-bg.gif" role="data" />
-          <file baseinstalldir="/" name="grid3-special-col-sel-bg.gif" role="data" />
-          <file baseinstalldir="/" name="group-by.gif" role="data" />
-          <file baseinstalldir="/" name="group-expand-sprite.gif" role="data" />
-          <file baseinstalldir="/" name="hd-pop.gif" role="data" />
-          <file baseinstalldir="/" name="hmenu-asc.gif" role="data" />
-          <file baseinstalldir="/" name="hmenu-desc.gif" role="data" />
-          <file baseinstalldir="/" name="hmenu-lock.gif" role="data" />
-          <file baseinstalldir="/" name="hmenu-lock.png" role="data" />
-          <file baseinstalldir="/" name="hmenu-unlock.gif" role="data" />
-          <file baseinstalldir="/" name="hmenu-unlock.png" role="data" />
-          <file baseinstalldir="/" name="invalid_line.gif" role="data" />
-          <file baseinstalldir="/" name="loading.gif" role="data" />
-          <file baseinstalldir="/" name="mso-hd.gif" role="data" />
-          <file baseinstalldir="/" name="nowait.gif" role="data" />
-          <file baseinstalldir="/" name="page-first-disabled.gif" role="data" />
-          <file baseinstalldir="/" name="page-first.gif" role="data" />
-          <file baseinstalldir="/" name="page-last-disabled.gif" role="data" />
-          <file baseinstalldir="/" name="page-last.gif" role="data" />
-          <file baseinstalldir="/" name="page-next-disabled.gif" role="data" />
-          <file baseinstalldir="/" name="page-next.gif" role="data" />
-          <file baseinstalldir="/" name="page-prev-disabled.gif" role="data" />
-          <file baseinstalldir="/" name="page-prev.gif" role="data" />
-          <file baseinstalldir="/" name="pick-button.gif" role="data" />
-          <file baseinstalldir="/" name="refresh.gif" role="data" />
-          <file baseinstalldir="/" name="row-check-sprite.gif" role="data" />
-          <file baseinstalldir="/" name="row-expand-sprite.gif" role="data" />
-          <file baseinstalldir="/" name="row-over.gif" role="data" />
-          <file baseinstalldir="/" name="row-sel.gif" role="data" />
-          <file baseinstalldir="/" name="sort_asc.gif" role="data" />
-          <file baseinstalldir="/" name="sort_desc.gif" role="data" />
-          <file baseinstalldir="/" name="Thumbs.db" role="data" />
-          <file baseinstalldir="/" name="wait.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/default/grid -->
-         <dir name="layout">
-          <file baseinstalldir="/" name="collapse.gif" role="data" />
-          <file baseinstalldir="/" name="expand.gif" role="data" />
-          <file baseinstalldir="/" name="gradient-bg.gif" role="data" />
-          <file baseinstalldir="/" name="mini-bottom.gif" role="data" />
-          <file baseinstalldir="/" name="mini-left.gif" role="data" />
-          <file baseinstalldir="/" name="mini-right.gif" role="data" />
-          <file baseinstalldir="/" name="mini-top.gif" role="data" />
-          <file baseinstalldir="/" name="ns-collapse.gif" role="data" />
-          <file baseinstalldir="/" name="ns-expand.gif" role="data" />
-          <file baseinstalldir="/" name="panel-close.gif" role="data" />
-          <file baseinstalldir="/" name="panel-title-bg.gif" role="data" />
-          <file baseinstalldir="/" name="panel-title-light-bg.gif" role="data" />
-          <file baseinstalldir="/" name="stick.gif" role="data" />
-          <file baseinstalldir="/" name="stuck.gif" role="data" />
-          <file baseinstalldir="/" name="tab-close-on.gif" role="data" />
-          <file baseinstalldir="/" name="tab-close.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/default/layout -->
-         <dir name="menu">
-          <file baseinstalldir="/" name="checked.gif" role="data" />
-          <file baseinstalldir="/" name="group-checked.gif" role="data" />
-          <file baseinstalldir="/" name="item-over.gif" role="data" />
-          <file baseinstalldir="/" name="menu-parent.gif" role="data" />
-          <file baseinstalldir="/" name="menu.gif" role="data" />
-          <file baseinstalldir="/" name="unchecked.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/default/menu -->
-         <dir name="panel">
-          <file baseinstalldir="/" name="corners-sprite.gif" role="data" />
-          <file baseinstalldir="/" name="left-right.gif" role="data" />
-          <file baseinstalldir="/" name="light-hd.gif" role="data" />
-          <file baseinstalldir="/" name="tool-sprite-tpl.gif" role="data" />
-          <file baseinstalldir="/" name="tool-sprites.gif" role="data" />
-          <file baseinstalldir="/" name="tools-sprites-trans.gif" role="data" />
-          <file baseinstalldir="/" name="top-bottom.gif" role="data" />
-          <file baseinstalldir="/" name="top-bottom.png" role="data" />
-          <file baseinstalldir="/" name="white-corners-sprite.gif" role="data" />
-          <file baseinstalldir="/" name="white-left-right.gif" role="data" />
-          <file baseinstalldir="/" name="white-top-bottom.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/default/panel -->
-         <dir name="progress">
-          <file baseinstalldir="/" name="progress-bg.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/default/progress -->
-         <dir name="qtip">
-          <file baseinstalldir="/" name="bg.gif" role="data" />
-          <file baseinstalldir="/" name="close.gif" role="data" />
-          <file baseinstalldir="/" name="tip-sprite.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/default/qtip -->
-         <dir name="shared">
-          <file baseinstalldir="/" name="blue-loading.gif" role="data" />
-          <file baseinstalldir="/" name="calendar.gif" role="data" />
-          <file baseinstalldir="/" name="glass-bg.gif" role="data" />
-          <file baseinstalldir="/" name="hd-sprite.gif" role="data" />
-          <file baseinstalldir="/" name="large-loading.gif" role="data" />
-          <file baseinstalldir="/" name="left-btn.gif" role="data" />
-          <file baseinstalldir="/" name="loading-balls.gif" role="data" />
-          <file baseinstalldir="/" name="right-btn.gif" role="data" />
-          <file baseinstalldir="/" name="warning.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/default/shared -->
-         <dir name="sizer">
-          <file baseinstalldir="/" name="e-handle-dark.gif" role="data" />
-          <file baseinstalldir="/" name="e-handle.gif" role="data" />
-          <file baseinstalldir="/" name="ne-handle-dark.gif" role="data" />
-          <file baseinstalldir="/" name="ne-handle.gif" role="data" />
-          <file baseinstalldir="/" name="nw-handle-dark.gif" role="data" />
-          <file baseinstalldir="/" name="nw-handle.gif" role="data" />
-          <file baseinstalldir="/" name="s-handle-dark.gif" role="data" />
-          <file baseinstalldir="/" name="s-handle.gif" role="data" />
-          <file baseinstalldir="/" name="se-handle-dark.gif" role="data" />
-          <file baseinstalldir="/" name="se-handle.gif" role="data" />
-          <file baseinstalldir="/" name="square.gif" role="data" />
-          <file baseinstalldir="/" name="sw-handle-dark.gif" role="data" />
-          <file baseinstalldir="/" name="sw-handle.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/default/sizer -->
-         <dir name="slider">
-          <file baseinstalldir="/" name="slider-bg.png" role="data" />
-          <file baseinstalldir="/" name="slider-thumb.png" role="data" />
-          <file baseinstalldir="/" name="slider-v-bg.png" role="data" />
-          <file baseinstalldir="/" name="slider-v-thumb.png" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/default/slider -->
-         <dir name="tabs">
-          <file baseinstalldir="/" name="scroll-left.gif" role="data" />
-          <file baseinstalldir="/" name="scroll-right.gif" role="data" />
-          <file baseinstalldir="/" name="scroller-bg.gif" role="data" />
-          <file baseinstalldir="/" name="tab-btm-inactive-left-bg.gif" role="data" />
-          <file baseinstalldir="/" name="tab-btm-inactive-right-bg.gif" role="data" />
-          <file baseinstalldir="/" name="tab-btm-left-bg.gif" role="data" />
-          <file baseinstalldir="/" name="tab-btm-right-bg.gif" role="data" />
-          <file baseinstalldir="/" name="tab-close.gif" role="data" />
-          <file baseinstalldir="/" name="tab-strip-bg.gif" role="data" />
-          <file baseinstalldir="/" name="tab-strip-bg.png" role="data" />
-          <file baseinstalldir="/" name="tab-strip-btm-bg.gif" role="data" />
-          <file baseinstalldir="/" name="tabs-sprite.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/default/tabs -->
-         <dir name="toolbar">
-          <file baseinstalldir="/" name="bg.gif" role="data" />
-          <file baseinstalldir="/" name="btn-arrow-light.gif" role="data" />
-          <file baseinstalldir="/" name="btn-arrow.gif" role="data" />
-          <file baseinstalldir="/" name="btn-over-bg.gif" role="data" />
-          <file baseinstalldir="/" name="gray-bg.gif" role="data" />
-          <file baseinstalldir="/" name="tb-bg.gif" role="data" />
-          <file baseinstalldir="/" name="tb-btn-sprite.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/default/toolbar -->
-         <dir name="tree">
-          <file baseinstalldir="/" name="arrows.gif" role="data" />
-          <file baseinstalldir="/" name="drop-add.gif" role="data" />
-          <file baseinstalldir="/" name="drop-between.gif" role="data" />
-          <file baseinstalldir="/" name="drop-no.gif" role="data" />
-          <file baseinstalldir="/" name="drop-over.gif" role="data" />
-          <file baseinstalldir="/" name="drop-under.gif" role="data" />
-          <file baseinstalldir="/" name="drop-yes.gif" role="data" />
-          <file baseinstalldir="/" name="elbow-end-minus-nl.gif" role="data" />
-          <file baseinstalldir="/" name="elbow-end-minus.gif" role="data" />
-          <file baseinstalldir="/" name="elbow-end-plus-nl.gif" role="data" />
-          <file baseinstalldir="/" name="elbow-end-plus.gif" role="data" />
-          <file baseinstalldir="/" name="elbow-end.gif" role="data" />
-          <file baseinstalldir="/" name="elbow-line.gif" role="data" />
-          <file baseinstalldir="/" name="elbow-minus-nl.gif" role="data" />
-          <file baseinstalldir="/" name="elbow-minus.gif" role="data" />
-          <file baseinstalldir="/" name="elbow-plus-nl.gif" role="data" />
-          <file baseinstalldir="/" name="elbow-plus.gif" role="data" />
-          <file baseinstalldir="/" name="elbow.gif" role="data" />
-          <file baseinstalldir="/" name="folder-open.gif" role="data" />
-          <file baseinstalldir="/" name="folder.gif" role="data" />
-          <file baseinstalldir="/" name="leaf.gif" role="data" />
-          <file baseinstalldir="/" name="loading.gif" role="data" />
-          <file baseinstalldir="/" name="s.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/default/tree -->
-         <dir name="window">
-          <file baseinstalldir="/" name="icon-error.gif" role="data" />
-          <file baseinstalldir="/" name="icon-info.gif" role="data" />
-          <file baseinstalldir="/" name="icon-question.gif" role="data" />
-          <file baseinstalldir="/" name="icon-warning.gif" role="data" />
-          <file baseinstalldir="/" name="left-corners.png" role="data" />
-          <file baseinstalldir="/" name="left-corners.psd" role="data" />
-          <file baseinstalldir="/" name="left-right.png" role="data" />
-          <file baseinstalldir="/" name="left-right.psd" role="data" />
-          <file baseinstalldir="/" name="right-corners.png" role="data" />
-          <file baseinstalldir="/" name="right-corners.psd" role="data" />
-          <file baseinstalldir="/" name="top-bottom.png" role="data" />
-          <file baseinstalldir="/" name="top-bottom.psd" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/default/window -->
-         <file baseinstalldir="/" name="gradient-bg.gif" role="data" />
-         <file baseinstalldir="/" name="s.gif" role="data" />
-         <file baseinstalldir="/" name="shadow-c.png" role="data" />
-         <file baseinstalldir="/" name="shadow-lr.png" role="data" />
-         <file baseinstalldir="/" name="shadow.png" role="data" />
-        </dir> <!-- /docs/scripts/extjs/resources/images/default -->
-        <dir name="gray">
-         <dir name="button">
-          <file baseinstalldir="/" name="btn-arrow.gif" role="data" />
-          <file baseinstalldir="/" name="btn-sprite.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/gray/button -->
-         <dir name="panel">
-          <file baseinstalldir="/" name="corners-sprite.gif" role="data" />
-          <file baseinstalldir="/" name="left-right.gif" role="data" />
-          <file baseinstalldir="/" name="light-hd.gif" role="data" />
-          <file baseinstalldir="/" name="tool-sprite-tpl.gif" role="data" />
-          <file baseinstalldir="/" name="tool-sprites.gif" role="data" />
-          <file baseinstalldir="/" name="tools-sprites-trans.gif" role="data" />
-          <file baseinstalldir="/" name="top-bottom.gif" role="data" />
-          <file baseinstalldir="/" name="top-bottom.png" role="data" />
-          <file baseinstalldir="/" name="white-corners-sprite.gif" role="data" />
-          <file baseinstalldir="/" name="white-left-right.gif" role="data" />
-          <file baseinstalldir="/" name="white-top-bottom.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/gray/panel -->
-         <dir name="qtip">
-          <file baseinstalldir="/" name="bg.gif" role="data" />
-          <file baseinstalldir="/" name="close.gif" role="data" />
-          <file baseinstalldir="/" name="tip-sprite.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/gray/qtip -->
-         <dir name="tabs">
-          <file baseinstalldir="/" name="scroll-left.gif" role="data" />
-          <file baseinstalldir="/" name="scroll-right.gif" role="data" />
-          <file baseinstalldir="/" name="scroller-bg.gif" role="data" />
-          <file baseinstalldir="/" name="tab-btm-inactive-left-bg.gif" role="data" />
-          <file baseinstalldir="/" name="tab-btm-inactive-right-bg.gif" role="data" />
-          <file baseinstalldir="/" name="tab-btm-left-bg.gif" role="data" />
-          <file baseinstalldir="/" name="tab-btm-right-bg.gif" role="data" />
-          <file baseinstalldir="/" name="tab-close.gif" role="data" />
-          <file baseinstalldir="/" name="tab-strip-bg.gif" role="data" />
-          <file baseinstalldir="/" name="tab-strip-bg.png" role="data" />
-          <file baseinstalldir="/" name="tab-strip-btm-bg.gif" role="data" />
-          <file baseinstalldir="/" name="tabs-sprite.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/gray/tabs -->
-         <dir name="toolbar">
-          <file baseinstalldir="/" name="bg.gif" role="data" />
-          <file baseinstalldir="/" name="btn-arrow-light.gif" role="data" />
-          <file baseinstalldir="/" name="btn-arrow.gif" role="data" />
-          <file baseinstalldir="/" name="btn-over-bg.gif" role="data" />
-          <file baseinstalldir="/" name="gray-bg.gif" role="data" />
-          <file baseinstalldir="/" name="tb-bg.gif" role="data" />
-          <file baseinstalldir="/" name="tb-btn-sprite.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/gray/toolbar -->
-         <dir name="window">
-          <file baseinstalldir="/" name="icon-error.gif" role="data" />
-          <file baseinstalldir="/" name="icon-info.gif" role="data" />
-          <file baseinstalldir="/" name="icon-question.gif" role="data" />
-          <file baseinstalldir="/" name="icon-warning.gif" role="data" />
-          <file baseinstalldir="/" name="left-corners.png" role="data" />
-          <file baseinstalldir="/" name="left-corners.pspimage" role="data" />
-          <file baseinstalldir="/" name="left-right.png" role="data" />
-          <file baseinstalldir="/" name="right-corners.png" role="data" />
-          <file baseinstalldir="/" name="top-bottom.png" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/gray/window -->
-         <file baseinstalldir="/" name="gradient-bg.gif" role="data" />
-         <file baseinstalldir="/" name="s.gif" role="data" />
-        </dir> <!-- /docs/scripts/extjs/resources/images/gray -->
-        <dir name="vista">
-         <dir name="basic-dialog">
-          <file baseinstalldir="/" name="bg-center.gif" role="data" />
-          <file baseinstalldir="/" name="bg-left.gif" role="data" />
-          <file baseinstalldir="/" name="bg-right.gif" role="data" />
-          <file baseinstalldir="/" name="close.gif" role="data" />
-          <file baseinstalldir="/" name="collapse.gif" role="data" />
-          <file baseinstalldir="/" name="dlg-bg.gif" role="data" />
-          <file baseinstalldir="/" name="e-handle.gif" role="data" />
-          <file baseinstalldir="/" name="expand.gif" role="data" />
-          <file baseinstalldir="/" name="hd-sprite.gif" role="data" />
-          <file baseinstalldir="/" name="s-handle.gif" role="data" />
-          <file baseinstalldir="/" name="se-handle.gif" role="data" />
-          <file baseinstalldir="/" name="w-handle.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/vista/basic-dialog -->
-         <dir name="grid">
-          <file baseinstalldir="/" name="grid-split.gif" role="data" />
-          <file baseinstalldir="/" name="grid-vista-hd.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/vista/grid -->
-         <dir name="layout">
-          <file baseinstalldir="/" name="collapse.gif" role="data" />
-          <file baseinstalldir="/" name="expand.gif" role="data" />
-          <file baseinstalldir="/" name="gradient-bg.gif" role="data" />
-          <file baseinstalldir="/" name="ns-collapse.gif" role="data" />
-          <file baseinstalldir="/" name="ns-expand.gif" role="data" />
-          <file baseinstalldir="/" name="panel-close.gif" role="data" />
-          <file baseinstalldir="/" name="panel-title-bg.gif" role="data" />
-          <file baseinstalldir="/" name="panel-title-light-bg.gif" role="data" />
-          <file baseinstalldir="/" name="stick.gif" role="data" />
-          <file baseinstalldir="/" name="tab-close-on.gif" role="data" />
-          <file baseinstalldir="/" name="tab-close.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/vista/layout -->
-         <dir name="qtip">
-          <file baseinstalldir="/" name="bg.gif" role="data" />
-          <file baseinstalldir="/" name="tip-sprite.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/vista/qtip -->
-         <dir name="sizer">
-          <file baseinstalldir="/" name="e-handle-dark.gif" role="data" />
-          <file baseinstalldir="/" name="e-handle.gif" role="data" />
-          <file baseinstalldir="/" name="ne-handle-dark.gif" role="data" />
-          <file baseinstalldir="/" name="ne-handle.gif" role="data" />
-          <file baseinstalldir="/" name="nw-handle-dark.gif" role="data" />
-          <file baseinstalldir="/" name="nw-handle.gif" role="data" />
-          <file baseinstalldir="/" name="s-handle-dark.gif" role="data" />
-          <file baseinstalldir="/" name="s-handle.gif" role="data" />
-          <file baseinstalldir="/" name="se-handle-dark.gif" role="data" />
-          <file baseinstalldir="/" name="se-handle.gif" role="data" />
-          <file baseinstalldir="/" name="sw-handle-dark.gif" role="data" />
-          <file baseinstalldir="/" name="sw-handle.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/vista/sizer -->
-         <dir name="tabs">
-          <file baseinstalldir="/" name="tab-btm-inactive-left-bg.gif" role="data" />
-          <file baseinstalldir="/" name="tab-btm-inactive-right-bg.gif" role="data" />
-          <file baseinstalldir="/" name="tab-btm-left-bg.gif" role="data" />
-          <file baseinstalldir="/" name="tab-btm-right-bg.gif" role="data" />
-          <file baseinstalldir="/" name="tab-sprite.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/vista/tabs -->
-         <dir name="toolbar">
-          <file baseinstalldir="/" name="gray-bg.gif" role="data" />
-          <file baseinstalldir="/" name="tb-btn-sprite.gif" role="data" />
-         </dir> <!-- /docs/scripts/extjs/resources/images/vista/toolbar -->
-         <file baseinstalldir="/" name="gradient-bg.gif" role="data" />
-         <file baseinstalldir="/" name="s.gif" role="data" />
-        </dir> <!-- /docs/scripts/extjs/resources/images/vista -->
-       </dir> <!-- /docs/scripts/extjs/resources/images -->
-       <file baseinstalldir="/" name="resources.jsb" role="data" />
-      </dir> <!-- /docs/scripts/extjs/resources -->
-      <file baseinstalldir="/" name="ext-all-debug.js" role="data" />
-      <file baseinstalldir="/" name="ext-all.js" role="data" />
-      <file baseinstalldir="/" name="ext-core-debug.js" role="data" />
-      <file baseinstalldir="/" name="ext-core.js" role="data" />
-      <file baseinstalldir="/" name="LICENSE.txt" role="data" />
-     </dir> <!-- /docs/scripts/extjs -->
-     <file baseinstalldir="/" name="docs.js" role="data" />
-     <file baseinstalldir="/" name="nav_data.js" role="data" />
-     <file baseinstalldir="/" name="nav_data.tpl" role="data" />
-     <file baseinstalldir="/" name="TabCloseMenu.js" role="data" />
-    </dir> <!-- /docs/scripts -->
-    <dir name="styles">
-     <file baseinstalldir="/" name="collapser.css" role="data" />
-     <file baseinstalldir="/" name="docs.css" role="data" />
-     <file baseinstalldir="/" name="phpdoc.css" role="data" />
-     <file baseinstalldir="/" name="print.css" role="data" />
-     <file baseinstalldir="/" name="reset.css" role="data" />
-     <file baseinstalldir="/" name="style.css" role="data" />
-     <file baseinstalldir="/" name="welcome.css" role="data" />
-    </dir> <!-- /docs/styles -->
-    <file baseinstalldir="/" name="blank.html" role="doc" />
-    <file baseinstalldir="/" name="classtrees_Rediska.html" role="doc" />
-    <file baseinstalldir="/" name="elementindex.html" role="doc" />
-    <file baseinstalldir="/" name="elementindex_Rediska.html" role="doc" />
-    <file baseinstalldir="/" name="errors.html" role="doc" />
-    <file baseinstalldir="/" name="index.html" role="doc" />
-    <file baseinstalldir="/" name="li_Rediska.html" role="doc" />
-    <file baseinstalldir="/" name="packages.html" role="doc" />
-    <file baseinstalldir="/" name="welcome.html" role="doc" />
-   </dir> <!-- /docs -->
    <dir name="examples">
     <dir name="retwitter">
      <dir name="application">
@@ -994,6 +127,9 @@ This is an beta release, see README.markdown for examples.
    <dir name="library">
     <dir name="Rediska">
      <dir name="Command">
+      <dir name="GetSortedSet">
+       <file baseinstalldir="/" name="WithScoresIterator.php" role="php" />
+      </dir> <!-- /library/Rediska/Command/GetSortedSet -->
       <dir name="Response">
        <file baseinstalldir="/" name="ListNameAndValue.php" role="php" />
        <file baseinstalldir="/" name="ValueAndScore.php" role="php" />
@@ -1021,6 +157,7 @@ This is an beta release, see README.markdown for examples.
       <file baseinstalldir="/" name="Expire.php" role="php" />
       <file baseinstalldir="/" name="FlushDb.php" role="php" />
       <file baseinstalldir="/" name="Get.php" role="php" />
+      <file baseinstalldir="/" name="GetBit.php" role="php" />
       <file baseinstalldir="/" name="GetFromHash.php" role="php" />
       <file baseinstalldir="/" name="GetFromList.php" role="php" />
       <file baseinstalldir="/" name="GetFromSortedSetByScore.php" role="php" />
@@ -1031,11 +168,13 @@ This is an beta release, see README.markdown for examples.
       <file baseinstalldir="/" name="GetKeysByPattern.php" role="php" />
       <file baseinstalldir="/" name="GetKeysCount.php" role="php" />
       <file baseinstalldir="/" name="GetLastSaveTime.php" role="php" />
+      <file baseinstalldir="/" name="GetLength.php" role="php" />
       <file baseinstalldir="/" name="GetLifetime.php" role="php" />
       <file baseinstalldir="/" name="GetList.php" role="php" />
       <file baseinstalldir="/" name="GetListLength.php" role="php" />
       <file baseinstalldir="/" name="GetRandomFromSet.php" role="php" />
       <file baseinstalldir="/" name="GetRandomKey.php" role="php" />
+      <file baseinstalldir="/" name="GetRange.php" role="php" />
       <file baseinstalldir="/" name="GetRankFromSortedSet.php" role="php" />
       <file baseinstalldir="/" name="GetScoreFromSortedSet.php" role="php" />
       <file baseinstalldir="/" name="GetSet.php" role="php" />
@@ -1048,6 +187,10 @@ This is an beta release, see README.markdown for examples.
       <file baseinstalldir="/" name="IncrementInHash.php" role="php" />
       <file baseinstalldir="/" name="IncrementScoreInSortedSet.php" role="php" />
       <file baseinstalldir="/" name="Info.php" role="php" />
+      <file baseinstalldir="/" name="InsertToList.php" role="php" />
+      <file baseinstalldir="/" name="InsertToListAbstract.php" role="php" />
+      <file baseinstalldir="/" name="InsertToListAfter.php" role="php" />
+      <file baseinstalldir="/" name="InsertToListBefore.php" role="php" />
       <file baseinstalldir="/" name="Interface.php" role="php" />
       <file baseinstalldir="/" name="IntersectSets.php" role="php" />
       <file baseinstalldir="/" name="IntersectSortedSets.php" role="php" />
@@ -1065,6 +208,8 @@ This is an beta release, see README.markdown for examples.
       <file baseinstalldir="/" name="Set.php" role="php" />
       <file baseinstalldir="/" name="SetAndExpire.php" role="php" />
       <file baseinstalldir="/" name="SetAndGet.php" role="php" />
+      <file baseinstalldir="/" name="SetBit.php" role="php" />
+      <file baseinstalldir="/" name="SetRange.php" role="php" />
       <file baseinstalldir="/" name="SetToHash.php" role="php" />
       <file baseinstalldir="/" name="SetToList.php" role="php" />
       <file baseinstalldir="/" name="ShiftFromList.php" role="php" />
@@ -1072,7 +217,6 @@ This is an beta release, see README.markdown for examples.
       <file baseinstalldir="/" name="Shutdown.php" role="php" />
       <file baseinstalldir="/" name="SlaveOf.php" role="php" />
       <file baseinstalldir="/" name="Sort.php" role="php" />
-      <file baseinstalldir="/" name="Substring.php" role="php" />
       <file baseinstalldir="/" name="TruncateList.php" role="php" />
       <file baseinstalldir="/" name="UnionSets.php" role="php" />
       <file baseinstalldir="/" name="UnionSortedSets.php" role="php" />
@@ -1080,6 +224,7 @@ This is an beta release, see README.markdown for examples.
      <dir name="Connection">
       <dir name="Exec">
        <file baseinstalldir="/" name="Exception.php" role="php" />
+       <file baseinstalldir="/" name="MultiBulkIterator.php" role="php" />
       </dir> <!-- /library/Rediska/Connection/Exec -->
       <file baseinstalldir="/" name="Exception.php" role="php" />
       <file baseinstalldir="/" name="Exec.php" role="php" />
@@ -1107,6 +252,13 @@ This is an beta release, see README.markdown for examples.
      <dir name="Options">
       <file baseinstalldir="/" name="RediskaInstance.php" role="php" />
      </dir> <!-- /library/Rediska/Options -->
+     <dir name="Profiler">
+      <file baseinstalldir="/" name="Exception.php" role="php" />
+      <file baseinstalldir="/" name="Interface.php" role="php" />
+      <file baseinstalldir="/" name="Null.php" role="php" />
+      <file baseinstalldir="/" name="Profile.php" role="php" />
+      <file baseinstalldir="/" name="Stream.php" role="php" />
+     </dir> <!-- /library/Rediska/Profiler -->
      <dir name="PubSub">
       <dir name="Response">
        <file baseinstalldir="/" name="Abstract.php" role="php" />
@@ -1130,6 +282,7 @@ This is an beta release, see README.markdown for examples.
       <file baseinstalldir="/" name="Exception.php" role="php" />
      </dir> <!-- /library/Rediska/Serializer -->
      <dir name="Transaction">
+      <file baseinstalldir="/" name="AbortedException.php" role="php" />
       <file baseinstalldir="/" name="Exception.php" role="php" />
      </dir> <!-- /library/Rediska/Transaction -->
      <dir name="Zend">
@@ -1153,6 +306,9 @@ This is an beta release, see README.markdown for examples.
         <file baseinstalldir="/" name="Redis.php" role="php" />
        </dir> <!-- /library/Rediska/Zend/Log/Writer -->
       </dir> <!-- /library/Rediska/Zend/Log -->
+      <dir name="Profiler">
+       <file baseinstalldir="/" name="Firebug.php" role="php" />
+      </dir> <!-- /library/Rediska/Zend/Profiler -->
       <dir name="Queue">
        <dir name="Adapter">
         <file baseinstalldir="/" name="Redis.php" role="php" />
@@ -1175,6 +331,7 @@ This is an beta release, see README.markdown for examples.
      <file baseinstalldir="/" name="Monitor.php" role="php" />
      <file baseinstalldir="/" name="Options.php" role="php" />
      <file baseinstalldir="/" name="Pipeline.php" role="php" />
+     <file baseinstalldir="/" name="Profiler.php" role="php" />
      <file baseinstalldir="/" name="Serializer.php" role="php" />
      <file baseinstalldir="/" name="Transaction.php" role="php" />
     </dir> <!-- /library/Rediska -->
@@ -1205,6 +362,7 @@ This is an beta release, see README.markdown for examples.
        <file baseinstalldir="/" name="ExistsTest.php" role="test" />
        <file baseinstalldir="/" name="ExpireTest.php" role="test" />
        <file baseinstalldir="/" name="FlushDbTest.php" role="test" />
+       <file baseinstalldir="/" name="GetBitTest.php" role="test" />
        <file baseinstalldir="/" name="GetFromHashTest.php" role="test" />
        <file baseinstalldir="/" name="GetFromListTest.php" role="test" />
        <file baseinstalldir="/" name="GetFromSortedSetByScoreTest.php" role="test" />
@@ -1215,11 +373,13 @@ This is an beta release, see README.markdown for examples.
        <file baseinstalldir="/" name="GetKeysByPatternTest.php" role="test" />
        <file baseinstalldir="/" name="GetKeysCountTest.php" role="test" />
        <file baseinstalldir="/" name="GetLastSaveTimeTest.php" role="test" />
+       <file baseinstalldir="/" name="GetLength.php" role="test" />
        <file baseinstalldir="/" name="GetLifetimeTest.php" role="test" />
        <file baseinstalldir="/" name="GetListLengthTest.php" role="test" />
        <file baseinstalldir="/" name="GetListTest.php" role="test" />
        <file baseinstalldir="/" name="GetRandomFromSetTest.php" role="test" />
        <file baseinstalldir="/" name="GetRandomKeyTest.php" role="test" />
+       <file baseinstalldir="/" name="GetRangeTest.php" role="test" />
        <file baseinstalldir="/" name="GetRankFromSortedSetTest.php" role="test" />
        <file baseinstalldir="/" name="GetScoreFromSortedSetTest.php" role="test" />
        <file baseinstalldir="/" name="GetSetLengthTest.php" role="test" />
@@ -1233,6 +393,9 @@ This is an beta release, see README.markdown for examples.
        <file baseinstalldir="/" name="IncrementScoreInSortedSetTest.php" role="test" />
        <file baseinstalldir="/" name="IncrementTest.php" role="test" />
        <file baseinstalldir="/" name="InfoTest.php" role="test" />
+       <file baseinstalldir="/" name="InsertToListAfterTest.php" role="test" />
+       <file baseinstalldir="/" name="InsertToListBeforeTest.php" role="test" />
+       <file baseinstalldir="/" name="InsertToListTest.php" role="test" />
        <file baseinstalldir="/" name="IntersectSetsTest.php" role="test" />
        <file baseinstalldir="/" name="IntersectSortedSetsTest.php" role="test" />
        <file baseinstalldir="/" name="MoveToDbTest.php" role="test" />
@@ -1247,6 +410,8 @@ This is an beta release, see README.markdown for examples.
        <file baseinstalldir="/" name="SelectDbTest.php" role="test" />
        <file baseinstalldir="/" name="SetAndExpireTest.php" role="test" />
        <file baseinstalldir="/" name="SetAndGetTest.php" role="test" />
+       <file baseinstalldir="/" name="SetBit.php" role="test" />
+       <file baseinstalldir="/" name="SetRangeTest.php" role="test" />
        <file baseinstalldir="/" name="SetTest.php" role="test" />
        <file baseinstalldir="/" name="SetToHashTest.php" role="test" />
        <file baseinstalldir="/" name="SetToListTest.php" role="test" />
@@ -1255,7 +420,6 @@ This is an beta release, see README.markdown for examples.
        <file baseinstalldir="/" name="ShutdownTest.php" role="test" />
        <file baseinstalldir="/" name="SlaveOfTest.php" role="test" />
        <file baseinstalldir="/" name="SortTest.php" role="test" />
-       <file baseinstalldir="/" name="SubstringTest.php" role="test" />
        <file baseinstalldir="/" name="TruncateListTest.php" role="test" />
        <file baseinstalldir="/" name="UnionSetsTest.php" role="test" />
        <file baseinstalldir="/" name="UnionSortedSetsTest.php" role="test" />
@@ -1385,6 +549,7 @@ This is an beta release, see README.markdown for examples.
    <install as="Rediska/Command/Expire.php" name="library/Rediska/Command/Expire.php" />
    <install as="Rediska/Command/FlushDb.php" name="library/Rediska/Command/FlushDb.php" />
    <install as="Rediska/Command/Get.php" name="library/Rediska/Command/Get.php" />
+   <install as="Rediska/Command/GetBit.php" name="library/Rediska/Command/GetBit.php" />
    <install as="Rediska/Command/GetFromHash.php" name="library/Rediska/Command/GetFromHash.php" />
    <install as="Rediska/Command/GetFromList.php" name="library/Rediska/Command/GetFromList.php" />
    <install as="Rediska/Command/GetFromSortedSetByScore.php" name="library/Rediska/Command/GetFromSortedSetByScore.php" />
@@ -1395,15 +560,18 @@ This is an beta release, see README.markdown for examples.
    <install as="Rediska/Command/GetKeysByPattern.php" name="library/Rediska/Command/GetKeysByPattern.php" />
    <install as="Rediska/Command/GetKeysCount.php" name="library/Rediska/Command/GetKeysCount.php" />
    <install as="Rediska/Command/GetLastSaveTime.php" name="library/Rediska/Command/GetLastSaveTime.php" />
+   <install as="Rediska/Command/GetLength.php" name="library/Rediska/Command/GetLength.php" />
    <install as="Rediska/Command/GetLifetime.php" name="library/Rediska/Command/GetLifetime.php" />
    <install as="Rediska/Command/GetList.php" name="library/Rediska/Command/GetList.php" />
    <install as="Rediska/Command/GetListLength.php" name="library/Rediska/Command/GetListLength.php" />
    <install as="Rediska/Command/GetRandomFromSet.php" name="library/Rediska/Command/GetRandomFromSet.php" />
    <install as="Rediska/Command/GetRandomKey.php" name="library/Rediska/Command/GetRandomKey.php" />
+   <install as="Rediska/Command/GetRange.php" name="library/Rediska/Command/GetRange.php" />
    <install as="Rediska/Command/GetRankFromSortedSet.php" name="library/Rediska/Command/GetRankFromSortedSet.php" />
    <install as="Rediska/Command/GetScoreFromSortedSet.php" name="library/Rediska/Command/GetScoreFromSortedSet.php" />
    <install as="Rediska/Command/GetSet.php" name="library/Rediska/Command/GetSet.php" />
    <install as="Rediska/Command/GetSetLength.php" name="library/Rediska/Command/GetSetLength.php" />
+   <install as="Rediska/Command/GetSortedSet/WithScoresIterator.php" name="library/Rediska/Command/GetSortedSet/WithScoresIterator.php" />
    <install as="Rediska/Command/GetSortedSet.php" name="library/Rediska/Command/GetSortedSet.php" />
    <install as="Rediska/Command/GetSortedSetLength.php" name="library/Rediska/Command/GetSortedSetLength.php" />
    <install as="Rediska/Command/GetSortedSetLengthByScore.php" name="library/Rediska/Command/GetSortedSetLengthByScore.php" />
@@ -1412,6 +580,10 @@ This is an beta release, see README.markdown for examples.
    <install as="Rediska/Command/IncrementInHash.php" name="library/Rediska/Command/IncrementInHash.php" />
    <install as="Rediska/Command/IncrementScoreInSortedSet.php" name="library/Rediska/Command/IncrementScoreInSortedSet.php" />
    <install as="Rediska/Command/Info.php" name="library/Rediska/Command/Info.php" />
+   <install as="Rediska/Command/InsertToList.php" name="library/Rediska/Command/InsertToList.php" />
+   <install as="Rediska/Command/InsertToListAbstract.php" name="library/Rediska/Command/InsertToListAbstract.php" />
+   <install as="Rediska/Command/InsertToListAfter.php" name="library/Rediska/Command/InsertToListAfter.php" />
+   <install as="Rediska/Command/InsertToListBefore.php" name="library/Rediska/Command/InsertToListBefore.php" />
    <install as="Rediska/Command/Interface.php" name="library/Rediska/Command/Interface.php" />
    <install as="Rediska/Command/IntersectSets.php" name="library/Rediska/Command/IntersectSets.php" />
    <install as="Rediska/Command/IntersectSortedSets.php" name="library/Rediska/Command/IntersectSortedSets.php" />
@@ -1431,6 +603,8 @@ This is an beta release, see README.markdown for examples.
    <install as="Rediska/Command/Set.php" name="library/Rediska/Command/Set.php" />
    <install as="Rediska/Command/SetAndExpire.php" name="library/Rediska/Command/SetAndExpire.php" />
    <install as="Rediska/Command/SetAndGet.php" name="library/Rediska/Command/SetAndGet.php" />
+   <install as="Rediska/Command/SetBit.php" name="library/Rediska/Command/SetBit.php" />
+   <install as="Rediska/Command/SetRange.php" name="library/Rediska/Command/SetRange.php" />
    <install as="Rediska/Command/SetToHash.php" name="library/Rediska/Command/SetToHash.php" />
    <install as="Rediska/Command/SetToList.php" name="library/Rediska/Command/SetToList.php" />
    <install as="Rediska/Command/ShiftFromList.php" name="library/Rediska/Command/ShiftFromList.php" />
@@ -1438,7 +612,6 @@ This is an beta release, see README.markdown for examples.
    <install as="Rediska/Command/Shutdown.php" name="library/Rediska/Command/Shutdown.php" />
    <install as="Rediska/Command/SlaveOf.php" name="library/Rediska/Command/SlaveOf.php" />
    <install as="Rediska/Command/Sort.php" name="library/Rediska/Command/Sort.php" />
-   <install as="Rediska/Command/Substring.php" name="library/Rediska/Command/Substring.php" />
    <install as="Rediska/Command/TruncateList.php" name="library/Rediska/Command/TruncateList.php" />
    <install as="Rediska/Command/UnionSets.php" name="library/Rediska/Command/UnionSets.php" />
    <install as="Rediska/Command/UnionSortedSets.php" name="library/Rediska/Command/UnionSortedSets.php" />
@@ -1446,6 +619,7 @@ This is an beta release, see README.markdown for examples.
    <install as="Rediska/Config.php" name="library/Rediska/Config.php" />
    <install as="Rediska/Connection/Exception.php" name="library/Rediska/Connection/Exception.php" />
    <install as="Rediska/Connection/Exec/Exception.php" name="library/Rediska/Connection/Exec/Exception.php" />
+   <install as="Rediska/Connection/Exec/MultiBulkIterator.php" name="library/Rediska/Connection/Exec/MultiBulkIterator.php" />
    <install as="Rediska/Connection/Exec.php" name="library/Rediska/Connection/Exec.php" />
    <install as="Rediska/Connection/Specified.php" name="library/Rediska/Connection/Specified.php" />
    <install as="Rediska/Connection/TimeoutException.php" name="library/Rediska/Connection/TimeoutException.php" />
@@ -1469,6 +643,12 @@ This is an beta release, see README.markdown for examples.
    <install as="Rediska/Options/RediskaInstance.php" name="library/Rediska/Options/RediskaInstance.php" />
    <install as="Rediska/Options.php" name="library/Rediska/Options.php" />
    <install as="Rediska/Pipeline.php" name="library/Rediska/Pipeline.php" />
+   <install as="Rediska/Profiler/Exception.php" name="library/Rediska/Profiler/Exception.php" />
+   <install as="Rediska/Profiler/Interface.php" name="library/Rediska/Profiler/Interface.php" />
+   <install as="Rediska/Profiler/Null.php" name="library/Rediska/Profiler/Null.php" />
+   <install as="Rediska/Profiler/Profile.php" name="library/Rediska/Profiler/Profile.php" />
+   <install as="Rediska/Profiler/Stream.php" name="library/Rediska/Profiler/Stream.php" />
+   <install as="Rediska/Profiler.php" name="library/Rediska/Profiler.php" />
    <install as="Rediska/PubSub/Channel.php" name="library/Rediska/PubSub/Channel.php" />
    <install as="Rediska/PubSub/Connections.php" name="library/Rediska/PubSub/Connections.php" />
    <install as="Rediska/PubSub/Exception.php" name="library/Rediska/PubSub/Exception.php" />
@@ -1484,12 +664,14 @@ This is an beta release, see README.markdown for examples.
    <install as="Rediska/Serializer/Adapter/ToString.php" name="library/Rediska/Serializer/Adapter/ToString.php" />
    <install as="Rediska/Serializer/Exception.php" name="library/Rediska/Serializer/Exception.php" />
    <install as="Rediska/Serializer.php" name="library/Rediska/Serializer.php" />
+   <install as="Rediska/Transaction/AbortedException.php" name="library/Rediska/Transaction/AbortedException.php" />
    <install as="Rediska/Transaction/Exception.php" name="library/Rediska/Transaction/Exception.php" />
    <install as="Rediska/Transaction.php" name="library/Rediska/Transaction.php" />
    <install as="Rediska/Zend/Application/Resource/Rediska.php" name="library/Rediska/Zend/Application/Resource/Rediska.php" />
    <install as="Rediska/Zend/Auth/Adapter/Redis.php" name="library/Rediska/Zend/Auth/Adapter/Redis.php" />
    <install as="Rediska/Zend/Cache/Backend/Redis.php" name="library/Rediska/Zend/Cache/Backend/Redis.php" />
    <install as="Rediska/Zend/Log/Writer/Redis.php" name="library/Rediska/Zend/Log/Writer/Redis.php" />
+   <install as="Rediska/Zend/Profiler/Firebug.php" name="library/Rediska/Zend/Profiler/Firebug.php" />
    <install as="Rediska/Zend/Queue/Adapter/Redis.php" name="library/Rediska/Zend/Queue/Adapter/Redis.php" />
    <install as="Rediska/Zend/Session/SaveHandler/Redis.php" name="library/Rediska/Zend/Session/SaveHandler/Redis.php" />
    <install as="Rediska/Zend/Session/Set.php" name="library/Rediska/Zend/Session/Set.php" />
@@ -1500,14 +682,14 @@ This is an beta release, see README.markdown for examples.
  <changelog>
   <release>
    <version>
-    <release>0.5.1</release>
-    <api>0.5.1</api>
+    <release>0.5.5</release>
+    <api>0.5.5</api>
    </version>
    <stability>
     <release>beta</release>
     <api>beta</api>
    </stability>
-   <date>2010-10-28</date>
+   <date>2011-04-02</date>
    <license uri="http://www.opensource.org/licenses/bsd-license.php">New BSD License</license>
    <notes>
 This is an beta release, see README.markdown for examples.
