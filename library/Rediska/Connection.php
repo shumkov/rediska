@@ -51,6 +51,7 @@ class Rediska_Connection extends Rediska_Options
         'timeout'      => null,
         'readTimeout'  => null,
         'blockingMode' => true,
+        'reconnect'    => true,
     );
 
     /**
@@ -155,23 +156,27 @@ class Rediska_Connection extends Rediska_Options
     public function write($string) 
     {
         if ($string !== '') {
-            $string = (string)$string . Rediska::EOL;
+            $needToWrite = (string)$string . Rediska::EOL;
 
             $this->connect();
 
-            while ($string) {
-                $bytes = @fwrite($this->_socket, $string);
+            while ($needToWrite) {
+                $bytes = @fwrite($this->_socket, $needToWrite);
     
                 if ($bytes === false) {
                     $this->disconnect();
-                    throw new Rediska_Connection_Exception("Can't write to socket.");
+                    if ($this->getOption('reconnect')) {
+                        return $this->write($string);
+                    } else {
+                        throw new Rediska_Connection_Exception("Can't write to socket.");
+                    }
                 }
     
                 if ($bytes == 0) {
                     return true;
                 }
     
-                $string = substr($string, $bytes);
+                $needToWrite = substr($needToWrite, $bytes);
             }
 
             return true;
@@ -229,7 +234,11 @@ class Rediska_Connection extends Rediska_Options
         if ($reply === false) {
             if ($this->_options['blockingMode'] || (!$this->_options['blockingMode'] && $info['eof'])) {
                 $this->disconnect();
-                throw new Rediska_Connection_Exception("Can't read from socket.");
+                if ($this->getOption('reconnect')) {
+                    $this->connect();
+                } else {
+                    throw new Rediska_Connection_Exception("Can't read from socket.");
+                }
             }
 
             $reply = null;

@@ -1,5 +1,6 @@
-Version 0.5.5 (March 2, 2011):
+Version 0.5.5 (April 2, 2011):
  * Feature #4214: Profiler
+ * Feature #10766: Reconnect when Rediska can't read from socket
  * Feature #9921: Implement SETBIT, GETBIT, SETRANGE, GETRANGE, STRLEN
  * Feature #9932: Implement LINSERT, LPUSHX, RPUSHX
  * Feature #9933: Implement BRPOPLPUSH
