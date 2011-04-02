@@ -245,6 +245,8 @@ class Rediska_PubSub_Channel extends Rediska_Options_RediskaInstance implements 
                     }
 
                     $connection->setReadTimeout($timeLeft);
+                } else {
+                    $connection->setReadTimeout(600);
                 }
 
                 try {
@@ -269,7 +271,7 @@ class Rediska_PubSub_Channel extends Rediska_Options_RediskaInstance implements 
                     return $response;
                 } catch (Rediska_Connection_TimeoutException $e) {
                     if (!$timeout) {
-                        throw $e;
+                        continue;
                     }
 
                     // Reset timeStart if time started from this method

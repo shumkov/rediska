@@ -143,7 +143,7 @@ class Rediska_KeyDistributor_ConsistentHashing implements Rediska_KeyDistributor
             if ($slice >= $this->_slicesCount) {
                 // If already looped once, something is wrong.
                 if ($looped) {
-                    break 2;
+                    break;
                 }
 
                 // Otherwise, loop back to the beginning.       
