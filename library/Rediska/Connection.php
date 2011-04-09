@@ -357,15 +357,21 @@ class Rediska_Connection extends Rediska_Options
     /**
      * If a stream context is provided, use it creating the socket.
      *
+     * It's supported to provide either an array with options, or an already created
+     * resource.
+     *
      * @return mixed null or resource
      * @see    self::connect()
      */
     public function getStreamContext()
     {
-        if ($this->_options['streamContext'] !== null
-            && is_resource($this->_options['streamContext'])
-        ) {
-            return $this->_options['streamContext'];
+        if ($this->_options['streamContext'] !== null) {
+            if (is_resource($this->_options['streamContext'])) {
+                return $this->_options['streamContext'];
+            }
+            if (is_array($this->_options['streamContext'])) {
+                return stream_context_create($this->_options['streamContext']);
+            }
         }
         return null;
     }
