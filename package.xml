@@ -36,11 +36,11 @@ More information and documentation on homepage: http://rediska.geometria-lab.net
   <email>till@php.net</email>
   <active>yes</active>
  </developer>
- <date>2011-04-02</date>
- <time>15:22:22</time>
+ <date>2011-04-13</date>
+ <time>12:57:04</time>
  <version>
-  <release>0.5.5</release>
-  <api>0.5.5</api>
+  <release>0.5.6</release>
+  <api>0.5.6</api>
  </version>
  <stability>
   <release>beta</release>
@@ -682,14 +682,14 @@ This is an beta release, see README.markdown for examples.
  <changelog>
   <release>
    <version>
-    <release>0.5.5</release>
-    <api>0.5.5</api>
+    <release>0.5.6</release>
+    <api>0.5.6</api>
    </version>
    <stability>
     <release>beta</release>
     <api>beta</api>
    </stability>
-   <date>2011-04-02</date>
+   <date>2011-04-13</date>
    <license uri="http://www.opensource.org/licenses/bsd-license.php">New BSD License</license>
    <notes>
 This is an beta release, see README.markdown for examples.
