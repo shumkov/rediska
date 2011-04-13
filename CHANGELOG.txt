@@ -1,4 +1,8 @@
-Version 0.5.5 (March 8, 2011):
+Version 0.5.6 (April 13, 2011):
+ * Bug #10886: Remove json_last_error() from JSON serialzier
+ * Bug #10887: Subscribe don't unserialize values
+
+Version 0.5.5 (April 2, 2011):
  * Feature #4214: Profiler
  * Feature #9921: Implement SETBIT, GETBIT, SETRANGE, GETRANGE, STRLEN
  * Feature #9932: Implement LINSERT, LPUSHX, RPUSHX
