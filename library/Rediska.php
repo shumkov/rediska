@@ -525,6 +525,12 @@ class Rediska extends Rediska_Options
     public function getProfiler()
     {
         if (!$this->_profiler) {
+            if (is_string($this->_options['profiler'])) {
+                $this->_options['profiler'] = array(
+                    'name' => $this->_options['profiler']
+                );
+            }
+
             if ($this->_options['profiler'] === false) {
                 $this->_profiler = new Rediska_Profiler_Null();
             } else if ($this->_options['profiler'] === true) {
@@ -535,12 +541,14 @@ class Rediska extends Rediska_Options
                 } else if (in_array($this->_options['profiler']['name'], array('stream'))) {
                     $name = ucfirst($this->_options['profiler']['name']);
                     $className = "Rediska_Profiler_$name";
-                    unset($this->_options['profiler']['name']);
-                    $this->_profiler = new $className($this->_options['profiler']);
+                    $options = $this->_options['profiler'];
+                    unset($options['name']);
+                    $this->_profiler = new $className($options);
                 } else if (@class_exists($this->_options['profiler']['name'])) {
                     $className = $this->_options['profiler']['name'];
-                    unset($this->_options['profiler']['name']);
-                    $this->_profiler = new $className($this->_options['profiler']);
+                    $options = $this->_options['profiler'];
+                    unset($options['name']);
+                    $this->_profiler = new $className($options);
                 } else {
                     throw new Rediska_Exception("Profiler '{$this->_options['profiler']['name']}' not found. You need include it before or setup autoload.");
                 }
