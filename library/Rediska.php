@@ -185,15 +185,37 @@ class Rediska extends Rediska_Options
     }
 
     /**
+     * Add a configured connection to Rediska.
+     *
+     * Eventually replace {@link self::addServer()}.
+     *
+     * @param Rediska_Connection $connection
+     *
+     * @return $this
+     * @uses   self::_updateKeyDistributor()
+     */
+    public function addConnection(Rediska_Connection $connection)
+    {
+        $alias = $connection->getAlias();
+        $this->_connections[$alias] = $connection;
+
+        $this->_updateKeyDistributor($connection);
+
+        return $this;
+    }
+
+    /**
      * Set servers array:
-     * 
+     *
      * array(
      *     array('host' => '127.0.0.1', 'port' => 6379, 'weight' => 1),
      *     array('host' => '127.0.0.1', 'port' => 6380, 'weight' => 2)
      * )
-     * 
-     * @param array $servers
+     *
+     * @param array $servers An array of server configurations.
+     *
      * @return Rediska
+     * @uses   self::addServer()
      */
     public function setServers(array $servers)
     {
@@ -201,7 +223,7 @@ class Rediska extends Rediska_Options
         foreach($servers as $alias => $serverOptions) {
             if (!isset($serverOptions['alias']) && is_string($alias)) {
                 $serverOptions['alias'] = $alias;
-            } 
+            }
 
             $this->addServer(
                 isset($serverOptions['host']) ? $serverOptions['host'] : Rediska_Connection::DEFAULT_HOST,
@@ -214,12 +236,15 @@ class Rediska extends Rediska_Options
 
     /**
      * Add server
-     * 
+     *
      * @throws Rediska_Exception
+     *
      * @param string $host Hostname or IP
      * @param integer $port Port
      * @param array $options Options see: Rediska_Connection
+     *
      * @return Rediska
+     * @uses   self::_updateKeyDistributor()
      */
     public function addServer($host, $port = Rediska_Connection::DEFAULT_PORT, array $options = array())
     {
@@ -238,12 +263,7 @@ class Rediska extends Rediska_Options
 
         $this->_connections[$connectionString] = new Rediska_Connection($options);
 
-        if ($this->_keyDistributor) {
-            $this->_keyDistributor->addConnection(
-                $connectionString,
-                isset($options['weight']) ? $options['weight'] : Rediska_Connection::DEFAULT_WEIGHT
-            );
-        }
+        $this->_updateKeyDistributor($this->_connections[$connectionString]);
 
         return $this;
     }
@@ -275,7 +295,7 @@ class Rediska extends Rediska_Options
 
     /**
      * Get Rediska connection instance by key name
-     * 
+     *
      * @throws Rediska_Connection_Exception
      * @param string $name Key name
      * @return Rediska_Connection
@@ -297,7 +317,7 @@ class Rediska extends Rediska_Options
 
     /**
      * Get connection by alias
-     * 
+     *
      * @param string $alias
      * @return Rediska_Connection
      */
@@ -477,7 +497,7 @@ class Rediska extends Rediska_Options
 
     /**
      * Set Rediska serializer adapter
-     * 
+     *
      * @param mixed $serializer
      * @return Rediska
      */
@@ -491,7 +511,7 @@ class Rediska extends Rediska_Options
 
     /**
      * Get Rediska serializer
-     * 
+     *
      * @return Rediska_Serializer
      */
     public function getSerializer()
@@ -513,7 +533,7 @@ class Rediska extends Rediska_Options
     {
         $this->_options['profiler'] = $profilerOrOptions;
         $this->_profiler = null;
-        
+
         return $this;
     }
 
@@ -587,7 +607,7 @@ class Rediska extends Rediska_Options
      * @return mixed
      */
     protected function _executeCommand($name, $args = array())
-    {        
+    {
         $this->_specifiedConnection->resetConnection();
 
         $command = Rediska_Commands::get($this, $name, $args);
@@ -601,6 +621,24 @@ class Rediska extends Rediska_Options
         unset($command);
 
         return $response;
+    }
+
+    /**
+     * Update the key distributor
+     *
+     * @param Rediska_Connection $connection
+     *
+     * @return void
+     * @uses   self::$_keyDistributor
+     */
+    protected function _updateKeyDistributor(Rediska_Connection $connection)
+    {
+        if ($this->_keyDistributor) {
+            $this->_keyDistributor->addConnection(
+                $connection->getAlias(),
+                $connection->getWeight()
+            );
+        }
     }
 
     /**
