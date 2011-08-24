@@ -1,6 +1,12 @@
 Changelog
 ======
 
+Version 0.5.7
+---
+Unreleased
+
+ * Bug #11654: Profiler option can't get a string
+
 Version 0.5.6
 ---
 April 13, 2011
