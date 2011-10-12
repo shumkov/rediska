@@ -54,14 +54,14 @@ class Rediska_Connection extends Rediska_Options
         'streamContext' => null,
     );
 
-    /**
+   /**
      * Connect to redis server
-     * 
+     *
      * @throws Rediska_Connection_Exception
      * @return boolean
      * @uses   self::getStreamContext()
      */
-    public function connect() 
+    public function connect()
     {
         if (!$this->isConnected()) {
             $socketAddress = 'tcp://' . $this->getHost() . ':' . $this->getPort();
@@ -72,14 +72,21 @@ class Rediska_Connection extends Rediska_Options
                 $flag = STREAM_CLIENT_CONNECT;
             }
 
-            $this->_socket = @stream_socket_client(
+            $socketParams = array(
                 $socketAddress,
-                $errno,
-                $errmsg,
+                &$errno,
+                &$errmsg,
                 $this->getTimeout(),
-                $flag,
-                $this->getStreamContext()
+                $flag
             );
+
+            $streamContext = $this->getStreamContext();
+
+            if ($streamContext) {
+                $socketParams[] = $streamContext;
+            }
+
+            $this->_socket = call_user_func_array('stream_socket_client', $socketParams);
 
             // Throw exception if can't connect
             if (!is_resource($this->_socket)) {
