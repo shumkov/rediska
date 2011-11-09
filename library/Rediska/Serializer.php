@@ -99,7 +99,7 @@ class Rediska_Serializer
                 $unserializedValue = (float)$value;
             }
 
-            if ((string)$unserializedValue != $value) {
+            if ((string)$unserializedValue !== $value) {
                 $unserializedValue = $value;
             }
         } else {
