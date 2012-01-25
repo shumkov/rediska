@@ -614,9 +614,10 @@ class Rediska_Connection_Specified
      * @param boolean[optional] $withScores Get with scores. For default is false
      * @param integer[optional] $limit      Limit. For default is no limit
      * @param integer[optional] $offset     Offset. For default is no offset
+     * @param boolean[optional] $revert     Revert. For default is false
      * @return array
      */
-    public function getFromSortedSetByScore($key, $min, $max, $withScores = false, $limit = null, $offset = null) { $args = func_get_args(); return $this->_executeCommand('getFromSortedSetByScore', $args); }
+    public function getFromSortedSetByScore($key, $min, $max, $withScores = false, $limit = null, $offset = null, $revert = false) { $args = func_get_args(); return $this->_executeCommand('getFromSortedSetByScore', $args); }
 
     /**
      * Get length of Sorted Set
