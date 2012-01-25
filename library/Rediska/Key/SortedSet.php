@@ -80,11 +80,12 @@ class Rediska_Key_SortedSet extends Rediska_Key_Abstract implements IteratorAggr
      * @param boolean $withScores Get with scores
      * @param integer $limit      Limit
      * @param integer $offset     Offset
+     * @param boolean $revert     Is revert result
      * @return array
      */
-    public function getByScore($min, $max, $withScores = false, $limit = null, $offset = null)
+    public function getByScore($min, $max, $withScores = false, $limit = null, $offset = null, $revert = false)
     {
-        return $this->_getRediskaOn()->getFromSortedSetByScore($this->getName(), $min, $max, $withScores, $limit, $offset);
+        return $this->_getRediskaOn()->getFromSortedSetByScore($this->getName(), $min, $max, $withScores, $limit, $offset, $revert);
     }
 
     /**
