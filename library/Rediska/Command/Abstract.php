@@ -75,7 +75,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
      * 
      * @var unknown_type
      */
-    protected $_isWrited = false;
+    protected $_isWritten = false;
     
     /**
      * Is queued to transaction
@@ -135,7 +135,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
             $exec->write();
         }
 
-        $this->_isWrited = true;
+        $this->_isWritten = true;
 
         return true;
     }
@@ -149,7 +149,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
     {
         $responses = array();
 
-        if (!$this->_isWrited) {
+        if (!$this->_isWritten) {
             throw new Rediska_Command_Exception('You need write before');
         }
 
@@ -162,7 +162,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
 
             return true;
         } else {
-            $this->_isWrited = false;
+            $this->_isWritten = false;
             return $this->parseResponses($responses);
         }
     }
@@ -339,8 +339,7 @@ abstract class Rediska_Command_Abstract implements Rediska_Command_Interface
             $key = !is_integer($name) ? "'$name' => " : '';
 
             if (is_object($value)) {
-                //$string .= get_class($argument);
-                $argument = (string)$value;
+                $argument = get_class($value) . ' $' . $name;
             } else if (is_numeric($value)) {
                 $argument = $value;
             } else if (is_string($value)) {

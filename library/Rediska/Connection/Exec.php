@@ -42,9 +42,9 @@ class Rediska_Connection_Exec
     /**
      * Is writed
      * 
-     * @var $_isWrited string
+     * @var $_isWritten boolean
      */
-    protected $_isWrited = false;
+    protected $_isWritten = false;
 
     /**
      * Response callback
@@ -84,7 +84,7 @@ class Rediska_Connection_Exec
     public function write()
     {
         $result = $this->getConnection()->write($this->getCommand());
-        $this->_isWrited = true;
+        $this->_isWritten = true;
 
         return $result;
     }
@@ -94,9 +94,9 @@ class Rediska_Connection_Exec
      *
      * @return boolean
      */
-    public function isWrited()
+    public function isWritten()
     {
-        return $this->_isWrited;
+        return $this->_isWritten;
     }
 
     /**
@@ -106,11 +106,11 @@ class Rediska_Connection_Exec
      */
     public function read()
     {
-        if (!$this->isWrited()) {
+        if (!$this->isWritten()) {
             throw new Rediska_Connection_Exec_Exception('You must write command before read');
         }
 
-        $this->_isWrited = false;
+        $this->_isWritten = false;
 
         if ($this->getResponseIterator() !== null) {
             if ($this->getResponseIterator() === true) {

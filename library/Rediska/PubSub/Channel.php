@@ -245,6 +245,8 @@ class Rediska_PubSub_Channel extends Rediska_Options_RediskaInstance implements 
                     }
 
                     $connection->setReadTimeout($timeLeft);
+                } else {
+                    $connection->setReadTimeout(600);
                 }
 
                 try {
@@ -269,7 +271,7 @@ class Rediska_PubSub_Channel extends Rediska_Options_RediskaInstance implements 
                     return $response;
                 } catch (Rediska_Connection_TimeoutException $e) {
                     if (!$timeout) {
-                        throw $e;
+                        continue;
                     }
 
                     // Reset timeStart if time started from this method
@@ -538,7 +540,9 @@ class Rediska_PubSub_Channel extends Rediska_Options_RediskaInstance implements 
                 return new Rediska_PubSub_Response_Unsubscribe($connection, $channel);
 
             case self::MESSAGE:
-                return new Rediska_PubSub_Response_Message($connection, $channel, $body);
+                $message = $this->getRediska()->getSerializer()->unserialize($body);
+
+                return new Rediska_PubSub_Response_Message($connection, $channel, $message);
 
             default:
                 throw new Rediska_PubSub_Response_Exception('Unknown reponse type: ' . $type);

@@ -41,26 +41,28 @@ class Rediska_Connection extends Rediska_Options
      * @var array
      */
     protected $_options = array(
-        'host'         => self::DEFAULT_HOST,
-        'port'         => self::DEFAULT_PORT,
-        'db'           => self::DEFAULT_DB,
-        'alias'        => null,
-        'weight'       => self::DEFAULT_WEIGHT,
-        'password'     => null,
-        'persistent'   => false,
-        'timeout'      => null,
-        'readTimeout'  => null,
-        'blockingMode' => true,
-        'reconnect'    => true,
+        'host'          => self::DEFAULT_HOST,
+        'port'          => self::DEFAULT_PORT,
+        'db'            => self::DEFAULT_DB,
+        'alias'         => null,
+        'weight'        => self::DEFAULT_WEIGHT,
+        'password'      => null,
+        'persistent'    => false,
+        'timeout'       => null,
+        'readTimeout'   => null,
+        'blockingMode'  => true,
+        'streamContext' => null,
+		'reconnect'    => true,
     );
 
-    /**
+   /**
      * Connect to redis server
-     * 
+     *
      * @throws Rediska_Connection_Exception
      * @return boolean
+     * @uses   self::getStreamContext()
      */
-    public function connect() 
+    public function connect()
     {
         if (!$this->isConnected()) {
             $socketAddress = 'tcp://' . $this->getHost() . ':' . $this->getPort();
@@ -71,7 +73,21 @@ class Rediska_Connection extends Rediska_Options
                 $flag = STREAM_CLIENT_CONNECT;
             }
 
-            $this->_socket = @stream_socket_client($socketAddress, $errno, $errmsg, $this->getTimeout(), $flag);
+            $socketParams = array(
+                $socketAddress,
+                &$errno,
+                &$errmsg,
+                $this->getTimeout(),
+                $flag
+            );
+
+            $streamContext = $this->getStreamContext();
+
+            if ($streamContext) {
+                $socketParams[] = $streamContext;
+            }
+
+            $this->_socket = call_user_func_array('stream_socket_client', $socketParams);
 
             // Throw exception if can't connect
             if (!is_resource($this->_socket)) {
@@ -352,6 +368,28 @@ class Rediska_Connection extends Rediska_Options
         } else {
             return $this->_options['host'] . ':' . $this->_options['port'];
         }
+    }
+
+    /**
+     * If a stream context is provided, use it creating the socket.
+     *
+     * It's supported to provide either an array with options, or an already created
+     * resource.
+     *
+     * @return mixed null or resource
+     * @see    self::connect()
+     */
+    public function getStreamContext()
+    {
+        if ($this->_options['streamContext'] !== null) {
+            if (is_resource($this->_options['streamContext'])) {
+                return $this->_options['streamContext'];
+            }
+            if (is_array($this->_options['streamContext'])) {
+                return stream_context_create($this->_options['streamContext']);
+            }
+        }
+        return null;
     }
 
     /**

@@ -164,12 +164,15 @@ class Rediska_Key extends Rediska_Key_Abstract implements Countable, ArrayAccess
 
     /**
      * Get value, if value not present set it from chain method
-     * 
-     * @param $object Object of chain method
+     *
+     * @param mixin[optional]   $object            Object of chain method
+     * @param integer[optional] $expire            Expire
+     * @param boolean[optional] $expireIsTimestamp If true $expire argument in seconds, or $expire is timestamp
+     * @return Rediska_Key_GetOrSetValue
      */
-    public function getOrSetValue($object = null)
+    public function getOrSetValue($object = null, $expire = null, $expireIsTimestamp = false)
     {
-        return new Rediska_Key_GetOrSetValue($this, $object);
+        return new Rediska_Key_GetOrSetValue($this, $object, $expire, $expireIsTimestamp);
     }
 
     /**
@@ -246,15 +249,33 @@ class Rediska_Key_GetOrSetValue
     protected $_object;
 
     /**
+     * Expire
+     *
+     * @var integer
+     */
+    protected $_expire;
+
+    /**
+     * Is expire in seconds
+     *
+     * @var bool
+     */
+    protected $_expireIsTimestamp = false;
+
+    /**
      * Construct GetOrSetValue provider
      * 
      * @param Rediska_Key $key
      * @param object      $object Provider object
+     * @param integer[optional] $expire            Expire
+     * @param boolean[optional] $expireIsTimestamp If true $expire argument in seconds, or $expire is timestamp
      */
-    public function __construct(Rediska_Key $key, $object = null)
+    public function __construct(Rediska_Key $key, $object = null, $expire = null, $expireIsTimestamp = false)
     {
-        $this->_key    = $key;
-        $this->_object = $object;
+        $this->_key               = $key;
+        $this->_object            = $object;
+        $this->_expire            = $expire;
+        $this->_expireIsTimestamp = $expireIsTimestamp;
     }
 
     public function __call($method, $args)
@@ -269,6 +290,9 @@ class Rediska_Key_GetOrSetValue
             }
             $value = call_user_func_array($callback, $args);
             $this->_key->setValue($value);
+            if ($this->_expire !== null) {
+                $this->_key->expire($this->_expire, $this->_expireIsTimestamp);
+            }
         }
 
         return $value;
