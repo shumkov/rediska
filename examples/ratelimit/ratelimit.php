@@ -109,7 +109,7 @@ class Ratelimit {
 	 */
 	public function reset($subject) {
 		$keyName = $this->_getKeyName($subject);
-		return (bool) $this->_rediska->del($keyName);
+		return (bool) $this->_rediska->delete($keyName);
 	}
 
 	/**
