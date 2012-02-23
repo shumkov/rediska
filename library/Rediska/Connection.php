@@ -185,6 +185,7 @@ class Rediska_Connection extends Rediska_Options
 					$attemptsCount++;
                     $this->disconnect();
                     if ($maxReconnectAttempts && $attemptsCount < $maxReconnectAttempts) {
+						error_log("Rediska reconnect attempt {$attemptsCount} from {$maxReconnectAttempts}");
                         return $this->write($string);
                     } else {
                         throw new Rediska_Connection_Exception("Can't write to socket. Max reconnect attempts {$maxReconnectAttempts} was reached.");
