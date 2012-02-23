@@ -37,6 +37,7 @@ class Rediska_Connection extends Rediska_Options
      * timeout      - Connection timeout for Redis server. Optional
      * readTimeout  - Read timeout for Redis server
      * blockingMode - Blocking/non-blocking mode for reads
+	 * maxReconnectAttempts - Reconnect attempts count
      * 
      * @var array
      */
@@ -52,7 +53,7 @@ class Rediska_Connection extends Rediska_Options
         'readTimeout'   => null,
         'blockingMode'  => true,
         'streamContext' => null,
-		'reconnect'    => true,
+		'maxReconnectAttempts'    => 10,
     );
 
    /**
@@ -175,16 +176,18 @@ class Rediska_Connection extends Rediska_Options
             $needToWrite = (string)$string . Rediska::EOL;
 
             $this->connect();
-
+			$maxReconnectAttempts = $this->getOption('maxReconnectAttempts');
+			$attemptsCount = 0;
             while ($needToWrite) {
                 $bytes = @fwrite($this->_socket, $needToWrite);
     
                 if ($bytes === false) {
+					$attemptsCount++;
                     $this->disconnect();
-                    if ($this->getOption('reconnect')) {
+                    if ($maxReconnectAttempts && $attemptsCount < $maxReconnectAttempts) {
                         return $this->write($string);
                     } else {
-                        throw new Rediska_Connection_Exception("Can't write to socket.");
+                        throw new Rediska_Connection_Exception("Can't write to socket. Max reconnect attempts {$maxReconnectAttempts} was reached.");
                     }
                 }
     
