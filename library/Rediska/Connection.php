@@ -22,6 +22,12 @@ class Rediska_Connection extends Rediska_Options {
 	 * @var stream
 	 */
 	protected $_socket;
+	
+	/**
+	 *	Count of connection attempts befeore exception
+	 * @var integer 
+	 */
+	protected $_attemptsCount = 0;
 
 	/**
 	 * Options
@@ -171,16 +177,13 @@ class Rediska_Connection extends Rediska_Options {
 			$needToWrite = (string) $string . Rediska::EOL;
 
 			$this->connect();
-			$maxReconnectAttempts = $this->getOption('maxReconnectAttempts');
-			$attemptsCount = 0;
+			
 			while ($needToWrite) {
 				$bytes = @fwrite($this->_socket, $needToWrite);
 
 				if ($bytes === false) {
-					$attemptsCount++;
 					$this->disconnect();
-					if ($maxReconnectAttempts && $attemptsCount < $maxReconnectAttempts) {
-						error_log("Rediska reconnect attempt {$attemptsCount} from {$maxReconnectAttempts}");
+					if ($this->_checkAttemptsCount()) {
 						return $this->write($string);
 					} else {
 						throw new Rediska_Connection_Exception("Can't write to socket. Max reconnect attempts {$maxReconnectAttempts} was reached.");
@@ -245,20 +248,11 @@ class Rediska_Connection extends Rediska_Options {
 		}
 
 		if ($reply === false) {
-			$maxReconnectAttempts = $this->getOption('maxReconnectAttempts');
-
-			static $attemptsCount;
-			
-			if (!$attemptsCount) {
-				$attemptsCount = 0;
-			}
 
 			if ($this->_options['blockingMode'] || (!$this->_options['blockingMode'] && $info['eof'])) {
 				$this->disconnect();
-				if ($maxReconnectAttempts && $attemptsCount < $maxReconnectAttempts) {
-					error_log("Rediska reconnect attempt {$attemptsCount} from {$maxReconnectAttempts}");
+				if ($this->_checkAttemptsCount()) {
 					$this->connect();
-					$attemptsCount++;
 				} else {
 					throw new Rediska_Connection_Exception("Can't read from socket.");
 				}
@@ -446,4 +440,24 @@ class Rediska_Connection extends Rediska_Options {
 		$this->_socket = null;
 	}
 
+	/**
+	 *	Return attempts count
+	 * @return integer 
+	 */
+	protected function _getAttemptsCount(){
+		return $this->_attemptsCount;
+	}
+	
+	/**
+	 * Increment attempts count
+	 */
+	protected function _checkAttemptsCount() {
+		$maxReconnectAttempts = $this->getOption('maxReconnectAttempts');
+		if($maxReconnectAttempts && $this->_attemptsCount < $maxReconnectAttempts) {
+			$this->_attemptsCount++;
+			return true;
+		}
+		return false;
+	}
+	
 }
