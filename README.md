@@ -18,7 +18,7 @@ Features
 * Pipelining
 * Easy extending Rediska by adding you own commands or overwrite standart
 * [Zend Framework](http://framework.zend.com/) integration
-* [Syfmony](http://www.symfony-project.org/) framework integration
+* [Symfony](http://www.symfony-project.org/) framework integration
 * Full [documentation](http://rediska.geometria-lab.ru/documentation)
 * Example application
 * [PHPUnit](http://phpunit.de/) tests
