@@ -68,7 +68,8 @@ class Rediska_Connection extends Rediska_Options {
      * @return boolean
      * @uses   self::getStreamContext()
      */
-    public function connect() {
+    public function connect()
+    {
         if (!$this->isConnected()) {
             $socketAddress = 'tcp://' . $this->getHost() . ':' . $this->getPort();
 
@@ -147,7 +148,8 @@ class Rediska_Connection extends Rediska_Options {
      * 
      * @return boolean
      */
-    public function disconnect() {
+    public function disconnect()
+    {
         if ($this->isConnected()) {
             @fclose($this->_socket);
 
@@ -162,7 +164,8 @@ class Rediska_Connection extends Rediska_Options {
      * 
      * @return boolean
      */
-    public function isConnected() {
+    public function isConnected()
+    {
         return is_resource($this->_socket);
     }
 
@@ -172,7 +175,8 @@ class Rediska_Connection extends Rediska_Options {
      * @param $string
      * @return boolean
      */
-    public function write($string) {
+    public function write($string)
+    {
         if ($string !== '') {
             $needToWrite = (string) $string . Rediska::EOL;
 
@@ -210,7 +214,8 @@ class Rediska_Connection extends Rediska_Options {
      * @param integer $length
      * @return boolean
      */
-    public function read($length) {
+    public function read($length)
+    {
         if (!$this->isConnected()) {
             throw new Rediska_Connection_Exception("Can't read without connection to Redis server. Do connect or write first.");
         }
@@ -235,7 +240,8 @@ class Rediska_Connection extends Rediska_Options {
      * @throws Rediska_Connection_TimeoutException
      * @return string
      */
-    public function readLine() {
+    public function readLine()
+    {
         if (!$this->isConnected()) {
             throw new Rediska_Connection_Exception("Can't read without connection to Redis server. Do connect or write first.");
         }
@@ -272,7 +278,8 @@ class Rediska_Connection extends Rediska_Options {
      * @param $timeout
      * @return Rediska_Connection
      */
-    public function setReadTimeout($timeout) {
+    public function setReadTimeout($timeout)
+    {
         $this->_options['readTimeout'] = $timeout;
 
         if ($this->isConnected()) {
@@ -291,7 +298,8 @@ class Rediska_Connection extends Rediska_Options {
      * @param $flag
      * @return Rediska_Connection
      */
-    public function setBlockingMode($flag = true) {
+    public function setBlockingMode($flag = true)
+    {
         $this->_options['blockingMode'] = $flag;
 
         if ($this->isConnected()) {
@@ -306,7 +314,8 @@ class Rediska_Connection extends Rediska_Options {
      * 
      * @return string
      */
-    public function getHost() {
+    public function getHost()
+    {
         return $this->_options['host'];
     }
 
@@ -315,7 +324,8 @@ class Rediska_Connection extends Rediska_Options {
      * 
      * @return string
      */
-    public function getPort() {
+    public function getPort()
+    {
         return $this->_options['port'];
     }
 
@@ -324,7 +334,8 @@ class Rediska_Connection extends Rediska_Options {
      * 
      * @return string
      */
-    public function getWeight() {
+    public function getWeight()
+    {
         return $this->_options['weight'];
     }
 
@@ -333,7 +344,8 @@ class Rediska_Connection extends Rediska_Options {
      * 
      * @return string
      */
-    public function getPassword() {
+    public function getPassword()
+    {
         return $this->_options['password'];
     }
 
@@ -342,7 +354,8 @@ class Rediska_Connection extends Rediska_Options {
      * 
      * @return string
      */
-    public function getTimeout() {
+    public function getTimeout()
+    {
         if (null !== $this->_options['timeout']) {
             return $this->_options['timeout'];
         } else {
@@ -355,7 +368,8 @@ class Rediska_Connection extends Rediska_Options {
      * 
      * @return string
      */
-    public function getAlias() {
+    public function getAlias()
+    {
         if ($this->_options['alias'] != '') {
             return $this->_options['alias'];
         } else {
@@ -372,7 +386,8 @@ class Rediska_Connection extends Rediska_Options {
      * @return mixed null or resource
      * @see    self::connect()
      */
-    public function getStreamContext() {
+    public function getStreamContext()
+    {
         if ($this->_options['streamContext'] !== null) {
             if (is_resource($this->_options['streamContext'])) {
                 return $this->_options['streamContext'];
@@ -390,7 +405,8 @@ class Rediska_Connection extends Rediska_Options {
      * @param $length Lenght of bytes to read
      * @return string
      */
-    protected function _readAndThrowException($length) {
+    protected function _readAndThrowException($length)
+    {
         $data = @stream_get_contents($this->_socket, $length);
 
         $info = stream_get_meta_data($this->_socket);
@@ -411,7 +427,8 @@ class Rediska_Connection extends Rediska_Options {
      *
      * @return string
      */
-    public function __invoke($command) {
+    public function __invoke($command)
+    {
         $exec = new Rediska_Connection_Exec($this, $command);
 
         return $exec->execute();
@@ -420,14 +437,16 @@ class Rediska_Connection extends Rediska_Options {
     /**
      * Return alias to strings
      */
-    public function __toString() {
+    public function __toString()
+    {
         return $this->getAlias();
     }
 
     /**
      * Disconnect on destrcuct connection object
      */
-    public function __destruct() {
+    public function __destruct()
+    {
         if (!$this->_options['persistent']) {
             $this->disconnect();
         }
@@ -436,7 +455,8 @@ class Rediska_Connection extends Rediska_Options {
     /**
      * Do not clone socket
      */
-    public function __clone() {
+    public function __clone()
+    {
         $this->_socket = null;
     }
 
@@ -444,14 +464,16 @@ class Rediska_Connection extends Rediska_Options {
      * 	Return attempts count
      * @return integer 
      */
-    protected function _getAttemptsCount() {
+    protected function _getAttemptsCount()
+    {
         return $this->_attemptsCount;
     }
 
     /**
      * Increment attempts count
      */
-    protected function _checkAttemptsCount() {
+    protected function _checkAttemptsCount()
+    {
         $maxReconnectAttempts = $this->getOption('maxReconnectAttempts');
         if ($maxReconnectAttempts && $this->_attemptsCount < $maxReconnectAttempts) {
             $this->_attemptsCount++;
