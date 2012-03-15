@@ -10,12 +10,11 @@
  * @link http://rediska.geometria-lab.net
  * @license http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_Connection extends Rediska_Options
-{
-    const DEFAULT_HOST   = '127.0.0.1';
-    const DEFAULT_PORT   = 6379;
+class Rediska_Connection extends Rediska_Options {
+    const DEFAULT_HOST = '127.0.0.1';
+    const DEFAULT_PORT = 6379;
     const DEFAULT_WEIGHT = 1;
-    const DEFAULT_DB     = 0;
+    const DEFAULT_DB = 0;
 
     /**
      * Socket
@@ -23,6 +22,12 @@ class Rediska_Connection extends Rediska_Options
      * @var stream
      */
     protected $_socket;
+
+    /**
+     * 	Count of connection attempts befeore exception
+     * @var integer 
+     */
+    protected $_attemptsCount = 0;
 
     /**
      * Options
@@ -37,24 +42,26 @@ class Rediska_Connection extends Rediska_Options
      * timeout      - Connection timeout for Redis server. Optional
      * readTimeout  - Read timeout for Redis server
      * blockingMode - Blocking/non-blocking mode for reads
+     * maxReconnectAttempts - Reconnect attempts count
      * 
      * @var array
      */
     protected $_options = array(
-        'host'          => self::DEFAULT_HOST,
-        'port'          => self::DEFAULT_PORT,
-        'db'            => self::DEFAULT_DB,
-        'alias'         => null,
-        'weight'        => self::DEFAULT_WEIGHT,
-        'password'      => null,
-        'persistent'    => false,
-        'timeout'       => null,
-        'readTimeout'   => null,
-        'blockingMode'  => true,
+        'host' => self::DEFAULT_HOST,
+        'port' => self::DEFAULT_PORT,
+        'db' => self::DEFAULT_DB,
+        'alias' => null,
+        'weight' => self::DEFAULT_WEIGHT,
+        'password' => null,
+        'persistent' => false,
+        'timeout' => null,
+        'readTimeout' => null,
+        'blockingMode' => true,
         'streamContext' => null,
+        'maxReconnectAttempts' => 10,
     );
 
-   /**
+    /**
      * Connect to redis server
      *
      * @throws Rediska_Connection_Exception
@@ -114,7 +121,7 @@ class Rediska_Connection extends Rediska_Options
             if ($this->getPassword() != '') {
                 $auth = new Rediska_Connection_Exec($this, "AUTH {$this->getPassword()}");
                 try {
-                   $auth->execute();
+                    $auth->execute();
                 } catch (Rediska_Command_Exception $e) {
                     throw new Rediska_Connection_Exception("Password error: {$e->getMessage()}");
                 }
@@ -124,7 +131,7 @@ class Rediska_Connection extends Rediska_Options
             if ($this->_options['db'] !== self::DEFAULT_DB) {
                 $selectDb = new Rediska_Connection_Exec($this, "SELECT {$this->_options['db']}");
                 try {
-                   $selectDb->execute();
+                    $selectDb->execute();
                 } catch (Rediska_Command_Exception $e) {
                     throw new Rediska_Connection_Exception("Select db error: {$e->getMessage()}");
                 }
@@ -141,7 +148,7 @@ class Rediska_Connection extends Rediska_Options
      * 
      * @return boolean
      */
-    public function disconnect() 
+    public function disconnect()
     {
         if ($this->isConnected()) {
             @fclose($this->_socket);
@@ -168,26 +175,30 @@ class Rediska_Connection extends Rediska_Options
      * @param $string
      * @return boolean
      */
-    public function write($string) 
+    public function write($string)
     {
         if ($string !== '') {
-            $string = (string)$string . Rediska::EOL;
+            $needToWrite = (string) $string . Rediska::EOL;
 
             $this->connect();
 
-            while ($string) {
-                $bytes = @fwrite($this->_socket, $string);
-    
+            while ($needToWrite) {
+                $bytes = @fwrite($this->_socket, $needToWrite);
+
                 if ($bytes === false) {
                     $this->disconnect();
-                    throw new Rediska_Connection_Exception("Can't write to socket.");
+                    if ($this->_checkAttemptsCount()) {
+                        return $this->write($string);
+                    } else {
+                        throw new Rediska_Connection_Exception("Can't write to socket. Max reconnect attempts {$maxReconnectAttempts} was reached.");
+                    }
                 }
-    
+
                 if ($bytes == 0) {
                     return true;
                 }
-    
-                $string = substr($string, $bytes);
+
+                $needToWrite = substr($needToWrite, $bytes);
             }
 
             return true;
@@ -243,9 +254,14 @@ class Rediska_Connection extends Rediska_Options
         }
 
         if ($reply === false) {
+
             if ($this->_options['blockingMode'] || (!$this->_options['blockingMode'] && $info['eof'])) {
                 $this->disconnect();
-                throw new Rediska_Connection_Exception("Can't read from socket.");
+                if ($this->_checkAttemptsCount()) {
+                    $this->connect();
+                } else {
+                    throw new Rediska_Connection_Exception("Can't read from socket.");
+                }
             }
 
             $reply = null;
@@ -443,4 +459,27 @@ class Rediska_Connection extends Rediska_Options
     {
         $this->_socket = null;
     }
+
+    /**
+     * 	Return attempts count
+     * @return integer 
+     */
+    protected function _getAttemptsCount()
+    {
+        return $this->_attemptsCount;
+    }
+
+    /**
+     * Increment attempts count
+     */
+    protected function _checkAttemptsCount()
+    {
+        $maxReconnectAttempts = $this->getOption('maxReconnectAttempts');
+        if ($maxReconnectAttempts && $this->_attemptsCount < $maxReconnectAttempts) {
+            $this->_attemptsCount++;
+            return true;
+        }
+        return false;
+    }
+
 }
