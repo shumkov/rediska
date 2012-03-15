@@ -11,453 +11,453 @@
  * @license http://www.opensource.org/licenses/bsd-license.php
  */
 class Rediska_Connection extends Rediska_Options {
-	const DEFAULT_HOST = '127.0.0.1';
-	const DEFAULT_PORT = 6379;
-	const DEFAULT_WEIGHT = 1;
-	const DEFAULT_DB = 0;
+    const DEFAULT_HOST = '127.0.0.1';
+    const DEFAULT_PORT = 6379;
+    const DEFAULT_WEIGHT = 1;
+    const DEFAULT_DB = 0;
 
-	/**
-	 * Socket
-	 * 
-	 * @var stream
-	 */
-	protected $_socket;
-	
-	/**
-	 *	Count of connection attempts befeore exception
-	 * @var integer 
-	 */
-	protected $_attemptsCount = 0;
+    /**
+     * Socket
+     * 
+     * @var stream
+     */
+    protected $_socket;
 
-	/**
-	 * Options
-	 * 
-	 * host         - Redis server host. For default 127.0.0.1
-	 * port         - Redis server port. For default 6379
-	 * db           - Redis server DB index. For default 0
-	 * alias        - Redis server alias for operate keys on specified server. For default [host]:[port]
-	 * weight       - Weight of Redis server for key distribution. For default 1
-	 * password     - Redis server password. Optional
-	 * persistent   - Persistent connection to Redis server. For default false
-	 * timeout      - Connection timeout for Redis server. Optional
-	 * readTimeout  - Read timeout for Redis server
-	 * blockingMode - Blocking/non-blocking mode for reads
-	 * maxReconnectAttempts - Reconnect attempts count
-	 * 
-	 * @var array
-	 */
-	protected $_options = array(
-		'host' => self::DEFAULT_HOST,
-		'port' => self::DEFAULT_PORT,
-		'db' => self::DEFAULT_DB,
-		'alias' => null,
-		'weight' => self::DEFAULT_WEIGHT,
-		'password' => null,
-		'persistent' => false,
-		'timeout' => null,
-		'readTimeout' => null,
-		'blockingMode' => true,
-		'streamContext' => null,
-		'maxReconnectAttempts' => 10,
-	);
+    /**
+     * 	Count of connection attempts befeore exception
+     * @var integer 
+     */
+    protected $_attemptsCount = 0;
 
-	/**
-	 * Connect to redis server
-	 *
-	 * @throws Rediska_Connection_Exception
-	 * @return boolean
-	 * @uses   self::getStreamContext()
-	 */
-	public function connect() {
-		if (!$this->isConnected()) {
-			$socketAddress = 'tcp://' . $this->getHost() . ':' . $this->getPort();
+    /**
+     * Options
+     * 
+     * host         - Redis server host. For default 127.0.0.1
+     * port         - Redis server port. For default 6379
+     * db           - Redis server DB index. For default 0
+     * alias        - Redis server alias for operate keys on specified server. For default [host]:[port]
+     * weight       - Weight of Redis server for key distribution. For default 1
+     * password     - Redis server password. Optional
+     * persistent   - Persistent connection to Redis server. For default false
+     * timeout      - Connection timeout for Redis server. Optional
+     * readTimeout  - Read timeout for Redis server
+     * blockingMode - Blocking/non-blocking mode for reads
+     * maxReconnectAttempts - Reconnect attempts count
+     * 
+     * @var array
+     */
+    protected $_options = array(
+        'host' => self::DEFAULT_HOST,
+        'port' => self::DEFAULT_PORT,
+        'db' => self::DEFAULT_DB,
+        'alias' => null,
+        'weight' => self::DEFAULT_WEIGHT,
+        'password' => null,
+        'persistent' => false,
+        'timeout' => null,
+        'readTimeout' => null,
+        'blockingMode' => true,
+        'streamContext' => null,
+        'maxReconnectAttempts' => 10,
+    );
 
-			if ($this->_options['persistent']) {
-				$flag = STREAM_CLIENT_PERSISTENT | STREAM_CLIENT_CONNECT;
-			} else {
-				$flag = STREAM_CLIENT_CONNECT;
-			}
+    /**
+     * Connect to redis server
+     *
+     * @throws Rediska_Connection_Exception
+     * @return boolean
+     * @uses   self::getStreamContext()
+     */
+    public function connect() {
+        if (!$this->isConnected()) {
+            $socketAddress = 'tcp://' . $this->getHost() . ':' . $this->getPort();
 
-			$socketParams = array(
-				$socketAddress,
-				&$errno,
-				&$errmsg,
-				$this->getTimeout(),
-				$flag
-			);
+            if ($this->_options['persistent']) {
+                $flag = STREAM_CLIENT_PERSISTENT | STREAM_CLIENT_CONNECT;
+            } else {
+                $flag = STREAM_CLIENT_CONNECT;
+            }
 
-			$streamContext = $this->getStreamContext();
+            $socketParams = array(
+                $socketAddress,
+                &$errno,
+                &$errmsg,
+                $this->getTimeout(),
+                $flag
+            );
 
-			if ($streamContext) {
-				$socketParams[] = $streamContext;
-			}
+            $streamContext = $this->getStreamContext();
 
-			$this->_socket = call_user_func_array('stream_socket_client', $socketParams);
+            if ($streamContext) {
+                $socketParams[] = $streamContext;
+            }
 
-			// Throw exception if can't connect
-			if (!is_resource($this->_socket)) {
-				$msg = "Can't connect to Redis server on {$this->getHost()}:{$this->getPort()}";
-				if ($errno || $errmsg) {
-					$msg .= "," . ($errno ? " error $errno" : "") . ($errmsg ? " $errmsg" : "");
-				}
+            $this->_socket = call_user_func_array('stream_socket_client', $socketParams);
 
-				$this->_socket = null;
+            // Throw exception if can't connect
+            if (!is_resource($this->_socket)) {
+                $msg = "Can't connect to Redis server on {$this->getHost()}:{$this->getPort()}";
+                if ($errno || $errmsg) {
+                    $msg .= "," . ($errno ? " error $errno" : "") . ($errmsg ? " $errmsg" : "");
+                }
 
-				throw new Rediska_Connection_Exception($msg);
-			}
+                $this->_socket = null;
 
-			// Set read timeout
-			if ($this->_options['readTimeout'] != null) {
-				$this->setReadTimeout($this->_options['readTimeout']);
-			}
+                throw new Rediska_Connection_Exception($msg);
+            }
 
-			// Set blocking mode
-			if ($this->_options['blockingMode'] == false) {
-				$this->setBlockingMode($this->_options['blockingMode']);
-			}
+            // Set read timeout
+            if ($this->_options['readTimeout'] != null) {
+                $this->setReadTimeout($this->_options['readTimeout']);
+            }
 
-			// Send password
-			if ($this->getPassword() != '') {
-				$auth = new Rediska_Connection_Exec($this, "AUTH {$this->getPassword()}");
-				try {
-					$auth->execute();
-				} catch (Rediska_Command_Exception $e) {
-					throw new Rediska_Connection_Exception("Password error: {$e->getMessage()}");
-				}
-			}
+            // Set blocking mode
+            if ($this->_options['blockingMode'] == false) {
+                $this->setBlockingMode($this->_options['blockingMode']);
+            }
 
-			// Set db
-			if ($this->_options['db'] !== self::DEFAULT_DB) {
-				$selectDb = new Rediska_Connection_Exec($this, "SELECT {$this->_options['db']}");
-				try {
-					$selectDb->execute();
-				} catch (Rediska_Command_Exception $e) {
-					throw new Rediska_Connection_Exception("Select db error: {$e->getMessage()}");
-				}
-			}
+            // Send password
+            if ($this->getPassword() != '') {
+                $auth = new Rediska_Connection_Exec($this, "AUTH {$this->getPassword()}");
+                try {
+                    $auth->execute();
+                } catch (Rediska_Command_Exception $e) {
+                    throw new Rediska_Connection_Exception("Password error: {$e->getMessage()}");
+                }
+            }
 
-			return true;
-		} else {
-			return false;
-		}
-	}
+            // Set db
+            if ($this->_options['db'] !== self::DEFAULT_DB) {
+                $selectDb = new Rediska_Connection_Exec($this, "SELECT {$this->_options['db']}");
+                try {
+                    $selectDb->execute();
+                } catch (Rediska_Command_Exception $e) {
+                    throw new Rediska_Connection_Exception("Select db error: {$e->getMessage()}");
+                }
+            }
 
-	/**
-	 * Disconnect
-	 * 
-	 * @return boolean
-	 */
-	public function disconnect() {
-		if ($this->isConnected()) {
-			@fclose($this->_socket);
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-			return true;
-		} else {
-			return false;
-		}
-	}
+    /**
+     * Disconnect
+     * 
+     * @return boolean
+     */
+    public function disconnect() {
+        if ($this->isConnected()) {
+            @fclose($this->_socket);
 
-	/**
-	 * Is connected
-	 * 
-	 * @return boolean
-	 */
-	public function isConnected() {
-		return is_resource($this->_socket);
-	}
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-	/**
-	 * Write to connection stream
-	 * 
-	 * @param $string
-	 * @return boolean
-	 */
-	public function write($string) {
-		if ($string !== '') {
-			$needToWrite = (string) $string . Rediska::EOL;
+    /**
+     * Is connected
+     * 
+     * @return boolean
+     */
+    public function isConnected() {
+        return is_resource($this->_socket);
+    }
 
-			$this->connect();
-			
-			while ($needToWrite) {
-				$bytes = @fwrite($this->_socket, $needToWrite);
+    /**
+     * Write to connection stream
+     * 
+     * @param $string
+     * @return boolean
+     */
+    public function write($string) {
+        if ($string !== '') {
+            $needToWrite = (string) $string . Rediska::EOL;
 
-				if ($bytes === false) {
-					$this->disconnect();
-					if ($this->_checkAttemptsCount()) {
-						return $this->write($string);
-					} else {
-						throw new Rediska_Connection_Exception("Can't write to socket. Max reconnect attempts {$maxReconnectAttempts} was reached.");
-					}
-				}
+            $this->connect();
 
-				if ($bytes == 0) {
-					return true;
-				}
+            while ($needToWrite) {
+                $bytes = @fwrite($this->_socket, $needToWrite);
 
-				$needToWrite = substr($needToWrite, $bytes);
-			}
+                if ($bytes === false) {
+                    $this->disconnect();
+                    if ($this->_checkAttemptsCount()) {
+                        return $this->write($string);
+                    } else {
+                        throw new Rediska_Connection_Exception("Can't write to socket. Max reconnect attempts {$maxReconnectAttempts} was reached.");
+                    }
+                }
 
-			return true;
-		} else {
-			return false;
-		}
-	}
+                if ($bytes == 0) {
+                    return true;
+                }
 
-	/**
-	 * Read length bytes from connection stram
-	 * 
-	 * @throws Rediska_Connection_Exception
-	 * @param integer $length
-	 * @return boolean
-	 */
-	public function read($length) {
-		if (!$this->isConnected()) {
-			throw new Rediska_Connection_Exception("Can't read without connection to Redis server. Do connect or write first.");
-		}
+                $needToWrite = substr($needToWrite, $bytes);
+            }
 
-		if ($length > 0) {
-			$data = $this->_readAndThrowException($length);
-		} else {
-			$data = null;
-		}
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-		if ($length !== -1) {
-			$this->_readAndThrowException(2);
-		}
+    /**
+     * Read length bytes from connection stram
+     * 
+     * @throws Rediska_Connection_Exception
+     * @param integer $length
+     * @return boolean
+     */
+    public function read($length) {
+        if (!$this->isConnected()) {
+            throw new Rediska_Connection_Exception("Can't read without connection to Redis server. Do connect or write first.");
+        }
 
-		return $data;
-	}
+        if ($length > 0) {
+            $data = $this->_readAndThrowException($length);
+        } else {
+            $data = null;
+        }
 
-	/**
-	 * Read line from connection stream
-	 * 
-	 * @throws Rediska_Connection_Exception
-	 * @throws Rediska_Connection_TimeoutException
-	 * @return string
-	 */
-	public function readLine() {
-		if (!$this->isConnected()) {
-			throw new Rediska_Connection_Exception("Can't read without connection to Redis server. Do connect or write first.");
-		}
+        if ($length !== -1) {
+            $this->_readAndThrowException(2);
+        }
 
-		$reply = @fgets($this->_socket);
+        return $data;
+    }
 
-		$info = stream_get_meta_data($this->_socket);
-		if ($info['timed_out']) {
-			throw new Rediska_Connection_TimeoutException("Connection read timed out.");
-		}
+    /**
+     * Read line from connection stream
+     * 
+     * @throws Rediska_Connection_Exception
+     * @throws Rediska_Connection_TimeoutException
+     * @return string
+     */
+    public function readLine() {
+        if (!$this->isConnected()) {
+            throw new Rediska_Connection_Exception("Can't read without connection to Redis server. Do connect or write first.");
+        }
 
-		if ($reply === false) {
+        $reply = @fgets($this->_socket);
 
-			if ($this->_options['blockingMode'] || (!$this->_options['blockingMode'] && $info['eof'])) {
-				$this->disconnect();
-				if ($this->_checkAttemptsCount()) {
-					$this->connect();
-				} else {
-					throw new Rediska_Connection_Exception("Can't read from socket.");
-				}
-			}
+        $info = stream_get_meta_data($this->_socket);
+        if ($info['timed_out']) {
+            throw new Rediska_Connection_TimeoutException("Connection read timed out.");
+        }
 
-			$reply = null;
-		} else {
-			$reply = trim($reply);
-		}
+        if ($reply === false) {
 
-		return $reply;
-	}
+            if ($this->_options['blockingMode'] || (!$this->_options['blockingMode'] && $info['eof'])) {
+                $this->disconnect();
+                if ($this->_checkAttemptsCount()) {
+                    $this->connect();
+                } else {
+                    throw new Rediska_Connection_Exception("Can't read from socket.");
+                }
+            }
 
-	/**
-	 * Set read timeout
-	 * 
-	 * @param $timeout
-	 * @return Rediska_Connection
-	 */
-	public function setReadTimeout($timeout) {
-		$this->_options['readTimeout'] = $timeout;
+            $reply = null;
+        } else {
+            $reply = trim($reply);
+        }
 
-		if ($this->isConnected()) {
-			$seconds = floor($this->_options['readTimeout']);
-			$microseconds = ($this->_options['readTimeout'] - $seconds) * 1000000;
+        return $reply;
+    }
 
-			stream_set_timeout($this->_socket, $seconds, $microseconds);
-		}
+    /**
+     * Set read timeout
+     * 
+     * @param $timeout
+     * @return Rediska_Connection
+     */
+    public function setReadTimeout($timeout) {
+        $this->_options['readTimeout'] = $timeout;
 
-		return $this;
-	}
+        if ($this->isConnected()) {
+            $seconds = floor($this->_options['readTimeout']);
+            $microseconds = ($this->_options['readTimeout'] - $seconds) * 1000000;
 
-	/**
-	 * Set blocking/non-blocking mode for reads
-	 * 
-	 * @param $flag
-	 * @return Rediska_Connection
-	 */
-	public function setBlockingMode($flag = true) {
-		$this->_options['blockingMode'] = $flag;
+            stream_set_timeout($this->_socket, $seconds, $microseconds);
+        }
 
-		if ($this->isConnected()) {
-			stream_set_blocking($this->_socket, $this->_options['blockingMode']);
-		}
+        return $this;
+    }
 
-		return $this;
-	}
+    /**
+     * Set blocking/non-blocking mode for reads
+     * 
+     * @param $flag
+     * @return Rediska_Connection
+     */
+    public function setBlockingMode($flag = true) {
+        $this->_options['blockingMode'] = $flag;
 
-	/**
-	 * Get option host
-	 * 
-	 * @return string
-	 */
-	public function getHost() {
-		return $this->_options['host'];
-	}
+        if ($this->isConnected()) {
+            stream_set_blocking($this->_socket, $this->_options['blockingMode']);
+        }
 
-	/**
-	 * Get option port
-	 * 
-	 * @return string
-	 */
-	public function getPort() {
-		return $this->_options['port'];
-	}
+        return $this;
+    }
 
-	/**
-	 * Get option weight
-	 * 
-	 * @return string
-	 */
-	public function getWeight() {
-		return $this->_options['weight'];
-	}
+    /**
+     * Get option host
+     * 
+     * @return string
+     */
+    public function getHost() {
+        return $this->_options['host'];
+    }
 
-	/**
-	 * Get option password
-	 * 
-	 * @return string
-	 */
-	public function getPassword() {
-		return $this->_options['password'];
-	}
+    /**
+     * Get option port
+     * 
+     * @return string
+     */
+    public function getPort() {
+        return $this->_options['port'];
+    }
 
-	/**
-	 * Get option timout
-	 * 
-	 * @return string
-	 */
-	public function getTimeout() {
-		if (null !== $this->_options['timeout']) {
-			return $this->_options['timeout'];
-		} else {
-			return ini_get('default_socket_timeout');
-		}
-	}
+    /**
+     * Get option weight
+     * 
+     * @return string
+     */
+    public function getWeight() {
+        return $this->_options['weight'];
+    }
 
-	/**
-	 * Connection alias
-	 * 
-	 * @return string
-	 */
-	public function getAlias() {
-		if ($this->_options['alias'] != '') {
-			return $this->_options['alias'];
-		} else {
-			return $this->_options['host'] . ':' . $this->_options['port'];
-		}
-	}
+    /**
+     * Get option password
+     * 
+     * @return string
+     */
+    public function getPassword() {
+        return $this->_options['password'];
+    }
 
-	/**
-	 * If a stream context is provided, use it creating the socket.
-	 *
-	 * It's supported to provide either an array with options, or an already created
-	 * resource.
-	 *
-	 * @return mixed null or resource
-	 * @see    self::connect()
-	 */
-	public function getStreamContext() {
-		if ($this->_options['streamContext'] !== null) {
-			if (is_resource($this->_options['streamContext'])) {
-				return $this->_options['streamContext'];
-			}
-			if (is_array($this->_options['streamContext'])) {
-				return stream_context_create($this->_options['streamContext']);
-			}
-		}
-		return null;
-	}
+    /**
+     * Get option timout
+     * 
+     * @return string
+     */
+    public function getTimeout() {
+        if (null !== $this->_options['timeout']) {
+            return $this->_options['timeout'];
+        } else {
+            return ini_get('default_socket_timeout');
+        }
+    }
 
-	/**
-	 * Read and throw exception if somthing wrong
-	 * 
-	 * @param $length Lenght of bytes to read
-	 * @return string
-	 */
-	protected function _readAndThrowException($length) {
-		$data = @stream_get_contents($this->_socket, $length);
+    /**
+     * Connection alias
+     * 
+     * @return string
+     */
+    public function getAlias() {
+        if ($this->_options['alias'] != '') {
+            return $this->_options['alias'];
+        } else {
+            return $this->_options['host'] . ':' . $this->_options['port'];
+        }
+    }
 
-		$info = stream_get_meta_data($this->_socket);
-		if ($info['timed_out']) {
-			throw new Rediska_Connection_TimeoutException("Connection read timed out.");
-		}
+    /**
+     * If a stream context is provided, use it creating the socket.
+     *
+     * It's supported to provide either an array with options, or an already created
+     * resource.
+     *
+     * @return mixed null or resource
+     * @see    self::connect()
+     */
+    public function getStreamContext() {
+        if ($this->_options['streamContext'] !== null) {
+            if (is_resource($this->_options['streamContext'])) {
+                return $this->_options['streamContext'];
+            }
+            if (is_array($this->_options['streamContext'])) {
+                return stream_context_create($this->_options['streamContext']);
+            }
+        }
+        return null;
+    }
 
-		if ($data === false) {
-			$this->disconnect();
-			throw new Rediska_Connection_Exception("Can't read from socket.");
-		}
+    /**
+     * Read and throw exception if somthing wrong
+     * 
+     * @param $length Lenght of bytes to read
+     * @return string
+     */
+    protected function _readAndThrowException($length) {
+        $data = @stream_get_contents($this->_socket, $length);
 
-		return $data;
-	}
+        $info = stream_get_meta_data($this->_socket);
+        if ($info['timed_out']) {
+            throw new Rediska_Connection_TimeoutException("Connection read timed out.");
+        }
 
-	/**
-	 * Magic method for execute command in connection
-	 *
-	 * @return string
-	 */
-	public function __invoke($command) {
-		$exec = new Rediska_Connection_Exec($this, $command);
+        if ($data === false) {
+            $this->disconnect();
+            throw new Rediska_Connection_Exception("Can't read from socket.");
+        }
 
-		return $exec->execute();
-	}
+        return $data;
+    }
 
-	/**
-	 * Return alias to strings
-	 */
-	public function __toString() {
-		return $this->getAlias();
-	}
+    /**
+     * Magic method for execute command in connection
+     *
+     * @return string
+     */
+    public function __invoke($command) {
+        $exec = new Rediska_Connection_Exec($this, $command);
 
-	/**
-	 * Disconnect on destrcuct connection object
-	 */
-	public function __destruct() {
-		if (!$this->_options['persistent']) {
-			$this->disconnect();
-		}
-	}
+        return $exec->execute();
+    }
 
-	/**
-	 * Do not clone socket
-	 */
-	public function __clone() {
-		$this->_socket = null;
-	}
+    /**
+     * Return alias to strings
+     */
+    public function __toString() {
+        return $this->getAlias();
+    }
 
-	/**
-	 *	Return attempts count
-	 * @return integer 
-	 */
-	protected function _getAttemptsCount(){
-		return $this->_attemptsCount;
-	}
-	
-	/**
-	 * Increment attempts count
-	 */
-	protected function _checkAttemptsCount() {
-		$maxReconnectAttempts = $this->getOption('maxReconnectAttempts');
-		if($maxReconnectAttempts && $this->_attemptsCount < $maxReconnectAttempts) {
-			$this->_attemptsCount++;
-			return true;
-		}
-		return false;
-	}
-	
+    /**
+     * Disconnect on destrcuct connection object
+     */
+    public function __destruct() {
+        if (!$this->_options['persistent']) {
+            $this->disconnect();
+        }
+    }
+
+    /**
+     * Do not clone socket
+     */
+    public function __clone() {
+        $this->_socket = null;
+    }
+
+    /**
+     * 	Return attempts count
+     * @return integer 
+     */
+    protected function _getAttemptsCount() {
+        return $this->_attemptsCount;
+    }
+
+    /**
+     * Increment attempts count
+     */
+    protected function _checkAttemptsCount() {
+        $maxReconnectAttempts = $this->getOption('maxReconnectAttempts');
+        if ($maxReconnectAttempts && $this->_attemptsCount < $maxReconnectAttempts) {
+            $this->_attemptsCount++;
+            return true;
+        }
+        return false;
+    }
+
 }
