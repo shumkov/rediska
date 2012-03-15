@@ -4,7 +4,7 @@ Changelog
 Version 0.5.7
 ---
 Unreleased
-
+ * Feature #10766: Reconnect when Rediska can't read from socket
  * Bug #11654: Profiler option can't get a string
 
 Version 0.5.6
