@@ -599,7 +599,7 @@ class Rediska extends Rediska_Options
 
         $expirableCommands = $this->getOption('expirableCommands');
         if(isset($expirableCommands[$name])){
-            if($name == 'expire'){
+            if(mb_strtolower($name) == 'expire'){
                 throw new Rediska_Exception('Expire cannot be expired');
             }
             $this->expire(array_shift($args), $expirableCommands[$name]);
