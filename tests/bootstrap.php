@@ -2,6 +2,7 @@
 
 set_include_path(implode(PATH_SEPARATOR, array(
     realpath(dirname(__FILE__) . '/../library/'),
+    realpath(dirname(__FILE__) . '/../vendor/wesrc/yaZF1m/library/'),
     get_include_path(),
 )));
 

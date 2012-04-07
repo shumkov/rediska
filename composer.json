@@ -1,0 +1,26 @@
+{
+    "name": "rediska/rediska",
+    "description": "Full-featured PHP client for key-value database Redis",
+    "authors": [
+        {
+            "name": "Ivan Shumkov",
+            "email": "ivan@shumkov.ru"
+        },
+        {
+            "name": "Maxim Ivanov",
+            "email": "maximiv@gmail.com"
+        },
+        {
+            "name": "Ryan Grenz",
+            "email": "info@ryangrenz.com"
+        },
+        {
+            "name": "Till Klampaeckel",
+            "email": "till@php.net"
+        }
+    ],
+    "require": {},
+    "suggest": {
+        "wesrc/yaZF1m": "dev-master"
+    }
+}
