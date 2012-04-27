@@ -20,6 +20,9 @@
         }
     ],
     "require": {},
+    "autoload": {
+        "classmap": [""]
+    },
     "suggest": {
         "wesrc/yaZF1m": "dev-master"
     }
