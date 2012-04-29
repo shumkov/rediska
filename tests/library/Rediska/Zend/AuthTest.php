@@ -2,8 +2,6 @@
 
 require_once 'Zend/Auth.php';
 
-Zend_Session::$_unitTestEnabled = true;
-
 class Rediska_Zend_AuthTest extends Rediska_TestCase
 {
     /**
@@ -27,6 +25,7 @@ class Rediska_Zend_AuthTest extends Rediska_TestCase
 
         $this->rediska->set('users:1', $data);
 
+        Zend_Session::$_unitTestEnabled = true;
         $this->auth = Zend_Auth::getInstance();
 
         $this->adapter = new Rediska_Zend_Auth_Adapter_Redis();
