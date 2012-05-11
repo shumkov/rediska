@@ -5,10 +5,10 @@ class Rediska_PipelineTest extends Rediska_TestCase
     public function testPiplineInstance()
     {
         $instance = $this->rediska->pipeline();
-        $this->assertType('Rediska_Pipeline', $instance);
+        $this->assertInstanceOf('Rediska_Pipeline', $instance);
 
         $instance = $this->rediska->pipeline()->set('a', 'b');
-        $this->assertType('Rediska_Pipeline', $instance);
+        $this->assertInstanceOf('Rediska_Pipeline', $instance);
     }
 
     public function testPipelineIncapsulation()

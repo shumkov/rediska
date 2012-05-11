@@ -32,7 +32,7 @@ class Rediska_Command_ShiftFromListBlockingTest extends Rediska_TestCase
         $this->rediska->appendToList('test', 'aaa');
 
         $reply = $this->rediska->shiftFromListBlocking(array('test', 'test2'));
-        $this->assertType('Rediska_Command_Response_ListNameAndValue', $reply);
+        $this->assertInstanceOf('Rediska_Command_Response_ListNameAndValue', $reply);
         $this->assertEquals('aaa', $reply->value);
         $this->assertEquals('test', $reply['name']);
 
