@@ -24,7 +24,7 @@ class Rediska_Key_AbstractTest extends Rediska_TestCase
 
     public function testGetRediska()
     {
-        $this->assertType('Rediska', $this->key->getRediska());
+        $this->assertInstanceOf('Rediska', $this->key->getRediska());
     }
 
     public function testSpecifiedServerAlias()

@@ -59,21 +59,21 @@ class RediskaTest extends Rediska_TestCase
     public function testTransaction()
     {
         $transaction = $this->rediska->transaction();
-        $this->assertType('Rediska_Transaction', $transaction);
+        $this->assertInstanceOf('Rediska_Transaction', $transaction);
     }
 
     public function testTransactionWithManyServersByAlias()
     {
         $this->_addSecondServerOrSkipTest();
         $transaction = $this->rediska->transaction('127.0.0.1:6380');
-        $this->assertType('Rediska_Transaction', $transaction);
+        $this->assertInstanceOf('Rediska_Transaction', $transaction);
     }
     
     public function testTransactionWithManyServersByOn()
     {
         $this->_addSecondServerOrSkipTest();
         $transaction = $this->rediska->on('127.0.0.1:6380')->transaction();
-        $this->assertType('Rediska_Transaction', $transaction);
+        $this->assertInstanceOf('Rediska_Transaction', $transaction);
     }
 
     public function testTransactionWithManyServersWithoutSpecifiedServer()
