@@ -1,7 +1,10 @@
 <?php
 
+require __DIR__ . '/../vendor/autoload.php';
+
 set_include_path(implode(PATH_SEPARATOR, array(
     realpath(dirname(__FILE__) . '/../library/'),
+    realpath(dirname(__FILE__) . '/../vendor/zendframework/zendframework/library/'),
     get_include_path(),
 )));
 
