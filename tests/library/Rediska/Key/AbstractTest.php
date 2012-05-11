@@ -17,9 +17,6 @@ class Rediska_Key_AbstractTest extends Rediska_TestCase
     {
         $key = new Rediska_Key('test');
         $this->assertEquals('test', $key->getName());
-        
-        $key = new Rediska_Key('test', array('expire' => 3));
-        $this->assertEquals(3, $key->getExpire());
     }
 
     public function testGetRediska()
@@ -124,38 +121,5 @@ class Rediska_Key_AbstractTest extends Rediska_TestCase
 
         $reply = $this->key->getLifetime();
         $this->assertGreaterThan(45, $reply);
-    }
-    
-    public function testSetExpire()
-    {
-        $this->key->setExpire(1);
-        
-        $expire = $this->key->getExpire();
-        $this->assertEquals(1, $expire);
-        $this->assertFalse($this->key->isExpireTimestamp());
-        
-        $this->key->setValue(1);
-        
-        sleep(2);
-        
-        $reply = $this->key->getRediska()->get($this->key->getName());
-        $this->assertNull($reply);
-    }
-
-    public function testSetExpireTimestamp()
-    {
-        $time = time() + 1;
-        $this->key->setExpire($time, true);
-
-        $expire = $this->key->getExpire();
-        $this->assertEquals($time, $expire);
-        $this->assertTrue($this->key->isExpireTimestamp());
-
-        $this->key->setValue(1);
-
-        sleep(2);
-
-        $reply = $this->key->getRediska()->get($this->key->getName());
-        $this->assertNull($reply);
     }
 }

@@ -2,6 +2,8 @@
 
 require_once 'Zend/Auth.php';
 
+Zend_Session::$_unitTestEnabled = true;
+
 class Rediska_Zend_AuthTest extends Rediska_TestCase
 {
     /**
