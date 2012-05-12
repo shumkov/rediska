@@ -1,6 +1,8 @@
 <?php
-
-require __DIR__ . '/../vendor/autoload.php';
+$composerAutoload = realpath(dirname(__FILE__) . '/../vendor/autoload.php');
+if (file_exists($composerAutoload)) {
+    require_once $composerAutoload;
+}
 
 set_include_path(implode(PATH_SEPARATOR, array(
     realpath(dirname(__FILE__) . '/../library/'),
