@@ -9,3 +9,4 @@ tests/config.ini
 library/Zend
 vendor
 composer.phar
+composer.lock
