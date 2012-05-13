@@ -37,7 +37,7 @@ class Rediska_Zend_QueueTest extends Rediska_TestCase
     {
         $queue = $this->queue->createQueue('test');
         $reply = $queue->send(array(1, 2, 3));
-        $this->assertType($queue->getMessageClass(), $reply);
+        $this->assertInstanceOf($queue->getMessageClass(), $reply);
 
         $values = $this->rediska->getList('Zend_Queue_queue_test');
         $this->assertEquals(array(array(1, 2, 3)), $values);
@@ -56,7 +56,7 @@ class Rediska_Zend_QueueTest extends Rediska_TestCase
         $queue->send(array(1, 2, 3));
 
         $messages = $queue->receive();
-        $this->assertType($queue->getMessageSetClass(), $messages);
+        $this->assertInstanceOf($queue->getMessageSetClass(), $messages);
 
         $values = $messages->toArray();
         $this->assertEquals(array(1, 2, 3), $values[0]['body']);

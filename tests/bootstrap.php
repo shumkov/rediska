@@ -1,6 +1,8 @@
 <?php
-
-require __DIR__ . '/../vendor/autoload.php';
+$composerAutoload = realpath(dirname(__FILE__) . '/../vendor/autoload.php');
+if (file_exists($composerAutoload)) {
+    require_once $composerAutoload;
+}
 
 set_include_path(implode(PATH_SEPARATOR, array(
     realpath(dirname(__FILE__) . '/../library/'),
@@ -12,8 +14,8 @@ set_include_path(implode(PATH_SEPARATOR, array(
 require_once 'Rediska.php';
 
 // Configuration
-@include_once 'Zend/Config/Ini.php';
-if (!class_exists('Zend_Config_Ini')) {
+$status = @include_once 'Zend/Config/Ini.php';
+if (false === $status) {
     echo "The Zend Framework is needed to run this test suite. ";
     echo "Please add it to your include_path.";
     echo "\n";

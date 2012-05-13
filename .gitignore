@@ -6,6 +6,9 @@
 nbproject
 *.tgz
 tests/config.ini
+tests/redis.pid
+tests/dump.rdb
 library/Zend
 vendor
 composer.phar
+composer.lock
