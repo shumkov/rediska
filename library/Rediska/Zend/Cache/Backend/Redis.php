@@ -238,14 +238,6 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
         $result = array_map(array($this, '_filterIds'),$result);
         return (bool) $result ? $result : array();
     }
-    protected function _filterIds($val)
-    {
-        static $length = 0;
-        if(!$length){
-            $length = strlen(self::REDISKA_IDS);
-        }
-        return substr($val, $length);
-    }
     /**
      * Return an array of stored tags
      *
@@ -412,5 +404,19 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
             'infinite_lifetime'  => false,
             'get_list'           => true
         );
+    }
+    /**
+     * Utilized by the `getIds` methods to acquire the list of all IDs
+     *
+     * @param string $val
+     * @return string
+     */
+    protected function _filterIds($val)
+    {
+        static $length = 0;
+        if(!$length){
+            $length = strlen(self::REDISKA_IDS);
+        }
+        return substr($val, $length);
     }
 }
