@@ -235,16 +235,17 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
     public function getIds()
     {
         $result = $this->getRediska()->getKeysByPattern(self::REDISKA_IDS . '*');
-        $result = array_map(
-            function($v){
-                return substr(
-                    $v,strlen(Rediska_Zend_Cache_Backend_Redis::REDISKA_IDS)
-                );
-            },$result
-        );
+        $result = array_map(array($this, '_filterIds'),$result);
         return (bool) $result ? $result : array();
     }
-
+    protected function _filterIds($val)
+    {
+        static $length = 0;
+        if(!$length){
+            $length = strlen(self::REDISKA_IDS);
+        }
+        return substr($val, $length);
+    }
     /**
      * Return an array of stored tags
      *
@@ -286,10 +287,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
     public function getIdsNotMatchingTags($tags = array())
     {
         $result = array();
-        $ids = $this->getRediska()->getKeysByPattern(self::REDISKA_IDS . '*');
-        $ids = array_map(function($k){
-            return substr($k, strlen(Rediska_Zend_Cache_Backend_Redis::REDISKA_IDS));
-        }, $ids);
+        $ids = $this->getIds();
         foreach ($tags as $tag) {
             $t[] = self::REDISKA_TAGS . $tag;
         }
