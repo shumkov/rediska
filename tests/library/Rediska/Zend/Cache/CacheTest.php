@@ -15,6 +15,10 @@ class Rediska_Zend_Cache_BackendTest extends Rediska_TestCase
 
         $this->cache = Zend_Cache::factory('Core', 'Rediska_Zend_Cache_Backend_Redis', array(), array(), false, true, true);
     }
+    protected function tearDown()
+    {
+        $this->rediska->flushDb();
+    }
 
     public function testLoad()
     {
@@ -35,7 +39,7 @@ class Rediska_Zend_Cache_BackendTest extends Rediska_TestCase
         $value = $this->cache->test('test2');
         $this->assertFalse($value);
     }
-    
+
     public function testSave()
     {
         $reply = $this->cache->save('aaa', 'test');
@@ -61,7 +65,7 @@ class Rediska_Zend_Cache_BackendTest extends Rediska_TestCase
         $reply = $this->rediska->get('test');
         $this->assertNull($reply);
     }
-    
+
     public function testClean()
     {
         $this->rediska->set('test', array('aaa', time(), null));
@@ -70,19 +74,19 @@ class Rediska_Zend_Cache_BackendTest extends Rediska_TestCase
         $reply = $this->rediska->get('test');
         $this->assertNull($reply);
     }
-    
-    public function testGetMetadats()
+    /**
+     * @group metadata
+     */
+    public function testGetMetadata()
     {
-        $this->rediska->set('test', array('aaa', time(), 100));
-        $this->rediska->expire('test', 100);
-        
-        $array = $this->cache->getMetadatas('test');
+        $this->cache->save('abc','test_abc',array('tag_abc'));
+        $array = $this->cache->getMetadatas('test_abc');
         $this->assertTrue(is_array($array));
         $this->assertGreaterThan(time(), $array['expire']);
         $this->assertLessThanOrEqual(time(), $array['mtime']);
-        $this->assertEquals(array(), $array['tags']);
+        $this->assertEquals(array('tag_abc'), $array['tags']);
     }
-    
+
     public function testTouch()
     {
         $this->rediska->set('test', array('aaa', time(), 100));
@@ -95,6 +99,99 @@ class Rediska_Zend_Cache_BackendTest extends Rediska_TestCase
         $this->assertTrue($lifetime > 290);
 
         $values = $this->rediska->get('test');
-        $this->assertEquals(300, $values[2]); 
+        $this->assertEquals(300, $values[2]);
+    }
+    /**
+     * @group tags
+     */
+    public function testGetTags()
+    {
+        $this->setKeys();
+        $actual = $this->cache->getTags();
+        sort($actual);
+        $this->assertEquals(array('tag_a1','tag_a2','tag_a3'), $actual);
+    }
+    /**
+     * @group tags
+     */
+    public function testGetIdsMatchingAnyTag()
+    {
+        $this->setKeys();
+        $ids = $this->cache->getIdsMatchingAnyTags(array('tag_a1','tag_a2'));
+        sort($ids);
+        $this->assertEquals(array('test_aaa','test_bbb','test_ccc'), $ids);
+    }
+    /**
+     * @group tags
+     */
+    public function testGetIdsNotMatchingTag()
+    {
+        $this->setKeys();
+        $this->cache->save('nnn','no_tag');
+        $ids = $this->cache->getIdsNotMatchingTags(array('tag_a1'));
+        sort($ids);
+        $this->assertEquals(array('no_tag', 'test_ccc', 'test_ddd'), $ids);
+    }
+    /**
+     * @group tags
+     */
+    public function testGetIdsMatchingTag()
+    {
+        $this->setKeys();
+        $ids = $this->cache->getIdsMatchingTags(array('tag_a1', 'tag_a2'));
+        sort($ids);
+        $this->assertEquals(array('test_bbb'), $ids);
+    }
+    /**
+     * @group tags
+     */
+    public function testGetIds()
+    {
+        $this->setKeys();
+        $ids = $this->cache->getIds();
+        sort($ids);
+        $this->assertEquals(array('test_aaa','test_bbb','test_ccc','test_ddd'), $ids);
+    }
+    /**
+     * @group tags
+     */
+    public function testCleanMatchingTag()
+    {
+        $this->setKeys();
+        $this->cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('tag_a1'));
+        $ids = $this->cache->getIds();
+        sort($ids);
+        $this->assertEquals(array('test_ccc','test_ddd'), $ids);
+    }
+    /**
+     * @group tags
+     */
+    public function testCleanNotMatchingTag()
+    {
+        $this->setKeys();
+        $this->cache->clean(Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG, array('tag_a1'));
+        $ids = $this->cache->getIdsNotMatchingTags(array('tag_a1'));
+        $ids = $this->cache->getIds();
+        sort($ids);
+        $this->assertEquals(array('test_aaa','test_bbb'), $ids);
+    }
+    /**
+     * @group tags
+     */
+    public function testCleanAnyMatchingTag()
+    {
+        $this->setKeys();
+        $this->cache->clean(
+            Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array('tag_a1', 'tag_a3')
+        );
+        $ids = $this->cache->getIds();
+        sort($ids);
+        $this->assertEquals(array('test_ccc'), $ids);
+    }
+    protected function setKeys(){
+        $this->cache->save('aaa', 'test_aaa', array('tag_a1'));
+        $this->cache->save('bbb', 'test_bbb', array('tag_a1', 'tag_a2'));
+        $this->cache->save('ccc', 'test_ccc', array('tag_a2'));
+        $this->cache->save('ddd', 'test_ddd', array('tag_a3'));
     }
 }

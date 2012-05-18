@@ -15,7 +15,7 @@ require_once 'Zend/Cache/Backend/ExtendedInterface.php';
 
 /**
  * Redis adapter for Zend_Cache
- * 
+ *
  * @author Ivan Shumkov
  * @package Rediska
  * @subpackage ZendFrameworkIntegration
@@ -25,22 +25,18 @@ require_once 'Zend/Cache/Backend/ExtendedInterface.php';
  */
 class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zend_Cache_Backend_ExtendedInterface
 {
-    /**
-     * Log message
-     */
-    const TAGS_UNSUPPORTED_BY_CLEAN_OF_REDIS_BACKEND = 'Rediska_Zend_Cache_Backend_Redis::clean() : tags are unsupported by the Redis backend';
-    const TAGS_UNSUPPORTED_BY_SAVE_OF_REDIS_BACKEND =  'Rediska_Zend_Cache_Backend_Redis::save() : tags are unsupported by the Redis backend';
-
+    const REDISKA_TAGS = '__REDISKA__TAGS__SET__';
+    const REDISKA_IDS =  '__REDISKA_IDS__';
     /**
      * Rediska instance
-     * 
+     *
      * @var Rediska
      */
     protected $_rediska = Rediska::DEFAULT_NAME;
 
     /**
      * Contruct Zend_Cache Redis backend
-     * 
+     *
      * @param mixed $rediska Rediska instance name, Rediska object or array of options
      */
     public function __construct($options = array())
@@ -57,7 +53,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
     public function setRediska($rediska)
     {
         $this->_rediska = $rediska;
-        
+
         return $this;
     }
 
@@ -94,7 +90,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
 
         return false;
     }
-    
+
     /**
      * Test if a cache is available or not (for the given id)
      *
@@ -125,15 +121,21 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
     public function save($data, $id, $tags = array(), $specificLifetime = false)
     {
         $lifetime = $this->getLifetime($specificLifetime);
-        
+
         if ($lifetime) {
             $result = $this->getRediska()->setAndExpire($id, array($data, time(), $lifetime), $lifetime);
+            $result = $this->getRediska()->setAndExpire(
+                self::REDISKA_IDS . $id, array($tags, time(), $lifetime), $lifetime
+            );
         } else {
             $result = $this->getRediska()->set($id, array($data, time(), $lifetime));
+            $result = $this->getRediska()->set(
+                self::REDISKA_IDS . $id, array($tags, time(), $lifetime)
+            );
         }
-
-        if (count($tags) > 0) {
-            $this->_log(self::TAGS_UNSUPPORTED_BY_SAVE_OF_REDIS_BACKEND);
+        foreach ($tags as $tag) {
+            $this->getRediska()->addToSet(self::REDISKA_TAGS . $tag, $id);
+            $this->getRediska()->addToSet(self::REDISKA_TAGS, $tag);
         }
 
         return $result;
@@ -167,6 +169,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     public function clean($mode = Zend_Cache::CLEANING_MODE_ALL, $tags = array())
     {
+        $ids = null;
         switch ($mode) {
             case Zend_Cache::CLEANING_MODE_ALL:
                 return $this->getRediska()->flushDb();
@@ -175,14 +178,27 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
                 $this->_log("Rediska_Zend_Cache_Backend_Redis::clean() : CLEANING_MODE_OLD is unsupported by the Redis backend");
                 break;
             case Zend_Cache::CLEANING_MODE_MATCHING_TAG:
+                $ids = $this->getIdsMatchingTags($tags);
+                break;
             case Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG:
+                $ids = $this->getIdsNotMatchingTags($tags);
+                break;
             case Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG:
-                $this->_log(self::TAGS_UNSUPPORTED_BY_CLEAN_OF_REDIS_BACKEND);
+                $ids = $this->getIdsMatchingAnyTags($tags);
                 break;
             default:
                 Zend_Cache::throwException('Invalid mode for clean() method');
                 break;
         }
+        if((bool) $ids){
+            $pipe = $this->getRediska()->pipeline();
+            foreach ($ids as $key) {
+                $pipe->expire($key, -1000);
+                $pipe->expire(self::REDISKA_IDS . $key, -1000);
+            }
+            $pipe->execute();
+        }
+        return true;
     }
 
     /**
@@ -218,10 +234,10 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     public function getIds()
     {
-        $this->_log("Rediska_Zend_Cache_Backend_Redis::save() : getting the list of cache ids is unsupported by the Redis backend");
-        return array();
+        $result = $this->getRediska()->getKeysByPattern(self::REDISKA_IDS . '*');
+        $result = array_map(array($this, '_filterIds'),$result);
+        return (bool) $result ? $result : array();
     }
-
     /**
      * Return an array of stored tags
      *
@@ -229,8 +245,8 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     public function getTags()
     {
-        $this->_log(self::TAGS_UNSUPPORTED_BY_SAVE_OF_REDIS_BACKEND);
-        return array();
+        $result = $this->getRediska()->getSet(self::REDISKA_TAGS);
+        return (bool) $result ? $result : array();
     }
 
     /**
@@ -243,8 +259,13 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     public function getIdsMatchingTags($tags = array())
     {
-        $this->_log(self::TAGS_UNSUPPORTED_BY_SAVE_OF_REDIS_BACKEND);
-        return array();
+        foreach ($tags as $tag) {
+            $t[] = self::REDISKA_TAGS . $tag;
+        }
+        if((bool) $t){
+            $result = $this->getRediska()->intersectSets($t);
+        }
+        return (bool) $result ? $result : array();
     }
 
     /**
@@ -257,8 +278,14 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     public function getIdsNotMatchingTags($tags = array())
     {
-        $this->_log(self::TAGS_UNSUPPORTED_BY_SAVE_OF_REDIS_BACKEND);
-        return array();
+        $result = array();
+        $ids = $this->getIds();
+        foreach ($tags as $tag) {
+            $t[] = self::REDISKA_TAGS . $tag;
+        }
+        $tagSet = $this->getRediska()->unionSets($t);
+        $result = array_diff($ids,$tagSet);
+        return (bool) $result  ? $result : array();
     }
 
     /**
@@ -271,8 +298,13 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     public function getIdsMatchingAnyTags($tags = array())
     {
-        $this->_log(self::TAGS_UNSUPPORTED_BY_SAVE_OF_REDIS_BACKEND);
-        return array();
+        foreach ($tags as $tag) {
+            $t[] = self::REDISKA_TAGS . $tag;
+        }
+        if((bool) $t){
+            $result = $this->getRediska()->unionSets($t);
+        }
+        return (bool) $result ? array_unique($result) : array();
     }
 
     /**
@@ -301,6 +333,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
     public function getMetadatas($id)
     {
         $tmp = $this->getRediska()->get($id);
+        $tags = $this->getRediska()->get(self::REDISKA_IDS . $id);
         if (is_array($tmp)) {
             $data = $tmp[0];
             $mtime = $tmp[1];
@@ -312,7 +345,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
             $lifetime = $tmp[2];
             return array(
                 'expire' => $mtime + $lifetime,
-                'tags' => array(),
+                'tags' => (bool) $tags[0] ? $tags[0] : array(),
                 'mtime' => $mtime
             );
         }
@@ -365,11 +398,25 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
     {
         return array(
             'automatic_cleaning' => false,
-            'tags'               => false,
+            'tags'               => true,
             'expired_read'       => false,
             'priority'           => false,
             'infinite_lifetime'  => false,
-            'get_list'           => false
+            'get_list'           => true
         );
+    }
+    /**
+     * Utilized by the `getIds` methods to acquire the list of all IDs
+     *
+     * @param string $val
+     * @return string
+     */
+    protected function _filterIds($val)
+    {
+        static $length = 0;
+        if(!$length){
+            $length = strlen(self::REDISKA_IDS);
+        }
+        return substr($val, $length);
     }
 }
