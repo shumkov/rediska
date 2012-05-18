@@ -237,8 +237,8 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
         $result = $this->getRediska()->getKeysByPattern(self::REDISKA_IDS . '*');
         $result = array_map(
             function($v){
-                return str_replace(
-                    Rediska_Zend_Cache_Backend_Redis::REDISKA_IDS, null, $v
+                return substr(
+                    $v,strlen(Rediska_Zend_Cache_Backend_Redis::REDISKA_IDS)
                 );
             },$result
         );
@@ -285,15 +285,16 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     public function getIdsNotMatchingTags($tags = array())
     {
-
+        $result = array();
+        $ids = $this->getRediska()->getKeysByPattern(self::REDISKA_IDS . '*');
+        $ids = array_map(function($k){
+            return substr($k, strlen(Rediska_Zend_Cache_Backend_Redis::REDISKA_IDS));
+        }, $ids);
         foreach ($tags as $tag) {
             $t[] = self::REDISKA_TAGS . $tag;
         }
-        foreach ($this->getRediska()->getSet(self::REDISKA_TAGS) as $tag) {
-            $allIdTagSet[] = self::REDISKA_TAGS . $tag;
-        }
-        $allIds = $this->getRediska()->unionSets($allIdTagSet);
-        $result = array_diff($allIds, $this->getRediska()->unionSets($t));
+        $tagSet = $this->getRediska()->unionSets($t);
+        $result = array_diff($ids,$tagSet);
         return (bool) $result  ? $result : array();
     }
 

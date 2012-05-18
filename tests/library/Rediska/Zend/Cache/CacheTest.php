@@ -122,14 +122,15 @@ class Rediska_Zend_Cache_BackendTest extends Rediska_TestCase
         $this->assertEquals(array('test_aaa','test_bbb','test_ccc'), $ids);
     }
     /**
-     * @group tags1
+     * @group tags
      */
     public function testGetIdsNotMatchingTag()
     {
         $this->setKeys();
+        $this->cache->save('nnn','no_tag');
         $ids = $this->cache->getIdsNotMatchingTags(array('tag_a1'));
         sort($ids);
-        $this->assertEquals(array('test_ccc', 'test_ddd'), $ids);
+        $this->assertEquals(array('no_tag', 'test_ccc', 'test_ddd'), $ids);
     }
     /**
      * @group tags
