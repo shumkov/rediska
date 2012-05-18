@@ -74,17 +74,17 @@ class Rediska_Zend_Cache_BackendTest extends Rediska_TestCase
         $reply = $this->rediska->get('test');
         $this->assertNull($reply);
     }
-
-    public function testGetMetadats()
+    /**
+     * @group metadata
+     */
+    public function testGetMetadata()
     {
-        $this->rediska->set('test', array('aaa', time(), 100));
-        $this->rediska->expire('test', 100);
-
-        $array = $this->cache->getMetadatas('test');
+        $this->cache->save('abc','test_abc',array('tag_abc'));
+        $array = $this->cache->getMetadatas('test_abc');
         $this->assertTrue(is_array($array));
         $this->assertGreaterThan(time(), $array['expire']);
         $this->assertLessThanOrEqual(time(), $array['mtime']);
-        $this->assertEquals(array(), $array['tags']);
+        $this->assertEquals(array('tag_abc'), $array['tags']);
     }
 
     public function testTouch()

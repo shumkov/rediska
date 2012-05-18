@@ -25,8 +25,8 @@ require_once 'Zend/Cache/Backend/ExtendedInterface.php';
  */
 class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zend_Cache_Backend_ExtendedInterface
 {
-    const REDISKA_TAGS = '___REDISKA__TAGS__SET__';
-    const REDISKA_TAGS_IDS =  '__REDISKA_TAGS_IDS__';
+    const REDISKA_TAGS = '__REDISKA__TAGS__SET__';
+    const REDISKA_IDS =  '__REDISKA_IDS__';
     /**
      * Rediska instance
      *
@@ -125,12 +125,12 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
         if ($lifetime) {
             $result = $this->getRediska()->setAndExpire($id, array($data, time(), $lifetime), $lifetime);
             $result = $this->getRediska()->setAndExpire(
-                self::REDISKA_TAGS_IDS . $id, array($tags, time(), $lifetime), $lifetime
+                self::REDISKA_IDS . $id, array($tags, time(), $lifetime), $lifetime
             );
         } else {
             $result = $this->getRediska()->set($id, array($data, time(), $lifetime));
             $result = $this->getRediska()->set(
-                self::REDISKA_TAGS_IDS . $id, array($tags, time(), $lifetime)
+                self::REDISKA_IDS . $id, array($tags, time(), $lifetime)
             );
         }
         foreach ($tags as $tag) {
@@ -194,7 +194,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
             $pipe = $this->getRediska()->pipeline();
             foreach ($ids as $key) {
                 $pipe->expire($key, -1000);
-                $pipe->expire(self::REDISKA_TAGS_IDS . $key, -1000);
+                $pipe->expire(self::REDISKA_IDS . $key, -1000);
             }
             $pipe->execute();
         }
@@ -234,11 +234,11 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     public function getIds()
     {
-        $result = $this->getRediska()->getKeysByPattern(self::REDISKA_TAGS_IDS . '*');
+        $result = $this->getRediska()->getKeysByPattern(self::REDISKA_IDS . '*');
         $result = array_map(
             function($v){
                 return str_replace(
-                    Rediska_Zend_Cache_Backend_Redis::REDISKA_TAGS_IDS, null, $v
+                    Rediska_Zend_Cache_Backend_Redis::REDISKA_IDS, null, $v
                 );
             },$result
         );
@@ -342,7 +342,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
     public function getMetadatas($id)
     {
         $tmp = $this->getRediska()->get($id);
-        $tags = $this->getRediska()->get(self::REDISKA_TAGS_IDS . $id);
+        $tags = $this->getRediska()->get(self::REDISKA_IDS . $id);
         if (is_array($tmp)) {
             $data = $tmp[0];
             $mtime = $tmp[1];
@@ -354,7 +354,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
             $lifetime = $tmp[2];
             return array(
                 'expire' => $mtime + $lifetime,
-                'tags' => (bool) $tags ? $tags : array(),
+                'tags' => (bool) $tags[0] ? $tags[0] : array(),
                 'mtime' => $mtime
             );
         }
