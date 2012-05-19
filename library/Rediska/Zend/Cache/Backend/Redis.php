@@ -224,8 +224,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
             $tags = array($tags);
         }
         if($mode == Zend_Cache::CLEANING_MODE_ALL) {
-            $ids = $this->getIds();
-            $this->removeIds($ids);
+            $this->getRediska()->flushDb();
         }
         if($mode == Zend_Cache::CLEANING_MODE_OLD) {
             $this->_collectGarbage();
@@ -482,13 +481,13 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
         $tags = $this->getTags();
         $transaction = $this->getTransaction();
         foreach($tags as $tag){
-            $tagMembers = $transaction->getSet(self::PREFIX_TAG_IDS . $tag);
+            $tagMembers = $this->getRediska()->getSet(self::PREFIX_TAG_IDS . $tag);
             $transaction->watch(self::PREFIX_TAG_IDS . $tag);
             $expired = array();
             if(count($tagMembers)) {
                 foreach($tagMembers as $id) {
                     if( ! isset($exists[$id])) {
-                        $exists[$id] = $transaction->exists(self::PREFIX_KEY.$id);
+                        $exists[$id] = $this->getRediska()->exists(self::PREFIX_KEY.$id);
                     }
                     if(!$exists[$id]) {
                         $expired[] = $id;
@@ -496,10 +495,9 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
                 }
                 if(!count($expired)) continue;
             }
-
             if(!count($tagMembers) || count($expired) == count($tagMembers)) {
-                $transaction->delete(self::PREFIX_TAG_IDS . $tag);
                 $transaction->deleteFromSet(self::SET_TAGS, $tag);
+                $transaction->delete(self::PREFIX_TAG_IDS . $tag);
             } else {
                 $transaction->deleteFromSet( self::PREFIX_TAG_IDS . $tag, $expired);
             }
