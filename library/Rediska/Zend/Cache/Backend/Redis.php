@@ -163,7 +163,9 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
         );
         $transaction->expire(self::PREFIX_KEY.$id, $lifetime ? $lifetime : self::MAX_LIFETIME);
         if ($addTags = ($oldTags ? array_diff($tags, $oldTags) : $tags)) {
-            $transaction->addToSet( self::SET_TAGS, $addTags);
+            foreach ($addTags as $add) {
+                $transaction->addToSet(self::SET_TAGS, $add);
+            }
             foreach($addTags as $tag){
                 $transaction->addToSet(self::PREFIX_TAG_IDS . $tag, $id);
             }
@@ -223,18 +225,15 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
         if( $tags && ! is_array($tags)) {
             $tags = array($tags);
         }
-        if($mode == Zend_Cache::CLEANING_MODE_ALL) {
-            $this->getRediska()->flushDb();
-        }
-        if($mode == Zend_Cache::CLEANING_MODE_OLD) {
-            $this->_collectGarbage();
-            return true;
-        }
-        if( ! count($tags)) {
-            return true;
-        }
         $result = true;
         switch ($mode) {
+            case Zend_Cache::CLEANING_MODE_ALL:
+                $this->removeIds($this->getIds());
+                break;
+
+            case Zend_Cache::CLEANING_MODE_OLD:
+                break;
+
             case Zend_Cache::CLEANING_MODE_MATCHING_TAG:
                 $this->removeIdsByMatchingTags($tags);
                 break;
@@ -252,6 +251,11 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
         }
         return $this->_collectGarbage();
     }
+    /**
+     *
+     * @param  array $ids
+     * @return boolean
+     */
     protected function removeIds($ids = array())
     {
         $transaction = $this->getTransaction();
@@ -290,9 +294,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
         $ids = $this->getIdsMatchingAnyTags($tags);
         $this->removeIds($ids);
         $transaction->delete( $this->_preprocessTagIds($tags));
-        foreach($tags as $tag){
-            $transaction->deleteFromSet( self::SET_TAGS, $tag);
-        }
+            $transaction->deleteFromSet( self::SET_TAGS, $tags);
     }
     /**
      * Return true if the automatic cleaning is available for the backend
@@ -337,7 +339,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     public function getTags()
     {
-        return $this->_processResult($this->getRediska()->getSet(self::SET_TAGS));
+        return $this->getRediska()->getSet(self::SET_TAGS);
     }
 
     /**
@@ -502,13 +504,12 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
                 $transaction->deleteFromSet( self::PREFIX_TAG_IDS . $tag, $expired);
             }
             $transaction->deleteFromSet( self::SET_IDS, $expired);
-            try{
-                $transaction->execute();
-                return true;
-            } catch (Rediska_Transaction_Exception $e){
-                $this->_collectGarbage();
-                return false;
-            }
+        }
+        try{
+            $transaction->execute();
+        return true;
+        } catch (Rediska_Transaction_Exception $e){
+            return false;
         }
     }
     /**
@@ -529,17 +530,6 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
     {
         array_walk($ids, array($this, '_preprocess'), self::PREFIX_KEY);
         return $ids;
-    }
-    protected function _processResult($data)
-    {
-        $result = array();
-        foreach($data as $dat){
-            foreach ($dat as $datum) {
-                $result[] = $datum;
-            }
-        }
-        return array_unique($result);
-        return $result;
     }
     /**
      * @param $tags

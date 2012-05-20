@@ -48,19 +48,17 @@ class Rediska_Zend_Cache_BackendTest extends Rediska_TestCase
         $reply = $this->cache->save('aaa', 'test');
         $this->assertTrue($reply);
 
-        $value = $this->rediska->getHashValues(
-            Rediska_Zend_Cache_Backend_Redis::PREFIX_KEY . 'test'
-        );
-        $this->assertTrue(is_array($value));
-        $this->assertEquals('aaa', $value[0]);
+        $value = $this->cache->load('test');
+
+        $this->assertEquals('aaa', $value);
 
         $reply = $this->cache->save('aaa', 'test', array(), 2);
         $this->assertTrue($reply);
 
         sleep(3);
 
-        $value = $this->rediska->get('test');
-        $this->assertNull($value);
+        $value = $this->cache->load('test');
+        $this->assertFalse($value);
     }
     /**
      *
@@ -86,8 +84,8 @@ class Rediska_Zend_Cache_BackendTest extends Rediska_TestCase
         $this->setKeys();
         $reply = $this->cache->clean();
         $this->assertTrue($reply);
-        $reply = $this->rediska->get('test_aaa');
-        $this->assertNull($reply);
+        $reply = $this->cache->load('test_aaa');
+        $this->assertFalse($reply);
     }
     /**
      * @group all
@@ -117,14 +115,10 @@ class Rediska_Zend_Cache_BackendTest extends Rediska_TestCase
     public function testTouch()
     {
         $this->cache->save('aaa','test_id',array(), 100);
-        $this->rediska->expire('test_id', 100);
-
         $reply = $this->cache->touch('test_id', 200);
         $this->assertTrue($reply);
-
-        $lifetime = $this->rediska->getLifetime(
-            Rediska_Zend_Cache_Backend_Redis::PREFIX_KEY . 'test_id'
-        );
+        $meta = $this->cache->getMetadatas('test_id');
+        $lifetime = $meta['expire'] - time();
         $this->assertTrue($lifetime > 290);
         $this->assertEquals(300, $lifetime);
     }
