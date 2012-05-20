@@ -173,17 +173,12 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      * @param string $alias
      * @return Rediska_Zend_Cache_Backend_Redis
      */
-    protected function getTransaction()
+    protected function _getTransaction()
     {
         if(!$this->_transaction instanceof Rediska_Transaction){
             $this->_transaction = $this->getRediska()->transaction();
         }
         return $this->_transaction;
-    }
-    protected function resetTransaction()
-    {
-        $this->_transaction = null;
-        return $this;
     }
     /**
      * Load value with given id from cache
@@ -239,7 +234,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
                 $this->_options['storage']['prefix_key'].$id, self::FIELD_TAGS
             )
         );
-        $transaction = $this->getTransaction();
+        $transaction = $this->_getTransaction();
         $transaction->setToHash(
             $this->_options['storage']['prefix_key'].$id,  array(
             self::FIELD_DATA => $data,
@@ -262,10 +257,14 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
             }
         }
         $transaction->addToSet($this->_options['storage']['set_ids'], $id);
+        try {
+            $transaction->execute();
+            return true;
+        } catch (Rediska_Transaction_Exception $e){
+            $this->_log($e->getMessage(), Zend_Log::ERR);
+            return false;
+        }
 
-        $transaction->execute();
-
-        return true;
     }
 
     /**
@@ -282,7 +281,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
             )
         );
 
-        $transaction = $this->getTransaction();
+        $transaction = $this->_getTransaction();
         $transaction->delete($this->_options['storage']['prefix_key'].$id);
         $transaction->deleteFromSet( $this->_options['storage']['set_ids'], $id );
         foreach($tags as $tag) {
@@ -314,22 +313,22 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
         $result = true;
         switch ($mode) {
             case Zend_Cache::CLEANING_MODE_ALL:
-                $this->removeIds($this->getIds());
+                $this->_removeIds($this->getIds());
                 break;
 
             case Zend_Cache::CLEANING_MODE_OLD:
                 break;
 
             case Zend_Cache::CLEANING_MODE_MATCHING_TAG:
-                $this->removeIdsByMatchingTags($tags);
+                $this->_removeIdsByMatchingTags($tags);
                 break;
 
             case Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG:
-                $this->removeIdsByNotMatchingTags($tags);
+                $this->_removeIdsByNotMatchingTags($tags);
                 break;
 
             case Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG:
-                $this->removeIdsByMatchingAnyTags($tags);
+                $this->_removeIdsByMatchingAnyTags($tags);
                 break;
 
             default:
@@ -342,9 +341,9 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      * @param  array $ids
      * @return boolean
      */
-    protected function removeIds($ids = array())
+    protected function _removeIds($ids = array())
     {
-        $transaction = $this->getTransaction();
+        $transaction = $this->_getTransaction();
         $transaction->delete($this->_preprocessIds($ids));
         foreach($ids as $id){
             $transaction->deleteFromSet( $this->_options['storage']['set_ids'], $id);
@@ -355,30 +354,30 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
     /**
      * @param array $tags
      */
-    protected function removeIdsByNotMatchingTags($tags)
+    protected function _removeIdsByNotMatchingTags($tags)
     {
-        $transaction = $this->getTransaction();
+        $transaction = $this->_getTransaction();
         $ids = $this->getIdsNotMatchingTags($tags);
-        $this->removeIds($ids);
+        $this->_removeIds($ids);
     }
     /**
      * @param array $tags
      */
-    protected function removeIdsByMatchingTags($tags)
+    protected function _removeIdsByMatchingTags($tags)
     {
-        $transaction = $this->getTransaction();
+        $transaction = $this->_getTransaction();
         $ids = $this->getIdsMatchingTags($tags);
-        $this->removeIds($ids);
+        $this->_removeIds($ids);
     }
 
     /**
      * @param array $tags
      */
-    protected function removeIdsByMatchingAnyTags($tags)
+    protected function _removeIdsByMatchingAnyTags($tags)
     {
-        $transaction = $this->getTransaction();
+        $transaction = $this->_getTransaction();
         $ids = $this->getIdsMatchingAnyTags($tags);
-        $this->removeIds($ids);
+        $this->_removeIds($ids);
         $transaction->delete( $this->_preprocessTagIds($tags));
             $transaction->deleteFromSet( $this->_options['storage']['set_tags'], $tags);
     }
@@ -567,7 +566,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
     {
         $exists = array();
         $tags = $this->getTags();
-        $transaction = $this->getTransaction();
+        $transaction = $this->_getTransaction();
         foreach($tags as $tag){
             $tagMembers = $this->getRediska()->getSet($this->_options['storage']['prefix_tag_ids'] . $tag);
             $transaction->watch($this->_options['storage']['prefix_tag_ids'] . $tag);
@@ -595,6 +594,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
             $transaction->execute();
             return true;
         } catch (Rediska_Transaction_Exception $e){
+            $this->_log($e->getMessage(), Zend_Log::ERR);
             return false;
         }
     }
