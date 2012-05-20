@@ -16,9 +16,16 @@ class Rediska_Zend_Cache_BackendTest extends Rediska_TestCase
     protected function setUp()
     {
         parent::setUp();
-
+        $backendOptions = array(
+            'storage' => array(
+                'set_ids'         => 'zc-test:ids',
+                'set_tags'        => 'zc-test:tags',
+                'prefix_key'      => 'zc-test:k:',
+                'prefix_tag_ids'  => 'zc-test:ti:',
+            )
+        );
         $this->cache = Zend_Cache::factory(
-            'Core', 'Rediska_Zend_Cache_Backend_Redis', array(), array(),
+            'Core', 'Rediska_Zend_Cache_Backend_Redis', array(), $backendOptions,
             false, true, true
         );
     }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @group Zend_Cache
- *
+ * @group Zend_Cache_Resource
  *
  */
 class Rediska_Zend_Cache_ResourceTest extends PHPUnit_Framework_TestCase
@@ -31,8 +31,8 @@ class Rediska_Zend_Cache_ResourceTest extends PHPUnit_Framework_TestCase
                                ->getResource('cachemanager');
 
         $manager->getCache('test')->save('1', 'test');
-
-        $one = Rediska_Manager::get()->getHashValues(Rediska_Zend_Cache_Backend_Redis::PREFIX_KEY . 'test');
+        $options = $manager->getCache('test')->getBackend()->getOption('storage');
+        $one = Rediska_Manager::get()->getHashValues($options['prefix_key'] . 'test');
 
         $this->assertEquals('1', $one[0]);
     }
@@ -46,7 +46,8 @@ class Rediska_Zend_Cache_ResourceTest extends PHPUnit_Framework_TestCase
 
         $manager->getCache('test')->save('1', 'test');
 
-        $one = Rediska_Manager::get('test')->getHashValues(Rediska_Zend_Cache_Backend_Redis::PREFIX_KEY . 'test');
+        $options = $manager->getCache('test')->getBackend()->getOption('storage');
+        $one = Rediska_Manager::get('test')->getHashValues($options['prefix_key'] . 'test');
 
         $this->assertEquals('1', $one[0]);
 
@@ -64,8 +65,9 @@ class Rediska_Zend_Cache_ResourceTest extends PHPUnit_Framework_TestCase
 
         $manager->getCache('test')->save('1', 'test');
 
+        $options = $manager->getCache('test')->getBackend()->getOption('storage');
         $rediska = new Rediska(array('redisVersion' => '2.0', 'addToManager' => false));
-        $one = $rediska->getHashValues(Rediska_Zend_Cache_Backend_Redis::PREFIX_KEY.'test');
+        $one = $rediska->getHashValues($options['prefix_key'].'test');
 
         $this->assertEquals('1', $one[0]);
 
