@@ -168,18 +168,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
         }
         return false;
     }
-    /**
-     *
-     * @param string $alias
-     * @return Rediska_Zend_Cache_Backend_Redis
-     */
-    protected function _getTransaction()
-    {
-        if(!$this->_transaction instanceof Rediska_Transaction){
-            $this->_transaction = $this->getRediska()->transaction();
-        }
-        return $this->_transaction;
-    }
+
     /**
      * Load value with given id from cache
      *
@@ -189,12 +178,24 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     public function load($id, $doNotTestCacheValidity = false)
     {
-        if(!$this->getRediska()->exists($this->_options['storage']['prefix_key'].$id)){
-            return false;
+        $id = (array) $id;
+        $transaction = $this->getRediska()->transaction();
+        foreach ($id as $key){
+            $transaction->getFromHash(
+                $this->_options['storage']['prefix_key'] . $key,
+                self::FIELD_DATA
+            );
         }
-        return $this->getRediska()->getFromHash(
-            $this->_options['storage']['prefix_key'].$id, self::FIELD_DATA
-        );
+        $result = $transaction->execute();
+        if(count($result) == 1){
+            if(null === ($result = array_shift($result))){
+                return false;
+            } else {
+                return $result;
+            }
+        } else {
+            return $result;
+        }
     }
 
     /**
@@ -234,7 +235,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
                 $this->_options['storage']['prefix_key'].$id, self::FIELD_TAGS
             )
         );
-        $transaction = $this->_getTransaction();
+        $transaction = $this->getRediska()->transaction();
         $transaction->setToHash(
             $this->_options['storage']['prefix_key'].$id,  array(
             self::FIELD_DATA => $data,
@@ -281,13 +282,18 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
             )
         );
 
-        $transaction = $this->_getTransaction();
+        $transaction = $this->getRediska()->transaction();
         $transaction->delete($this->_options['storage']['prefix_key'].$id);
         $transaction->deleteFromSet( $this->_options['storage']['set_ids'], $id );
         foreach($tags as $tag) {
             $transaction->deleteFromSet($this->_options['storage']['prefix_tag_ids'] . $tag, $id);
         }
-        return (bool) $transaction->execute();
+        $result = $transaction->execute();
+        if(count($result)){
+            return array_shift($result);
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -343,7 +349,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     protected function _removeIds($ids = array())
     {
-        $transaction = $this->_getTransaction();
+        $transaction = $this->getRediska()->transaction();
         $transaction->delete($this->_preprocessIds($ids));
         foreach($ids as $id){
             $transaction->deleteFromSet( $this->_options['storage']['set_ids'], $id);
@@ -356,7 +362,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     protected function _removeIdsByNotMatchingTags($tags)
     {
-        $transaction = $this->_getTransaction();
+        $transaction = $this->getRediska()->transaction();
         $ids = $this->getIdsNotMatchingTags($tags);
         $this->_removeIds($ids);
     }
@@ -365,7 +371,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     protected function _removeIdsByMatchingTags($tags)
     {
-        $transaction = $this->_getTransaction();
+        $transaction = $this->getRediska()->transaction();
         $ids = $this->getIdsMatchingTags($tags);
         $this->_removeIds($ids);
     }
@@ -375,7 +381,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     protected function _removeIdsByMatchingAnyTags($tags)
     {
-        $transaction = $this->_getTransaction();
+        $transaction = $this->getRediska()->transaction();
         $ids = $this->getIdsMatchingAnyTags($tags);
         $this->_removeIds($ids);
         $transaction->delete( $this->_preprocessTagIds($tags));
@@ -496,18 +502,22 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     public function getMetadatas($id)
     {
-        list($data, $tags, $mtime, $infinite) = $this->getRediska()->getHashValues($this->_options['storage']['prefix_key'].$id);
-        if(!$mtime) {
+        $metaData = $this->getRediska()->getFromHash(
+            $this->_options['storage']['prefix_key'].$id,
+            array(self::FIELD_DATA, self::FIELD_TAGS, self::FIELD_MTIME, self::FIELD_INF)
+        );
+        if(!$metaData[self::FIELD_MTIME]) {
           return false;
         }
-        $tags = explode(',', $tags);
-        $expire = $infinite === '1' ? false : time() + $this->getRediska()
+        $tags = explode(',', $metaData[self::FIELD_TAGS]);
+        $expire = $metaData[self::FIELD_INF] === '1' ? false : time() +
+            $this->getRediska()
             ->getLifetime($this->_options['storage']['prefix_key'].$id);
 
         return array(
             'expire' => $expire,
             'tags'   => $tags,
-            'mtime'  => $mtime,
+            'mtime'  => $metaData[self::FIELD_MTIME],
         );
     }
 
@@ -523,7 +533,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
         $data = $this->getRediska()->getFromHash(
             $this->_options['storage']['prefix_key'].$id, array(self::FIELD_INF)
         );
-        if ($data['i'] === 0) {
+        if ($data[self::FIELD_INF] === 0) {
             $expireAt = time() + $this->getRediska()
                 ->getLifetime($this->_options['storage']['prefix_key'].$id) + $extraLifetime;
             return (bool) $this->getRediska()->expire(
@@ -566,7 +576,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
     {
         $exists = array();
         $tags = $this->getTags();
-        $transaction = $this->_getTransaction();
+        $transaction = $this->getRediska()->transaction();
         foreach($tags as $tag){
             $tagMembers = $this->getRediska()->getSet($this->_options['storage']['prefix_tag_ids'] . $tag);
             $transaction->watch($this->_options['storage']['prefix_tag_ids'] . $tag);
