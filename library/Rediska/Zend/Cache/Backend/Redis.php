@@ -78,7 +78,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
     /**
      * Contruct Zend_Cache Redis backend
      *
-     * Available optiosn are :
+     * Available options are :
      * 'storage`
      *     - set_ids        : the set name that all ids are storage
      *     - set_tags       : the set name that stores the tags
@@ -409,7 +409,10 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
         parent::setDirectives($directives);
         $lifetime = $this->getLifetime(false);
         if ($lifetime > self::MAX_LIFETIME) {
-            $this->_log('redis backend has a limit of 30 days (2592000 seconds) for the lifetime');
+            $this->_log(
+                'redis backend has a limit of 30 days (' . self::MAX_LIFETIME
+                . ' seconds) for the lifetime'
+            );
         }
     }
 
