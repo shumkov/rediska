@@ -512,10 +512,10 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
         if(!$metaData[self::FIELD_MTIME]) {
           return false;
         }
+        $lifetime = $this->getRediska()
+            ->getLifetime($this->_options['storage']['prefix_key'] . $id);
         $tags = explode(',', $metaData[self::FIELD_TAGS]);
-        $expire = $metaData[self::FIELD_INF] === '1' ? false : time() +
-            $this->getRediska()
-            ->getLifetime($this->_options['storage']['prefix_key'].$id);
+        $expire = $metaData[self::FIELD_INF] === '1' ? false : time() + $lifetime;
 
         return array(
             'expire' => $expire,
@@ -536,9 +536,10 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
         $data = $this->getRediska()->getFromHash(
             $this->_options['storage']['prefix_key'].$id, array(self::FIELD_INF)
         );
+        $lifetime = $this->getRediska()
+            ->getLifetime($this->_options['storage']['prefix_key'] . $id);
         if ($data[self::FIELD_INF] === 0) {
-            $expireAt = time() + $this->getRediska()
-                ->getLifetime($this->_options['storage']['prefix_key'].$id) + $extraLifetime;
+            $expireAt = time() + $lifetime + $extraLifetime;
             return (bool) $this->getRediska()->expire(
                 $this->_options['storage']['prefix_key'].$id, $expireAt, true
             );
