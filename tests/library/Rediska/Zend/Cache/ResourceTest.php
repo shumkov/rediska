@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * @group Zend_Cache
+ * @group Zend_Cache_Resource
+ *
+ */
 class Rediska_Zend_Cache_ResourceTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
@@ -27,12 +31,12 @@ class Rediska_Zend_Cache_ResourceTest extends PHPUnit_Framework_TestCase
                                ->getResource('cachemanager');
 
         $manager->getCache('test')->save('1', 'test');
-
-        $one = Rediska_Manager::get()->get('test');
+        $options = $manager->getCache('test')->getBackend()->getOption('storage');
+        $one = Rediska_Manager::get()->getHashValues($options['prefix_key'] . 'test');
 
         $this->assertEquals('1', $one[0]);
     }
-    
+
     public function testNamedInstance()
     {
         $application = new Zend_Application('tests', dirname(__FILE__) . '/application3.ini');
@@ -42,13 +46,16 @@ class Rediska_Zend_Cache_ResourceTest extends PHPUnit_Framework_TestCase
 
         $manager->getCache('test')->save('1', 'test');
 
-        $one = Rediska_Manager::get('test')->get('test');
+        $options = $manager->getCache('test')->getBackend()->getOption('storage');
+        $one = Rediska_Manager::get('test')->getHashValues($options['prefix_key'] . 'test');
 
         $this->assertEquals('1', $one[0]);
 
         $this->assertFalse(Rediska_Manager::has('default'));
     }
-
+    /**
+     * @group resource
+     */
     public function testNewInstance()
     {
         $application = new Zend_Application('tests', dirname(__FILE__) . '/application4.ini');
@@ -57,12 +64,13 @@ class Rediska_Zend_Cache_ResourceTest extends PHPUnit_Framework_TestCase
                                ->getResource('cachemanager');
 
         $manager->getCache('test')->save('1', 'test');
-        
+
+        $options = $manager->getCache('test')->getBackend()->getOption('storage');
         $rediska = new Rediska(array('redisVersion' => '2.0', 'addToManager' => false));
-        $one = $rediska->get('test');
+        $one = $rediska->getHashValues($options['prefix_key'].'test');
 
         $this->assertEquals('1', $one[0]);
-        
+
         $this->assertEquals(array(), Rediska_Manager::getAll());
     }
 }
