@@ -11,7 +11,7 @@ require_once 'Zend/Application/Resource/ResourceAbstract.php';
 /**
  * Rediska Zend Application Resource for configure
  * and initialize Rediska from application.ini
- * 
+ *
  * @author Ivan Shumkov
  * @package Rediska
  * @subpackage ZendFrameworkIntegration
@@ -26,7 +26,6 @@ class Rediska_Zend_Application_Resource_Rediska extends Zend_Application_Resourc
     public function init()
     {
         $options = $this->getOptions();
-
         if (isset($options['instances'])) {
             foreach($options['instances'] as $name => $instanceOptions) {
                 if ($name == Rediska::DEFAULT_NAME) {
@@ -40,7 +39,7 @@ class Rediska_Zend_Application_Resource_Rediska extends Zend_Application_Resourc
         }
 
         if (!empty($options)) {
-            $options['name'] = Rediska::DEFAULT_NAME;   
+            $options['name'] = Rediska::DEFAULT_NAME;
             $rediska = new Rediska($options);
 
             Zend_Registry::set(self::DEFAULT_REGISTRY_KEY, $rediska);
