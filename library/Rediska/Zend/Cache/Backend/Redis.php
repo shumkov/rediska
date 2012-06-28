@@ -179,7 +179,8 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
     public function load($id, $doNotTestCacheValidity = false)
     {
         $id = (array) $id;
-        $transaction = $this->getRediska()->transaction();
+        $connections = $this->getRediska()->getConnections();
+        $transaction = $this->getRediska()->transaction($connections[0]);
         foreach ($id as $key){
             $transaction->getFromHash(
                 $this->_options['storage']['prefix_key'] . $key,
@@ -235,7 +236,8 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
                 $this->_options['storage']['prefix_key'].$id, self::FIELD_TAGS
             )
         );
-        $transaction = $this->getRediska()->transaction();
+        $connections = $this->getRediska()->getConnections();
+        $transaction = $this->getRediska()->transaction($connections[0]);
         $transaction->setToHash(
             $this->_options['storage']['prefix_key'].$id,  array(
             self::FIELD_DATA => $data,
@@ -282,7 +284,8 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
             )
         );
 
-        $transaction = $this->getRediska()->transaction();
+        $connections = $this->getRediska()->getConnections();
+        $transaction = $this->getRediska()->transaction($connections[0]);
         $transaction->delete($this->_options['storage']['prefix_key'].$id);
         $transaction->deleteFromSet( $this->_options['storage']['set_ids'], $id );
         foreach($tags as $tag) {
@@ -349,7 +352,8 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     protected function _removeIds($ids = array())
     {
-        $transaction = $this->getRediska()->transaction();
+        $connections = $this->getRediska()->getConnections();
+        $transaction = $this->getRediska()->transaction($connections[0]);
         $transaction->delete($this->_preprocessIds($ids));
         foreach($ids as $id){
             $transaction->deleteFromSet( $this->_options['storage']['set_ids'], $id);
@@ -362,7 +366,6 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     protected function _removeIdsByNotMatchingTags($tags)
     {
-        $transaction = $this->getRediska()->transaction();
         $ids = $this->getIdsNotMatchingTags($tags);
         $this->_removeIds($ids);
     }
@@ -371,7 +374,6 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     protected function _removeIdsByMatchingTags($tags)
     {
-        $transaction = $this->getRediska()->transaction();
         $ids = $this->getIdsMatchingTags($tags);
         $this->_removeIds($ids);
     }
@@ -381,7 +383,8 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     protected function _removeIdsByMatchingAnyTags($tags)
     {
-        $transaction = $this->getRediska()->transaction();
+        $connections = $this->getRediska()->getConnections();
+        $transaction = $this->getRediska()->transaction($connections[0]);
         $ids = $this->getIdsMatchingAnyTags($tags);
         $this->_removeIds($ids);
         $transaction->delete( $this->_preprocessTagIds($tags));
@@ -580,7 +583,8 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
     {
         $exists = array();
         $tags = $this->getTags();
-        $transaction = $this->getRediska()->transaction();
+        $connections = $this->getRediska()->getConnections();
+        $transaction = $this->getRediska()->transaction($connections[0]);
         foreach($tags as $tag){
             $tagMembers = $this->getRediska()->getSet($this->_options['storage']['prefix_tag_ids'] . $tag);
             $transaction->watch($this->_options['storage']['prefix_tag_ids'] . $tag);
