@@ -50,6 +50,25 @@ class Rediska_Zend_Cache_BackendTest extends Rediska_TestCase
         $this->assertFalse($value);
     }
 
+    /**
+     * This test checks that in the event a clean operation is requested for
+     * a tag that has no associated keys in the database that it will not attempt
+     * to execute a delete operation with an empty id value and consequently
+     * thrown an Exception.
+     */
+    public function testEmptyTagsClean()
+    {
+        $this->cache->save('aaa', 'testa', array('a1'));
+        $this->cache->save('bbb', 'testb');
+
+        $this->cache->clean(
+            Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array('rem')
+        );
+
+        $this->assertEquals('aaa', $this->cache->load('testa'));
+        $this->assertEquals('bbb', $this->cache->load('testb'));
+    }
+
     public function testSave()
     {
         $reply = $this->cache->save('aaa', 'test');
