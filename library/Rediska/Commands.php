@@ -48,6 +48,7 @@ class Rediska_Commands
         'substring'    => 'Rediska_Command_GetRange',
         'setbit'       => 'Rediska_Command_SetBit',
         'getbit'       => 'Rediska_Command_GetBit',
+        'bitop'        => 'Rediska_Command_Bitop',
         'getlength'    => 'Rediska_Command_GetLength',
 
         // Commands operating on lists

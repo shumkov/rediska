@@ -897,6 +897,14 @@ class Rediska extends Rediska_Options
     public function getBit($key, $offset) { $args = func_get_args(); return $this->_executeCommand('getBit', $args); }
 
     /**
+     * @param string $operation OR|XOR|AND|NOT
+     * @param string $destkey
+     * @param array  $srckeys
+     * @return Rediska_Pipeline
+     */
+    public function bitop($operation, $destkey, $srckeys) { $args = func_get_args(); return $this->_executeCommand('bitop', $args); }
+
+    /**
      * Returns the length of the string value stored at key
      *
      * @param string  $key Key name
