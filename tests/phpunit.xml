@@ -30,6 +30,7 @@
         <file>./library/Rediska/Command/SetTest.php</file>
         <file>./library/Rediska/Command/SetAndGetTest.php</file>
         <file>./library/Rediska/Command/GetTest.php</file>
+        <file>./library/Rediska/Command/BitCountTest.php</file>
         <file>./library/Rediska/Command/IncrementTest.php</file>
         <file>./library/Rediska/Command/DecrementTest.php</file>
     </testsuite>
