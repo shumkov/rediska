@@ -45,10 +45,9 @@ class Rediska_Command_Info extends Rediska_Command_Abstract
             $info[$connection] = array();
             
             foreach (explode(Rediska::EOL, $responses[$count]) as $param) {
-                if (!$param) {
+                if (!$param || !strpos($param, ':') !== false) {
                     continue;
                 }
-
                 list($name, $stringValue) = explode(':', $param, 2);
 
                 if (strpos($stringValue, '.') !== false) {
@@ -63,13 +62,11 @@ class Rediska_Command_Info extends Rediska_Command_Abstract
 
                 $info[$connection][$name] = $value;
             }
-
+            $info[$connection] = new Rediska_Info($info[$connection]);
             $count++;
         }
-
         if (count($info) == 1) {
-            $info = array_values($info);
-            $info = $info[0];
+            $info = array_shift($info);
         }
 
         return $info;
