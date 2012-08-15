@@ -68,9 +68,43 @@ class Rediska_Zend_Cache_ResourceTest extends PHPUnit_Framework_TestCase
         $options = $manager->getCache('test')->getBackend()->getOption('storage');
         $rediska = new Rediska(array('redisVersion' => '2.0', 'addToManager' => false));
         $one = $rediska->getHashValues($options['prefix_key'].'test');
-
         $this->assertEquals('1', $one[0]);
 
         $this->assertEquals(array(), Rediska_Manager::getAll());
+    }
+    /**
+     * @group resource
+     * @group auto_serialize
+     */
+    public function testNewInstanceWithAutoSerialization()
+    {
+        $application = new Zend_Application('tests', dirname(__FILE__) . '/application5.ini');
+        /* @var Zend_Cache_Manager $manager */
+        $manager = $application->bootstrap()
+                               ->getBootstrap()
+                               ->getResource('cachemanager');
+
+        $manager->getCache('test')->save('321', 'test');
+        $options = $manager->getCache('test')->getBackend()->getOption('storage');
+        $rediska = new Rediska(array('redisVersion' => '2.0', 'addToManager' => false));
+        $one = $rediska->getHashValues($options['prefix_key'].'test');
+
+        $this->assertEquals('321', $one[0]);
+
+        $this->assertEquals(array(), Rediska_Manager::getAll());
+    }
+
+    public function testCleanWithNoIdsToClean()
+    {
+
+        $application = new Zend_Application('tests', dirname(__FILE__) . '/application5.ini');
+        /* @var Zend_Cache_Manager $manager */
+        $manager = $application->bootstrap()
+                               ->getBootstrap()
+                               ->getResource('cachemanager');
+
+        $actual = $manager->getCache('test')->clean(Zend_Cache::CLEANING_MODE_ALL);
+
+        $this->assertFalse($actual);
     }
 }
