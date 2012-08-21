@@ -168,7 +168,6 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
         }
         return false;
     }
-
     /**
      * Load value with given id from cache
      *
@@ -179,16 +178,17 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
     public function load($id, $doNotTestCacheValidity = false)
     {
         $id = (array) $id;
-        $transaction = $this->getRediska()->transaction();
         foreach ($id as $key){
-            $transaction->getFromHash(
-                $this->_options['storage']['prefix_key'] . $key,
-                self::FIELD_DATA
-            );
+            $key = $this->_options['storage']['prefix_key'] . $key;
+            $this->_getTransactionByKey($key)
+                ->getFromHash(
+                    $key,
+                    self::FIELD_DATA
+                );
         }
         $oldSerializaerAdapter = $this->getRediska()->getSerializer()->getAdapter();
         $this->getRediska()->setSerializerAdapter('toString');
-        $result = $transaction->execute();
+        $result = $this->_execTransactions();
         $this->getRediska()->getSerializer()->setAdapter($oldSerializaerAdapter);
         if(count($result) == 1){
             if(null === ($result = array_shift($result))){
@@ -238,31 +238,37 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
                 $this->_options['storage']['prefix_key'].$id, self::FIELD_TAGS
             )
         );
-        $transaction = $this->getRediska()->transaction();
-        $transaction->setToHash(
-            $this->_options['storage']['prefix_key'].$id,  array(
-            self::FIELD_DATA => $data,
-            self::FIELD_TAGS => implode(',',$tags),
-            self::FIELD_MTIME => time(),
-            self::FIELD_INF => $lifetime ? 0 : 1)
-        );
-        $transaction->expire($this->_options['storage']['prefix_key'].$id, $lifetime ? $lifetime : self::MAX_LIFETIME);
+
+        $this->_getTransactionByKey($this->_options['storage']['prefix_key'].$id)
+            ->setToHash(
+                $this->_options['storage']['prefix_key'].$id,  array(
+                self::FIELD_DATA => $data,
+                self::FIELD_TAGS => implode(',',$tags),
+                self::FIELD_MTIME => time(),
+                self::FIELD_INF => $lifetime ? 0 : 1)
+            );
+        $this->_getTransactionByKey($this->_options['storage']['prefix_key'].$id)
+            ->expire($this->_options['storage']['prefix_key'].$id, $lifetime ? $lifetime : self::MAX_LIFETIME);
         if ($addTags = ($oldTags ? array_diff($tags, $oldTags) : $tags)) {
             foreach ($addTags as $add) {
-                $transaction->addToSet($this->_options['storage']['set_tags'], $add);
+                $this->_getTransactionByKey($this->_options['storage']['set_tags'])
+                    ->addToSet($this->_options['storage']['set_tags'], $add);
             }
             foreach($addTags as $tag){
-                $transaction->addToSet($this->_options['storage']['prefix_tag_ids'] . $tag, $id);
+                $this->_getTransactionByKey($this->_options['storage']['prefix_tag_ids'] . $tag)
+                    ->addToSet($this->_options['storage']['prefix_tag_ids'] . $tag, $id);
             }
         }
         if ($remTags = ($oldTags ? array_diff($oldTags, $tags) : false)){
             foreach($remTags as $tag){
-                $transaction->deleteFromSet($this->_options['storage']['prefix_tag_ids'] . $tag, $id);
+                $this->_getTransactionByKey($this->_options['storage']['prefix_tag_ids'] . $tag)
+                    ->deleteFromSet($this->_options['storage']['prefix_tag_ids'] . $tag, $id);
             }
         }
-        $transaction->addToSet($this->_options['storage']['set_ids'], $id);
+        $this->_getTransactionByKey($this->_options['storage']['set_ids'])
+            ->addToSet($this->_options['storage']['set_ids'], $id);
         try {
-            $transaction->execute();
+            $this->_execTransactions();
             return true;
         } catch(Rediska_Transaction_AbortedException $e){
             return false;
@@ -287,13 +293,15 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
             )
         );
 
-        $transaction = $this->getRediska()->transaction();
-        $transaction->delete($this->_options['storage']['prefix_key'].$id);
-        $transaction->deleteFromSet( $this->_options['storage']['set_ids'], $id );
+        $this->_getTransactionByKey($this->_options['storage']['prefix_key'].$id)
+            ->delete($this->_options['storage']['prefix_key'].$id);
+        $this->_getTransactionByKey($this->_options['storage']['set_ids'], $id)
+            ->deleteFromSet( $this->_options['storage']['set_ids'], $id );
         foreach($tags as $tag) {
-            $transaction->deleteFromSet($this->_options['storage']['prefix_tag_ids'] . $tag, $id);
+            $this->_getTransactionByKey($this->_options['storage']['prefix_tag_ids'] . $tag)
+                ->deleteFromSet($this->_options['storage']['prefix_tag_ids'] . $tag, $id);
         }
-        $result = $transaction->execute();
+        $result = $this->_execTransactions();
         if(count($result)){
             return array_shift($result);
         } else {
@@ -354,14 +362,15 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     protected function _removeIds($ids = array())
     {
-        $transaction = $this->getRediska()->transaction();
-        $transaction->delete($this->_preprocessIds($ids));
         foreach($ids as $id){
-            $transaction->deleteFromSet( $this->_options['storage']['set_ids'], $id);
+            $this->_getTransactionByKey($this->_options['storage']['prefix_key']. $id)
+                ->delete($this->_options['storage']['prefix_key']. $id);
+            $this->_getTransactionByKey($this->_options['storage']['set_ids'])
+                ->deleteFromSet( $this->_options['storage']['set_ids'], $id);
         }
 
         try {
-            $result =  (bool) $transaction->execute();
+            $result =  (bool) $this->_execTransactions();
         } catch (Rediska_Transaction_AbortedException $e){
             $result = false;
         }
@@ -393,12 +402,14 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
         $ids = $this->getIdsMatchingAnyTags($tags);
         $this->_removeIds($ids);
 
-        $transaction = $this->getRediska()->transaction();
-        $transaction->delete( $this->_preprocessTagIds($tags));
-        $transaction->deleteFromSet( $this->_options['storage']['set_tags'], $tags);
+        foreach ($this->_preprocessTagIds($tags) as $tag) {
+            $this->_getTransactionByKey($tag)->delete($tag);
+        }
+        $this->_getTransactionByKey($this->_options['storage']['set_tags'])
+            ->deleteFromSet( $this->_options['storage']['set_tags'], $tags);
 
         try {
-            $result =  (bool) $transaction->execute();
+            $result =  (bool) $this->_execTransactions();
         } catch (Rediska_Transaction_AbortedException $e){
             $result = false;
         }
@@ -597,33 +608,37 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
     {
         $exists = array();
         $tags = $this->getTags();
-        $transaction = $this->getRediska()->transaction();
         foreach($tags as $tag){
-            $tagMembers = $this->getRediska()->getSet($this->_options['storage']['prefix_tag_ids'] . $tag);
-            $transaction->watch($this->_options['storage']['prefix_tag_ids'] . $tag);
+            $prefix_tag_ids = $this->_options['storage']['prefix_tag_ids'] . $tag;
+            $tagMembers = $this->getRediska()->getSet($prefix_tag_ids);
+            $this->_getTransactionByKey($prefix_tag_ids)->watch($prefix_tag_ids);
             $expired = array();
             if(count($tagMembers)) {
                 foreach($tagMembers as $id) {
                     if( ! isset($exists[$id])) {
-                        $exists[$id] = $this->getRediska()->exists($this->_options['storage']['prefix_key'].$id);
+                        $exists[$id] = $this->getRediska()
+                            ->exists($this->_options['storage']['prefix_key'].$id);
                     }
                     if(!$exists[$id]) {
                         $expired[] = $id;
                     }
                 }
-                if(!count($expired)) continue;
+//                if(!count($expired)) continue;
             }
             if(!count($tagMembers) || count($expired) == count($tagMembers)) {
-                $transaction->deleteFromSet($this->_options['storage']['set_tags'], $tag);
-                $transaction->delete($this->_options['storage']['prefix_tag_ids'] . $tag);
+                $this->_getTransactionByKey($this->_options['storage']['set_tags'])
+                    ->deleteFromSet($this->_options['storage']['set_tags'], $tag);
+                $this->_getTransactionByKey($this->_options['storage']['prefix_tag_ids'] . $tag)
+                    ->delete($this->_options['storage']['prefix_tag_ids'] . $tag);
             } else {
-                $transaction->deleteFromSet( $this->_options['storage']['prefix_tag_ids'] . $tag, $expired);
+                $this->_getTransactionByKey($this->_options['storage']['prefix_tag_ids'] . $tag)
+                    ->deleteFromSet( $this->_options['storage']['prefix_tag_ids'] . $tag, $expired);
             }
-            $transaction->deleteFromSet( $this->_options['storage']['set_ids'], $expired);
+            $this->_getTransactionByKey($this->_options['storage']['set_ids'])
+                ->deleteFromSet( $this->_options['storage']['set_ids'], $expired);
         }
         try{
-            $transaction->execute();
-            return true;
+            return (bool) $this->_execTransactions();
         } catch (Rediska_Transaction_AbortedException $e ){
             return false;
         } catch (Rediska_Transaction_Exception $e){
@@ -660,5 +675,35 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
             array_walk($tags, array($this, '_preprocess'), $this->_options['storage']['prefix_tag_ids']);
         }
         return $tags;
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return Rediska_Transaction
+     */
+    protected function _getTransactionByKey($key)
+    {
+        $connection = $this->getRediska()->getConnectionByKeyName($key);
+        if(!$this->_transaction[$connection->getAlias()]){
+            $this->_transaction[$connection->getAlias()] = $this->getRediska()
+                ->transaction($connection);
+        }
+        return $this->_transaction[$connection->getAlias()];
+    }
+
+    /**
+     * @return array
+     */
+    protected function _execTransactions()
+    {
+        $result = array();
+        /* @var Rediska_Transaction $transaction */
+        if($this->_transaction){
+            foreach ($this->_transaction as $transaction) {
+                $result = array_merge($result,$transaction->execute());
+            }
+        }
+        return $result;
     }
 }
