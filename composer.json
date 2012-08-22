@@ -37,6 +37,8 @@
         "zendframework/zendframework": "1.11.*"
     },
     "autoload": {
-        "classmap": ["library"]
+        "psr-0":{
+            "Rediska":["library/", "tests/library/"]
+        }
     }
 }
