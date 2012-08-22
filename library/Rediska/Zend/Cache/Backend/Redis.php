@@ -270,9 +270,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
         try {
             $this->_execTransactions();
             return true;
-        } catch(Rediska_Transaction_AbortedException $e){
-            return false;
-        } catch (Rediska_Transaction_Exception $e){
+        } catch(Rediska_Transaction_Exception $e){
             $this->_log($e->getMessage(), Zend_Log::ERR);
             return false;
         }
@@ -368,13 +366,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
             $this->_getTransactionByKey($this->_options['storage']['set_ids'])
                 ->deleteFromSet( $this->_options['storage']['set_ids'], $id);
         }
-
-        try {
-            $result =  (bool) $this->_execTransactions();
-        } catch (Rediska_Transaction_AbortedException $e){
-            $result = false;
-        }
-        return $result;
+        return (bool) $this->_execTransactions();
     }
 
     /**
@@ -408,12 +400,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
         $this->_getTransactionByKey($this->_options['storage']['set_tags'])
             ->deleteFromSet( $this->_options['storage']['set_tags'], $tags);
 
-        try {
-            $result =  (bool) $this->_execTransactions();
-        } catch (Rediska_Transaction_AbortedException $e){
-            $result = false;
-        }
-        return $result;
+        return (bool) $this->_execTransactions();
     }
     /**
      * Return true if the automatic cleaning is available for the backend
@@ -623,7 +610,7 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
                         $expired[] = $id;
                     }
                 }
-//                if(!count($expired)) continue;
+                if(!count($expired)) continue;
             }
             if(!count($tagMembers) || count($expired) == count($tagMembers)) {
                 $this->_getTransactionByKey($this->_options['storage']['set_tags'])
@@ -640,8 +627,6 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
         try{
             return (bool) $this->_execTransactions();
         } catch (Rediska_Transaction_AbortedException $e ){
-            return false;
-        } catch (Rediska_Transaction_Exception $e){
             $this->_log($e->getMessage(), Zend_Log::ERR);
             return false;
         }
@@ -699,9 +684,21 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
     {
         $result = array();
         /* @var Rediska_Transaction $transaction */
-        if($this->_transaction){
+        if ($this->_transaction) {
             foreach ($this->_transaction as $transaction) {
-                $result = array_merge($result,$transaction->execute());
+                /*
+                 * Do not execute empty transaction avoiding a false
+                 * `Rediska_Transaction_AbortedException`
+                 */
+                $preamble = substr(
+                    (string)$transaction, 0,
+                    strlen(Rediska_Transaction::TRANSACTION_PREAMBLE)
+                );
+                if (Rediska_Transaction::TRANSACTION_PREAMBLE == $preamble){
+                    $result = array_merge($result, $transaction->execute());
+                } else {
+                    $transaction->discard();
+                }
             }
         }
         return $result;
