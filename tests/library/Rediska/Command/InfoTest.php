@@ -16,10 +16,10 @@ class Rediska_Command_InfoTest extends Rediska_TestCase
         $this->_addSecondServerOrSkipTest();
 
         $info = $this->rediska->info();
-        $this->assertInstanceOf('Rediska_Info', $info);
 
         foreach($this->rediska->getConnections() as $connection) {
             $this->assertArrayHasKey($connection->getAlias(), $info);
+            $this->assertInstanceOf('Rediska_Info', $info[$connection->getAlias()]);
             $this->assertNotNull($info[$connection->getAlias()]->redis_version);
         }
     }
