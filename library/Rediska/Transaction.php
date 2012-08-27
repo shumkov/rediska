@@ -11,6 +11,16 @@
  */
 class Rediska_Transaction
 {
+
+    /**
+     * @var string
+     */
+    const TRANSACTION_PREAMBLE = 'Transaction: ';
+
+    /**
+     * @var string
+     */
+    const TRANSACTION_EMPTY = 'Empty transaction';
     /**
      * Rediska instance
      * 
@@ -228,9 +238,9 @@ class Rediska_Transaction
     public function  __toString()
     {
         if (empty($this->_commands)) {
-            return 'Empty transaction';
+            return self::TRANSACTION_EMPTY;
         } else {
-            return 'Transaction: ' . implode(', ', $this->_commands);
+            return self::TRANSACTION_PREAMBLE . implode(', ', $this->_commands);
         }
     }
 
@@ -991,6 +1001,14 @@ class Rediska_Transaction
      * @return Rediska_Transaction
      */
     public function info() { $args = func_get_args(); return $this->_addCommand('info', $args); }
+
+    /**
+     * This command is often used to test if a connection is still alive, or to
+     * measure latency.
+     *
+     * @return mixed
+     */
+    public function ping() { $args = func_get_args(); return $this->_executeCommand('ping', $args); }
 
     /**
      * Change the replication settings of a slave on the fly

@@ -43,6 +43,6 @@ class Rediska_Command_SlaveOfTest extends Rediska_TestCase
     protected function _checkRole($server, $role)
     {
         $info = $this->rediska->on($server->getAlias())->info();
-        $this->assertEquals($role, $info['role']);
+        $this->assertEquals($role, $info->role);
     }
 }
