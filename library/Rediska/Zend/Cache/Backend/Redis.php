@@ -186,7 +186,10 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
                 self::FIELD_DATA
             );
         }
+        $oldSerializaerAdapter = $this->getRediska()->getSerializer()->getAdapter();
+        $this->getRediska()->setSerializerAdapter('toString');
         $result = $transaction->execute();
+        $this->getRediska()->getSerializer()->setAdapter($oldSerializaerAdapter);
         if(count($result) == 1){
             if(null === ($result = array_shift($result))){
                 return false;
@@ -261,6 +264,8 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
         try {
             $transaction->execute();
             return true;
+        } catch(Rediska_Transaction_AbortedException $e){
+            return false;
         } catch (Rediska_Transaction_Exception $e){
             $this->_log($e->getMessage(), Zend_Log::ERR);
             return false;
@@ -354,7 +359,13 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
         foreach($ids as $id){
             $transaction->deleteFromSet( $this->_options['storage']['set_ids'], $id);
         }
-        return (bool) $transaction->execute();
+
+        try {
+            $result =  (bool) $transaction->execute();
+        } catch (Rediska_Transaction_AbortedException $e){
+            $result = false;
+        }
+        return $result;
     }
 
     /**
@@ -362,7 +373,6 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     protected function _removeIdsByNotMatchingTags($tags)
     {
-        $transaction = $this->getRediska()->transaction();
         $ids = $this->getIdsNotMatchingTags($tags);
         $this->_removeIds($ids);
     }
@@ -371,7 +381,6 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     protected function _removeIdsByMatchingTags($tags)
     {
-        $transaction = $this->getRediska()->transaction();
         $ids = $this->getIdsMatchingTags($tags);
         $this->_removeIds($ids);
     }
@@ -381,11 +390,19 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
      */
     protected function _removeIdsByMatchingAnyTags($tags)
     {
-        $transaction = $this->getRediska()->transaction();
         $ids = $this->getIdsMatchingAnyTags($tags);
         $this->_removeIds($ids);
+
+        $transaction = $this->getRediska()->transaction();
         $transaction->delete( $this->_preprocessTagIds($tags));
-            $transaction->deleteFromSet( $this->_options['storage']['set_tags'], $tags);
+        $transaction->deleteFromSet( $this->_options['storage']['set_tags'], $tags);
+
+        try {
+            $result =  (bool) $transaction->execute();
+        } catch (Rediska_Transaction_AbortedException $e){
+            $result = false;
+        }
+        return $result;
     }
     /**
      * Return true if the automatic cleaning is available for the backend
@@ -607,6 +624,8 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
         try{
             $transaction->execute();
             return true;
+        } catch (Rediska_Transaction_AbortedException $e ){
+            return false;
         } catch (Rediska_Transaction_Exception $e){
             $this->_log($e->getMessage(), Zend_Log::ERR);
             return false;

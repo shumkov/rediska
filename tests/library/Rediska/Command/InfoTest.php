@@ -1,12 +1,14 @@
 <?php
-
+/**
+ * @group Info
+ */
 class Rediska_Command_InfoTest extends Rediska_TestCase
 {
     public function testInfo()
     {
         $info = $this->rediska->info();
-        $this->assertTrue(is_array($info));
-        $this->assertArrayHasKey('redis_version', $info);
+        $this->assertInstanceOf('Rediska_Info', $info);
+        $this->assertNotNull($info->redis_version);
     }
     
     public function testInfoWithManyServers()
@@ -14,11 +16,11 @@ class Rediska_Command_InfoTest extends Rediska_TestCase
         $this->_addSecondServerOrSkipTest();
 
         $info = $this->rediska->info();
-        $this->assertTrue(is_array($info));
+        $this->assertInstanceOf('Rediska_Info', $info);
 
         foreach($this->rediska->getConnections() as $connection) {
             $this->assertArrayHasKey($connection->getAlias(), $info);
-            $this->assertArrayHasKey('redis_version', $info[$connection->getAlias()]);
+            $this->assertNotNull($info[$connection->getAlias()]->redis_version);
         }
     }
 }
