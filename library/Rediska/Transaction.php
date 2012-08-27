@@ -11,6 +11,16 @@
  */
 class Rediska_Transaction
 {
+
+    /**
+     * @var string
+     */
+    const TRANSACTION_PREAMBLE = 'Transaction: ';
+
+    /**
+     * @var string
+     */
+    const TRANSACTION_EMPTY = 'Empty transaction';
     /**
      * Rediska instance
      * 
@@ -228,9 +238,9 @@ class Rediska_Transaction
     public function  __toString()
     {
         if (empty($this->_commands)) {
-            return 'Empty transaction';
+            return self::TRANSACTION_EMPTY;
         } else {
-            return 'Transaction: ' . implode(', ', $this->_commands);
+            return self::TRANSACTION_PREAMBLE . implode(', ', $this->_commands);
         }
     }
 
