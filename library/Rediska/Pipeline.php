@@ -928,6 +928,14 @@ class Rediska_Pipeline
     public function info() { $args = func_get_args(); return $this->_addCommand('info', $args); }
 
     /**
+     * This command is often used to test if a connection is still alive, or to
+     * measure latency.
+     *
+     * @return mixed
+     */
+    public function ping() { $args = func_get_args(); return $this->_executeCommand('ping', $args); }
+
+    /**
      * Change the replication settings of a slave on the fly
      *
      * @param string|Rediska_Connection|false $aliasOrConnection Server alias, Rediska_Connection object or false if not slave
