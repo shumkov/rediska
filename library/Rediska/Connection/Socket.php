@@ -61,9 +61,9 @@ class Rediska_Connection_Socket extends Rediska_Connection
         }
 
         // Set blocking mode
-        if ($this->_options['blockingMode'] == false) {
-            $this->setBlockingMode($this->_options['blockingMode']);
-        }
+        //if (1 || $this->_options['blockingMode'] == false) {
+        //    $this->setBlockingMode($this->_options['blockingMode']);
+        //}
 
         // Send password
         if ($this->getPassword() != '') {
@@ -189,10 +189,8 @@ class Rediska_Connection_Socket extends Rediska_Connection
      */
     public function setBlockingMode($flag = true)
     {
-        $this->_options['blockingMode'] = $flag;
-
-        if ($this->isConnected()) {
-            @socket_set_nonblock($this->getSocket());
+        if ($flag !== true) {
+            throw new Rediska_Connection_Exception('Rediska_Connection_Socket not supported blocking mode');
         }
 
         return $this;
@@ -239,7 +237,7 @@ class Rediska_Connection_Socket extends Rediska_Connection
                 return null;
             }
         }else{
-            @socket_set_block($socket);
+            //@socket_set_block($socket);
 
             return $socket;
         }
@@ -255,7 +253,7 @@ class Rediska_Connection_Socket extends Rediska_Connection
             return null;
         }
 
-        @socket_set_block($socket);
+        //@socket_set_block($socket);
 
         return $socket;
     }
