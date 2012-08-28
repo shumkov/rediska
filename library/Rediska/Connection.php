@@ -51,7 +51,7 @@ class Rediska_Connection extends Rediska_Options
         'timeout' => null,
         'readTimeout' => null,
         'blockingMode' => true,
-        'streamContext' => null,
+        'streamContext' => null
     );
 
     /**
