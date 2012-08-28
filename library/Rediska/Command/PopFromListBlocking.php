@@ -53,7 +53,8 @@ class Rediska_Command_PopFromListBlocking extends Rediska_Command_Abstract
                 $this->setAtomic(false);
 
                 $command = array('BRPOP',
-                                 $this->getRediska()->getOption('namespace') . $key);
+                                 $this->getRediska()->getOption('namespace') . $key,
+                                 $timeout);
             } else {
                 $this->_throwExceptionIfNotSupported('2.1.7');
 
