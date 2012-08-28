@@ -1,4 +1,7 @@
 <?php
+
+ini_set('display_errors', true);
+
 $composerAutoload = realpath(dirname(__FILE__) . '/../vendor/autoload.php');
 if (file_exists($composerAutoload)) {
     require_once $composerAutoload;
