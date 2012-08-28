@@ -236,7 +236,16 @@ class Rediska extends Rediska_Options
         $options['host'] = $host;
         $options['port'] = $port;
 
-        $this->_connections[$connectionString] = new Rediska_Connection($options);
+        if (isset($options['useSocket'])) {
+            if ($options['useSocket'] == true) {
+                $connectionClass = 'Rediska_Connection_Socket';
+            }
+            unset($options['useSocket']);
+        } else {
+            $connectionClass = 'Rediska_Connection';
+        }
+
+        $this->_connections[$connectionString] = new $connectionClass($options);
 
         if ($this->_keyDistributor) {
             $this->_keyDistributor->addConnection(

@@ -10,7 +10,8 @@
  * @link http://rediska.geometria-lab.net
  * @license http://www.opensource.org/licenses/bsd-license.php
  */
-class Rediska_Connection extends Rediska_Options {
+class Rediska_Connection extends Rediska_Options
+{
     const DEFAULT_HOST = '127.0.0.1';
     const DEFAULT_PORT = 6379;
     const DEFAULT_WEIGHT = 1;
@@ -19,7 +20,7 @@ class Rediska_Connection extends Rediska_Options {
     /**
      * Socket
      * 
-     * @var stream
+     * @var resource
      */
     protected $_socket;
 
@@ -42,7 +43,6 @@ class Rediska_Connection extends Rediska_Options {
      * timeout      - Connection timeout for Redis server. Optional
      * readTimeout  - Read timeout for Redis server
      * blockingMode - Blocking/non-blocking mode for reads
-     * maxReconnectAttempts - Reconnect attempts count
      * 
      * @var array
      */
@@ -57,8 +57,7 @@ class Rediska_Connection extends Rediska_Options {
         'timeout' => null,
         'readTimeout' => null,
         'blockingMode' => true,
-        'streamContext' => null,
-        'maxReconnectAttempts' => 10,
+        'streamContext' => null
     );
 
     /**
@@ -187,11 +186,6 @@ class Rediska_Connection extends Rediska_Options {
 
                 if ($bytes === false) {
                     $this->disconnect();
-                    if ($this->_checkAttemptsCount()) {
-                        return $this->write($string);
-                    } else {
-                        throw new Rediska_Connection_Exception("Can't write to socket. Max reconnect attempts {$maxReconnectAttempts} was reached.");
-                    }
                 }
 
                 if ($bytes == 0) {
@@ -459,27 +453,4 @@ class Rediska_Connection extends Rediska_Options {
     {
         $this->_socket = null;
     }
-
-    /**
-     * 	Return attempts count
-     * @return integer 
-     */
-    protected function _getAttemptsCount()
-    {
-        return $this->_attemptsCount;
-    }
-
-    /**
-     * Increment attempts count
-     */
-    protected function _checkAttemptsCount()
-    {
-        $maxReconnectAttempts = $this->getOption('maxReconnectAttempts');
-        if ($maxReconnectAttempts && $this->_attemptsCount < $maxReconnectAttempts) {
-            $this->_attemptsCount++;
-            return true;
-        }
-        return false;
-    }
-
 }
