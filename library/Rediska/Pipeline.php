@@ -374,16 +374,6 @@ class Rediska_Pipeline
     public function getRange($key, $start, $end = -1) { $args = func_get_args(); return $this->_addCommand('getRange', $args); }
 
     /**
-     * Return a subset of the string from offset start to offset end (both offsets are inclusive)
-     *
-     * @param string            $key   Key name
-     * @param integer           $start Start
-     * @param integer[optional] $end   End. If end is omitted, the substring starting from $start until the end of the string will be returned. For default end of string
-     * @return Rediska_Pipeline
-     */
-    public function getRange($key, $start, $end = -1) { $args = func_get_args(); return $this->_addCommand('getRange', $args); }
-
-    /**
      * Returns the bit value at offset in the string value stored at key
      *
      * @param string  $key    Key name
