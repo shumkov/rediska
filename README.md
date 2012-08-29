@@ -21,7 +21,7 @@ Features
 * [Symfony](http://www.symfony-project.org/) framework integration
 * Full [documentation](http://rediska.geometria-lab.ru/documentation)
 * Example application
-* [PHPUnit](http://phpunit.de/) tests
+* [PHPUnit](http://phpunit.de/) tests [![Master branch build status](https://secure.travis-ci.org/Shumkov/Rediska.png?branch=master)](http://travis-ci.org/Shumkov/Rediska)
 
 Coming soon
 ---
