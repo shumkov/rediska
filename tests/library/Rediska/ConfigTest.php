@@ -49,8 +49,8 @@ class Rediska_ConfigTest extends Rediska_TestCase
 
     public function testSet()
     {
-        $reply = $this->config->get('maxmemory');
-        $this->assertEquals(0, $reply);
+        $maxMemory = $this->config->get('maxmemory');
+        $this->assertNotNull($maxMemory);
 
         $reply = $this->config->set('maxmemory', 100000);
         $this->assertEquals($this->config, $reply);
@@ -58,33 +58,33 @@ class Rediska_ConfigTest extends Rediska_TestCase
         $reply = $this->config->get('maxmemory');
         $this->assertEquals(100000, $reply);
 
-        $this->config->set('maxmemory', 0);
+        $this->config->set('maxmemory', $maxMemory);
     }
 
     public function testMagicSet()
     {
-        $reply = $this->config->get('maxmemory');
-        $this->assertEquals(0, $reply);
+        $maxMemory = $this->config->get('maxmemory');
+        $this->assertNotNull($maxMemory);
 
         $this->config->maxmemory = 100000;
 
         $reply = $this->config->get('maxmemory');
         $this->assertEquals(100000, $reply);
 
-        $this->config->set('maxmemory', 0);
+        $this->config->set('maxmemory', $maxMemory);
     }
 
     public function testArrayMagicSet()
     {
-        $reply = $this->config->get('maxmemory');
-        $this->assertEquals(0, $reply);
+        $maxMemory = $this->config->get('maxmemory');
+        $this->assertNotNull($maxMemory);
 
         $this->config['maxmemory'] = 100000;
 
         $reply = $this->config->get('maxmemory');
         $this->assertEquals(100000, $reply);
 
-        $this->config->set('maxmemory', 0);
+        $this->config->set('maxmemory', $maxMemory);
     }
 
     public function testToArray()

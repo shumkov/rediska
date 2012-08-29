@@ -1,5 +1,5 @@
 {
-    "name": "rediska/rediska",
+    "name": "geometria-lab/rediska",
     "description": "Full-featured PHP client for key-value database Redis",
     "authors": [
         {

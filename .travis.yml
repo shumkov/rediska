@@ -10,4 +10,5 @@ before_script:
 
 script:
   - redis-server tests/redis.conf
+  - redis-server tests/redis2.conf
   - cd tests; phpunit

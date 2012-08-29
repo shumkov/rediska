@@ -449,16 +449,6 @@ class Rediska_Transaction
     public function getRange($key, $start, $end = -1) { $args = func_get_args(); return $this->_addCommand('getRange', $args); }
 
     /**
-     * Return a subset of the string from offset start to offset end (both offsets are inclusive)
-     *
-     * @param string            $key   Key name
-     * @param integer           $start Start
-     * @param integer[optional] $end   End. If end is omitted, the substring starting from $start until the end of the string will be returned. For default end of string
-     * @return Rediska_Transaction
-     */
-    public function substring($key, $start, $end = -1) { $args = func_get_args(); return $this->_addCommand('substring', $args); }
-
-    /**
      * Returns the bit value at offset in the string value stored at key
      *
      * @param string  $key    Key name
@@ -764,9 +754,10 @@ class Rediska_Transaction
      * @param boolean[optional] $withScores Get with scores. For default is false
      * @param integer[optional] $limit      Limit. For default is no limit
      * @param integer[optional] $offset     Offset. For default is no offset
+     * @param boolean[optional] $revert     Revert. For default is false
      * @return Rediska_Transaction
      */
-    public function getFromSortedSetByScore($key, $min, $max, $withScores = false, $limit = null, $offset = null) { $args = func_get_args(); return $this->_addCommand('getFromSortedSetByScore', $args); }
+    public function getFromSortedSetByScore($key, $min, $max, $withScores = false, $limit = null, $offset = null, $revert = false) { $args = func_get_args(); return $this->_addCommand('getFromSortedSetByScore', $args); }
 
     /**
      * Get length of Sorted Set
@@ -1006,9 +997,9 @@ class Rediska_Transaction
      * This command is often used to test if a connection is still alive, or to
      * measure latency.
      *
-     * @return mixed
+     * @return Rediska_Transaction
      */
-    public function ping() { $args = func_get_args(); return $this->_executeCommand('ping', $args); }
+    public function ping() { $args = func_get_args(); return $this->_addCommand('ping', $args); }
 
     /**
      * Change the replication settings of a slave on the fly
