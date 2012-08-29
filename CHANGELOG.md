@@ -5,15 +5,21 @@ Version 0.5.7
 ---
 Unreleased
 
- * Feature #10766: Reconnect when Rediska can't read from socket
+ * Feature: Add Rediska package to Composer
+ * Feature: Add to Travis CI
+ * Feature: Info object. Robert Allen
+ * Feature: Implement `PING`. Robert Allen
+ * Feature: Socket functions support. New connection option: useSocket. Ruan Chunping
+ * Improvement: Transactions and tags support for Zend Cache backend. Robert Allen
+ * Bug: Redis invalid argument error in `Rediska::popFromListBlocking` with `$pushToKey` argument and many connections
  * Bug #11654: Profiler option can't get a string
 
 Version 0.5.6
 ---
 April 13, 2011
 
-* Bug #10886: Remove `json_last_error()` from JSON serialzier
-* Bug #10887: Subscribe don't unserialize values
+ * Bug #10886: Remove `json_last_error()` from JSON serialzier
+ * Bug #10887: Subscribe don't unserialize values
 
 Version 0.5.5
 ---

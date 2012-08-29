@@ -2,7 +2,10 @@
 /**
  * Rediska Info
  *
+ *
+ * @author Ivan Shumkov
  * @package Rediska
+ * @subpackage Info
  * @version @package_version@
  * @link http://rediska.geometria-lab.net
  * @license http://www.opensource.org/licenses/bsd-license.php
@@ -63,30 +66,38 @@
  * @property-read string $used_cpu_user_children
  * @property-read string $db
  */
-class Rediska_Info
+class Rediska_Info implements IteratorAggregate
 {
     /**
+     * Data
+     *
      * @var array
      */
     protected $_data = array();
 
     /**
+     * Constructor
+     *
      * @param array $data
      */
     public function __construct($data)
-    {
-        $this->_setData($data);
-    }
-
-    /**
-     * @param array $data
-     */
-    protected function _setData($data)
     {
         $this->_data = $data;
     }
 
     /**
+     * Get iterator
+     *
+     * @return ArrayIterator|Traversable
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator($this->_data);
+    }
+
+    /**
+     * Magic for get data
+     *
      * @param string $name
      * @return mixed
      */

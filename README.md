@@ -38,7 +38,11 @@ Get started!
    
    You can install Rediska from PEAR, download zip archive or get from git repository.
 
-     1.1. **Install from PEAR**
+     1.1. **Install via composer**
+
+     [Get composer](http://getcomposer.org/) and add [Rediska package](http://packagist.org/packages/geometria-lab/rediska) to dependencies.
+
+     1.2. **Install from PEAR**
 
      For begining you need to discover our PEAR channel:
 
@@ -48,7 +52,7 @@ Get started!
 
      `pear install geometria-lab/Rediska-beta`
 
-     1.2. **Download or get from repository**
+     1.3. **Download or get from repository**
 
      [Download zip archive](http://rediska.geometria-lab.net/download/latest) with latest version or get last **unstable** version from git repository:
 
@@ -56,9 +60,9 @@ Get started!
 
      For adding Rediska to your applcation you need copy Rediska from library folder to you application library folder
 
-      * [Add Rediska to your Zend Framework application](http://rediska.geometria-lab.net/documentation/integration-with-frameworks/zend-framework/configuration-and-bootstraping)
+        * [Add Rediska to your Zend Framework application](http://rediska.geometria-lab.net/documentation/integration-with-frameworks/zend-framework/configuration-and-bootstraping)
 
-      * [Add Rediska plugin to your Symfony application](http://rediska.geometria-lab.net/documentation/integration-with-frameworks/symfony)
+        * [Add Rediska plugin to your Symfony application](http://rediska.geometria-lab.net/documentation/integration-with-frameworks/symfony)
 
 
 2. **Configure Rediska**
