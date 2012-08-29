@@ -3,16 +3,19 @@ Changelog
 
 Version 0.5.7
 ---
-Unreleased
+August 29, 2012
 
- * Feature: Add Rediska package to Composer
- * Feature: Add to Travis CI
+ * Feature: Add Rediska package to Composer. Marc Abramowitz
+ * Feature: Add to Travis CI. Marc Abramowitz
  * Feature: Info object. Robert Allen
+ * Feature: Implement `ZREVRANGEBYSCORE`. Sergey Cherepanov
  * Feature: Implement `PING`. Robert Allen
  * Feature: Socket functions support. New connection option: useSocket. Ruan Chunping
+ * Improvement: Add $prepend to autoloader
  * Improvement: Transactions and tags support for Zend Cache backend. Robert Allen
+ * Bug #21: Unserializing "numeric like" string. Netweaver
  * Bug: Redis invalid argument error in `Rediska::popFromListBlocking` with `$pushToKey` argument and many connections
- * Bug #11654: Profiler option can't get a string
+ * Bug: Profiler option can't get a string
 
 Version 0.5.6
 ---
