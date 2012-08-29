@@ -60,9 +60,8 @@ Get started!
 
      For adding Rediska to your applcation you need copy Rediska from library folder to you application library folder
 
-        * [Add Rediska to your Zend Framework application](http://rediska.geometria-lab.net/documentation/integration-with-frameworks/zend-framework/configuration-and-bootstraping)
-
-        * [Add Rediska plugin to your Symfony application](http://rediska.geometria-lab.net/documentation/integration-with-frameworks/symfony)
+      * [Add Rediska to your Zend Framework application](http://rediska.geometria-lab.net/documentation/integration-with-frameworks/zend-framework/configuration-and-bootstraping)
+      * [Add Rediska plugin to your Symfony application](http://rediska.geometria-lab.net/documentation/integration-with-frameworks/symfony)
 
 
 2. **Configure Rediska**
