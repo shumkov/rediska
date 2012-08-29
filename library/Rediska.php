@@ -884,7 +884,7 @@ class Rediska extends Rediska_Options
      * @param integer[optional] $end   End. If end is omitted, the substring starting from $start until the end of the string will be returned. For default end of string
      * @return mixin
      */
-    public function substring($key, $start, $end = -1) { $args = func_get_args(); return $this->_executeCommand('substring', $args); }
+    public function getRange($key, $start, $end = -1) { $args = func_get_args(); return $this->_executeCommand('getRange', $args); }
 
     /**
      * Returns the bit value at offset in the string value stored at key
@@ -1192,7 +1192,7 @@ class Rediska extends Rediska_Options
      * @param boolean[optional] $withScores Get with scores. For default is false
      * @param integer[optional] $limit      Limit. For default is no limit
      * @param integer[optional] $offset     Offset. For default is no offset
-     * @param boolean[optional] $revert     Revert. For default false
+     * @param boolean[optional] $revert     Revert. For default is false
      * @return array
      */
     public function getFromSortedSetByScore($key, $min, $max, $withScores = false, $limit = null, $offset = null, $revert = false) { $args = func_get_args(); return $this->_executeCommand('getFromSortedSetByScore', $args); }

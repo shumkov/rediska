@@ -306,7 +306,7 @@ class Rediska_Connection_Specified
      * @param integer[optional] $end   End. If end is omitted, the substring starting from $start until the end of the string will be returned. For default end of string
      * @return mixin
      */
-    public function substring($key, $start, $end = -1) { $args = func_get_args(); return $this->_executeCommand('substring', $args); }
+    public function getRange($key, $start, $end = -1) { $args = func_get_args(); return $this->_executeCommand('getRange', $args); }
 
     /**
      * Returns the bit value at offset in the string value stored at key
@@ -852,6 +852,14 @@ class Rediska_Connection_Specified
      * @return mixed
      */
     public function info() { $args = func_get_args(); return $this->_executeCommand('info', $args); }
+
+    /**
+     * This command is often used to test if a connection is still alive, or to
+     * measure latency.
+     *
+     * @return mixed
+     */
+    public function ping() { $args = func_get_args(); return $this->_executeCommand('ping', $args); }
 
     /**
      * Change the replication settings of a slave on the fly
