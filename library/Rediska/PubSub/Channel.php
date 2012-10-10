@@ -459,7 +459,9 @@ class Rediska_PubSub_Channel extends Rediska_Options_RediskaInstance implements 
             foreach($channels as $channel) {
                 $execCommand[] = $this->getRediska()->getOption('namespace') . $channel;
             }
-            $connection = $this->_connections->getConnectionByAlias($connectionAlias);
+            if (!$connection){
+                $connection = $this->_connections->getConnectionByAlias($connectionAlias);
+            }
             $exec = new Rediska_Connection_Exec($connection, $execCommand);
             $exec->write();
         }
@@ -467,7 +469,9 @@ class Rediska_PubSub_Channel extends Rediska_Options_RediskaInstance implements 
         // Get responses from connections
         while (!empty($channelsByConnections)) {
             foreach ($channelsByConnections as $connectionAlias => $channels) {
-                $connection = $this->_connections->getConnectionByAlias($connectionAlias);
+                if (!$connection){
+                    $connection = $this->_connections->getConnectionByAlias($connectionAlias);
+                }
 
                 foreach($channels as $channel) {
                     $response = $this->_getResponseFromConnection($connection);
