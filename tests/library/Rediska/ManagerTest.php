@@ -20,9 +20,10 @@ class ManagerTest extends Rediska_TestCase
         $this->assertSame($rediska,Rediska_Manager::get());
         $this->assertSame($rediska,Rediska_Manager::get("testalias"));
 
-        $rediska2=new Rediska();
-        Rediska_Manager::addAlias($rediska2,"secondinstance");
+        $rediska2=new Rediska(array("name"=>"secondinstance"));
+        Rediska_Manager::addAlias($rediska2,"secondinstance_alias");
         $this->assertSame($rediska2,Rediska_Manager::get("secondinstance"));
+        $this->assertSame($rediska2,Rediska_Manager::get("secondinstance_alias"));
         $this->assertNotSame($rediska2,Rediska_Manager::get());
         $this->assertNotSame($rediska2,Rediska_Manager::get("testalias"));
     }
