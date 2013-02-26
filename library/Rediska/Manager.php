@@ -62,6 +62,17 @@ class Rediska_Manager
     }
 
     /**
+     * Add a Rediska-instance under a special alias.
+     *
+     * @param Rediska $rediska The rediska instance that should be added
+     * @param string $alias The alias-name under which the instance should be reachable.
+     */
+    public static function addAlias(Rediska $rediska, $alias)
+    {
+        self::$_instances[$alias]=$rediska;
+    }
+
+    /**
      * Has Rediska instances
      *
      * @param string $name
