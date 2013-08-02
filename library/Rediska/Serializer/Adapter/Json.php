@@ -83,16 +83,18 @@ class Rediska_Serializer_Adapter_Json extends Rediska_Options implements Rediska
      * Unserialize value
      *
      * @param mixed $value
-     * @return string
+     * @return array
      */
     public function unserialize($value)
     {
-        $decodedValue = json_decode($value);
+        $decodedValue = json_decode($value, true);
 
-        if ($decodedValue === null && $value !== 'null') {
+        if ($decodedValue === null && $value !== 'null' || json_last_error() != JSON_ERROR_NONE) {
             throw new Rediska_Serializer_Adapter_Exception("Can't unserialize value");
         }
-
-        return $value;
+        
+        if (is_array($decodedValue)) return $decodedValue;
+        
+        return $value;              
     }
 }
