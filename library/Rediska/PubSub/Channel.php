@@ -94,7 +94,7 @@ class Rediska_PubSub_Channel extends Rediska_Options_RediskaInstance implements 
      * 
      * @param string|array    $nameOrNames Channel name or array of names
      * @param array[optional] $options     Options:
-     *                                         timeout     - Timeout in seconds
+     *                                         timeout     - Timeout in seconds. This can be a float to allow sub-second accuracy (For example 0.2 for 200 msec)
      *                                         serverAlias - Server alias or connection object
      *                                         rediska     - Rediska instance name, Rediska object or Rediska options for new instance
      */
@@ -190,7 +190,7 @@ class Rediska_PubSub_Channel extends Rediska_Options_RediskaInstance implements 
     /**
      * Get message
      *
-     * @param integer[optional] Timeout
+     * @param float[optional] Timeout The timeout in seconds. Since this is a float it allows sub-second accuracy (For example 0.2 for 200 msec)
      * @return Rediska_PubSub_Response_Message|null
      */
     public function getMessage($timeout = null)
@@ -202,7 +202,7 @@ class Rediska_PubSub_Channel extends Rediska_Options_RediskaInstance implements 
 
         // Start timer if not started from iterator
         if ($timeout && $this->_needStart) {
-            $this->_timeStart = time();
+            $this->_timeStart = microtime(true);
         }
 
         // Get message from connections
@@ -233,7 +233,7 @@ class Rediska_PubSub_Channel extends Rediska_Options_RediskaInstance implements 
             /* @var $connection Rediska_Connection */
             foreach ($this->_connections as $connection) {
                 if ($timeout) {
-                    $timeLeft = ($this->_timeStart + $timeout) - time();
+                    $timeLeft = ($this->_timeStart + $timeout) - microtime(true);
 
                     if ($timeLeft <= 0) {
                         // Reset timeStart if time started from this method
@@ -335,7 +335,7 @@ class Rediska_PubSub_Channel extends Rediska_Options_RediskaInstance implements 
     public function rewind()
     {
         if ($this->_timeout) {
-            $this->_timeStart = time();
+            $this->_timeStart = microtime(true);
         }
     }
 
