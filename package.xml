@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package packagerversion="1.9.0" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+<package packagerversion="1.9.4" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
     http://pear.php.net/dtd/tasks-1.0.xsd
     http://pear.php.net/dtd/package-2.0
     http://pear.php.net/dtd/package-2.0.xsd">
@@ -36,11 +36,11 @@ More information and documentation on homepage: http://rediska.geometria-lab.net
   <email>till@php.net</email>
   <active>yes</active>
  </developer>
- <date>2012-08-29</date>
- <time>18:33:46</time>
+ <date>2013-08-20</date>
+ <time>20:33:40</time>
  <version>
-  <release>0.5.7</release>
-  <api>0.5.7</api>
+  <release>0.5.8</release>
+  <api>0.5.8</api>
  </version>
  <stability>
   <release>beta</release>
@@ -133,220 +133,691 @@ This is an beta release, see README.markdown for examples.
     <dir name="Rediska">
      <dir name="Command">
       <dir name="GetSortedSet">
-       <file baseinstalldir="/" name="WithScoresIterator.php" role="php" />
+       <file baseinstalldir="/" name="WithScoresIterator.php" role="php">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
       </dir> <!-- /library/Rediska/Command/GetSortedSet -->
       <dir name="Response">
-       <file baseinstalldir="/" name="ListNameAndValue.php" role="php" />
-       <file baseinstalldir="/" name="ValueAndScore.php" role="php" />
+       <file baseinstalldir="/" name="ListNameAndValue.php" role="php">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="ValueAndScore.php" role="php">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
       </dir> <!-- /library/Rediska/Command/Response -->
-      <file baseinstalldir="/" name="Abstract.php" role="php" />
-      <file baseinstalldir="/" name="AddToSet.php" role="php" />
-      <file baseinstalldir="/" name="AddToSortedSet.php" role="php" />
-      <file baseinstalldir="/" name="Append.php" role="php" />
-      <file baseinstalldir="/" name="AppendToList.php" role="php" />
-      <file baseinstalldir="/" name="CompareSets.php" role="php" />
-      <file baseinstalldir="/" name="CompareSortedSets.php" role="php" />
-      <file baseinstalldir="/" name="Decrement.php" role="php" />
-      <file baseinstalldir="/" name="Delete.php" role="php" />
-      <file baseinstalldir="/" name="DeleteFromHash.php" role="php" />
-      <file baseinstalldir="/" name="DeleteFromList.php" role="php" />
-      <file baseinstalldir="/" name="DeleteFromSet.php" role="php" />
-      <file baseinstalldir="/" name="DeleteFromSortedSet.php" role="php" />
-      <file baseinstalldir="/" name="DeleteFromSortedSetByRank.php" role="php" />
-      <file baseinstalldir="/" name="DeleteFromSortedSetByScore.php" role="php" />
-      <file baseinstalldir="/" name="DiffSets.php" role="php" />
-      <file baseinstalldir="/" name="Exception.php" role="php" />
-      <file baseinstalldir="/" name="Exists.php" role="php" />
-      <file baseinstalldir="/" name="ExistsInHash.php" role="php" />
-      <file baseinstalldir="/" name="ExistsInSet.php" role="php" />
-      <file baseinstalldir="/" name="Expire.php" role="php" />
-      <file baseinstalldir="/" name="FlushDb.php" role="php" />
-      <file baseinstalldir="/" name="Get.php" role="php" />
-      <file baseinstalldir="/" name="GetBit.php" role="php" />
-      <file baseinstalldir="/" name="GetFromHash.php" role="php" />
-      <file baseinstalldir="/" name="GetFromList.php" role="php" />
-      <file baseinstalldir="/" name="GetFromSortedSetByScore.php" role="php" />
-      <file baseinstalldir="/" name="GetHash.php" role="php" />
-      <file baseinstalldir="/" name="GetHashFields.php" role="php" />
-      <file baseinstalldir="/" name="GetHashLength.php" role="php" />
-      <file baseinstalldir="/" name="GetHashValues.php" role="php" />
-      <file baseinstalldir="/" name="GetKeysByPattern.php" role="php" />
-      <file baseinstalldir="/" name="GetKeysCount.php" role="php" />
-      <file baseinstalldir="/" name="GetLastSaveTime.php" role="php" />
-      <file baseinstalldir="/" name="GetLength.php" role="php" />
-      <file baseinstalldir="/" name="GetLifetime.php" role="php" />
-      <file baseinstalldir="/" name="GetList.php" role="php" />
-      <file baseinstalldir="/" name="GetListLength.php" role="php" />
-      <file baseinstalldir="/" name="GetRandomFromSet.php" role="php" />
-      <file baseinstalldir="/" name="GetRandomKey.php" role="php" />
-      <file baseinstalldir="/" name="GetRange.php" role="php" />
-      <file baseinstalldir="/" name="GetRankFromSortedSet.php" role="php" />
-      <file baseinstalldir="/" name="GetScoreFromSortedSet.php" role="php" />
-      <file baseinstalldir="/" name="GetSet.php" role="php" />
-      <file baseinstalldir="/" name="GetSetLength.php" role="php" />
-      <file baseinstalldir="/" name="GetSortedSet.php" role="php" />
-      <file baseinstalldir="/" name="GetSortedSetLength.php" role="php" />
-      <file baseinstalldir="/" name="GetSortedSetLengthByScore.php" role="php" />
-      <file baseinstalldir="/" name="GetType.php" role="php" />
-      <file baseinstalldir="/" name="Increment.php" role="php" />
-      <file baseinstalldir="/" name="IncrementInHash.php" role="php" />
-      <file baseinstalldir="/" name="IncrementScoreInSortedSet.php" role="php" />
-      <file baseinstalldir="/" name="Info.php" role="php" />
-      <file baseinstalldir="/" name="InsertToList.php" role="php" />
-      <file baseinstalldir="/" name="InsertToListAbstract.php" role="php" />
-      <file baseinstalldir="/" name="InsertToListAfter.php" role="php" />
-      <file baseinstalldir="/" name="InsertToListBefore.php" role="php" />
-      <file baseinstalldir="/" name="Interface.php" role="php" />
-      <file baseinstalldir="/" name="IntersectSets.php" role="php" />
-      <file baseinstalldir="/" name="IntersectSortedSets.php" role="php" />
-      <file baseinstalldir="/" name="MoveToDb.php" role="php" />
-      <file baseinstalldir="/" name="MoveToSet.php" role="php" />
-      <file baseinstalldir="/" name="Ping.php" role="php" />
-      <file baseinstalldir="/" name="PopFromList.php" role="php" />
-      <file baseinstalldir="/" name="PopFromListBlocking.php" role="php" />
-      <file baseinstalldir="/" name="PrependToList.php" role="php" />
-      <file baseinstalldir="/" name="Publish.php" role="php" />
-      <file baseinstalldir="/" name="Quit.php" role="php" />
-      <file baseinstalldir="/" name="Rename.php" role="php" />
-      <file baseinstalldir="/" name="RewriteAppendOnlyFile.php" role="php" />
-      <file baseinstalldir="/" name="Save.php" role="php" />
-      <file baseinstalldir="/" name="SelectDb.php" role="php" />
-      <file baseinstalldir="/" name="Set.php" role="php" />
-      <file baseinstalldir="/" name="SetAndExpire.php" role="php" />
-      <file baseinstalldir="/" name="SetAndGet.php" role="php" />
-      <file baseinstalldir="/" name="SetBit.php" role="php" />
-      <file baseinstalldir="/" name="SetRange.php" role="php" />
-      <file baseinstalldir="/" name="SetToHash.php" role="php" />
-      <file baseinstalldir="/" name="SetToList.php" role="php" />
-      <file baseinstalldir="/" name="ShiftFromList.php" role="php" />
-      <file baseinstalldir="/" name="ShiftFromListBlocking.php" role="php" />
-      <file baseinstalldir="/" name="Shutdown.php" role="php" />
-      <file baseinstalldir="/" name="SlaveOf.php" role="php" />
-      <file baseinstalldir="/" name="Sort.php" role="php" />
-      <file baseinstalldir="/" name="TruncateList.php" role="php" />
-      <file baseinstalldir="/" name="UnionSets.php" role="php" />
-      <file baseinstalldir="/" name="UnionSortedSets.php" role="php" />
+      <file baseinstalldir="/" name="Abstract.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="AddToSet.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="AddToSortedSet.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Append.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="AppendToList.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="CompareSets.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="CompareSortedSets.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Decrement.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Delete.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="DeleteFromHash.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="DeleteFromList.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="DeleteFromSet.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="DeleteFromSortedSet.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="DeleteFromSortedSetByRank.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="DeleteFromSortedSetByScore.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="DiffSets.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Exception.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Exists.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="ExistsInHash.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="ExistsInSet.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Expire.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="FlushDb.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Get.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="GetBit.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="GetFromHash.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="GetFromList.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="GetFromSortedSetByScore.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="GetHash.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="GetHashFields.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="GetHashLength.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="GetHashValues.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="GetKeysByPattern.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="GetKeysCount.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="GetLastSaveTime.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="GetLength.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="GetLifetime.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="GetList.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="GetListLength.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="GetRandomFromSet.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="GetRandomKey.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="GetRange.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="GetRankFromSortedSet.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="GetScoreFromSortedSet.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="GetSet.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="GetSetLength.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="GetSortedSet.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="GetSortedSetLength.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="GetSortedSetLengthByScore.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="GetType.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Increment.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="IncrementInHash.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="IncrementScoreInSortedSet.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Info.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="InsertToList.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="InsertToListAbstract.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="InsertToListAfter.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="InsertToListBefore.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Interface.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="IntersectSets.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="IntersectSortedSets.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="MoveToDb.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="MoveToSet.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Ping.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="PopFromList.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="PopFromListBlocking.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="PrependToList.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Publish.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Quit.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Rename.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="RewriteAppendOnlyFile.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Save.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="SelectDb.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Set.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="SetAndExpire.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="SetAndGet.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="SetBit.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="SetRange.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="SetToHash.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="SetToList.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="ShiftFromList.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="ShiftFromListBlocking.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Shutdown.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="SlaveOf.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Sort.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="TruncateList.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="UnionSets.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="UnionSortedSets.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
      </dir> <!-- /library/Rediska/Command -->
      <dir name="Connection">
       <dir name="Exec">
-       <file baseinstalldir="/" name="Exception.php" role="php" />
-       <file baseinstalldir="/" name="MultiBulkIterator.php" role="php" />
+       <file baseinstalldir="/" name="Exception.php" role="php">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="MultiBulkIterator.php" role="php">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
       </dir> <!-- /library/Rediska/Connection/Exec -->
       <dir name="Socket">
-       <file baseinstalldir="/" name="ReadBuffer.php" role="php" />
+       <file baseinstalldir="/" name="ReadBuffer.php" role="php">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
       </dir> <!-- /library/Rediska/Connection/Socket -->
-      <file baseinstalldir="/" name="Exception.php" role="php" />
-      <file baseinstalldir="/" name="Exec.php" role="php" />
-      <file baseinstalldir="/" name="Socket.php" role="php" />
-      <file baseinstalldir="/" name="Specified.php" role="php" />
-      <file baseinstalldir="/" name="TimeoutException.php" role="php" />
+      <file baseinstalldir="/" name="Exception.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Exec.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Socket.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Specified.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="TimeoutException.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
      </dir> <!-- /library/Rediska/Connection -->
      <dir name="Key">
-      <file baseinstalldir="/" name="Abstract.php" role="php" />
-      <file baseinstalldir="/" name="Exception.php" role="php" />
-      <file baseinstalldir="/" name="Hash.php" role="php" />
-      <file baseinstalldir="/" name="List.php" role="php" />
-      <file baseinstalldir="/" name="Set.php" role="php" />
-      <file baseinstalldir="/" name="SortedSet.php" role="php" />
+      <file baseinstalldir="/" name="Abstract.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Exception.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Hash.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="List.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Set.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="SortedSet.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
      </dir> <!-- /library/Rediska/Key -->
      <dir name="KeyDistributor">
-      <file baseinstalldir="/" name="ConsistentHashing.php" role="php" />
-      <file baseinstalldir="/" name="Crc32.php" role="php" />
-      <file baseinstalldir="/" name="Exception.php" role="php" />
-      <file baseinstalldir="/" name="Interface.php" role="php" />
+      <file baseinstalldir="/" name="ConsistentHashing.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Crc32.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Exception.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Interface.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
      </dir> <!-- /library/Rediska/KeyDistributor -->
      <dir name="Monitor">
-      <file baseinstalldir="/" name="Connections.php" role="php" />
-      <file baseinstalldir="/" name="Exception.php" role="php" />
+      <file baseinstalldir="/" name="Connections.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Exception.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
      </dir> <!-- /library/Rediska/Monitor -->
      <dir name="Options">
-      <file baseinstalldir="/" name="RediskaInstance.php" role="php" />
+      <file baseinstalldir="/" name="RediskaInstance.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
      </dir> <!-- /library/Rediska/Options -->
      <dir name="Profiler">
-      <file baseinstalldir="/" name="Exception.php" role="php" />
-      <file baseinstalldir="/" name="Interface.php" role="php" />
-      <file baseinstalldir="/" name="Null.php" role="php" />
-      <file baseinstalldir="/" name="Profile.php" role="php" />
-      <file baseinstalldir="/" name="Stream.php" role="php" />
+      <file baseinstalldir="/" name="Exception.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Interface.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Null.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Profile.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Stream.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
      </dir> <!-- /library/Rediska/Profiler -->
      <dir name="PubSub">
       <dir name="Response">
-       <file baseinstalldir="/" name="Abstract.php" role="php" />
-       <file baseinstalldir="/" name="Exception.php" role="php" />
-       <file baseinstalldir="/" name="Message.php" role="php" />
-       <file baseinstalldir="/" name="Subscribe.php" role="php" />
-       <file baseinstalldir="/" name="Unsubscribe.php" role="php" />
+       <file baseinstalldir="/" name="Abstract.php" role="php">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="Exception.php" role="php">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="Message.php" role="php">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="Subscribe.php" role="php">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="Unsubscribe.php" role="php">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
       </dir> <!-- /library/Rediska/PubSub/Response -->
-      <file baseinstalldir="/" name="Channel.php" role="php" />
-      <file baseinstalldir="/" name="Connections.php" role="php" />
-      <file baseinstalldir="/" name="Exception.php" role="php" />
+      <file baseinstalldir="/" name="Channel.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Connections.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Exception.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
      </dir> <!-- /library/Rediska/PubSub -->
      <dir name="Serializer">
       <dir name="Adapter">
-       <file baseinstalldir="/" name="Exception.php" role="php" />
-       <file baseinstalldir="/" name="Interface.php" role="php" />
-       <file baseinstalldir="/" name="Json.php" role="php" />
-       <file baseinstalldir="/" name="PhpSerialize.php" role="php" />
-       <file baseinstalldir="/" name="ToString.php" role="php" />
+       <file baseinstalldir="/" name="Exception.php" role="php">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="Interface.php" role="php">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="Json.php" role="php">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="PhpSerialize.php" role="php">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="ToString.php" role="php">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
       </dir> <!-- /library/Rediska/Serializer/Adapter -->
-      <file baseinstalldir="/" name="Exception.php" role="php" />
+      <file baseinstalldir="/" name="Exception.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
      </dir> <!-- /library/Rediska/Serializer -->
      <dir name="Transaction">
-      <file baseinstalldir="/" name="AbortedException.php" role="php" />
-      <file baseinstalldir="/" name="Exception.php" role="php" />
+      <file baseinstalldir="/" name="AbortedException.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="Exception.php" role="php">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
      </dir> <!-- /library/Rediska/Transaction -->
      <dir name="Zend">
       <dir name="Application">
        <dir name="Resource">
-        <file baseinstalldir="/" name="Rediska.php" role="php" />
+        <file baseinstalldir="/" name="Rediska.php" role="php">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
        </dir> <!-- /library/Rediska/Zend/Application/Resource -->
       </dir> <!-- /library/Rediska/Zend/Application -->
       <dir name="Auth">
        <dir name="Adapter">
-        <file baseinstalldir="/" name="Redis.php" role="php" />
+        <file baseinstalldir="/" name="Redis.php" role="php">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
        </dir> <!-- /library/Rediska/Zend/Auth/Adapter -->
       </dir> <!-- /library/Rediska/Zend/Auth -->
       <dir name="Cache">
        <dir name="Backend">
-        <file baseinstalldir="/" name="Redis.php" role="php" />
+        <file baseinstalldir="/" name="Redis.php" role="php">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
        </dir> <!-- /library/Rediska/Zend/Cache/Backend -->
       </dir> <!-- /library/Rediska/Zend/Cache -->
       <dir name="Log">
        <dir name="Writer">
-        <file baseinstalldir="/" name="Redis.php" role="php" />
+        <file baseinstalldir="/" name="Redis.php" role="php">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
        </dir> <!-- /library/Rediska/Zend/Log/Writer -->
       </dir> <!-- /library/Rediska/Zend/Log -->
       <dir name="Profiler">
-       <file baseinstalldir="/" name="Firebug.php" role="php" />
+       <file baseinstalldir="/" name="Firebug.php" role="php">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
       </dir> <!-- /library/Rediska/Zend/Profiler -->
       <dir name="Queue">
        <dir name="Adapter">
-        <file baseinstalldir="/" name="Redis.php" role="php" />
+        <dir name="Redis">
+         <file baseinstalldir="/" name="Queues.php" role="php">
+          <tasks:replace from="@name@" to="name" type="package-info" />
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
+         </file>
+        </dir> <!-- /library/Rediska/Zend/Queue/Adapter/Redis -->
+        <file baseinstalldir="/" name="Redis.php" role="php">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
        </dir> <!-- /library/Rediska/Zend/Queue/Adapter -->
       </dir> <!-- /library/Rediska/Zend/Queue -->
       <dir name="Session">
        <dir name="SaveHandler">
-        <file baseinstalldir="/" name="Redis.php" role="php" />
+        <file baseinstalldir="/" name="Redis.php" role="php">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
        </dir> <!-- /library/Rediska/Zend/Session/SaveHandler -->
-       <file baseinstalldir="/" name="Set.php" role="php" />
+       <file baseinstalldir="/" name="Set.php" role="php">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
       </dir> <!-- /library/Rediska/Zend/Session -->
      </dir> <!-- /library/Rediska/Zend -->
-     <file baseinstalldir="/" name="Autoloader.php" role="php" />
-     <file baseinstalldir="/" name="Commands.php" role="php" />
-     <file baseinstalldir="/" name="Config.php" role="php" />
-     <file baseinstalldir="/" name="Connection.php" role="php" />
-     <file baseinstalldir="/" name="Exception.php" role="php" />
-     <file baseinstalldir="/" name="Info.php" role="php" />
-     <file baseinstalldir="/" name="Key.php" role="php" />
-     <file baseinstalldir="/" name="Manager.php" role="php" />
-     <file baseinstalldir="/" name="Monitor.php" role="php" />
-     <file baseinstalldir="/" name="Options.php" role="php" />
-     <file baseinstalldir="/" name="Pipeline.php" role="php" />
-     <file baseinstalldir="/" name="Profiler.php" role="php" />
-     <file baseinstalldir="/" name="Serializer.php" role="php" />
-     <file baseinstalldir="/" name="Transaction.php" role="php" />
+     <file baseinstalldir="/" name="Autoloader.php" role="php">
+      <tasks:replace from="@name@" to="name" type="package-info" />
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file baseinstalldir="/" name="Commands.php" role="php">
+      <tasks:replace from="@name@" to="name" type="package-info" />
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file baseinstalldir="/" name="Config.php" role="php">
+      <tasks:replace from="@name@" to="name" type="package-info" />
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file baseinstalldir="/" name="Connection.php" role="php">
+      <tasks:replace from="@name@" to="name" type="package-info" />
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file baseinstalldir="/" name="Exception.php" role="php">
+      <tasks:replace from="@name@" to="name" type="package-info" />
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file baseinstalldir="/" name="Info.php" role="php">
+      <tasks:replace from="@name@" to="name" type="package-info" />
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file baseinstalldir="/" name="Key.php" role="php">
+      <tasks:replace from="@name@" to="name" type="package-info" />
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file baseinstalldir="/" name="Manager.php" role="php">
+      <tasks:replace from="@name@" to="name" type="package-info" />
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file baseinstalldir="/" name="Monitor.php" role="php">
+      <tasks:replace from="@name@" to="name" type="package-info" />
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file baseinstalldir="/" name="Options.php" role="php">
+      <tasks:replace from="@name@" to="name" type="package-info" />
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file baseinstalldir="/" name="Pipeline.php" role="php">
+      <tasks:replace from="@name@" to="name" type="package-info" />
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file baseinstalldir="/" name="Profiler.php" role="php">
+      <tasks:replace from="@name@" to="name" type="package-info" />
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file baseinstalldir="/" name="Serializer.php" role="php">
+      <tasks:replace from="@name@" to="name" type="package-info" />
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file baseinstalldir="/" name="Transaction.php" role="php">
+      <tasks:replace from="@name@" to="name" type="package-info" />
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
     </dir> <!-- /library/Rediska -->
-    <file baseinstalldir="/" name="Rediska.php" role="php" />
+    <file baseinstalldir="/" name="Rediska.php" role="php">
+     <tasks:replace from="@name@" to="name" type="package-info" />
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
    </dir> <!-- /library -->
    <dir name="scripts">
     <file baseinstalldir="/" name="add_command_methods.php" role="php" />
@@ -355,164 +826,563 @@ This is an beta release, see README.markdown for examples.
     <dir name="library">
      <dir name="Rediska">
       <dir name="Command">
-       <file baseinstalldir="/" name="AddToSetTest.php" role="test" />
-       <file baseinstalldir="/" name="AddToSortedSetTest.php" role="test" />
-       <file baseinstalldir="/" name="AppendTest.php" role="test" />
-       <file baseinstalldir="/" name="AppendToListTest.php" role="test" />
-       <file baseinstalldir="/" name="DecrementTest.php" role="test" />
-       <file baseinstalldir="/" name="DeleteFromHashTest.php" role="test" />
-       <file baseinstalldir="/" name="DeleteFromListTest.php" role="test" />
-       <file baseinstalldir="/" name="DeleteFromSetTest.php" role="test" />
-       <file baseinstalldir="/" name="DeleteFromSortedSetByRankTest.php" role="test" />
-       <file baseinstalldir="/" name="DeleteFromSortedSetByScoreTest.php" role="test" />
-       <file baseinstalldir="/" name="DeleteFromSortedSetTest.php" role="test" />
-       <file baseinstalldir="/" name="DeleteTest.php" role="test" />
-       <file baseinstalldir="/" name="DiffSetsTest.php" role="test" />
-       <file baseinstalldir="/" name="ExistsInHashTest.php" role="test" />
-       <file baseinstalldir="/" name="ExistsInSetTest.php" role="test" />
-       <file baseinstalldir="/" name="ExistsTest.php" role="test" />
-       <file baseinstalldir="/" name="ExpireTest.php" role="test" />
-       <file baseinstalldir="/" name="FlushDbTest.php" role="test" />
-       <file baseinstalldir="/" name="GetBitTest.php" role="test" />
-       <file baseinstalldir="/" name="GetFromHashTest.php" role="test" />
-       <file baseinstalldir="/" name="GetFromListTest.php" role="test" />
-       <file baseinstalldir="/" name="GetFromSortedSetByScoreTest.php" role="test" />
-       <file baseinstalldir="/" name="GetHashFieldsTest.php" role="test" />
-       <file baseinstalldir="/" name="GetHashLengthTest.php" role="test" />
-       <file baseinstalldir="/" name="GetHashTest.php" role="test" />
-       <file baseinstalldir="/" name="GetHashValuesTest.php" role="test" />
-       <file baseinstalldir="/" name="GetKeysByPatternTest.php" role="test" />
-       <file baseinstalldir="/" name="GetKeysCountTest.php" role="test" />
-       <file baseinstalldir="/" name="GetLastSaveTimeTest.php" role="test" />
-       <file baseinstalldir="/" name="GetLength.php" role="test" />
-       <file baseinstalldir="/" name="GetLifetimeTest.php" role="test" />
-       <file baseinstalldir="/" name="GetListLengthTest.php" role="test" />
-       <file baseinstalldir="/" name="GetListTest.php" role="test" />
-       <file baseinstalldir="/" name="GetRandomFromSetTest.php" role="test" />
-       <file baseinstalldir="/" name="GetRandomKeyTest.php" role="test" />
-       <file baseinstalldir="/" name="GetRangeTest.php" role="test" />
-       <file baseinstalldir="/" name="GetRankFromSortedSetTest.php" role="test" />
-       <file baseinstalldir="/" name="GetScoreFromSortedSetTest.php" role="test" />
-       <file baseinstalldir="/" name="GetSetLengthTest.php" role="test" />
-       <file baseinstalldir="/" name="GetSetTest.php" role="test" />
-       <file baseinstalldir="/" name="GetSortedSetLengthByScoreTest.php" role="test" />
-       <file baseinstalldir="/" name="GetSortedSetLengthTest.php" role="test" />
-       <file baseinstalldir="/" name="GetSortedSetTest.php" role="test" />
-       <file baseinstalldir="/" name="GetTest.php" role="test" />
-       <file baseinstalldir="/" name="GetTypeTest.php" role="test" />
-       <file baseinstalldir="/" name="IncrementInHashTest.php" role="test" />
-       <file baseinstalldir="/" name="IncrementScoreInSortedSetTest.php" role="test" />
-       <file baseinstalldir="/" name="IncrementTest.php" role="test" />
-       <file baseinstalldir="/" name="InfoTest.php" role="test" />
-       <file baseinstalldir="/" name="InsertToListAfterTest.php" role="test" />
-       <file baseinstalldir="/" name="InsertToListBeforeTest.php" role="test" />
-       <file baseinstalldir="/" name="InsertToListTest.php" role="test" />
-       <file baseinstalldir="/" name="IntersectSetsTest.php" role="test" />
-       <file baseinstalldir="/" name="IntersectSortedSetsTest.php" role="test" />
-       <file baseinstalldir="/" name="MoveToDbTest.php" role="test" />
-       <file baseinstalldir="/" name="MoveToSetTest.php" role="test" />
-       <file baseinstalldir="/" name="PingTest.php" role="test" />
-       <file baseinstalldir="/" name="PopFromListBlockingTest.php" role="test" />
-       <file baseinstalldir="/" name="PopFromListTest.php" role="test" />
-       <file baseinstalldir="/" name="PrependToListTest.php" role="test" />
-       <file baseinstalldir="/" name="QuitTest.php" role="test" />
-       <file baseinstalldir="/" name="RenameTest.php" role="test" />
-       <file baseinstalldir="/" name="RewriteAppendOnlyFileTest.php" role="test" />
-       <file baseinstalldir="/" name="SaveTest.php" role="test" />
-       <file baseinstalldir="/" name="SelectDbTest.php" role="test" />
-       <file baseinstalldir="/" name="SetAndExpireTest.php" role="test" />
-       <file baseinstalldir="/" name="SetAndGetTest.php" role="test" />
-       <file baseinstalldir="/" name="SetBit.php" role="test" />
-       <file baseinstalldir="/" name="SetRangeTest.php" role="test" />
-       <file baseinstalldir="/" name="SetTest.php" role="test" />
-       <file baseinstalldir="/" name="SetToHashTest.php" role="test" />
-       <file baseinstalldir="/" name="SetToListTest.php" role="test" />
-       <file baseinstalldir="/" name="ShiftFromListBlockingTest.php" role="test" />
-       <file baseinstalldir="/" name="ShiftFromListTest.php" role="test" />
-       <file baseinstalldir="/" name="ShutdownTest.php" role="test" />
-       <file baseinstalldir="/" name="SlaveOfTest.php" role="test" />
-       <file baseinstalldir="/" name="SortTest.php" role="test" />
-       <file baseinstalldir="/" name="TruncateListTest.php" role="test" />
-       <file baseinstalldir="/" name="UnionSetsTest.php" role="test" />
-       <file baseinstalldir="/" name="UnionSortedSetsTest.php" role="test" />
+       <file baseinstalldir="/" name="AddToSetTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="AddToSortedSetTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="AppendTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="AppendToListTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="DecrementTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="DeleteFromHashTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="DeleteFromListTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="DeleteFromSetTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="DeleteFromSortedSetByRankTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="DeleteFromSortedSetByScoreTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="DeleteFromSortedSetTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="DeleteTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="DiffSetsTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="ExistsInHashTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="ExistsInSetTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="ExistsTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="ExpireTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="FlushDbTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetBitTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetFromHashTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetFromListTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetFromSortedSetByScoreTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetHashFieldsTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetHashLengthTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetHashTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetHashValuesTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetKeysByPatternTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetKeysCountTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetLastSaveTimeTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetLength.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetLifetimeTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetListLengthTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetListTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetRandomFromSetTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetRandomKeyTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetRangeTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetRankFromSortedSetTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetScoreFromSortedSetTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetSetLengthTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetSetTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetSortedSetLengthByScoreTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetSortedSetLengthTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetSortedSetTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="GetTypeTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="IncrementInHashTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="IncrementScoreInSortedSetTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="IncrementTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="InfoTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="InsertToListAfterTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="InsertToListBeforeTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="InsertToListTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="IntersectSetsTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="IntersectSortedSetsTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="MoveToDbTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="MoveToSetTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="PingTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="PopFromListBlockingTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="PopFromListTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="PrependToListTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="QuitTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="RenameTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="RewriteAppendOnlyFileTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="SaveTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="SelectDbTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="SetAndExpireTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="SetAndGetTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="SetBit.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="SetRangeTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="SetTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="SetToHashTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="SetToListTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="ShiftFromListBlockingTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="ShiftFromListTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="ShutdownTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="SlaveOfTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="SortTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="TruncateListTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="UnionSetsTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="UnionSortedSetsTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
       </dir> <!-- /tests/library/Rediska/Command -->
       <dir name="Connection">
-       <file baseinstalldir="/" name="ExecTest.php" role="test" />
+       <file baseinstalldir="/" name="ExecTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
       </dir> <!-- /tests/library/Rediska/Connection -->
       <dir name="Key">
-       <file baseinstalldir="/" name="AbstractTest.php" role="test" />
-       <file baseinstalldir="/" name="HashTest.php" role="test" />
-       <file baseinstalldir="/" name="ListTest.php" role="test" />
-       <file baseinstalldir="/" name="SetTest.php" role="test" />
-       <file baseinstalldir="/" name="SortedSetTest.php" role="test" />
+       <file baseinstalldir="/" name="AbstractTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="HashTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="ListTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="SetTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="SortedSetTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
       </dir> <!-- /tests/library/Rediska/Key -->
       <dir name="KeyDistributor">
-       <file baseinstalldir="/" name="ConsistentHashingTest.php" role="test" />
-       <file baseinstalldir="/" name="Crc32Test.php" role="test" />
+       <file baseinstalldir="/" name="ConsistentHashingTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="Crc32Test.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
       </dir> <!-- /tests/library/Rediska/KeyDistributor -->
       <dir name="Options">
-       <file baseinstalldir="/" name="RediskaInstanceTest.php" role="test" />
+       <file baseinstalldir="/" name="RediskaInstanceTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
       </dir> <!-- /tests/library/Rediska/Options -->
       <dir name="Serializer">
        <dir name="Adapter">
-        <file baseinstalldir="/" name="JsonTest.php" role="test" />
-        <file baseinstalldir="/" name="PhpSerializeTest.php" role="test" />
-        <file baseinstalldir="/" name="ToStringTest.php" role="test" />
+        <file baseinstalldir="/" name="JsonTest.php" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file baseinstalldir="/" name="PhpSerializeTest.php" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file baseinstalldir="/" name="ToStringTest.php" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
        </dir> <!-- /tests/library/Rediska/Serializer/Adapter -->
       </dir> <!-- /tests/library/Rediska/Serializer -->
       <dir name="Zend">
        <dir name="Application">
-        <file baseinstalldir="/" name="application.ini" role="test" />
-        <file baseinstalldir="/" name="application2.ini" role="test" />
-        <file baseinstalldir="/" name="application3.ini" role="test" />
-        <file baseinstalldir="/" name="application4.ini" role="test" />
-        <file baseinstalldir="/" name="ResourceTest.php" role="test" />
+        <file baseinstalldir="/" name="application.ini" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file baseinstalldir="/" name="application2.ini" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file baseinstalldir="/" name="application3.ini" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file baseinstalldir="/" name="application4.ini" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file baseinstalldir="/" name="ResourceTest.php" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
        </dir> <!-- /tests/library/Rediska/Zend/Application -->
        <dir name="Cache">
-        <file baseinstalldir="/" name="application.ini" role="test" />
-        <file baseinstalldir="/" name="application2.ini" role="test" />
-        <file baseinstalldir="/" name="application3.ini" role="test" />
-        <file baseinstalldir="/" name="application4.ini" role="test" />
-        <file baseinstalldir="/" name="application5.ini" role="test" />
-        <file baseinstalldir="/" name="CacheTest.php" role="test" />
-        <file baseinstalldir="/" name="ResourceTest.php" role="test" />
+        <file baseinstalldir="/" name="application.ini" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file baseinstalldir="/" name="application2.ini" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file baseinstalldir="/" name="application3.ini" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file baseinstalldir="/" name="application4.ini" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file baseinstalldir="/" name="application5.ini" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file baseinstalldir="/" name="CacheTest.php" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file baseinstalldir="/" name="ResourceTest.php" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
        </dir> <!-- /tests/library/Rediska/Zend/Cache -->
        <dir name="Log">
-        <file baseinstalldir="/" name="application.ini" role="test" />
-        <file baseinstalldir="/" name="application2.ini" role="test" />
-        <file baseinstalldir="/" name="application3.ini" role="test" />
-        <file baseinstalldir="/" name="application4.ini" role="test" />
-        <file baseinstalldir="/" name="ResourceTest.php" role="test" />
-        <file baseinstalldir="/" name="WriterTest.php" role="test" />
+        <file baseinstalldir="/" name="application.ini" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file baseinstalldir="/" name="application2.ini" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file baseinstalldir="/" name="application3.ini" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file baseinstalldir="/" name="application4.ini" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file baseinstalldir="/" name="ResourceTest.php" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file baseinstalldir="/" name="WriterTest.php" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
        </dir> <!-- /tests/library/Rediska/Zend/Log -->
        <dir name="Session">
-        <file baseinstalldir="/" name="application.ini" role="test" />
-        <file baseinstalldir="/" name="application2.ini" role="test" />
-        <file baseinstalldir="/" name="application3.ini" role="test" />
-        <file baseinstalldir="/" name="application4.ini" role="test" />
-        <file baseinstalldir="/" name="ResourceTest.php" role="test" />
-        <file baseinstalldir="/" name="SessionTest.php" role="test" />
+        <file baseinstalldir="/" name="application.ini" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file baseinstalldir="/" name="application2.ini" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file baseinstalldir="/" name="application3.ini" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file baseinstalldir="/" name="application4.ini" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file baseinstalldir="/" name="ResourceTest.php" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file baseinstalldir="/" name="SessionTest.php" role="test">
+         <tasks:replace from="@name@" to="name" type="package-info" />
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
        </dir> <!-- /tests/library/Rediska/Zend/Session -->
-       <file baseinstalldir="/" name="AuthTest.php" role="test" />
-       <file baseinstalldir="/" name="QueueTest.php" role="test" />
+       <file baseinstalldir="/" name="AuthTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file baseinstalldir="/" name="QueueTest.php" role="test">
+        <tasks:replace from="@name@" to="name" type="package-info" />
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
       </dir> <!-- /tests/library/Rediska/Zend -->
-      <file baseinstalldir="/" name="ConfigTest.php" role="test" />
-      <file baseinstalldir="/" name="ConnectionTest.php" role="test" />
-      <file baseinstalldir="/" name="KeyTest.php" role="test" />
-      <file baseinstalldir="/" name="OptionsTest.php" role="test" />
-      <file baseinstalldir="/" name="PipelineTest.php" role="test" />
-      <file baseinstalldir="/" name="SerializerTest.php" role="test" />
-      <file baseinstalldir="/" name="TestCase.php" role="test" />
-      <file baseinstalldir="/" name="TransactionTest.php" role="test" />
+      <file baseinstalldir="/" name="ConfigTest.php" role="test">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="ConnectionTest.php" role="test">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="KeyTest.php" role="test">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="OptionsTest.php" role="test">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="PipelineTest.php" role="test">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="SerializerTest.php" role="test">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="TestCase.php" role="test">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file baseinstalldir="/" name="TransactionTest.php" role="test">
+       <tasks:replace from="@name@" to="name" type="package-info" />
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
      </dir> <!-- /tests/library/Rediska -->
-     <file baseinstalldir="/" name="RediskaTest.php" role="test" />
+     <file baseinstalldir="/" name="RediskaTest.php" role="test">
+      <tasks:replace from="@name@" to="name" type="package-info" />
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
     </dir> <!-- /tests/library -->
-    <file baseinstalldir="/" name="bootstrap.php" role="test" />
-    <file baseinstalldir="/" name="config.ini-dist" role="test" />
-    <file baseinstalldir="/" name="phpunit.xml" role="test" />
-    <file baseinstalldir="/" name="README.txt" role="test" />
-    <file baseinstalldir="/" name="redis.conf" role="test" />
-    <file baseinstalldir="/" name="redis2.conf" role="test" />
+    <file baseinstalldir="/" name="bootstrap.php" role="test">
+     <tasks:replace from="@name@" to="name" type="package-info" />
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/" name="config.ini-dist" role="test">
+     <tasks:replace from="@name@" to="name" type="package-info" />
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/" name="phpunit.xml" role="test">
+     <tasks:replace from="@name@" to="name" type="package-info" />
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/" name="README.txt" role="test">
+     <tasks:replace from="@name@" to="name" type="package-info" />
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/" name="redis.conf" role="test">
+     <tasks:replace from="@name@" to="name" type="package-info" />
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/" name="redis2.conf" role="test">
+     <tasks:replace from="@name@" to="name" type="package-info" />
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
    </dir> <!-- /tests -->
    <file baseinstalldir="/" name="CHANGELOG.md" role="data" />
    <file baseinstalldir="/" name="composer.json" role="data" />
@@ -692,6 +1562,7 @@ This is an beta release, see README.markdown for examples.
    <install as="Rediska/Zend/Cache/Backend/Redis.php" name="library/Rediska/Zend/Cache/Backend/Redis.php" />
    <install as="Rediska/Zend/Log/Writer/Redis.php" name="library/Rediska/Zend/Log/Writer/Redis.php" />
    <install as="Rediska/Zend/Profiler/Firebug.php" name="library/Rediska/Zend/Profiler/Firebug.php" />
+   <install as="Rediska/Zend/Queue/Adapter/Redis/Queues.php" name="library/Rediska/Zend/Queue/Adapter/Redis/Queues.php" />
    <install as="Rediska/Zend/Queue/Adapter/Redis.php" name="library/Rediska/Zend/Queue/Adapter/Redis.php" />
    <install as="Rediska/Zend/Session/SaveHandler/Redis.php" name="library/Rediska/Zend/Session/SaveHandler/Redis.php" />
    <install as="Rediska/Zend/Session/Set.php" name="library/Rediska/Zend/Session/Set.php" />
@@ -702,14 +1573,14 @@ This is an beta release, see README.markdown for examples.
  <changelog>
   <release>
    <version>
-    <release>0.5.7</release>
-    <api>0.5.7</api>
+    <release>0.5.8</release>
+    <api>0.5.8</api>
    </version>
    <stability>
     <release>beta</release>
     <api>beta</api>
    </stability>
-   <date>2012-08-29</date>
+   <date>2013-08-20</date>
    <license uri="http://www.opensource.org/licenses/bsd-license.php">New BSD License</license>
    <notes>
 This is an beta release, see README.markdown for examples.
