@@ -93,6 +93,6 @@ class Rediska_Serializer_Adapter_Json extends Rediska_Options implements Rediska
             throw new Rediska_Serializer_Adapter_Exception("Can't unserialize value");
         }
 
-        return $value;
+        return $decodedValue;
     }
 }
