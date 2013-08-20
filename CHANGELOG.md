@@ -1,6 +1,17 @@
 Changelog
 ======
 
+Version 0.5.8
+---
+August 20, 2013
+
+ * Improvement: Zend queue adapter: avoid subsequent identical queries on existing queues set. Max Ivanov
+ * Improvement: Allow subsecond accuracy when reading from pubsub. Shyru
+ * Improvement: Composer autoloader now use psr-0 path. zircote
+ * Bug: Remove vm-enabled no from redis.conf. Shyru
+ * Bug: Unbreak travis by fixing the location of the ZF download. till
+ * Bug #75: Fixing issue with `Rediska_Serializer_Adapter_Json::unserialize` method not return unserialized value, trickeyone
+
 Version 0.5.7
 ---
 August 29, 2012
