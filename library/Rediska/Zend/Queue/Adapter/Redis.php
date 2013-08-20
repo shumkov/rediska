@@ -32,7 +32,7 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
     /**
      * Queues set
      *
-     * @var Rediska_Key_Set
+     * @var Rediska_Zend_Queue_Adapter_Redis_Queues
      */
     protected $_queues;
 
@@ -60,7 +60,8 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
 
         $this->_rediska = Rediska_Options_RediskaInstance::getRediskaInstance($this->_rediska, 'Zend_Queue_Exception', 'driverOptions');
 
-        $this->_queues = new Rediska_Key_Set($this->_getKeyName('queues'), array('rediska' => $this->_rediska));
+        $queuesSet = new Rediska_Key_Set($this->_getKeyName('queues'), array('rediska' => $this->_rediska));
+        $this->_queues = new Rediska_Zend_Queue_Adapter_Redis_Queues($queuesSet);
     }
 
     /**
@@ -75,11 +76,7 @@ class Rediska_Zend_Queue_Adapter_Redis extends Zend_Queue_Adapter_AdapterAbstrac
      */
     public function isExists($name)
     {
-        if (isset($this->_queueObjects[$name])) {
-            return true;
-        } else {
-            return $this->_queues->exists($name);
-        }
+        return $this->_queues->exists($name);
     }
 
     /**
