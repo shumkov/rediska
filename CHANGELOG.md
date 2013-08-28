@@ -1,6 +1,12 @@
 Changelog
 ======
 
+Version 0.5.9
+---
+August 28, 2013
+
+ * Bug #80: Fix can't read from socket bug
+
 Version 0.5.8
 ---
 August 20, 2013
