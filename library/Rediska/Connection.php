@@ -236,15 +236,14 @@ class Rediska_Connection extends Rediska_Options
         }
 
         $reply = @fgets($this->_socket);
+        
+        if ($reply === false || $reply === '') {
+            $metaData = stream_get_meta_data($this->_socket);
+            if ($metaData['timed_out']) {
+                throw new Rediska_Connection_TimeoutException("Connection read timed out.");
+            }
 
-        $info = stream_get_meta_data($this->_socket);
-        if ($info['timed_out']) {
-            throw new Rediska_Connection_TimeoutException("Connection read timed out.");
-        }
-
-        if ($reply === false) {
-
-            if ($this->_options['blockingMode'] || (!$this->_options['blockingMode'] && $info['eof'])) {
+            if ($this->_options['blockingMode'] && !$metaData['eof']) {
                 $this->disconnect();
                 throw new Rediska_Connection_Exception("Can't read from socket.");
             }
