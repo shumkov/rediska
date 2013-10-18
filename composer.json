@@ -1,6 +1,7 @@
 {
     "name": "geometria-lab/rediska",
     "description": "Full-featured PHP client for key-value database Redis",
+    "keywords": ["redis", "zend", "sessions", "cache"],
     "authors": [
         {
             "name": "Ivan Shumkov",
@@ -19,22 +20,15 @@
             "email": "till@php.net"
         }
     ],
-    "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "zendframework/zendframework",
-                "version": "1.11.11",
-                "dist": {
-                    "url": "http://packages.zendframework.com/releases/ZendFramework-1.11.11/ZendFramework-1.11.11-minimal.zip",
-                    "type": "zip"
-                }
-            }
-        }
-    ],
+	"repositories" : [{
+			"type" : "vcs",
+			"url" : "https://github.com/zendframework/zf1.git"
+		}
+	],
     "require": {},
     "require-dev": {
-        "zendframework/zendframework": "1.11.*"
+        "phpunit/phpunit" : ">=3.7.11",
+        "zendframework/zendframework1" : ">=1.12.1"
     },
     "autoload": {
         "psr-0":{
