@@ -3,12 +3,14 @@ language: php
 php:
   - 5.3
   - 5.4
+  - 5.5
 
-before_script:
+before_install:
   - curl -s http://getcomposer.org/installer | php
-  - php composer.phar install --dev
+  - php composer.phar install --dev --no-interaction --prefer-source
+  - phpenv rehash
 
 script:
   - redis-server tests/redis.conf
   - redis-server tests/redis2.conf
-  - cd tests; phpunit
+  - php vendor/bin/phpunit -c tests/phpunit.xml
