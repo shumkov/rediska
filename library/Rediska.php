@@ -1,8 +1,11 @@
 <?php
 
-// Register autoloader
+spl_autoload_unregister(array('YiiBase','autoload'));
+
 require_once dirname(__FILE__) . '/Rediska/Autoloader.php';
 Rediska_Autoloader::register();
+
+spl_autoload_register(array('YiiBase', 'autoload'));
 
 /**
  * Rediska (radish on russian) - PHP client 
