@@ -48,7 +48,7 @@ class Rediska_Command_IntersectSetsTest extends Rediska_TestCase
     }
 
     protected $_sets = array(
-        'set1' => array(1, 3, 6, 4, 2, 'fds', 312, array('1a', 1, 2)),
+        'set1' => array(1, 3, 6, 4, 2, 'fds', 312, 'asdadaaa'),
         'set2' => array(1, 5, 3, 7, 'aaa', 534),
         'set3' => array('asdas', 1, 6, 3, 'y', 'aaa', 4)
     );
