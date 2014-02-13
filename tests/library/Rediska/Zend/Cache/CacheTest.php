@@ -130,8 +130,8 @@ class Rediska_Zend_Cache_BackendTest extends Rediska_TestCase
         $this->assertTrue($reply);
         $meta     = $this->cache->getMetadatas('test_id');
         $lifetime = $meta['expire'] - time();
-        $this->assertTrue($lifetime > 290);
-        $this->assertEquals(300, $lifetime);
+        $this->assertTrue($lifetime >= 299);
+        $this->assertTrue($lifetime <= 301);
     }
 
     /**
