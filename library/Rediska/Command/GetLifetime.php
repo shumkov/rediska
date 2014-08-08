@@ -36,7 +36,7 @@ class Rediska_Command_GetLifetime extends Rediska_Command_Abstract
      */
     public function parseResponse($response)
     {
-        if ($response == -1) {
+        if ($response == -1 || $response == -2) {
             $response = null;
         }
 
