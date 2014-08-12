@@ -272,9 +272,7 @@ class Rediska_Connection_Exec
                     return $data;
                 }
             case self::REPLY_ERROR:
-                $message = substr($data, 4);
-
-                throw new Rediska_Connection_Exec_Exception($message);
+                throw new Rediska_Connection_Exec_Exception($data);
             case self::REPLY_INTEGER:
                 if (strpos($data, '.') !== false) {
                     $number = (integer)$data;
