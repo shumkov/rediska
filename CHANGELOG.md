@@ -1,6 +1,15 @@
 Changelog
 ======
 
+Version 0.5.10
+---
+August 12, 2014
+
+ * Improvement: Check the new return value of TTL command (starting with Redis 2.8 the command returns -2 if the key
+ does not exist)
+ * Improvement: Rediska_Connection_Exec_Exception message now contains error prefix (starting with Redis 2.8 many errors
+ are prefixed by a more specific error code instead of the generic ERR, for example WRONGTYPE, NOAUTH)
+
 Version 0.5.9
 ---
 August 28, 2013

@@ -28,7 +28,7 @@ class Rediska extends Rediska_Options
      * 
      * @var string
      */
-    const STABLE_REDIS_VERSION = '2.2.1';
+    const STABLE_REDIS_VERSION = '2.8.0';
 
     /**
      * Default client name
