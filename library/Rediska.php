@@ -36,6 +36,18 @@ class Rediska extends Rediska_Options
      * @var string
      */
     const DEFAULT_NAME = 'default';
+    
+    /**
+     * Default connection class
+     * @var string
+     */
+    const CONNECTION_CLASS = 'Rediska_Connection';
+    
+    /**
+     * Default socket connection class
+     * @var string
+     */
+    const CONNECTION_SOCKET_CLASS = 'Rediska_Connection_Socket';
 
     /**
      * Connections
@@ -238,11 +250,11 @@ class Rediska extends Rediska_Options
 
         if (isset($options['useSocket'])) {
             if ($options['useSocket'] == true) {
-                $connectionClass = 'Rediska_Connection_Socket';
+                $connectionClass = static::CONNECTION_SOCKET_CLASS;
             }
             unset($options['useSocket']);
         } else {
-            $connectionClass = 'Rediska_Connection';
+            $connectionClass = static::CONNECTION_CLASS;
         }
 
         $this->_connections[$connectionString] = new $connectionClass($options);
