@@ -251,6 +251,8 @@ class Rediska extends Rediska_Options
         if (isset($options['useSocket'])) {
             if ($options['useSocket'] == true) {
                 $connectionClass = static::CONNECTION_SOCKET_CLASS;
+            } else {
+                $connectionClass = static::CONNECTION_CLASS;
             }
             unset($options['useSocket']);
         } else {
