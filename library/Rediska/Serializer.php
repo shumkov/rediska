@@ -20,6 +20,17 @@ class Rediska_Serializer
     protected $_adapter;
 
     /**
+     * Available adapters with their classes
+     *
+     * @var array
+     */
+    protected $available_adapters = array(
+        'phpSerialize' => 'Rediska_Serializer_Adapter_PhpSerialize',
+        'json' => 'Rediska_Serializer_Adapter_Json',
+        'toString' => 'Rediska_Serializer_Adapter_ToString',
+    );
+
+    /**
      * Constuctor
      * 
      * @param mixed $adapter Adapter
@@ -34,14 +45,14 @@ class Rediska_Serializer
      * 
      * @param $adapter
      * @return Rediska_Serializer
+     * @throws Rediska_Serializer_Exception
      */
     public function setAdapter($adapter)
     {
         if (is_object($adapter)) {
             $this->_adapter = $adapter;
-        } else if (in_array($adapter, array('phpSerialize', 'json', 'toString'))) {
-            $adapter = ucfirst($adapter);
-            $className = "Rediska_Serializer_Adapter_$adapter";
+        } elseif (isset($this->available_adapters[$adapter])) {
+            $className = $this->available_adapters[$adapter];
             $this->_adapter = new $className;
         } else {
             if (!@class_exists($adapter)) {
