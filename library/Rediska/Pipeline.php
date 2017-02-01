@@ -393,6 +393,16 @@ class Rediska_Pipeline
     public function getBit($key, $offset) { $args = func_get_args(); return $this->_addCommand('getBit', $args); }
 
     /**
+     * Count the number of set bits (population counting) in a string
+     *
+     * @param  string       $key
+     * @param  integer|null $start
+     * @param  integer|null $end
+     * @return integer
+     */
+    public function bitCount($key, $start = null, $end = null) { $args = func_get_args(); return $this->_addCommand('bitCount', $args); }
+
+    /**
      * Returns the length of the string value stored at key
      *
      * @param string  $key Key name
