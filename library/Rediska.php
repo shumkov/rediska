@@ -129,6 +129,7 @@ class Rediska extends Rediska_Options
         'keyDistributor'    => 'consistentHashing',
         'redisVersion'      => self::STABLE_REDIS_VERSION,
         'profiler'          => false,
+        'expirableCommands' => array(),
     );
 
     /**
@@ -616,6 +617,14 @@ class Rediska extends Rediska_Options
         $this->getProfiler()->start($command);
 
         $response = $command->execute();
+
+        $expirableCommands = $this->getOption('expirableCommands');
+        if(isset($expirableCommands[$name])){
+            if(mb_strtolower($name) == 'expire'){
+                throw new Rediska_Exception('Expire cannot be expired');
+            }
+            $this->expire(array_shift($args), $expirableCommands[$name]);
+        }
 
         $this->getProfiler()->stop();
 
