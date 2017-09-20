@@ -64,7 +64,7 @@ class Rediska_Connection extends Rediska_Options
     public function connect()
     {
         if (!$this->isConnected()) {
-            $socketAddress = 'tcp://' . $this->getHost() . ':' . $this->getPort();
+            $socketAddress = $this->getSocketAddress();
 
             if ($this->_options['persistent']) {
                 $flag = STREAM_CLIENT_PERSISTENT | STREAM_CLIENT_CONNECT;
@@ -134,6 +134,11 @@ class Rediska_Connection extends Rediska_Options
         } else {
             return false;
         }
+    }
+
+    public function getSocketAddress()
+    {
+        return 'tcp://' . $this->getHost() . ':' . $this->getPort();
     }
 
     /**
