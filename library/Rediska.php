@@ -50,6 +50,11 @@ class Rediska extends Rediska_Options
     const CONNECTION_SOCKET_CLASS = 'Rediska_Connection_Socket';
 
     /**
+     * Default serializer class
+     */
+    const SERIALIZER_CLASS = 'Rediska_Serializer';
+
+    /**
      * Connections
      * 
      * @var array
@@ -518,7 +523,8 @@ class Rediska extends Rediska_Options
     public function getSerializer()
     {
         if ($this->_serializer === null) {
-            $this->_serializer = new Rediska_Serializer($this->_options['serializerAdapter']);
+            $className = static::SERIALIZER_CLASS;
+            $this->_serializer = new $className($this->_options['serializerAdapter']);
         }
 
         return $this->_serializer;
